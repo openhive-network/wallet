@@ -54,7 +54,7 @@ const XMLSerializer = new xmldom.XMLSerializer();
  *    - convert naked URLs to images/links
  *    - convert embeddable URLs to <iframe>s
  *    - basic sanitization?
- *  2. Steemit.com Rendering - add in proprietary Steemit.com functions/links
+ *  2. Hive.blog Rendering - add in proprietary Hive.blog functions/links
  *    - convert <iframe>s to custom objects
  *    - linkify #tags and @mentions
  *    - proxify images
@@ -142,17 +142,17 @@ function link(state, child) {
     if (url) {
         state.links.add(url);
         if (state.mutate) {
-            // If this link is not relative, http, https, or steem -- add https.
-            if (!/^((#)|(\/(?!\/))|(((steem|https?):)?\/\/))/.test(url)) {
+            // If this link is not relative, http, https, or hive -- add https.
+            if (!/^((#)|(\/(?!\/))|(((hive|https?):)?\/\/))/.test(url)) {
                 child.setAttribute('href', 'https://' + url);
             }
 
             // Unlink potential phishing attempts
             if (
                 (url.indexOf('#') !== 0 && // Allow in-page links
-                    (child.textContent.match(/(www\.)?steemit\.com/i) &&
+                    (child.textContent.match(/(www\.)?hive\.blog/i) &&
                         !url.match(
-                            /https?:\/\/(.*@)?(www\.)?steemit\.com/i
+                            /https?:\/\/(.*@)?(www\.)?hive\.blog/i
                         ))) ||
                 Phishing.looksPhishy(url)
             ) {
@@ -213,7 +213,7 @@ function img(state, child) {
     }
 }
 
-// For all img elements with non-local URLs, prepend the proxy URL (e.g. `https://img0.steemit.com/0x0/`)
+// For all img elements with non-local URLs, prepend the proxy URL
 function proxifyImages(doc) {
     if (!doc) return;
     [...doc.getElementsByTagName('img')].forEach(node => {
@@ -410,7 +410,7 @@ function twitchId(data) {
 
 function ipfsPrefix(url) {
     if ($STM_Config.ipfs_prefix) {
-        // Convert //ipfs/xxx  or /ipfs/xxx  into  https://steemit.com/ipfs/xxxxx
+        // Convert //ipfs/xxx  or /ipfs/xxx  into  https://hive.blog/ipfs/xxxxx
         if (/^\/?\/ipfs\//.test(url)) {
             const slash = url.charAt(1) === '/' ? 1 : 0;
             url = url.substring(slash + '/ipfs/'.length); // start with only 1 /

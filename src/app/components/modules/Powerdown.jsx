@@ -10,8 +10,8 @@ import { VEST_TICKER, LIQUID_TICKER, VESTING_TOKEN } from 'app/client_config';
 import {
     numberWithCommas,
     spToVestsf,
-    vestsToSpf,
-    vestsToSp,
+    vestsToHpf,
+    vestsToHp,
     assetFloat,
 } from 'app/utils/StateFunctions';
 
@@ -22,7 +22,7 @@ class Powerdown extends React.Component {
         if (props.to_withdraw - props.withdrawn > 0) {
             new_withdraw = props.to_withdraw - props.withdrawn;
         } else {
-            // Set the default withrawal amount to (available - 5 STEEM)
+            // Set the default withrawal amount to (available - 5 HIVE)
             // This should be removed post hf20
             new_withdraw = Math.max(
                 0,
@@ -46,8 +46,8 @@ class Powerdown extends React.Component {
             vesting_shares,
             delegated_vesting_shares,
         } = this.props;
-        const formatSp = amount =>
-            numberWithCommas(vestsToSp(this.props.state, amount));
+        const formatHp = amount =>
+            numberWithCommas(vestsToHp(this.props.state, amount));
         const sliderChange = value => {
             this.setState({ new_withdraw: value, manual_entry: false });
         };
@@ -91,8 +91,8 @@ class Powerdown extends React.Component {
 
         const notes = [];
         if (to_withdraw - withdrawn > 0) {
-            const AMOUNT = formatSp(to_withdraw);
-            const WITHDRAWN = formatSp(withdrawn);
+            const AMOUNT = formatHp(to_withdraw);
+            const WITHDRAWN = formatHp(withdrawn);
             notes.push(
                 <li key="already_power_down">
                     {tt('powerdown_jsx.already_power_down', {
@@ -104,7 +104,7 @@ class Powerdown extends React.Component {
             );
         }
         if (delegated_vesting_shares !== 0) {
-            const AMOUNT = formatSp(delegated_vesting_shares);
+            const AMOUNT = formatHp(delegated_vesting_shares);
             notes.push(
                 <li key="delegating">
                     {tt('powerdown_jsx.delegating', { AMOUNT, LIQUID_TICKER })}
@@ -112,7 +112,7 @@ class Powerdown extends React.Component {
             );
         }
         if (notes.length === 0) {
-            let AMOUNT = vestsToSpf(this.props.state, new_withdraw) / 13;
+            let AMOUNT = vestsToHpf(this.props.state, new_withdraw) / 13;
             AMOUNT = AMOUNT.toFixed(AMOUNT >= 10 ? 0 : 1);
             notes.push(
                 <li key="per_week">
@@ -155,7 +155,7 @@ class Powerdown extends React.Component {
                     value={new_withdraw}
                     step={0.000001}
                     max={vesting_shares - delegated_vesting_shares}
-                    format={formatSp}
+                    format={formatHp}
                     onChange={sliderChange}
                 />
                 <p className="powerdown-amount">
@@ -163,7 +163,7 @@ class Powerdown extends React.Component {
                     <br />
                     <input
                         value={
-                            manual_entry ? manual_entry : formatSp(new_withdraw)
+                            manual_entry ? manual_entry : formatHp(new_withdraw)
                         }
                         onChange={inputChange}
                         autoCorrect={false}

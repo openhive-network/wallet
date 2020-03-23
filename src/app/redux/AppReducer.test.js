@@ -60,7 +60,7 @@ describe('App reducer', () => {
             mockActions['LOCATION_CHANGE'].payload.pathname
         );
     });
-    it('should return correct state for a STEEM_API_ERROR action', () => {
+    it('should return correct state for a HIVE_API_ERROR action', () => {
         const initial = reducer();
         const out = reducer(initial, steemApiError());
         expect(out).toEqual(initial);

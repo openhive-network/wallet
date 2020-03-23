@@ -93,16 +93,16 @@ class WalletIndex extends React.Component {
                                             </span>
                                         </div>
                                         <div className="token-container">
-                                            <div className="token token-sbd" />
+                                            <div className="token token-hbd" />
                                             <span>
                                                 <h4>
                                                     {tt(
-                                                        'wallet_index.sbd_symbol'
+                                                        'wallet_index.hbd_symbol'
                                                     )}
                                                 </h4>
                                                 <span className="text">
                                                     {tt(
-                                                        'wallet_index.sbd_description'
+                                                        'wallet_index.hbd_description'
                                                     )}
                                                 </span>
                                             </span>

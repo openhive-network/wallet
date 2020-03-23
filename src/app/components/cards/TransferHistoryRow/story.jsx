@@ -61,7 +61,7 @@ storiesOf('Cards', module)
                                         amount: `${number(
                                             'amount',
                                             138.69
-                                        )} STEEM`,
+                                        )} HIVE`,
                                         to: select(
                                             'to user (affects transfer_to_vesting)',
                                             ['userA', 'userB', 'userC'],
@@ -94,21 +94,21 @@ storiesOf('Cards', module)
                                         sbd_payout: `${text(
                                             'sbd_payout',
                                             '0.000'
-                                        )} SBD`,
+                                        )} HBD`,
                                         steem_payout: `${text(
                                             'steem_payout',
                                             '0.000'
-                                        )} STEEM`,
+                                        )} HIVE`,
                                         author: 'author',
                                         permlink: 'permlink',
                                         reward_steem: `${text(
                                             'reward_steem',
                                             '1.234'
-                                        )} STEEM`,
+                                        )} HIVE`,
                                         reward_sbd: `${text(
                                             'reward_sbd',
                                             '3.456'
-                                        )} SBD`,
+                                        )} HBD`,
                                         interest: 1.234,
                                         amount_in: 1.234,
                                         amount_out: 1.234,

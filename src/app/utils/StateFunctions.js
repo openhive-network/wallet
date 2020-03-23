@@ -8,7 +8,7 @@ import { formatter } from '@steemit/steem-js';
 
 export const numberWithCommas = x => x.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 
-export function vestsToSpf(state, vesting_shares) {
+export function vestsToHpf(state, vesting_shares) {
     const { global } = state;
     let vests = vesting_shares;
     if (typeof vesting_shares === 'string') {
@@ -18,20 +18,20 @@ export function vestsToSpf(state, vesting_shares) {
         global.getIn(['props', 'total_vesting_shares']),
         VEST_TICKER
     );
-    const total_vest_steem = assetFloat(
+    const total_vest_hive = assetFloat(
         global.getIn(['props', 'total_vesting_fund_steem']),
         LIQUID_TICKER
     );
-    return total_vest_steem * (vests / total_vests);
+    return total_vest_hive * (vests / total_vests);
 }
 
-export function vestsToSp(state, vesting_shares) {
-    return vestsToSpf(state, vesting_shares).toFixed(3);
+export function vestsToHp(state, vesting_shares) {
+    return vestsToHpf(state, vesting_shares).toFixed(3);
 }
 
-export function spToVestsf(state, steem_power) {
+export function spToVestsf(state, hive_power) {
     const { global } = state;
-    let power = steem_power;
+    let power = hive_power;
     if (typeof power === 'string') {
         power = assetFloat(power, LIQUID_TICKER);
     }
@@ -39,29 +39,29 @@ export function spToVestsf(state, steem_power) {
         global.getIn(['props', 'total_vesting_shares']),
         VEST_TICKER
     );
-    const total_vest_steem = assetFloat(
+    const total_vest_hive = assetFloat(
         global.getIn(['props', 'total_vesting_fund_steem']),
         LIQUID_TICKER
     );
-    return steem_power / total_vest_steem * total_vests;
+    return hive_power / total_vest_hive * total_vests;
 }
 
 export function spToVests(state, vesting_shares) {
     return spToVestsf(state, vesting_shares).toFixed(6);
 }
 
-export function vestingSteem(account, gprops) {
+export function vestingHive(account, gprops) {
     const vests = parseFloat(account.vesting_shares.split(' ')[0]);
     const total_vests = parseFloat(gprops.total_vesting_shares.split(' ')[0]);
-    const total_vest_steem = parseFloat(
-        gprops.total_vesting_fund_steem.split(' ')[0]
+    const total_vest_hive = parseFloat(
+        gprops.total_vesting_fund_hive.split(' ')[0]
     );
-    const vesting_steemf = total_vest_steem * (vests / total_vests);
-    return vesting_steemf;
+    const vesting_hivef = total_vest_hive * (vests / total_vests);
+    return vesting_hivef;
 }
 
-// How much STEEM this account has delegated out (minus received).
-export function delegatedSteem(account, gprops) {
+// How much HIVE this account has delegated out (minus received).
+export function delegatedHive(account, gprops) {
     const delegated_vests = parseFloat(
         account.delegated_vesting_shares.split(' ')[0]
     );
@@ -70,15 +70,15 @@ export function delegatedSteem(account, gprops) {
     );
     const vests = delegated_vests - received_vests;
     const total_vests = parseFloat(gprops.total_vesting_shares.split(' ')[0]);
-    const total_vest_steem = parseFloat(
-        gprops.total_vesting_fund_steem.split(' ')[0]
+    const total_vest_hive = parseFloat(
+        gprops.total_vesting_fund_hive.split(' ')[0]
     );
-    const vesting_steemf = total_vest_steem * (vests / total_vests);
-    return vesting_steemf;
+    const vesting_hivef = total_vest_hive * (vests / total_vests);
+    return vesting_hivef;
 }
 
-// How much STEEM this account is powering down.
-export function powerdownSteem(account, gprops) {
+// How much HIVE this account is powering down.
+export function powerdownHive(account, gprops) {
     const withdraw_rate_vests = parseFloat(
         account.vesting_withdraw_rate.split(' ')[0]
     );
@@ -87,11 +87,11 @@ export function powerdownSteem(account, gprops) {
         1000000;
     const vests = Math.min(withdraw_rate_vests, remaining_vests);
     const total_vests = parseFloat(gprops.total_vesting_shares.split(' ')[0]);
-    const total_vest_steem = parseFloat(
-        gprops.total_vesting_fund_steem.split(' ')[0]
+    const total_vest_hive = parseFloat(
+        gprops.total_vesting_fund_hive.split(' ')[0]
     );
-    const powerdown_steemf = total_vest_steem * (vests / total_vests);
-    return powerdown_steemf;
+    const powerdown_hivef = total_vest_hive * (vests / total_vests);
+    return powerdown_hivef;
 }
 
 export function assetFloat(str, asset) {
@@ -215,13 +215,13 @@ export function filterTags(tags) {
         .filter((value, index, self) => value && self.indexOf(value) === index);
 }
 
-export function pricePerSteem(state) {
+export function pricePerHive(state) {
     const feed_price = state.user.get(
         'latest_feed_price',
         state.global.get('feed_price')
     );
     if (feed_price && feed_price.has('base') && feed_price.has('quote')) {
-        return formatter.pricePerSteem(feed_price.toJS());
+        return formatter.pricePerHive(feed_price.toJS());
     }
     return undefined;
 }

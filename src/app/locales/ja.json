@@ -181,7 +181,7 @@
         "vote_currently_exists_user_must_be_indicate_a_to_reject_witness":
             "現在、投票が存在し、証人を拒否するには強い意志を示す必要があります",
         "only_one_APP_NAME_account_allowed_per_ip_address_every_10_minutes":
-            "10分毎に各IPアドレスにつき1つのSteemアカウントのみ許可されています",
+            "10分毎に各IPアドレスにつき1つのHiveアカウントのみ許可されています",
         "write_your_story": "投稿内容を書いてください",
         "remember_voting_and_posting_key": "投稿キーを記憶する",
         "auto_login_question_mark": "自動ログインしますか？",
@@ -205,9 +205,9 @@
             "authors_get_paid_when_people_like_you_upvote_their_post":
                 "投稿者は読者から投稿をupvoteされることで報酬を得ます。",
             "if_you_enjoyed_what_you_read_earn_amount":
-                "読んで楽しんだら、次はアカウントを作成してSTEEMを手に入れましょう！",
-            "free_steem": "STEEMを手に入れよう！",
-            "sign_up_earn_steem": "サインアップして "
+                "読んで楽しんだら、次はアカウントを作成してHIVEを手に入れましょう！",
+            "free_hive": "HIVEを手に入れよう！",
+            "sign_up_earn_hive": "サインアップして "
         },
         "next_3_strings_together": {
             "show_more": "評価の低い投稿の表示を増やす",
@@ -232,14 +232,14 @@
         },
         "post_key_warning": {
             "confirm":
-                "STEEMの秘密キーまたはマスターパスワードを公開しようとしています。関連するアカウントの管理権とすべての資金を失う恐れがあります。",
+                "HIVEの秘密キーまたはマスターパスワードを公開しようとしています。関連するアカウントの管理権とすべての資金を失う恐れがあります。",
             "warning":
-                "Steemit Inc.の従業員を含む正当なユーザーは秘密キーまたはマスターパスワードを要求することはありません。",
+                "Hiveの従業員を含む正当なユーザーは秘密キーまたはマスターパスワードを要求することはありません。",
             "checkbox": "理解しました。"
         }
     },
     "navigation": {
-        "about": "Steemについて",
+        "about": "Hiveについて",
         "explore": "投稿を探す",
         "APP_NAME_whitepaper": "%(APP_NAME)sホワイトペーパー",
         "buy_LIQUID_TOKEN": "%(LIQUID_TOKEN)sを買う",
@@ -255,12 +255,12 @@
         "learn_more": "詳細",
         "welcome": "ようこそ",
         "faq": "FAQ",
-        "chat": "Steemitチャット",
-        "app_center": "Steemitアプリセンター",
-        "business_center": "Businesses Accepting Steem",
-        "api_docs": "Steemit API資料",
-        "bluepaper": "Steemブルーペーパー",
-        "whitepaper": "Steemホワイトペーパー"
+        "chat": "Hiveチャット",
+        "app_center": "Hiveアプリセンター",
+        "business_center": "Businesses Accepting Hive",
+        "api_docs": "Hive API資料",
+        "bluepaper": "Hiveブルーペーパー",
+        "whitepaper": "Hiveホワイトペーパー"
     },
     "reply_editor": {
         "shorten_title": "タイトルが長すぎます",
@@ -368,7 +368,7 @@
         "request_already_submitted_contact_support":
             "リクエストは既に送信されていて、現在作業中です。リクエストの状況については%(SUPPORT_EMAIL)sにお問い合わせください。",
         "recover_account_intro":
-            "時折、Steemianのオーナーキーが盗まれることがあります。盗難アカウントの回復は、盗んだ者がオーナーキーを変更してから30日以内に、アカウントの正しい所有者にアカウントを取り戻します。盗難アカウントの回復は、アカウントの所有者が'%(APP_NAME)s'をアカウント受託者とし、%(APP_NAME)sの利用規約に準拠している場合にのみ%(APP_URL)sで行うことができます。",
+            "時折、Hiveianのオーナーキーが盗まれることがあります。盗難アカウントの回復は、盗んだ者がオーナーキーを変更してから30日以内に、アカウントの正しい所有者にアカウントを取り戻します。盗難アカウントの回復は、アカウントの所有者が'%(APP_NAME)s'をアカウント受託者とし、%(APP_NAME)sの利用規約に準拠している場合にのみ%(APP_URL)sで行うことができます。",
         "login_with_facebook_or_reddit_media_to_verify_identity":
             "FacebookまたはRedditにログインして本人確認をしてください。",
         "login_with_social_media_to_verify_identity":
@@ -502,7 +502,7 @@
         "after_printing_write_down_your_user_name":
             "印刷後、ユーザー名を書き留めてください。"
     },
-    "converttosteem_jsx": {
+    "converttohive_jsx": {
         "your_existing_DEBT_TOKEN_are_liquid_and_transferable":
             "あなたが持つ%(DEBT_TOKEN)sは流動的であり移動可能です。代わりに、%(DEBT_TOKEN)sを%(link)sから行けるサイトで直接取引したり、または外部の取引所に送ることができます。",
         "this_is_a_price_feed_conversion":
@@ -522,8 +522,8 @@
             "%(VESTING_TOKEN)sは移転不可能であり、再び%(LIQUID_TOKEN)sに変換するには、3ヶ月（13週間）かかります。",
         "converted_VESTING_TOKEN_can_be_sent_to_yourself_but_can_not_transfer_again":
             "変換した%(VESTING_TOKEN)sは、自分自身や他の人に送ることが可能ですが、もう一度送るには%(LIQUID_TOKEN)sに変換する必要があります。",
-        "part_of_your_steem_power_is_currently_delegated":
-            "現在のSTEEM POWERの一部は委託されたものです。委託は影響力の寄付や、新規ユーザーがSteemitでアクションを起こしやすくするために行われます。委託された額は変動する可能性があります。"
+        "part_of_your_hive_power_is_currently_delegated":
+            "現在のHIVE POWERの一部は委託されたものです。委託は影響力の寄付や、新規ユーザーがHiveでアクションを起こしやすくするために行われます。委託された額は変動する可能性があります。"
     },
     "promote_post_jsx": {
         "promote_post": "投稿をプロモートする",
@@ -537,7 +537,7 @@
     "about_jsx": {
         "about_app": "%(APP_NAME)sについて",
         "about_app_details":
-            "%(APP_NAME)sは誰もがコンテンツ作成やキュレーションで報酬を得られるソーシャルメディアプラットフォームです。これにはSteemという堅牢なデジタルポイントシステムを活用しています。それは市場の価格発見と流動性によってデジタル報酬で実価値を与えます。",
+            "%(APP_NAME)sは誰もがコンテンツ作成やキュレーションで報酬を得られるソーシャルメディアプラットフォームです。これにはHiveという堅牢なデジタルポイントシステムを活用しています。それは市場の価格発見と流動性によってデジタル報酬で実価値を与えます。",
         "learn_more_at_app_url": "詳細は%(APP_URL)sを参照してください。",
         "resources": "リソース"
     },
@@ -610,15 +610,15 @@
         "password_update_success":
             "%(accountName)sのパスワードは正常に更新されました。",
         "password_info":
-            "入力したパスワードまたは秘密キーが間違っています。手入力したか、またはデータエラーがある可能性があります。ヒント：Steemitで生成したパスワードまたは秘密キーは0 (ゼロ)、O (大文字のo)、I (大文字のi)、l (小文字のL)を含みません。",
+            "入力したパスワードまたは秘密キーが間違っています。手入力したか、またはデータエラーがある可能性があります。ヒント：Hiveで生成したパスワードまたは秘密キーは0 (ゼロ)、O (大文字のo)、I (大文字のi)、l (小文字のL)を含みません。",
         "enter_your_username": "ユーザー名を入力してください",
         "password_or_wif": "パスワードまたはWIF",
         "this_operation_requires_your_key_or_master_password":
             "この操作には%(authType)sキーまたはマスターパスワードが必要です。",
         "keep_me_logged_in": "ログイン状態を維持する",
         "signup_button": "サインアップして",
-        "signup_button_emphasis": "STEEMを手に入れよう！",
-        "sign_up_get_steem": "登録してSTEEMを手に入れよう！",
+        "signup_button_emphasis": "HIVEを手に入れよう！",
+        "sign_up_get_hive": "登録してHIVEを手に入れよう！",
         "returning_users": "再",
         "use_keychain": "Use keychain extension"
     },
@@ -669,7 +669,7 @@
         "balance_subject_to_3_day_withdraw_waiting_period":
             "引き出しに3日間の待ち時間が必要となる貯蓄口座です。",
         "move_funds_to_another_account":
-            "資金を他のSteemアカウントに送ります。",
+            "資金を他のHiveアカウントに送ります。",
         "protect_funds_by_requiring_a_3_day_withdraw_waiting_period":
             "3日間の引き出し待ち時間で資金を守ります。",
         "withdraw_funds_after_the_required_3_day_waiting_period":
@@ -692,7 +692,7 @@
         "withdraw_LIQUID_TOKEN": "%(LIQUID_TOKEN)sを引き出す",
         "withdraw_DEBT_TOKENS": "%(DEBT_TOKENS)sを引き出す",
         "tokens_worth_about_1_of_LIQUID_TICKER":
-            "約$1.00の%(LIQUID_TICKER)sと同じ価値のトークンです。現在、利子が年間%(sbdInterest)s%%つきます。",
+            "約$1.00の%(LIQUID_TICKER)sと同じ価値のトークンです。現在、利子が年間%(hbdInterest)s%%つきます。",
         "savings": "貯蓄口座",
         "estimated_account_value": "推定アカウント価格",
         "next_power_down_is_scheduled_to_happen":
@@ -701,7 +701,7 @@
             "送金は一時的に無効になっています。",
         "history": "履歴",
         "redeem_rewards": "報酬の請求 (残高に送る)",
-        "buy_steem_or_steem_power": "STEEMやSTEEM POWERを購入する"
+        "buy_hive_or_hive_power": "HIVEやSTEEM POWERを購入する"
     },
     "powerdown_jsx": {
         "power_down": "パワーダウン",

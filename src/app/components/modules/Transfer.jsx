@@ -134,11 +134,11 @@ class TransferForm extends Component {
             const isWithdraw =
                 transferType && transferType === 'Savings Withdraw';
             const balanceValue =
-                !asset || asset === 'STEEM'
+                !asset || asset === 'HIVE'
                     ? isWithdraw
                       ? currentAccount.get('savings_balance')
                       : currentAccount.get('balance')
-                    : asset === 'SBD'
+                    : asset === 'HBD'
                       ? isWithdraw
                         ? currentAccount.get('savings_sbd_balance')
                         : currentAccount.get('sbd_balance')
@@ -203,11 +203,11 @@ class TransferForm extends Component {
         const { currentAccount } = this.props;
         const { asset } = this.state;
         const isWithdraw = transferType && transferType === 'Savings Withdraw';
-        return !asset || asset.value === 'STEEM'
+        return !asset || asset.value === 'HIVE'
             ? isWithdraw
               ? currentAccount.get('savings_balance')
               : currentAccount.get('balance')
-            : asset.value === 'SBD'
+            : asset.value === 'HBD'
               ? isWithdraw
                 ? currentAccount.get('savings_sbd_balance')
                 : currentAccount.get('sbd_balance')
@@ -216,7 +216,7 @@ class TransferForm extends Component {
 
     assetBalanceClick = e => {
         e.preventDefault();
-        // Convert '9.999 STEEM' to 9.999
+        // Convert '9.999 HIVE' to 9.999
         this.state.amount.props.onChange(this.balanceValue().split(' ')[0]);
     };
 
@@ -431,8 +431,8 @@ class TransferForm extends Component {
                                             border: 'none',
                                         }}
                                     >
-                                        <option value="STEEM">STEEM</option>
-                                        <option value="SBD">SBD</option>
+                                        <option value="HIVE">STEEM</option>
+                                        <option value="HBD">HBD</option>
                                     </select>
                                 </span>
                             )}
@@ -632,7 +632,7 @@ export default connect(
                 }
                 dispatch(userActions.hideTransfer());
             };
-            const asset2 = toVesting ? 'STEEM' : asset;
+            const asset2 = toVesting ? 'HIVE' : asset;
             const operation = {
                 from: username,
                 to,
