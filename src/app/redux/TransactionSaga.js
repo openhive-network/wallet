@@ -33,6 +33,8 @@ function makeSteemCompatible(type, operation) {
     } else if (type == 'claim_reward_balance') {
         operation.reward_steem = toSteemSymbols(operation.reward_steem);
         operation.reward_sbd = toSteemSymbols(operation.reward_sbd);
+    } else if (type == 'account_create') {
+        operation.fee = toSteemSymbols(operation.fee);
     } else if (operation.amount) {
         operation.amount = toSteemSymbols(operation.amount);
     }
