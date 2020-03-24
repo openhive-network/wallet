@@ -286,7 +286,7 @@ You can get to your account menu by clicking on the avatar icon in the top-right
 
 **Feed** - Here is where you go to see the most recent posts from the people you follow.
 
-**Blog** - Here is where you go to see all of your posts and resteems. It is also where you go to see your profile page that is viewable by other users.
+**Blog** - Here is where you go to see all of your posts and reblogs. It is also where you go to see your profile page that is viewable by other users.
 
 **Comments** - Here is where you go to see all of the comments and replies you have made.
 
@@ -842,7 +842,7 @@ Not necessarily. See: <a href="#What_causes_my_reputation_score_to_go_down">What
 - Threatening users with any type of physical violence.
 - Not citing sources when using someone else’s material.
 - Posting ‘not safe for work’ content without using the “nsfw” tag.
-- Selling or offering to buy votes/resteems/follows, or schemes that facilitate this.
+- Selling or offering to buy votes/reblogs/follows, or schemes that facilitate this.
 - Scams or Fraudulent offers.
 
 <a href="#Table_of_Contents_Plagiarism__Spam__and_Abuse">^</a>
