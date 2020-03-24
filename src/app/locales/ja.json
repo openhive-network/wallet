@@ -668,8 +668,7 @@
         "convert_to_VESTING_TOKEN": "%(VESTING_TOKEN)sに変換",
         "balance_subject_to_3_day_withdraw_waiting_period":
             "引き出しに3日間の待ち時間が必要となる貯蓄口座です。",
-        "move_funds_to_another_account":
-            "資金を他のHiveアカウントに送ります。",
+        "move_funds_to_another_account": "資金を他のHiveアカウントに送ります。",
         "protect_funds_by_requiring_a_3_day_withdraw_waiting_period":
             "3日間の引き出し待ち時間で資金を守ります。",
         "withdraw_funds_after_the_required_3_day_waiting_period":
@@ -701,7 +700,7 @@
             "送金は一時的に無効になっています。",
         "history": "履歴",
         "redeem_rewards": "報酬の請求 (残高に送る)",
-        "buy_hive_or_hive_power": "HIVEやSTEEM POWERを購入する"
+        "buy_hive_or_hive_power": "HIVEやHIVE POWERを購入する"
     },
     "powerdown_jsx": {
         "power_down": "パワーダウン",

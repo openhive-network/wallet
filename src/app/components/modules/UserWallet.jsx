@@ -163,7 +163,7 @@ class UserWallet extends React.Component {
         };
 
         const savings_balance = account.get('savings_balance');
-        const savings_hbd_balance = account.get('savings_hbd_balance');
+        const savings_hbd_balance = account.get('savings_sbd_balance');
 
         const powerDown = (cancel, e) => {
             e.preventDefault();
@@ -259,7 +259,7 @@ class UserWallet extends React.Component {
         const divesting =
             parseFloat(account.get('vesting_withdraw_rate').split(' ')[0]) >
             0.0;
-        const hbd_balance = parseFloat(account.get('hbd_balance'));
+        const hbd_balance = parseFloat(account.get('sbd_balance'));
         const hbd_balance_savings = parseFloat(
             savings_hbd_balance.split(' ')[0]
         );
@@ -345,20 +345,12 @@ class UserWallet extends React.Component {
             {
                 value: tt('userwallet_jsx.transfer'),
                 link: '#',
-                onClick: showTransfer.bind(
-                    this,
-                    'HIVE',
-                    'Transfer to Account'
-                ),
+                onClick: showTransfer.bind(this, 'HIVE', 'Transfer to Account'),
             },
             {
                 value: tt('userwallet_jsx.transfer_to_savings'),
                 link: '#',
-                onClick: showTransfer.bind(
-                    this,
-                    'HIVE',
-                    'Transfer to Savings'
-                ),
+                onClick: showTransfer.bind(this, 'HIVE', 'Transfer to Savings'),
             },
             {
                 value: tt('userwallet_jsx.power_up'),
@@ -439,9 +431,7 @@ class UserWallet extends React.Component {
         }
 
         const hive_balance_str = numberWithCommas(balance_hive.toFixed(3));
-        const hive_orders_balance_str = numberWithCommas(
-            hiveOrders.toFixed(3)
-        );
+        const hive_orders_balance_str = numberWithCommas(hiveOrders.toFixed(3));
         const power_balance_str = numberWithCommas(vesting_hive.toFixed(3));
         const received_power_balance_str =
             (delegated_hive < 0 ? '+' : '') +
@@ -449,7 +439,7 @@ class UserWallet extends React.Component {
         const powerdown_balance_str = numberWithCommas(
             powerdown_hive.toFixed(3)
         );
-        const hbd_balance_str = numberWithCommas('$' + hbd_balance.toFixed(3)); // formatDecimal(account.hbd_balance, 3)
+        const hbd_balance_str = numberWithCommas('$' + hbd_balance.toFixed(3)); // formatDecimal(account.sbd_balance, 3)
         const hbd_orders_balance_str = numberWithCommas(
             '$' + hbdOrders.toFixed(3)
         );

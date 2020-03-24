@@ -136,13 +136,13 @@ class TransferForm extends Component {
             const balanceValue =
                 !asset || asset === 'HIVE'
                     ? isWithdraw
-                      ? currentAccount.get('savings_balance')
-                      : currentAccount.get('balance')
+                        ? currentAccount.get('savings_balance')
+                        : currentAccount.get('balance')
                     : asset === 'HBD'
-                      ? isWithdraw
-                        ? currentAccount.get('savings_sbd_balance')
-                        : currentAccount.get('sbd_balance')
-                      : null;
+                        ? isWithdraw
+                            ? currentAccount.get('savings_sbd_balance')
+                            : currentAccount.get('sbd_balance')
+                        : null;
             if (!balanceValue) return false;
             const balance = balanceValue.split(' ')[0];
             return parseFloat(amount) > parseFloat(balance);
@@ -167,15 +167,19 @@ class TransferForm extends Component {
                 amount: !values.amount
                     ? 'Required'
                     : !/^\d+(\.\d+)?$/.test(values.amount)
-                      ? tt('transfer_jsx.amount_is_in_form')
-                      : insufficientFunds(values.asset, values.amount)
-                        ? tt('transfer_jsx.insufficient_funds')
-                        : countDecimals(values.amount) > 3
-                          ? tt('transfer_jsx.use_only_3_digits_of_precison')
-                          : null,
+                        ? tt('transfer_jsx.amount_is_in_form')
+                        : insufficientFunds(values.asset, values.amount)
+                            ? tt('transfer_jsx.insufficient_funds')
+                            : countDecimals(values.amount) > 3
+                                ? tt(
+                                      'transfer_jsx.use_only_3_digits_of_precison'
+                                  )
+                                : null,
                 asset: props.toVesting
                     ? null
-                    : !values.asset ? tt('g.required') : null,
+                    : !values.asset
+                        ? tt('g.required')
+                        : null,
                 memo: values.memo
                     ? validate_memo_field(
                           values.memo,
@@ -184,8 +188,8 @@ class TransferForm extends Component {
                       )
                     : values.memo &&
                       (!browserTests.memo_encryption && /^#/.test(values.memo))
-                      ? 'Encrypted memos are temporarily unavailable (issue #98)'
-                      : null,
+                        ? 'Encrypted memos are temporarily unavailable (issue #98)'
+                        : null,
             }),
         });
     }
@@ -205,13 +209,13 @@ class TransferForm extends Component {
         const isWithdraw = transferType && transferType === 'Savings Withdraw';
         return !asset || asset.value === 'HIVE'
             ? isWithdraw
-              ? currentAccount.get('savings_balance')
-              : currentAccount.get('balance')
+                ? currentAccount.get('savings_balance')
+                : currentAccount.get('balance')
             : asset.value === 'HBD'
-              ? isWithdraw
-                ? currentAccount.get('savings_sbd_balance')
-                : currentAccount.get('sbd_balance')
-              : null;
+                ? isWithdraw
+                    ? currentAccount.get('savings_sbd_balance')
+                    : currentAccount.get('sbd_balance')
+                : null;
     }
 
     assetBalanceClick = e => {
@@ -431,7 +435,7 @@ class TransferForm extends Component {
                                             border: 'none',
                                         }}
                                     >
-                                        <option value="HIVE">STEEM</option>
+                                        <option value="HIVE">HIVE</option>
                                         <option value="HBD">HBD</option>
                                     </select>
                                 </span>
@@ -616,9 +620,7 @@ export default connect(
                 )
             )
                 throw new Error(
-                    `Invalid transfer params: toVesting ${
-                        toVesting
-                    }, transferType ${transferType}`
+                    `Invalid transfer params: toVesting ${toVesting}, transferType ${transferType}`
                 );
 
             const username = currentUser.get('username');
@@ -649,12 +651,12 @@ export default connect(
                     type: toVesting
                         ? 'transfer_to_vesting'
                         : transferType === 'Transfer to Account'
-                          ? 'transfer'
-                          : transferType === 'Transfer to Savings'
-                            ? 'transfer_to_savings'
-                            : transferType === 'Savings Withdraw'
-                              ? 'transfer_from_savings'
-                              : null,
+                            ? 'transfer'
+                            : transferType === 'Transfer to Savings'
+                                ? 'transfer_to_savings'
+                                : transferType === 'Savings Withdraw'
+                                    ? 'transfer_from_savings'
+                                    : null,
                     operation,
                     successCallback,
                     errorCallback,

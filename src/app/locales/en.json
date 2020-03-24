@@ -37,8 +37,7 @@
         "dismiss": "Dismiss",
         "edit": "Edit",
         "email": "Email",
-        "external_link_message":
-            "This link will take you away from hive.blog",
+        "external_link_message": "This link will take you away from hive.blog",
         "feed": "Feed",
         "follow": "Follow",
         "for": " for ",
@@ -827,7 +826,7 @@
         "transfers_are_temporary_disabled": "Transfers are temporary disabled.",
         "history": "HISTORY",
         "redeem_rewards": "Redeem Rewards (Transfer to Balance)",
-        "buy_hive_or_hive_power": "Buy HIVE or STEEM POWER"
+        "buy_hive_or_hive_power": "Buy HIVE or HIVE POWER"
     },
     "powerdown_jsx": {
         "power_down": "Power Down",

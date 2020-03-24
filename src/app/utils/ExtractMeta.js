@@ -3,8 +3,7 @@ import { objAccessor } from 'app/utils/Accessors';
 import normalizeProfile from 'app/utils/NormalizeProfile';
 import { makeCanonicalLink } from 'app/utils/CanonicalLinker.js';
 
-const site_desc =
-    'Hive Wallet is an online wallet for managing Hive accounts.';
+const site_desc = 'Hive Wallet is an online wallet for managing Hive accounts.';
 
 function addSiteMeta(metas) {
     metas.push({ title: 'Hive Wallet' });
@@ -57,7 +56,8 @@ export default function extractMeta(chain_data, rp) {
             metas.push({ name: 'og:url', content: url });
             metas.push({
                 name: 'og:image',
-                content: image || 'https://hive.blog/images/hive-blog-share.png',
+                content:
+                    image || 'https://hive.blog/images/hive-blog-share.png',
             });
             metas.push({ name: 'og:description', content: desc });
             metas.push({ name: 'og:site_name', content: 'Hive Wallet' });
@@ -93,7 +93,7 @@ export default function extractMeta(chain_data, rp) {
             about =
                 'Join thousands on Hive.blog who share, post and earn rewards.';
         if (profile_image == null)
-            profile_image = 'https://hive.blog/images/hive-blog-twshare.png',
+            profile_image = 'https://hive.blog/images/hive-blog-twshare.png';
         // Set profile tags
         const title = `@${account.name}`;
         const desc = `The latest posts from ${name}. Follow me at @${

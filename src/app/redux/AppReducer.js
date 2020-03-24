@@ -1,7 +1,7 @@
 import { Map, OrderedMap } from 'immutable';
 import tt from 'counterpart';
 
-const HIVE_API_ERROR = 'app/STEEM_API_ERROR';
+const HIVE_API_ERROR = 'app/HIVE_API_ERROR';
 const FETCH_DATA_BEGIN = 'app/FETCH_DATA_BEGIN';
 const FETCH_DATA_END = 'app/FETCH_DATA_END';
 const ADD_NOTIFICATION = 'app/ADD_NOTIFICATION';

@@ -699,7 +699,7 @@
             "Las transferencias están temporalmente inhabilitadas.",
         "history": "HISTORIA",
         "redeem_rewards": "Liquidar recompensas (Transferir al saldo)",
-        "buy_hive_or_hive_power": "Compra HIVE o STEEM POWER."
+        "buy_hive_or_hive_power": "Compra HIVE o HIVE POWER."
     },
     "powerdown_jsx": {
         "power_down": "Power Down",

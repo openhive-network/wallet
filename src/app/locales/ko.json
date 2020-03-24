@@ -617,8 +617,7 @@
         "keep_me_logged_in": "로그인 유지",
         "signup_button": "Sign up now to earn ",
         "signup_button_emphasis": "FREE HIVE!",
-        "sign_up_get_hive":
-            "계정을 만들고 가상화폐 HIVE 을 보상으로 받으세요.",
+        "sign_up_get_hive": "계정을 만들고 가상화폐 HIVE 을 보상으로 받으세요.",
         "returning_users": "Returning Users: ",
         "use_keychain": "Use keychain extension"
     },
@@ -700,7 +699,7 @@
             "현재 일시적인 이유로 송금이 불가능합니다.",
         "history": "거래 내역",
         "redeem_rewards": "내 지갑으로 입금하기",
-        "buy_hive_or_hive_power": "HIVE, STEEM POWER 구입"
+        "buy_hive_or_hive_power": "HIVE, HIVE POWER 구입"
     },
     "powerdown_jsx": {
         "power_down": "파워 다운",

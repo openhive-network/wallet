@@ -89,8 +89,8 @@ class TransferHistoryRow extends React.Component {
                 type === 'transfer_to_savings'
                     ? 'to_savings'
                     : type === 'transfer_from_savings'
-                      ? 'from_savings'
-                      : 'not_savings';
+                        ? 'from_savings'
+                        : 'not_savings';
 
             if (data.from === context) {
                 // Semi-bad behavior - passing `type` to translation engine -- @todo better somehow?
@@ -208,10 +208,10 @@ class TransferHistoryRow extends React.Component {
             // `${data.sbd_payout}${hive_payout}, ${tt( 'g.and' )} ${author_reward} HIVE POWER ${tt('g.for')}`;
         } else if (type === 'claim_reward_balance') {
             const rewards = [];
-            if (parseFloat(data.reward_hive.split(' ')[0]) > 0)
-                rewards.push(data.reward_hive);
-            if (parseFloat(data.reward_hbd.split(' ')[0]) > 0)
-                rewards.push(data.reward_hbd);
+            if (parseFloat(data.reward_steem.split(' ')[0]) > 0)
+                rewards.push(data.reward_steem);
+            if (parseFloat(data.reward_sbd.split(' ')[0]) > 0)
+                rewards.push(data.reward_sbd);
             if (parseFloat(data.reward_vests.split(' ')[0]) > 0)
                 rewards.push(`${reward_vests} HIVE POWER`);
 

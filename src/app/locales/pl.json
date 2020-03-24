@@ -686,7 +686,7 @@
         "transfers_are_temporary_disabled": "Transfery tymczasowo wyłączone.",
         "history": "HISTORIA",
         "redeem_rewards": "Odbierz nagrody (transfer do salda)",
-        "buy_hive_or_hive_power": "Kup HIVE lub STEEM POWER"
+        "buy_hive_or_hive_power": "Kup HIVE lub HIVE POWER"
     },
     "powerdown_jsx": {
         "power_down": "Zmniejsz moc",

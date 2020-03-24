@@ -106,10 +106,10 @@ describe('market reducer', () => {
         const orders = withOrders.get('open_orders');
 
         expect(orders[0].price).toBe(0.666);
-        expect(orders[0].sbd).toBe('1.998 HBD');
+        expect(orders[0].hbd).toBe('1.998 HBD');
         expect(orders[1].type).toBe('ask');
         expect(orders[2].price).toBe(0.651);
-        expect(orders[2].sbd).toBe('1.953 HBD');
+        expect(orders[2].hbd).toBe('1.953 HBD');
         expect(orders[3].type).toBe('bid');
         expect(orders[3].type).toBe('bid');
     });

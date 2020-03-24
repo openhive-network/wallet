@@ -723,7 +723,7 @@
             "Les transferts sont temporairement désactivés.",
         "history": "HISTORIQUE",
         "redeem_rewards": "Réclamer les gains (transférer vers le solde)",
-        "buy_hive_or_hive_power": "Acheter du HIVE ou du STEEM POWER"
+        "buy_hive_or_hive_power": "Acheter du HIVE ou du HIVE POWER"
     },
     "powerdown_jsx": {
         "power_down": "Diminuer son influence",

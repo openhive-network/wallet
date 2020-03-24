@@ -483,7 +483,7 @@
         "converted_VESTING_TOKEN_can_be_sent_to_yourself_but_can_not_transfer_again":
             "%(VESTING_TOKEN)s可以转给你自己或其他人，但是只有转回%(LIQUID_TOKEN)s后，才可以进行下一次转账。",
         "part_of_your_hive_power_is_currently_delegated":
-            "有一部分HIVE POWER是代理给你使用的。代理的STEEM POWER是为了帮助新用户在hive.blog上进行操作。你被代理的数量可能会有波动。"
+            "有一部分HIVE POWER是代理给你使用的。代理的HIVE POWER是为了帮助新用户在hive.blog上进行操作。你被代理的数量可能会有波动。"
     },
     "promote_post_jsx": {
         "promote_post": "推广帖子",
@@ -646,7 +646,7 @@
         "transfers_are_temporary_disabled": "转移功能暂时被禁用。",
         "history": "历史",
         "redeem_rewards": "赎回奖励(转移至余额)",
-        "buy_hive_or_hive_power": "购买HIVE或STEEM Power"
+        "buy_hive_or_hive_power": "购买HIVE或HIVE Power"
     },
     "powerdown_jsx": {
         "power_down": "Power Down",

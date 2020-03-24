@@ -87,7 +87,7 @@ class Market extends React.Component {
         let tc =
             typeof this.props.ticker == 'undefined' ||
             this.props.ticker.latest !== nextProps.ticker.latest ||
-            this.props.ticker.hbd_volume !== nextProps.ticker.hbd_volume;
+            this.props.ticker.sbd_volume !== nextProps.ticker.sbd_volume;
 
         let bc =
             typeof this.props.orderbook == 'undefined' ||
@@ -187,7 +187,7 @@ class Market extends React.Component {
 
     percentDiff = (marketPrice, userPrice) => {
         marketPrice = parseFloat(marketPrice);
-        return 100 * (userPrice - marketPrice) / marketPrice;
+        return (100 * (userPrice - marketPrice)) / marketPrice;
     };
 
     validateBuyHive = () => {
@@ -242,7 +242,7 @@ class Market extends React.Component {
             lowest_ask: 0,
             highest_bid: 0,
             percent_change: 0,
-            hbd_volume: 0,
+            sbd_volume: 0,
             feed_price: 0,
         };
 
@@ -252,7 +252,7 @@ class Market extends React.Component {
                 lowest_ask,
                 highest_bid,
                 percent_change,
-                hbd_volume,
+                sbd_volume,
             } = this.props.ticker;
             const base = this.props.feed.get('base');
             const quote = this.props.feed.get('quote');
@@ -261,7 +261,7 @@ class Market extends React.Component {
                 lowest_ask: roundUp(parseFloat(lowest_ask), 6),
                 highest_bid: roundDown(parseFloat(highest_bid), 6),
                 percent_change: parseFloat(percent_change),
-                hbd_volume: parseFloat(hbd_volume),
+                sbd_volume: parseFloat(sbd_volume),
                 feed_price:
                     parseFloat(base.split(' ')[0]) /
                     parseFloat(quote.split(' ')[0]),
@@ -291,12 +291,7 @@ class Market extends React.Component {
                         last !== null &&
                         o.getStringPrice() === last.getStringPrice()
                     ) {
-                        //if(last !== null && o.price == last.price) {
                         buff[buff.length - 1] = buff[buff.length - 1].add(o);
-                        // buff[buff.length-1].hive += o.hive
-                        // buff[buff.length-1].hbd   += o.hbd
-                        // buff[buff.length-1].hbd_depth = o.hbd_depth
-                        // buff[buff.length-1].hive_depth = o.hive_depth
                     } else {
                         buff.push(o);
                     }
@@ -453,7 +448,7 @@ class Market extends React.Component {
                             <li>
                                 <b>{tt('market_jsx.24h_volume')}</b>{' '}
                                 {CURRENCY_SIGN}
-                                {ticker.hbd_volume.toFixed(2)}
+                                {ticker.sbd_volume.toFixed(2)}
                             </li>
                             <li>
                                 <b>{tt('g.bid')}</b> {CURRENCY_SIGN}
@@ -467,9 +462,9 @@ class Market extends React.Component {
                                 <li>
                                     <b>{tt('market_jsx.spread')}</b>{' '}
                                     {(
-                                        200 *
-                                        (ticker.lowest_ask -
-                                            ticker.highest_bid) /
+                                        (200 *
+                                            (ticker.lowest_ask -
+                                                ticker.highest_bid)) /
                                         (ticker.highest_bid + ticker.lowest_ask)
                                     ).toFixed(3)}%
                                 </li>
@@ -534,9 +529,7 @@ class Market extends React.Component {
                                                 validateBuyHive();
                                             }}
                                         />
-                                        <span className="input-group-label uppercase">{`${
-                                            DEBT_TOKEN_SHORT
-                                        }/${LIQUID_TOKEN}`}</span>
+                                        <span className="input-group-label uppercase">{`${DEBT_TOKEN_SHORT}/${LIQUID_TOKEN}`}</span>
                                     </div>
                                 </div>
                             </div>
@@ -605,9 +598,7 @@ class Market extends React.Component {
                                                 validateBuyHive();
                                             }}
                                         />
-                                        <span className="input-group-label">{`${
-                                            DEBT_TOKEN_SHORT
-                                        } (${CURRENCY_SIGN})`}</span>
+                                        <span className="input-group-label">{`${DEBT_TOKEN_SHORT} (${CURRENCY_SIGN})`}</span>
                                     </div>
                                 </div>
                             </div>
@@ -636,7 +627,7 @@ class Market extends React.Component {
                                                                 .buyHive_price
                                                                 .value
                                                         );
-                                                        const total = account.hbd_balance.split(
+                                                        const total = account.sbd_balance.split(
                                                             ' '
                                                         )[0];
                                                         this.refs.buyHive_total.value = total;
@@ -652,7 +643,7 @@ class Market extends React.Component {
                                                 >
                                                     {tt('market_jsx.available')}:
                                                 </a>{' '}
-                                                {account.hbd_balance.replace(
+                                                {account.sbd_balance.replace(
                                                     'HBD',
                                                     DEBT_TOKEN_SHORT
                                                 )}
@@ -667,8 +658,7 @@ class Market extends React.Component {
                                                 onClick={e => {
                                                     e.preventDefault();
                                                     const amount = parseFloat(
-                                                        this.refs
-                                                            .buyHive_amount
+                                                        this.refs.buyHive_amount
                                                             .value
                                                     );
                                                     const price = parseFloat(
@@ -701,10 +691,7 @@ class Market extends React.Component {
                             })}
                         </h4>
 
-                        <form
-                            className="Market__orderform"
-                            onSubmit={sellHive}
-                        >
+                        <form className="Market__orderform" onSubmit={sellHive}>
                             <div className="row">
                                 <div className="column small-3 large-2">
                                     <label>{tt('g.price')}</label>
@@ -738,9 +725,7 @@ class Market extends React.Component {
                                                 validateSellHive();
                                             }}
                                         />
-                                        <span className="input-group-label uppercase">{`${
-                                            DEBT_TOKEN_SHORT
-                                        }/${LIQUID_TOKEN}`}</span>
+                                        <span className="input-group-label uppercase">{`${DEBT_TOKEN_SHORT}/${LIQUID_TOKEN}`}</span>
                                     </div>
                                 </div>
                             </div>
@@ -808,9 +793,7 @@ class Market extends React.Component {
                                                 validateSellHive();
                                             }}
                                         />
-                                        <span className="input-group-label">{`${
-                                            DEBT_TOKEN_SHORT
-                                        } (${CURRENCY_SIGN})`}</span>
+                                        <span className="input-group-label">{`${DEBT_TOKEN_SHORT} (${CURRENCY_SIGN})`}</span>
                                     </div>
                                 </div>
                             </div>

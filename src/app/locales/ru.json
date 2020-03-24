@@ -720,7 +720,7 @@
         "transfers_are_temporary_disabled": "Переводы временно преостановлены.",
         "history": "ИСТОРИЯ",
         "redeem_rewards": "Получить вознаграждение",
-        "buy_hive_or_hive_power": "Купить HIVE или STEEM POWER"
+        "buy_hive_or_hive_power": "Купить HIVE или HIVE POWER"
     },
     "powerdown_jsx": {
         "power_down": "Уменьшить силу голоса (power down)",

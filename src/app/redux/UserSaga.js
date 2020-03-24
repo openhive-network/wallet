@@ -10,7 +10,7 @@ import { receiveFeatureFlags } from 'app/redux/AppReducer';
 import {
     hasCompatibleKeychain,
     isLoggedInWithKeychain,
-} from 'app/utils/SteemKeychain';
+} from 'app/utils/HiveKeychain';
 import { packLoginData, extractLoginData } from 'app/utils/UserUtil';
 import { browserHistory } from 'react-router';
 import {
@@ -327,7 +327,7 @@ function* usernamePasswordLogin({
             const bufSha = hash.sha256(buf);
             if (useKeychain) {
                 const response = yield new Promise(resolve => {
-                    window.steem_keychain.requestSignBuffer(
+                    window.hive_keychain.requestSignBuffer(
                         username,
                         buf,
                         'Posting',
@@ -411,7 +411,7 @@ function* getFeatureFlags(username, posting_private) {
         let flags;
         if (!posting_private && hasCompatibleKeychain()) {
             flags = yield new Promise((resolve, reject) => {
-                window.steem_keychain.requestSignedCall(
+                window.hive_keychain.requestSignedCall(
                     username,
                     'conveyor.get_feature_flags',
                     { account: username },

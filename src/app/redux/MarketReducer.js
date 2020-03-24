@@ -48,13 +48,13 @@ export default function reducer(state = defaultState, action = {}) {
                             : 'bid';
                     const hbd =
                         type == 'bid' ? o.sell_price.base : o.sell_price.quote;
-                    const steem =
+                    const hive =
                         type == 'ask' ? o.sell_price.base : o.sell_price.quote;
                     return {
                         ...o,
                         type: type,
-                        price: parseFloat(hbd) / parseFloat(steem),
-                        steem,
+                        price: parseFloat(hbd) / parseFloat(hive),
+                        hive,
                         hbd,
                     };
                 })

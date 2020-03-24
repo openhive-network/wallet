@@ -4,16 +4,16 @@
 	  	width: 120px;
 	   	height: auto;
 	   	opacity: 1;
-	   	fill: $color-teal;
+	   	fill: $color-hive-red;
 	   	@include MQ(M) {
 	  		width: 144px;
 	   		height: auto;
 	   	}
 	}
 	.icon-svg {
-	    fill: $color-teal;
+	    fill: $color-hive-red;
 	}
 	.logo-new:hover .icon-svg {
-   		fill: $color-blue-black;
+   		fill: $color-hive-black;
 	}
 }

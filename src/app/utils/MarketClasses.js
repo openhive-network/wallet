@@ -11,8 +11,8 @@ class Order {
                 ? roundUp(this.price, 6)
                 : Math.max(roundDown(this.price, 6), 0.000001);
         this.stringPrice = this.price.toFixed(6);
-        this.hive = parseInt(order.hive, 10);
-        this.hbd = parseInt(order.hbd, 10);
+        this.hive = parseInt(order.steem, 10);
+        this.hbd = parseInt(order.sbd, 10);
         this.date = order.created;
     }
 
@@ -44,8 +44,8 @@ class Order {
         return new Order(
             {
                 real_price: this.price,
-                hive: this.hive + order.hive,
-                hbd: this.hbd + order.hbd,
+                steem: this.hive + order.hive,
+                sbd: this.hbd + order.hbd,
                 date: this.date,
             },
             this.type
