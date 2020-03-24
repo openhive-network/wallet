@@ -11,7 +11,7 @@ function start {
         ;;
 
         "dev")
-            docker-compose -f docker-compose.dev.yml up --rm
+            docker-compose -f docker-compose.dev.yml up
         ;;
 
         "*")
@@ -62,10 +62,6 @@ function logs {
 
 function build {
     case "$1" in
-        "proxy")
-            docker-compose -f docker-compose.proxy.yml build
-        ;;
-
         "prod")
             docker-compose -f docker-compose.prod.yml build
         ;;
@@ -74,7 +70,7 @@ function build {
             echo Unknown environment
             exit 1
         ;;
-    esac     
+    esac
 }
 
 while test $# -gt 0; do

@@ -7,16 +7,16 @@ services:
         ports:
           - "80"
         environment:
-            VIRTUAL_HOST: wallet.hivean.com
+            VIRTUAL_HOST: wallet.hive.blog
             VIRTUAL_PORT: 8080
             SDC_CLIENT_STEEMD_URL: https://api.hive.blog
             SDC_SERVER_STEEMD_URL: https://api.hive.blog
             SDC_DISABLE_SIGNUPS: 1
-            SDC_SITE_DOMAIN: wallet.hivean.com
+            SDC_SITE_DOMAIN: wallet.hive.blog
             SDC_IMAGE_PROXY_PREFIX: https://steemitimages.com/
             SDC_UPLOAD_IMAGE_URL: https://steemitimages.com
-            SDC_HELMET_CONNECTSRC: "'self' steemit.com https://api.hive.blog https://wallet.hivean.com https://steemitimages.com"
-            WALLET_URL: https://wallet.hivean.com
+            SDC_HELMET_CONNECTSRC: "'self' steemit.com https://api.hive.blog https://wallet.hive.blog https://steemitimages.com"
+            WALLET_URL: https://wallet.hive.blog
         networks:
             - proxy_reverse-proxy
         restart: always
@@ -26,16 +26,16 @@ services:
 #        image: hive/wallet:staging
 #        container_name: wallet_stg
 #        environment:
-#            VIRTUAL_HOST: staging.hivean.com
+#            VIRTUAL_HOST: staging.hive.blog
 #            VIRTUAL_PORT: 8080
 #            SDC_CLIENT_STEEMD_URL: https://api.hive.blog
 #            SDC_SERVER_STEEMD_URL: https://api.hive.blog
 #            SDC_DISABLE_SIGNUPS: 1
-#            SDC_SITE_DOMAIN: staging.hivean.com
+#            SDC_SITE_DOMAIN: staging.hive.blog
 #            SDC_IMAGE_PROXY_PREFIX: https://steemitimages.com/
 #            SDC_UPLOAD_IMAGE_URL: https://steemitimages.com
-#            SDC_HELMET_CONNECTSRC: "'self' https://api.hive.blog https://staging.hivean.com https://steemitimages.com"
-#            WALLET_URL: https://wallet.hivean.com
+#            SDC_HELMET_CONNECTSRC: "'self' https://api.hive.blog https://staging.hive.blog https://steemitimages.com"
+#            WALLET_URL: https://wallet.hive.blog
 #        networks:
 #            - proxy_reverse-proxy
 #        restart: always
