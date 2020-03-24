@@ -78,6 +78,13 @@ const SidePanel = ({ alignment, visible, hideSidePanel, username }) => {
             },
         ],
         exchanges: [
+            {
+                value: 'blocktrades',
+                label: 'Blocktrades',
+                link: username
+                    ? `https://blocktrades.us/?input_coin_type=eth&output_coin_type=hive&receive_address=${username}`
+                    : `https://blocktrades.us/?input_coin_type=eth&output_coin_type=hive`,
+            },
         ],
         external: [
             {
@@ -163,14 +170,14 @@ const SidePanel = ({ alignment, visible, hideSidePanel, username }) => {
                 <ul className="vertical menu">
                     {sidePanelLinks.internal.map(makeInternalLink)}
                 </ul>
-                //<ul className="vertical menu">
-                //    <li>
-                //        <a className="menu-section">
-                //            {tt('navigation.third_party_exchanges')}
-                //        </a>
-                //    </li>
-                //    {sidePanelLinks.exchanges.map(makeExternalLink)}
-                //</ul>
+                <ul className="vertical menu">
+                    <li>
+                        <a className="menu-section">
+                            {tt('navigation.third_party_exchanges')}
+                        </a>
+                    </li>
+                    {sidePanelLinks.exchanges.map(makeExternalLink)}
+                </ul>
                 <ul className="vertical menu">
                     {sidePanelLinks.external.map(makeExternalLink)}
                 </ul>
