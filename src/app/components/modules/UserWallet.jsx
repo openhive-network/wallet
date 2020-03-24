@@ -817,8 +817,8 @@ export default connect(
 
             const operation = {
                 account: username,
-                reward_hive: account.get('reward_steem_balance'),
-                reward_hbd: account.get('reward_sbd_balance'),
+                reward_steem: account.get('reward_steem_balance'),
+                reward_sbd: account.get('reward_sbd_balance'),
                 reward_vests: account.get('reward_vesting_balance'),
             };
 

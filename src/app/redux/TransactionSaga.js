@@ -30,6 +30,9 @@ function makeSteemCompatible(type, operation) {
     if (type == 'limit_order_create') {
         operation.amount_to_sell = toSteemSymbols(operation.amount_to_sell);
         operation.min_to_receive = toSteemSymbols(operation.min_to_receive);
+    } else if (type == 'claim_reward_balance') {
+        operation.reward_steem = toSteemSymbols(operation.reward_steem);
+        operation.reward_sbd = toSteemSymbols(operation.reward_sbd);
     } else if (operation.amount) {
         operation.amount = toSteemSymbols(operation.amount);
     }
