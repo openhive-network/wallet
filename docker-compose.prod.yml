@@ -1,0 +1,46 @@
+version: "3"
+services:
+    hive_wallet:
+        build: .
+        image: hive/wallet:latest
+        container_name: hive_wallet
+        ports:
+          - "80"
+        environment:
+            VIRTUAL_HOST: wallet.hivean.com
+            VIRTUAL_PORT: 8080
+            SDC_CLIENT_STEEMD_URL: https://api.hive.blog
+            SDC_SERVER_STEEMD_URL: https://api.hive.blog
+            SDC_DISABLE_SIGNUPS: 1
+            SDC_SITE_DOMAIN: wallet.hivean.com
+            SDC_IMAGE_PROXY_PREFIX: https://steemitimages.com/
+            SDC_UPLOAD_IMAGE_URL: https://steemitimages.com
+            SDC_HELMET_CONNECTSRC: "'self' steemit.com https://api.hive.blog https://wallet.hivean.com https://steemitimages.com"
+            WALLET_URL: https://wallet.hivean.com
+        networks:
+            - proxy_reverse-proxy
+        restart: always
+
+#    wallet_stg:
+#        build: .
+#        image: hive/wallet:staging
+#        container_name: wallet_stg
+#        environment:
+#            VIRTUAL_HOST: staging.hivean.com
+#            VIRTUAL_PORT: 8080
+#            SDC_CLIENT_STEEMD_URL: https://api.hive.blog
+#            SDC_SERVER_STEEMD_URL: https://api.hive.blog
+#            SDC_DISABLE_SIGNUPS: 1
+#            SDC_SITE_DOMAIN: staging.hivean.com
+#            SDC_IMAGE_PROXY_PREFIX: https://steemitimages.com/
+#            SDC_UPLOAD_IMAGE_URL: https://steemitimages.com
+#            SDC_HELMET_CONNECTSRC: "'self' https://api.hive.blog https://staging.hivean.com https://steemitimages.com"
+#            WALLET_URL: https://wallet.hivean.com
+#        networks:
+#            - proxy_reverse-proxy
+#        restart: always
+
+networks:
+    proxy_reverse-proxy:
+        external:
+            name: proxy_reverse-proxy
