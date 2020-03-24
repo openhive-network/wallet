@@ -11,6 +11,7 @@
         "blog": "博客",
         "browse": "浏览",
         "buy": "购买",
+        "buy_hive_power": "Buy Hive Power",
         "buy_or_sell": "买或卖",
         "by": "by",
         "cancel": "取消",
@@ -20,6 +21,15 @@
         "close": "关闭",
         "collapse_or_expand": "折叠/展开",
         "comments": "评论",
+        "communities": "Communities",
+        "community_owner_name_is": "Your community owner name is",
+        "community_password_is": "Your password is",
+        "community_creating": "Your community is being created...",
+        "community_visit": "Visit your community",
+        "community_error":
+            "Oops, there was an error creating the community, please try again.",
+        "community_create": "CREATE A COMMUNITY",
+        "community_description": "About",
         "confirm": "确认",
         "convert": "转换",
         "date": "日期",
@@ -27,6 +37,7 @@
         "dismiss": "关闭",
         "edit": "编辑",
         "email": "邮件",
+        "external_link_message": "This link will take you away from hive.blog",
         "feed": "动态",
         "follow": "关注",
         "for": "对于",
@@ -37,12 +48,18 @@
         "in_reply_to": "回复",
         "insufficient_balance": "余额不足",
         "invalid_amount": "金额无效",
+        "links": "Links",
         "joined": "加入",
         "loading": "正在载入",
         "login": "登录",
         "logout": "登出",
         "memo": "备注",
         "mute": "屏蔽",
+        "my_blog": "My blog",
+        "my_comments": "My comments",
+        "my_feed": "My feed",
+        "my_replies": "Replies to me",
+        "my_wallet": "My wallet",
         "new": "最新",
         "newer": "较新的",
         "next": "下一个",
@@ -54,8 +71,10 @@
         "password": "密码",
         "payouts": "赏金",
         "permissions": "权限",
+        "phishy_message":
+            "Link expanded to plain text; beware of a potential phishing attempt",
         "post": "发布",
-        "post_as": "发布为",
+        "post_as_user": "Post as %(username)s",
         "posts": "文章",
         "powered_up_100": "Power Up 100%%",
         "preview": "预览",
@@ -100,8 +119,8 @@
         "to": "至",
         "topics": "主题",
         "toggle_nightmode": "切换夜间模式",
-
         "all_tags": "所有标签",
+        "all_tags_mobile": "All content",
         "transfer": "转账",
         "trending_topics": "热门话题",
         "type": "类型",
@@ -217,12 +236,21 @@
             "zero": "没有回复",
             "one": "%(count)s回复",
             "other": "%(count)s个回复"
-        }
+        },
+        "post_key_warning": {
+            "confirm":
+                "You are about to publish a HIVE private key or master password. You will probably lose control of the associated account and all its funds.",
+            "warning":
+                "Legitimate users, including employees of Hive, will never ask you for a private key or master password.",
+            "checkbox": "I understand"
+        },
+        "post_as": "发布为"
     },
     "navigation": {
         "about": "关于",
         "explore": "探索",
         "APP_NAME_whitepaper": "%(APP_NAME)s的白皮书",
+        "third_party_exchanges": "Third-party exchanges:",
         "buy_LIQUID_TOKEN": "购买%(LIQUID_TOKEN)s",
         "sell_LIQUID_TOKEN": "出售%(LIQUID_TOKEN)s",
         "currency_market": "货币市场",
@@ -240,7 +268,11 @@
         "app_center": "Hive应用中心",
         "business_center": "Businesses Accepting Hive",
         "api_docs": "Hive API文档",
-        "whitepaper": "Hive白皮书"
+        "bluepaper": "Hive Bluepaper",
+        "smt_whitepaper": "SMT Whitepaper",
+        "whitepaper": "Hive白皮书",
+        "jobs": "Jobs at Hive",
+        "hive_proposals": "Hive Proposals"
     },
     "reply_editor": {
         "shorten_title": "缩短标题",
@@ -264,7 +296,8 @@
         "or_by": "或通过",
         "title": "标题",
         "update_post": "更新帖子",
-        "markdown_not_supported": "这里不支持Markdown标记语言"
+        "markdown_not_supported": "这里不支持Markdown标记语言",
+        "advanced_settings": "Advanced settings"
     },
     "category_selector_jsx": {
         "tag_your_story": "标签(最多5个标签)，第一个标签是您文章的主要类别。",
@@ -290,6 +323,7 @@
             "由于版权限制，暂不能显示这篇文章。",
         "share_on_facebook": "分享到脸书",
         "share_on_twitter": "分享到推特",
+        "share_on_reddit": "Share on Reddit",
         "share_on_linkedin": "分享到Linkedin",
         "recent_password": "最近的密码",
         "in_week_convert_DEBT_TOKEN_to_LIQUID_TOKEN":
@@ -326,7 +360,8 @@
         "higher": "更高的",
         "lower": "更低的",
         "total_DEBT_TOKEN_SHORT_CURRENCY_SIGN":
-            "总共%(DEBT_TOKEN_SHORT)s (%(CURRENCY_SIGN)s)"
+            "总共%(DEBT_TOKEN_SHORT)s (%(CURRENCY_SIGN)s)",
+        "order_placed": "Order placed: %(order)s"
     },
     "recoveraccountstep1_jsx": {
         "begin_recovery": "开始恢复",
@@ -360,6 +395,10 @@
     },
     "user_profile": {
         "unknown_account": "未知的账户",
+        "create_a_post": "Create a Post",
+        "explore_trending_articles": "Explore Trending Articles",
+        "read_the_quick_start_guide": "Read The Quick Start Guide",
+        "browse_the_faq": "Browse The FAQ",
         "followers": "关注者",
         "this_is_users_reputations_score_it_is_based_on_history_of_votes":
             "这是%(name)s的声誉分数。声誉分数取决于账户收到的历史投票记录, 用于隐藏低质量的内容。",
@@ -376,7 +415,13 @@
     "post_jsx": {
         "now_showing_comments_with_low_ratings": "正在显示低评级的评论",
         "sort_order": "排序",
-        "comments_were_hidden_due_to_low_ratings": "评论由于评级不足而被隐藏"
+        "comments_were_hidden_due_to_low_ratings": "评论由于评级不足而被隐藏",
+        "comment_sort_order": {
+            "trending": "Trending",
+            "votes": "Votes",
+            "age": "Age",
+            "reputation": "Reputation"
+        }
     },
     "voting_jsx": {
         "flagging_post_can_remove_rewards_the_flag_should_be_used_for_the_following":
@@ -393,20 +438,28 @@
         "past_payouts": "累计赏金$%(value)s",
         "past_payouts_author": "- 作者收入 $%(value)s",
         "past_payouts_curators": " - 审查收入 $%(value)s",
-        "we_will_reset_curation_rewards_for_this_post":
-            "将重置你对这篇帖子的审查奖励",
         "removing_your_vote": "取消你的投票",
+        "removing_your_vote_will_reset_curation_rewards_for_this_post":
+            "Removing your vote will reset your curation rewards for this post",
         "changing_to_an_upvote": "改为投票",
+        "changing_to_an_upvote_will_reset_curation_rewards_for_this_post":
+            "Changing to an Up-Vote will reset your curation rewards for this post",
         "changing_to_a_downvote": "改为差评",
+        "changing_to_a_downvote_will_reset_curation_rewards_for_this_post":
+            "Changing to a Down-Vote will reset your curation rewards for this post",
         "confirm_flag": "确认差评",
         "and_more": "还有%(count)s次",
         "votes_plural": {
             "one": "%(count)s个投票",
             "other": "%(count)s个投票"
-        }
+        },
+        "we_will_reset_curation_rewards_for_this_post":
+            "将重置你对这篇帖子的审查奖励"
     },
     "witnesses_jsx": {
         "witness_thread": "见证人帖子",
+        "external_site": "external site",
+        "disabled": "disabled",
         "top_witnesses": "见证人投票",
         "you_have_votes_remaining": {
             "zero": "你无剩余选票",
@@ -483,7 +536,9 @@
         "converted_VESTING_TOKEN_can_be_sent_to_yourself_but_can_not_transfer_again":
             "%(VESTING_TOKEN)s可以转给你自己或其他人，但是只有转回%(LIQUID_TOKEN)s后，才可以进行下一次转账。",
         "part_of_your_hive_power_is_currently_delegated":
-            "有一部分HIVE POWER是代理给你使用的。代理的HIVE POWER是为了帮助新用户在hive.blog上进行操作。你被代理的数量可能会有波动。"
+            "有一部分HIVE POWER是代理给你使用的。代理的HIVE POWER是为了帮助新用户在hive.blog上进行操作。你被代理的数量可能会有波动。",
+        "hive_power_apr":
+            "HIVE POWER increases at an APR of approximately %(value)s&#37;, subject to blockchain variance. <a href=\"/faq.html#How_many_new_tokens_are_generated_by_the_blockchain\">See FAQ for details</a>."
     },
     "promote_post_jsx": {
         "promote_post": "推广帖子",
@@ -507,8 +562,68 @@
         "from_savings": "从储蓄账户",
         "cancel_transfer_from_savings": "取消从储蓄账户转账",
         "stop_power_down": "停止Power Down",
+        "withdraw_vesting": "Start power down of %(powerdown_vests)s HIVE",
         "start_power_down_of": "开始Power Down",
-        "receive_interest_of": "获得的利息"
+        "receive_interest_of": "获得的利息",
+        "bad_actor_caution": "Caution",
+        "bad_actor_explained":
+            "This is from an account that looks fraudulent. If you wish, you may temporarily reveal this memo which may contain dangerous links.",
+        "bad_actor_reveal_memo": "I understand the risk; show anyway.",
+        "from_negative_rep_user_caution": "Caution",
+        "from_negative_rep_user_explained":
+            "This is from an account with a bad reputation. If you wish, you may temporarily reveal this memo which may contain dangerous links.",
+        "from_negative_rep_user_reveal_memo":
+            "I understand the risk; show anyway.",
+        "curation_reward": "%(curation_reward)s HIVE POWER for ",
+        "author_reward":
+            "%(hbd_payout)s%(hive_payout)s and %(author_reward)s HIVE POWER for ",
+        "claim_reward_balance": {
+            "three_rewards":
+                "Claim rewards: %(first_reward)s, %(second_reward)s and %(third_reward)s",
+            "two_rewards":
+                "Claim rewards: %(first_reward)s and %(second_reward)s",
+            "one_reward": "Claim rewards: %(reward)s"
+        },
+        "interest": "Receive interest of %(interest)s",
+        "fill_convert_request":
+            "Fill convert request: %(amount_in)s for %(amount_out)s",
+        "fill_order": {
+            "filled_by_current_owner":
+                "Paid %(open_pays)s for %(current_pays)s",
+            "open_owner_filled_my_order":
+                "Paid %(current_pays)s for %(open_pays)s"
+        },
+        "comment_benefactor_reward":
+            "%(benefactor_reward)s HIVE POWER for %(author)s/%(permlink)s",
+        "transfer_to_vesting": {
+            "from_self": {
+                "no_to": "Transfer %(amount)s to HIVE POWER",
+                "to_someone": "Transfer %(amount)s HIVE POWER to "
+            },
+            "to_self": "Receive %(amount)s HIVE POWER from ",
+            "from_user_to_user":
+                " Transfer %(amount)s HIVE POWER from %(from) to "
+        },
+        "transfer": {
+            "from_self": {
+                "to_savings": "Transfer to savings %(amount)s to ",
+                "from_savings": "Transfer from savings %(amount)s to ",
+                "not_savings": "Transfer %(amount)s to "
+            },
+            "to_self": {
+                "to_savings": "Receive from savings %(amount)s from ",
+                "from_savings": "Transfer from savings %(amount)s from ",
+                "not_savings": "Received %(amount)s from "
+            },
+            "to_someone_from_someone": {
+                "to_savings":
+                    "Transfer to savings %(amount)s from %(from)s to %(to)s",
+                "from_savings":
+                    "Transfer from savings %(amount)s from %(from)s to %(to)s",
+                "not_savings": "Transfer %(amount)s from %(from)s to %(to)s"
+            }
+        },
+        "request_id": "Request ID: %(request_id)s"
     },
     "savingswithdrawhistory_jsx": {
         "cancel_this_withdraw_request": "确认取消提款请求吗？",
@@ -532,7 +647,8 @@
         "curation_rewards_by": "审查收入 by",
         "author_rewards_by": "作者收入 by",
         "replies_to": "回复",
-        "comments_by": "评论"
+        "comments_by": "评论",
+        "hive_proposals": "Hive Proposals"
     },
     "loginform_jsx": {
         "you_need_a_private_password_or_key":
@@ -564,16 +680,43 @@
         "password_info":
             "密码或私钥输入不正确。有可能是输入错误。提示：Hive创建的密码或私钥中永远不包含 0(零)， O(大写O)， I(大写i)和l (小写L)。",
         "enter_your_username": "输入您的用户名",
+        "enter_hive_key": "Enter a Hive key (ideally your Posting Key)",
         "password_or_wif": "密码或WIF",
         "this_operation_requires_your_key_or_master_password":
             "此操作需要您的%(authType)s密钥或主密码。",
         "keep_me_logged_in": "保持登录状态",
-        "sign_up_now_to_earn": "现在就来注册赚取",
-        "free_money": "免费的钱！",
+        "signup_button": "Sign up now to earn ",
+        "signup_button_emphasis": "FREE HIVE!",
+        "sign_up_get_hive": "Sign up",
         "returning_users": "返回用户:",
-        "use_keychain": "Use keychain extension"
+        "login_to_wallet": "Login to Wallet",
+        "sign_transfer": "Sign to complete transfer",
+        "use_keychain": "Use keychain extension",
+        "dont_have_an_account": "Don't have a Hive account?",
+        "sign_up_now_to_earn": "现在就来注册赚取",
+        "free_money": "免费的钱！"
     },
     "chainvalidation_js": {
+        "account_name_should_not_be_empty": "Account name should not be empty.",
+        "account_name_should_be_longer": "Account name should be longer.",
+        "account_name_should_be_shorter": "Account name should be shorter.",
+        "each_account_segment_should_start_with_a_letter":
+            "Each account segment should start with a letter.",
+        "each_account_segment_should_have_only_letters_digits_or_dashes":
+            "Each account segment should have only letters, digits, or dashes.",
+        "each_account_segment_should_have_only_one_dash_in_a_row":
+            "Each account segment should have only one dash in a row.",
+        "each_account_segment_should_end_with_a_letter_or_digit":
+            "Each account segment should end with a letter or digit.",
+        "each_account_segment_should_be_longer":
+            "Each account segment should be longer.",
+        "verified_exchange_no_memo": "如果你要转账到交易所，你必须填写备注。",
+        "badactor":
+            "Use caution sending to this account. Please double check your spelling for possible phishing.",
+        "memo_has_privatekey":
+            "Please do not include what appears to be a private key or password.",
+        "memo_is_privatekey": "Do not use private keys in memos.",
+        "memo_is_password": "Do not use passwords in memos.",
         "account_name_should": "帐户名称应该",
         "not_be_empty": "不是空的。",
         "be_longer": "更长。",
@@ -582,8 +725,7 @@
         "start_with_a_letter": "从一个字母开始。",
         "have_only_letters_digits_or_dashes": "只有字母、数字或破折号",
         "have_only_one_dash_in_a_row": "一行只有一个破折号",
-        "end_with_a_letter_or_digit": "字母或数字结尾",
-        "verified_exchange_no_memo": "如果你要转账到交易所，你必须填写备注。"
+        "end_with_a_letter_or_digit": "字母或数字结尾"
     },
     "settings_jsx": {
         "invalid_url": "无效的URL",
@@ -598,14 +740,19 @@
         "always_hide": "总是隐藏",
         "always_warn": "总是警告",
         "always_show": "总是显示",
+        "choose_default_blog_payout": "Blog post rewards",
+        "choose_default_comment_payout": "Comment post rewards",
         "muted_users": "屏蔽的用户",
         "update": "更新",
+        "upload_image": "Upload an image",
+        "uploading_image": "Uploading image",
         "profile_image_url": "个人头像的网址",
         "cover_image_url": "封面图片的网址",
         "profile_name": "显示名称",
         "profile_about": "关于",
         "profile_location": "位置",
-        "profile_website": "网站"
+        "profile_website": "网站",
+        "saved": "Saved!"
     },
     "transfer_jsx": {
         "amount_is_in_form": "金额以99999.999的形式出现",
@@ -625,9 +772,17 @@
             "需要在3天的等待期后提取资金。",
         "from": "从",
         "to": "到",
-        "asset_currently_collecting": "%(asset)s目前获得%(interest)s%%利息"
+        "asset_currently_collecting": "%(asset)s目前获得%(interest)s%%利息",
+        "beware_of_spam_and_phishing_links":
+            "Beware of spam and phishing links in transfer memos. Do not open links from users you do not trust. Do not provide your private keys to any third party websites.",
+        "transactions_make_take_a_few_minutes":
+            "Transactions will not show until they are confirmed on the blockchain, which may take a few minutes.",
+        "autocomplete_previous_transfers": "previous transfers",
+        "autocomplete_user_following": "following",
+        "confirm_transfer": "Transfer %(amount)s from %(from)s to %(to)s?"
     },
     "userwallet_jsx": {
+        "transfer": "Transfer",
         "conversion_complete_tip": "将完成在",
         "in_conversion": "%(amount)s在转换",
         "transfer_to_savings": "转移到储蓄",
@@ -639,6 +794,8 @@
         "withdraw_DEBT_TOKENS": "取出%(DEBT_TOKENS)s",
         "tokens_worth_about_1_of_LIQUID_TICKER":
             "价值约为1.00美金的%(LIQUID_TICKER)s，目前正在获得%(hbdInterest)s%%的利息。",
+        "tradeable_tokens_transferred":
+            "Tradeable tokens that may be transferred anywhere at anytime.",
         "savings": "储蓄",
         "estimated_account_value": "账户估值",
         "next_power_down_is_scheduled_to_happen":
@@ -666,5 +823,66 @@
         "ownership_changed_on": "所有权变更",
         "deadline_for_recovery_is": "恢复的截止日期是",
         "i_understand_dont_show_again": "我明白，不要再显示"
+    },
+    "termsagree_jsx": {
+        "please_review": "Please review our terms to continue",
+        "hi_user": "Hi %(username)s,",
+        "blurb":
+            "Our Terms of Service set the rules and guidelines that you must accept and follow in order to use Hive and our Privacy Policy explains the type of information we collect and what we do with it. Don't worry, we don't sell your data to anyone. We do use it to meet legal requirements and to learn how to make Hive better.",
+        "i_agree_to_hiveblogs": "I agree to Hive.blog's",
+        "terms_of_service": "Terms of Service",
+        "privacy_policy": "Privacy Policy",
+        "continue": "Continue",
+        "cancel": "Cancel"
+    },
+    "confirmtransactionform_jsx": {
+        "confirm": "Confirm %(transactionType)s"
+    },
+    "modals_jsx": {
+        "your_transaction_failed": "Your transaction failed to process",
+        "out_of_bandwidth_title": "Why? You've run out of Resource Credits",
+        "out_of_bandwidth_reason":
+            "Actions such as posting and voting use computing resources, placing a real cost on the community members who run the Hive blockchain for everyone.",
+        "out_of_bandwidth_reason_2":
+            "To keep things free, Hive intelligently allocates Resource Credits to each user based on their Hive Power holdings, which can be used to submit a limited number of feeless transactions. When a user runs low on Resource Credits, they will either need to wait for them to recharge, or purchase additional Hive Power. This system prioritizes actions by good community members while limiting spam.",
+        "out_of_bandwidth_option_title": "To keep interacting on Hive:",
+        "out_of_bandwidth_option_1": "Buy and hold more Hive Power",
+        "out_of_bandwidth_option_2":
+            "Wait until your Resource Credits recharge",
+        "out_of_bandwidth_option_3": "Wait until the network usage decreases"
+    },
+    "sanitizedlink_jsx": {
+        "phishylink_caution": "Link hidden; phishing attempt",
+        "phishylink_reveal": "show link"
+    },
+    "wallet_index": {
+        "title": "Hive wallet login",
+        "description":
+            "Welcome to Hive's official Hive blockchain wallet. Use it to transfer Hive tokens, Power up, vote for Hive Witnesses and change your Hive profile details.",
+        "login": "Login",
+        "hive_tokens": "Hive tokens",
+        "hive_symbol": "HIVE",
+        "hive_description": "Liquid platform token",
+        "hive_power_symbol": "HIVE Power",
+        "hive_power_description": "Vesting influence token",
+        "hbd_symbol": "HBD",
+        "hbd_description": "Seeks price stability with USD"
+    },
+    "hive_proposals": {
+        "top_sps": "Hive Proposals",
+        "votes_update_info": "* Only updated once per hour",
+        "table": {
+            "id": "Id",
+            "creator": "Creator",
+            "receiver": "Receiver",
+            "start_date": "Start Date",
+            "end_date": "End Date",
+            "daily_pay": "Daily Pay",
+            "total_votes": "Total Votes*",
+            "permlink": "",
+            "subject": "Subject"
+        },
+        "confirm_remove_proposal_description":
+            "Proposal removal is permanent and the fee paid for creating the proposal is not refundable."
     }
 }

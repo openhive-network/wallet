@@ -11,6 +11,7 @@
         "blog": "Blog",
         "browse": "Navegar",
         "buy": "Comprar",
+        "buy_hive_power": "Buy Hive Power",
         "buy_or_sell": "Comprar o Vender",
         "by": "por",
         "cancel": "Cancelar",
@@ -20,6 +21,15 @@
         "close": "Cerrar",
         "collapse_or_expand": "Plegar/Expandir",
         "comments": "Comentarios",
+        "communities": "Communities",
+        "community_owner_name_is": "Your community owner name is",
+        "community_password_is": "Your password is",
+        "community_creating": "Your community is being created...",
+        "community_visit": "Visit your community",
+        "community_error":
+            "Oops, there was an error creating the community, please try again.",
+        "community_create": "CREATE A COMMUNITY",
+        "community_description": "About",
         "confirm": "Confirmar",
         "convert": "Convertir",
         "date": "Fecha",
@@ -27,6 +37,7 @@
         "dismiss": "Descartar",
         "edit": "Editar",
         "email": "Email",
+        "external_link_message": "This link will take you away from hive.blog",
         "feed": "Favoritos",
         "follow": "Seguir",
         "for": "para",
@@ -37,12 +48,18 @@
         "in_reply_to": "en respuesta a",
         "insufficient_balance": "Saldo insuficiente",
         "invalid_amount": "Cantidad inválida",
+        "links": "Links",
         "joined": "Unió",
         "loading": "Cargando",
         "login": "Iniciar sesión",
         "logout": "Cerrar sesión",
         "memo": "Memo",
         "mute": "Silenciar",
+        "my_blog": "My blog",
+        "my_comments": "My comments",
+        "my_feed": "My feed",
+        "my_replies": "Replies to me",
+        "my_wallet": "My wallet",
         "new": "nuevo",
         "newer": "Nuevo",
         "next": "Próximo",
@@ -57,7 +74,7 @@
         "phishy_message":
             "Enlace expuesto a texto sin formato; cuidado con un posible intento de phishing",
         "post": "Publicación",
-        "post_as": "Publicar como",
+        "post_as_user": "Post as %(username)s",
         "posts": "Publicaciones",
         "powered_up_100": "Powered Up 100 %%",
         "preview": "Vista previa",
@@ -100,7 +117,10 @@
         "submit_a_story": "Publicar",
         "tag": "Etiqueta",
         "to": "hasta",
+        "topics": "Topics",
+        "toggle_nightmode": "Toggle Night Mode",
         "all_tags": "All tags",
+        "all_tags_mobile": "All content",
         "transfer": "Transferir",
         "trending_topics": "Temas Tendencia",
         "type": "Tipo",
@@ -237,12 +257,14 @@
             "warning":
                 "Los usuarios legítimos, incluidos los empleados de Hive, nunca le pedirán una clave privada o contraseña maestra.",
             "checkbox": "Entiendo"
-        }
+        },
+        "post_as": "Publicar como"
     },
     "navigation": {
         "about": "Sobre",
         "explore": "Explorar",
         "APP_NAME_whitepaper": "%(APP_NAME)s Documentación técnica",
+        "third_party_exchanges": "Third-party exchanges:",
         "buy_LIQUID_TOKEN": "Comprar %(LIQUID_TOKEN)s",
         "sell_LIQUID_TOKEN": "Vender %(LIQUID_TOKEN)s",
         "currency_market": "Mercado de monedas",
@@ -262,7 +284,9 @@
         "api_docs": "Documentos API de Hive",
         "bluepaper": "Hive Bluepaper",
         "smt_whitepaper": "Libro blanco de SMT",
-        "whitepaper": "Libro blanco de Hive"
+        "whitepaper": "Libro blanco de Hive",
+        "jobs": "Jobs at Hive",
+        "hive_proposals": "Hive Proposals"
     },
     "reply_editor": {
         "shorten_title": "Abreviar el título",
@@ -289,7 +313,8 @@
         "or_by": "o por",
         "title": "Título",
         "update_post": "Actualizar Publicación",
-        "markdown_not_supported": "Markdown no soportado aquí"
+        "markdown_not_supported": "Markdown no soportado aquí",
+        "advanced_settings": "Advanced settings"
     },
     "category_selector_jsx": {
         "tag_your_story":
@@ -309,11 +334,19 @@
         "must_end_with_a_letter_or_number":
             "Debe terminar con una letra o número"
     },
+    "post_advanced_settings_jsx": {
+        "payout_option_header": "Author rewards",
+        "payout_option_description":
+            "What type of tokens do you want as rewards from this post?",
+        "current_default": "Default",
+        "update_default_in_settings": "Update"
+    },
     "postfull_jsx": {
         "this_post_is_not_available_due_to_a_copyright_claim":
             "Este post no está disponible por reclamación de derechos de autor.",
         "share_on_facebook": "Compartir en Facebook",
         "share_on_twitter": "Compartir en Twitter",
+        "share_on_reddit": "Share on Reddit",
         "share_on_linkedin": "Compartir en Linkedin",
         "recent_password": "Contraseña reciente",
         "in_week_convert_DEBT_TOKEN_to_LIQUID_TOKEN":
@@ -350,7 +383,8 @@
         "higher": "Más alta",
         "lower": "Más baja",
         "total_DEBT_TOKEN_SHORT_CURRENCY_SIGN":
-            "Total %(DEBT_TOKEN_SHORT)s (%(CURRENCY_SIGN)s)"
+            "Total %(DEBT_TOKEN_SHORT)s (%(CURRENCY_SIGN)s)",
+        "order_placed": "Order placed: %(order)s"
     },
     "recoveraccountstep1_jsx": {
         "begin_recovery": "Empezar Recuperación",
@@ -408,7 +442,13 @@
             "Mostrando ahora comentarios con bajas calificaciones",
         "sort_order": "Clase de órden",
         "comments_were_hidden_due_to_low_ratings":
-            "Los comentarios fueron ocultados debido a las bajas calificaciones"
+            "Los comentarios fueron ocultados debido a las bajas calificaciones",
+        "comment_sort_order": {
+            "trending": "Trending",
+            "votes": "Votes",
+            "age": "Age",
+            "reputation": "Reputation"
+        }
     },
     "voting_jsx": {
         "flagging_post_can_remove_rewards_the_flag_should_be_used_for_the_following":
@@ -426,20 +466,28 @@
         "past_payouts": "Pagos pasados $ %(value)s",
         "past_payouts_author": "Autor $ %(value)s",
         "past_payouts_curators": "Curador $ %(value)s",
-        "we_will_reset_curation_rewards_for_this_post":
-            "Reseteará tus recompensas de curación para este post",
         "removing_your_vote": "Quitando tu voto",
+        "removing_your_vote_will_reset_curation_rewards_for_this_post":
+            "Removing your vote will reset your curation rewards for this post",
         "changing_to_an_upvote": "Cambiando a Up-vote",
+        "changing_to_an_upvote_will_reset_curation_rewards_for_this_post":
+            "Changing to an Up-Vote will reset your curation rewards for this post",
         "changing_to_a_downvote": "Cambiando a Down-Vote",
+        "changing_to_a_downvote_will_reset_curation_rewards_for_this_post":
+            "Changing to a Down-Vote will reset your curation rewards for this post",
         "confirm_flag": "Confirmar Flag",
         "and_more": "y %(count)s más",
         "votes_plural": {
             "one": "%(count)s voto",
             "other": "%(count)s votos"
-        }
+        },
+        "we_will_reset_curation_rewards_for_this_post":
+            "Reseteará tus recompensas de curación para este post"
     },
     "witnesses_jsx": {
         "witness_thread": "tema testigo",
+        "external_site": "external site",
+        "disabled": "disabled",
         "top_witnesses": "Votación para testigo",
         "you_have_votes_remaining": {
             "zero": "No tienes votos restantes",
@@ -522,7 +570,9 @@
         "converted_VESTING_TOKEN_can_be_sent_to_yourself_but_can_not_transfer_again":
             "Los %(VESTING_TOKEN)s convertidos pueden ser enviados a ti mismo o a otras personas pero no pueden ser transferidos de nuevo sin convertirlos de vuelta a %(LIQUID_TOKEN)s.",
         "part_of_your_hive_power_is_currently_delegated":
-            "Part of %(user_name)s's HIVE POWER is currently delegated. Delegation is donated for influence or to help new users perform actions on hive.blog. Your delegation amount can fluctuate."
+            "Part of %(user_name)s's HIVE POWER is currently delegated. Delegation is donated for influence or to help new users perform actions on hive.blog. Your delegation amount can fluctuate.",
+        "hive_power_apr":
+            "HIVE POWER increases at an APR of approximately %(value)s&#37;, subject to blockchain variance. <a href=\"/faq.html#How_many_new_tokens_are_generated_by_the_blockchain\">See FAQ for details</a>."
     },
     "promote_post_jsx": {
         "promote_post": "Promociona el Post",
@@ -549,8 +599,68 @@
         "from_savings": "desde ahorros",
         "cancel_transfer_from_savings": "Cancela transferencia desde ahorros",
         "stop_power_down": "Para power down",
+        "withdraw_vesting": "Start power down of %(powerdown_vests)s HIVE",
         "start_power_down_of": "Comenzar power down",
-        "receive_interest_of": "Recibir interés de"
+        "receive_interest_of": "Recibir interés de",
+        "bad_actor_caution": "Caution",
+        "bad_actor_explained":
+            "This is from an account that looks fraudulent. If you wish, you may temporarily reveal this memo which may contain dangerous links.",
+        "bad_actor_reveal_memo": "I understand the risk; show anyway.",
+        "from_negative_rep_user_caution": "Caution",
+        "from_negative_rep_user_explained":
+            "This is from an account with a bad reputation. If you wish, you may temporarily reveal this memo which may contain dangerous links.",
+        "from_negative_rep_user_reveal_memo":
+            "I understand the risk; show anyway.",
+        "curation_reward": "%(curation_reward)s HIVE POWER for ",
+        "author_reward":
+            "%(hbd_payout)s%(hive_payout)s and %(author_reward)s HIVE POWER for ",
+        "claim_reward_balance": {
+            "three_rewards":
+                "Claim rewards: %(first_reward)s, %(second_reward)s and %(third_reward)s",
+            "two_rewards":
+                "Claim rewards: %(first_reward)s and %(second_reward)s",
+            "one_reward": "Claim rewards: %(reward)s"
+        },
+        "interest": "Receive interest of %(interest)s",
+        "fill_convert_request":
+            "Fill convert request: %(amount_in)s for %(amount_out)s",
+        "fill_order": {
+            "filled_by_current_owner":
+                "Paid %(open_pays)s for %(current_pays)s",
+            "open_owner_filled_my_order":
+                "Paid %(current_pays)s for %(open_pays)s"
+        },
+        "comment_benefactor_reward":
+            "%(benefactor_reward)s HIVE POWER for %(author)s/%(permlink)s",
+        "transfer_to_vesting": {
+            "from_self": {
+                "no_to": "Transfer %(amount)s to HIVE POWER",
+                "to_someone": "Transfer %(amount)s HIVE POWER to "
+            },
+            "to_self": "Receive %(amount)s HIVE POWER from ",
+            "from_user_to_user":
+                " Transfer %(amount)s HIVE POWER from %(from) to "
+        },
+        "transfer": {
+            "from_self": {
+                "to_savings": "Transfer to savings %(amount)s to ",
+                "from_savings": "Transfer from savings %(amount)s to ",
+                "not_savings": "Transfer %(amount)s to "
+            },
+            "to_self": {
+                "to_savings": "Receive from savings %(amount)s from ",
+                "from_savings": "Transfer from savings %(amount)s from ",
+                "not_savings": "Received %(amount)s from "
+            },
+            "to_someone_from_someone": {
+                "to_savings":
+                    "Transfer to savings %(amount)s from %(from)s to %(to)s",
+                "from_savings":
+                    "Transfer from savings %(amount)s from %(from)s to %(to)s",
+                "not_savings": "Transfer %(amount)s from %(from)s to %(to)s"
+            }
+        },
+        "request_id": "Request ID: %(request_id)s"
     },
     "savingswithdrawhistory_jsx": {
         "cancel_this_withdraw_request": "¿Cancelar la petición de retirada?",
@@ -574,7 +684,8 @@
         "curation_rewards_by": "Recompensas de curación de",
         "author_rewards_by": "Recompensas de autor de",
         "replies_to": "Respuestas a",
-        "comments_by": "Comentarios de"
+        "comments_by": "Comentarios de",
+        "hive_proposals": "Hive Proposals"
     },
     "loginform_jsx": {
         "you_need_a_private_password_or_key":
@@ -610,17 +721,42 @@
         "password_info":
             "La contraseña o la contraseña privada fue introducida incorrectamente. Probablemente. Ayuda: Las contraseñas generadas por Hive nunca contendrán 0 (cero), O (o mayúscula), I (i mayúscula), l (L minúscula).",
         "enter_your_username": "Introduce tu nombre de usuario",
+        "enter_hive_key": "Enter a Hive key (ideally your Posting Key)",
         "password_or_wif": "Contraseña o WIF",
         "this_operation_requires_your_key_or_master_password":
             "Esta operación requiere %(authType)s contraseña o la contraseña maestra",
         "keep_me_logged_in": "Manténme logeado",
-        "sign_up_get_hive": "Crea una cuenta. Comienza en HIVE",
         "signup_button": "Crea una cuenta, comienza a ganar ",
         "signup_button_emphasis": "FREE HIVE!",
+        "sign_up_get_hive": "Crea una cuenta. Comienza en HIVE",
         "returning_users": "Inicia sesion",
-        "use_keychain": "Use keychain extension"
+        "login_to_wallet": "Login to Wallet",
+        "sign_transfer": "Sign to complete transfer",
+        "use_keychain": "Use keychain extension",
+        "dont_have_an_account": "Don't have a Hive account?"
     },
     "chainvalidation_js": {
+        "account_name_should_not_be_empty": "Account name should not be empty.",
+        "account_name_should_be_longer": "Account name should be longer.",
+        "account_name_should_be_shorter": "Account name should be shorter.",
+        "each_account_segment_should_start_with_a_letter":
+            "Each account segment should start with a letter.",
+        "each_account_segment_should_have_only_letters_digits_or_dashes":
+            "Each account segment should have only letters, digits, or dashes.",
+        "each_account_segment_should_have_only_one_dash_in_a_row":
+            "Each account segment should have only one dash in a row.",
+        "each_account_segment_should_end_with_a_letter_or_digit":
+            "Each account segment should end with a letter or digit.",
+        "each_account_segment_should_be_longer":
+            "Each account segment should be longer.",
+        "verified_exchange_no_memo":
+            "Tienes que incluir un memo para la transferencia al exchange",
+        "badactor":
+            "Use caution sending to this account. Please double check your spelling for possible phishing.",
+        "memo_has_privatekey":
+            "Please do not include what appears to be a private key or password.",
+        "memo_is_privatekey": "Do not use private keys in memos.",
+        "memo_is_password": "Do not use passwords in memos.",
         "account_name_should": "El nombre de la cuenta debería",
         "not_be_empty": "No estar vacío",
         "be_longer": "ser más largo",
@@ -630,9 +766,7 @@
         "have_only_letters_digits_or_dashes":
             "tener sólo letras, dígitos o guiones.",
         "have_only_one_dash_in_a_row": "tener sólo un guión consecutivo.",
-        "end_with_a_letter_or_digit": "terminar con una legra o dígito.",
-        "verified_exchange_no_memo":
-            "Tienes que incluir un memo para la transferencia al exchange"
+        "end_with_a_letter_or_digit": "terminar con una legra o dígito."
     },
     "settings_jsx": {
         "invalid_url": "URL inválida",
@@ -647,14 +781,19 @@
         "always_hide": "Ocultar siempre",
         "always_warn": "Advertir siempre",
         "always_show": "Mostrar siempre",
+        "choose_default_blog_payout": "Blog post rewards",
+        "choose_default_comment_payout": "Comment post rewards",
         "muted_users": "Usuarios silenciados",
         "update": "Actualizar",
+        "upload_image": "Upload an image",
+        "uploading_image": "Uploading image",
         "profile_image_url": "Link para la foto de perfil",
         "cover_image_url": "Link para la imagen de fondo",
         "profile_name": "Nombre de visualización",
         "profile_about": "Sobre",
         "profile_location": "Localización",
-        "profile_website": "Página Web"
+        "profile_website": "Página Web",
+        "saved": "Saved!"
     },
     "transfer_jsx": {
         "amount_is_in_form": "La cantidad está en el formato 99999.999",
@@ -677,9 +816,15 @@
         "asset_currently_collecting":
             "%(asset)s recolectando actualmente %(interest)s%% APR.",
         "beware_of_spam_and_phishing_links":
-            "Tenga cuidado con los enlaces de spam y phishing en los memos de transferencia. No abra enlaces de usuarios en los que no confíe. No proporcione sus claves privadas a sitios web de terceros."
+            "Tenga cuidado con los enlaces de spam y phishing en los memos de transferencia. No abra enlaces de usuarios en los que no confíe. No proporcione sus claves privadas a sitios web de terceros.",
+        "transactions_make_take_a_few_minutes":
+            "Transactions will not show until they are confirmed on the blockchain, which may take a few minutes.",
+        "autocomplete_previous_transfers": "previous transfers",
+        "autocomplete_user_following": "following",
+        "confirm_transfer": "Transfer %(amount)s from %(from)s to %(to)s?"
     },
     "userwallet_jsx": {
+        "transfer": "Transfer",
         "conversion_complete_tip": "Se completará el",
         "in_conversion": "%(amount)s en conversión",
         "transfer_to_savings": "Transferir a ahorros",
@@ -691,6 +836,8 @@
         "withdraw_DEBT_TOKENS": "Retirar %(DEBT_TOKENS)s",
         "tokens_worth_about_1_of_LIQUID_TICKER":
             "Los tokens valen alrededor de $1.00 de %(LIQUID_TICKER)s, ahora mismo recolectando %(hbdInterest)s%% APR.",
+        "tradeable_tokens_transferred":
+            "Tradeable tokens that may be transferred anywhere at anytime.",
         "savings": "AHORROS",
         "estimated_account_value": "Valor de cuenta aproximado",
         "next_power_down_is_scheduled_to_happen":
@@ -720,5 +867,66 @@
         "ownership_changed_on": "Pertenencia cambio el",
         "deadline_for_recovery_is": "La fecha límite para la recuperación es",
         "i_understand_dont_show_again": "Lo entiendo, no mostrarmelo de nuevo."
+    },
+    "termsagree_jsx": {
+        "please_review": "Please review our terms to continue",
+        "hi_user": "Hi %(username)s,",
+        "blurb":
+            "Our Terms of Service set the rules and guidelines that you must accept and follow in order to use Hive and our Privacy Policy explains the type of information we collect and what we do with it. Don't worry, we don't sell your data to anyone. We do use it to meet legal requirements and to learn how to make Hive better.",
+        "i_agree_to_hiveblogs": "I agree to Hive.blog's",
+        "terms_of_service": "Terms of Service",
+        "privacy_policy": "Privacy Policy",
+        "continue": "Continue",
+        "cancel": "Cancel"
+    },
+    "confirmtransactionform_jsx": {
+        "confirm": "Confirm %(transactionType)s"
+    },
+    "modals_jsx": {
+        "your_transaction_failed": "Your transaction failed to process",
+        "out_of_bandwidth_title": "Why? You've run out of Resource Credits",
+        "out_of_bandwidth_reason":
+            "Actions such as posting and voting use computing resources, placing a real cost on the community members who run the Hive blockchain for everyone.",
+        "out_of_bandwidth_reason_2":
+            "To keep things free, Hive intelligently allocates Resource Credits to each user based on their Hive Power holdings, which can be used to submit a limited number of feeless transactions. When a user runs low on Resource Credits, they will either need to wait for them to recharge, or purchase additional Hive Power. This system prioritizes actions by good community members while limiting spam.",
+        "out_of_bandwidth_option_title": "To keep interacting on Hive:",
+        "out_of_bandwidth_option_1": "Buy and hold more Hive Power",
+        "out_of_bandwidth_option_2":
+            "Wait until your Resource Credits recharge",
+        "out_of_bandwidth_option_3": "Wait until the network usage decreases"
+    },
+    "sanitizedlink_jsx": {
+        "phishylink_caution": "Link hidden; phishing attempt",
+        "phishylink_reveal": "show link"
+    },
+    "wallet_index": {
+        "title": "Hive wallet login",
+        "description":
+            "Welcome to Hive's official Hive blockchain wallet. Use it to transfer Hive tokens, Power up, vote for Hive Witnesses and change your Hive profile details.",
+        "login": "Login",
+        "hive_tokens": "Hive tokens",
+        "hive_symbol": "HIVE",
+        "hive_description": "Liquid platform token",
+        "hive_power_symbol": "HIVE Power",
+        "hive_power_description": "Vesting influence token",
+        "hbd_symbol": "HBD",
+        "hbd_description": "Seeks price stability with USD"
+    },
+    "hive_proposals": {
+        "top_sps": "Hive Proposals",
+        "votes_update_info": "* Only updated once per hour",
+        "table": {
+            "id": "Id",
+            "creator": "Creator",
+            "receiver": "Receiver",
+            "start_date": "Start Date",
+            "end_date": "End Date",
+            "daily_pay": "Daily Pay",
+            "total_votes": "Total Votes*",
+            "permlink": "",
+            "subject": "Subject"
+        },
+        "confirm_remove_proposal_description":
+            "Proposal removal is permanent and the fee paid for creating the proposal is not refundable."
     }
 }

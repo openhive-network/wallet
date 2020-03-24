@@ -60,34 +60,34 @@ class WalletIndex extends React.Component {
                                 <div className="sheet">
                                     <div className="sheet">
                                         <h3>
-                                            {tt('wallet_index.steem_tokens')}
+                                            {tt('wallet_index.hive_tokens')}
                                         </h3>
                                         <div className="token-container">
-                                            <div className="token token-steem" />
+                                            <div className="token token-hive" />
                                             <span>
                                                 <h4>
                                                     {tt(
-                                                        'wallet_index.steem_symbol'
+                                                        'wallet_index.hive_symbol'
                                                     )}
                                                 </h4>
                                                 <span className="text">
                                                     {tt(
-                                                        'wallet_index.steem_description'
+                                                        'wallet_index.hive_description'
                                                     )}
                                                 </span>
                                             </span>
                                         </div>
                                         <div className="token-container">
-                                            <div className="token token-steem-power" />
+                                            <div className="token token-hive-power" />
                                             <span>
                                                 <h4>
                                                     {tt(
-                                                        'wallet_index.steem_power_symbol'
+                                                        'wallet_index.hive_power_symbol'
                                                     )}
                                                 </h4>
                                                 <span className="text">
                                                     {tt(
-                                                        'wallet_index.steem_power_description'
+                                                        'wallet_index.hive_power_description'
                                                     )}
                                                 </span>
                                             </span>
