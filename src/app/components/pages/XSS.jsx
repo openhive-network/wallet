@@ -62,7 +62,7 @@ alert(String.fromCharCode(88,83,83))//";alert(String.fromCharCode(88,83,83))//--
 
     `'';!--"<XSS>=&{()}`,
 
-    `<SCRIPT SRC=https://steemd.com/xss.js></SCRIPT>`,
+    `<SCRIPT SRC=https://hived.com/xss.js></SCRIPT>`,
 
     `onnerr w/ clearly invalid img: <img src="awesome.jpg" onerror="alert('xss')" /><br />
 good image: <img src="https://steem.io/images/press/press-theblkchn.png" onerror="alert('xss')" /><br />

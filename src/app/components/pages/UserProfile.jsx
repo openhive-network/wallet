@@ -35,7 +35,6 @@ import DropdownMenu from 'app/components/elements/DropdownMenu';
 export default class UserProfile extends React.Component {
     constructor() {
         super();
-        this.state = { showResteem: true };
         this.onPrint = () => {
             window.print();
         };
@@ -48,8 +47,7 @@ export default class UserProfile extends React.Component {
             np.wifShown !== this.props.wifShown ||
             np.globalStatus !== this.props.globalStatus ||
             np.loading !== this.props.loading ||
-            np.location.pathname !== this.props.location.pathname ||
-            ns.showResteem !== this.state.showResteem
+            np.location.pathname !== this.props.location.pathname
         );
     }
 
@@ -60,7 +58,6 @@ export default class UserProfile extends React.Component {
 
     render() {
         const {
-            state: { showResteem },
             props: {
                 currentUser,
                 wifShown,

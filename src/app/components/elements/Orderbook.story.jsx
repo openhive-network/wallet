@@ -6,17 +6,17 @@ import Orderbook from './Orderbook';
 const selectOptions = ['error', 'default'];
 
 const mockOrder = {
-    getSBDAmount: () => 999,
-    getStringSBD: () => 'nine hundred and ninety nine',
-    getStringSteem: () => 'two hundred steem',
+    getHBDAmount: () => 999,
+    getStringHBD: () => 'nine hundred and ninety nine',
+    getStringHive: () => 'two hundred hive',
     getStringPrice: () => '55',
     equals: () => 55,
 };
 
 const mockOrder2 = {
-    getSBDAmount: () => 111,
-    getStringSBD: () => 'one hundred and eleven',
-    getStringSteem: () => 'one steem',
+    getHBDAmount: () => 111,
+    getStringHBD: () => 'one hundred and eleven',
+    getStringHive: () => 'one hive',
     getStringPrice: () => '55',
     equals: () => 55,
 };

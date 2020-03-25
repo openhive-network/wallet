@@ -18,9 +18,9 @@ require('module').Module._initPaths();
 
 global.$STM_Config = {
     fb_app: config.get('facebook_app_id'),
-    steemd_connection_client: config.get('steemd_connection_client'),
-    steemd_connection_server: config.get('steemd_connection_server'),
-    steemd_use_appbase: config.get('steemd_use_appbase'),
+    hived_connection_client: config.get('hived_connection_client'),
+    hived_connection_server: config.get('hived_connection_server'),
+    hived_use_appbase: config.get('hived_use_appbase'),
     chain_id: config.get('chain_id'),
     address_prefix: config.get('address_prefix'),
     img_proxy_prefix: config.get('img_proxy_prefix'),
@@ -44,7 +44,7 @@ global.webpackIsomorphicTools = new WebpackIsomorphicTools(
 
 global.webpackIsomorphicTools.server(ROOT, () => {
     steem.api.setOptions({
-        url: config.steemd_connection_server,
+        url: config.hived_connection_server,
         retry: {
             retries: 10,
             factor: 5,
@@ -52,7 +52,7 @@ global.webpackIsomorphicTools.server(ROOT, () => {
             maxTimeout: 60 * 1000,
             randomize: true,
         },
-        useAppbaseApi: !!config.steemd_use_appbase,
+        useAppbaseApi: !!config.hived_use_appbase,
     });
     steem.config.set('address_prefix', config.get('address_prefix'));
     steem.config.set('chain_id', config.get('chain_id'));

@@ -11,7 +11,7 @@ import { cleanReduxInput } from 'app/utils/ReduxForms';
 import tt from 'counterpart';
 import { DEBT_TOKEN, DEBT_TICKER, LIQUID_TOKEN } from 'app/client_config';
 
-class ConvertToSteem extends React.Component {
+class ConvertToHive extends React.Component {
     constructor() {
         super();
         this.state = {};
@@ -19,7 +19,7 @@ class ConvertToSteem extends React.Component {
     componentDidMount() {
         ReactDOM.findDOMNode(this.refs.amt).focus();
     }
-    shouldComponentUpdate = shouldComponentUpdate(this, 'ConvertToSteem');
+    shouldComponentUpdate = shouldComponentUpdate(this, 'ConvertToHive');
     dispatchSubmit = () => {
         const { convert, owner, onClose } = this.props;
         const { amount } = this.props.fields;
@@ -47,25 +47,25 @@ class ConvertToSteem extends React.Component {
                 <div className="row">
                     <div className="small-12 columns">
                         <h1>
-                            {tt('converttosteem_jsx.convert_to_LIQUID_TOKEN', {
+                            {tt('converttohive_jsx.convert_to_LIQUID_TOKEN', {
                                 LIQUID_TOKEN,
                             })}
                         </h1>
                         <p>
                             {tt(
-                                'converttosteem_jsx.DEBT_TOKEN_will_be_unavailable',
+                                'converttohive_jsx.DEBT_TOKEN_will_be_unavailable',
                                 { DEBT_TOKEN }
                             )}
                         </p>
                         <p>
                             {tt(
-                                'converttosteem_jsx.your_existing_DEBT_TOKEN_are_liquid_and_transferable',
+                                'converttohive_jsx.your_existing_DEBT_TOKEN_are_liquid_and_transferable',
                                 { link: tt('g.buy_or_sell'), DEBT_TOKEN }
                             )}
                         </p>
                         <p>
                             {tt(
-                                'converttosteem_jsx.this_is_a_price_feed_conversion'
+                                'converttohive_jsx.this_is_a_price_feed_conversion'
                             )}
                         </p>
                     </div>
@@ -122,14 +122,14 @@ class ConvertToSteem extends React.Component {
 }
 
 export default reduxForm(
-    { form: 'convertToSteem', fields: ['amount'] },
+    { form: 'convertToHive', fields: ['amount'] },
     // mapStateToProps
     (state, ownProps) => {
         const current = state.user.get('current');
         const username = current.get('username');
         const account = state.global.getIn(['accounts', username]);
-        const sbd_balance = account.get('sbd_balance');
-        const max = sbd_balance.split(' ')[0];
+        const hbd_balance = account.get('sbd_balance');
+        const max = hbd_balance.split(' ')[0];
         const validate = values => ({
             amount: !values.amount
                 ? tt('g.required')
@@ -163,7 +163,7 @@ export default reduxForm(
                         success();
                         dispatch(
                             appActions.addNotification({
-                                key: 'convert_sd_to_steem_' + Date.now(),
+                                key: 'convert_sd_to_hive_' + Date.now(),
                                 message: tt('g.order_placed', { order: conf }),
                                 dismissAfter: 5000,
                             })
@@ -176,4 +176,4 @@ export default reduxForm(
             );
         },
     })
-)(ConvertToSteem);
+)(ConvertToHive);

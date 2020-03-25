@@ -8,7 +8,7 @@
     padding: 2em;
   }
   &__title {
-    color: $color-blue-black;
+    color: $color-hive-black;
     font-weight: bold;  
     padding-top: 8px;
   }
@@ -22,7 +22,7 @@
   }
   input[type=submit].disabled, input[type=submit].disabled:focus {  
     opacity: 0.2;
-    background-color: $color-blue-black;
+    background-color: $color-hive-black;
     box-shadow: 0px 0px 0px 0 rgba(0,0,0,0);
   }
   &__step {
@@ -58,10 +58,10 @@
 .theme-dark {
   .CreateAccount {
     p {
-      color: $color-blue-black;
+      color: $color-hive-black;
     }
     label {
-     color: $color-blue-black; 
+     color: $color-hive-black; 
     }
     .error p, .error label {
       color: $color-red;

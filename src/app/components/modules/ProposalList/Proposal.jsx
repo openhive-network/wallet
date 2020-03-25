@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Moment from 'moment';
 import NumAbbr from 'number-abbreviate';
-import { numberWithCommas, vestsToSpf } from 'app/utils/StateFunctions';
+import { numberWithCommas, vestsToHpf } from 'app/utils/StateFunctions';
 
 import Icon from 'app/components/elements/Icon';
 
@@ -29,7 +29,7 @@ export default function Proposal(props) {
     const start = new Date(props.start_date);
     const end = new Date(props.end_date);
     const durationInDays = Moment(end).diff(Moment(start), 'days');
-    const totalPayout = durationInDays * daily_pay.split(' SBD')[0]; // ¯\_(ツ)_/¯
+    const totalPayout = durationInDays * daily_pay.split(' HBD')[0]; // ¯\_(ツ)_/¯
 
     const classUp =
         'Voting__button Voting__button-up' +
@@ -49,7 +49,7 @@ export default function Proposal(props) {
                 </a>
                 <span>
                     {abbreviateNumber(
-                        simpleVotesToSp(
+                        simpleVotesToHp(
                             total_votes,
                             total_vesting_shares,
                             total_vesting_fund_steem
@@ -96,11 +96,11 @@ export default function Proposal(props) {
             <div className="proposals__amount">
                 <span>
                     <a href="#" title={formatCurrency(totalPayout)}>
-                        <em>{abbreviateNumber(totalPayout)} SBD</em>
+                        <em>{abbreviateNumber(totalPayout)} HBD</em>
                     </a>
                 </span>
                 <small>
-                    {abbreviateNumber(daily_pay.split(' SBD')[0])} SBD per day
+                    {abbreviateNumber(daily_pay.split(' HBD')[0])} HBD per day
                     for {durationInDays} days
                 </small>
             </div>
@@ -132,7 +132,7 @@ Proposal.propTypes = {
  * @returns {string} - return a fancy string
  */
 function formatCurrency(amount = 0) {
-    return numberWithCommas(Number.parseFloat(amount).toFixed(2) + 'SBD');
+    return numberWithCommas(Number.parseFloat(amount).toFixed(2) + 'HBD');
 }
 
 /**
@@ -252,7 +252,7 @@ function checkIfSameUser(usernamea, usernameb, valueIfSame = true) {
 function linkifyUsername(linkText, username = '') {
     if (username == '') username = linkText;
     return (
-        <a href={`https://steemit.com/@${username}`} target="_blank">
+        <a href={`https://hive.blog/@${username}`} target="_blank">
             {linkText}
         </a>
     );
@@ -265,17 +265,17 @@ function linkifyUsername(linkText, username = '') {
  * @returns {string} - return a URL string
  */
 function urlifyPermlink(username, permlink) {
-    return `https://steemit.com/@${username}/${permlink}`;
+    return `https://hive.blog/@${username}/${permlink}`;
 }
 
 /**
- * Given total votes in vests returns value in SP
+ * Given total votes in vests returns value in HP
  * @param {number} total_votes - total votes on a proposal (vests from API)
  * @param {string} total_vesting_shares - vesting shares with vests symbol on end
  * @param {string} total_vesting_fund_steem - total steem vesting fund with liquid symbol on end
- * @returns {number} - return the number converted to SP
+ * @returns {number} - return the number converted to HP
  */
-function simpleVotesToSp(
+function simpleVotesToHp(
     total_votes,
     total_vesting_shares,
     total_vesting_fund_steem

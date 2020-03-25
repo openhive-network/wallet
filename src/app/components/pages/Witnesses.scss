@@ -18,11 +18,11 @@
 	}
 
 	.button {
-		background-color: $color-text-teal;
+		background-color: $color-text-hive-red;
 		text-shadow: 0 1px 0 rgba(0,0,0,0.20);
 		transition: 0.2s all ease-in-out;
 		&:hover {
-			background-color: $color-teal;
+			background-color: $color-hive-red;
 		}
 	}		
 }

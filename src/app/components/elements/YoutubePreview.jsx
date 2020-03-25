@@ -17,7 +17,7 @@ export default class YoutubePreview extends React.Component {
     static defaultProps = {
         width: 640,
         height: 360,
-        dataParams: 'enablejsapi=0&rel=0&origin=https://steemit.com',
+        dataParams: 'enablejsapi=0&rel=0&origin=https://hive.blog',
     };
 
     constructor() {
@@ -41,10 +41,10 @@ export default class YoutubePreview extends React.Component {
             const thumbnail =
                 width <= 320
                     ? 'mqdefault.jpg'
-                    : width <= 480 ? 'hqdefault.jpg' : '0.jpg';
-            const previewLink = `https://img.youtube.com/vi/${youTubeId}/${
-                thumbnail
-            }`;
+                    : width <= 480
+                        ? 'hqdefault.jpg'
+                        : '0.jpg';
+            const previewLink = `https://img.youtube.com/vi/${youTubeId}/${thumbnail}`;
             return (
                 <div
                     className="videoWrapper youtube"
@@ -55,9 +55,7 @@ export default class YoutubePreview extends React.Component {
                 </div>
             );
         }
-        const autoPlaySrc = `https://www.youtube.com/embed/${
-            youTubeId
-        }?autoplay=1&autohide=1&${dataParams}`;
+        const autoPlaySrc = `https://www.youtube.com/embed/${youTubeId}?autoplay=1&autohide=1&${dataParams}`;
         return (
             <div className="videoWrapper">
                 <iframe
