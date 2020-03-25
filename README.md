@@ -1,4 +1,3 @@
-
 # Hive.Blog
 
 
@@ -114,7 +113,7 @@ By default you will be connected to hive.blog's public hive node at
 you would use your regular account name and credentials to login - there is
 not an official separate testnet at this time. If you intend to run a
 full-fledged site relying on your own, we recommend looking into running a
-copy of `steemd` locally instead
+copy of `hived` locally instead
 [https://github.com/openhive-network/hive](https://github.com/openhive-network/hive).
 
 #### Debugging SSR code
