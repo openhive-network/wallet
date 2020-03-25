@@ -85,6 +85,11 @@ const SidePanel = ({ alignment, visible, hideSidePanel, username }) => {
                     ? `https://blocktrades.us/?input_coin_type=eth&output_coin_type=hive&receive_address=${username}`
                     : `https://blocktrades.us/?input_coin_type=eth&output_coin_type=hive`,
             },
+            {
+                value: 'ionomy',
+                label: 'Ionomy',
+                link: 'https://ionomy.com/en/markets/btc-hive',
+            },
         ],
         external: [
             {
