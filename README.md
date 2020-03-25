@@ -109,7 +109,7 @@ yarn run start
 It will take quite a bit longer to start in this mode (~60s) as it needs to
 build and start the webpack-dev-server.
 
-By default you will be connected to hive.blog's public steem node at
+By default you will be connected to hive.blog's public hive node at
 `wss://steemd.steeemit.com`. This is actually on the real blockchain and
 you would use your regular account name and credentials to login - there is
 not an official separate testnet at this time. If you intend to run a
