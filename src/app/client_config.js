@@ -38,7 +38,7 @@ export const FRACTION_DIGITS = 2; // default amount of decimal digits
 export const FRACTION_DIGITS_MARKET = 3; // accurate amount of deciaml digits (example: used in market)
 
 // meta info
-export const TWITTER_HANDLE = '@steemit';
+export const TWITTER_HANDLE = '@hiveblocks';
 export const SHARE_IMAGE =
     'https://' + APP_DOMAIN + '/images/hive-blog-share.png';
 export const TWITTER_SHARE_IMAGE =
