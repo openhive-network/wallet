@@ -115,7 +115,7 @@ while test $# -gt 0; do
         "logs")
             shift
             if test $# -gt 0; then
-                log $1
+                logs $1
             else
                 echo "no environment specified"
                 exit 1
