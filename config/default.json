@@ -7,7 +7,7 @@
         "directives": {
             "childSrc": "'self'",
             "connectSrc":
-                "'self' steemit.com https://api.steemit.com https://testnet.steemitdev.com api.blocktrades.us",
+                "'self' hive.blog https://api.hive.blog https://anyx.io api.blocktrades.us",
             "defaultSrc": "'self'",
             "fontSrc": "data: fonts.gstatic.com",
             "frameAncestors": "'none'",
@@ -35,7 +35,7 @@
     },
     "registrar": {
         "account": "-",
-        "fee": "0.5 STEEM",
+        "fee": "0.5 HIVE",
         "delegation": "150250.000000 VESTS",
         "signing_key": "5J..."
     },
@@ -70,13 +70,13 @@
         "auth_token": false
     },
     "upload_image": false,
-    "steemd_connection_client": "https://api.steemit.com",
-    "steemd_connection_server": "https://api.steemit.com",
-    "steemd_use_appbase": false,
+    "hived_connection_client": "https://api.hive.blog",
+    "hived_connection_server": "https://api.hive.blog",
+    "hived_use_appbase": false,
     "chain_id":
         "0000000000000000000000000000000000000000000000000000000000000000",
     "address_prefix": "STM",
     "conveyor_posting_wif": false,
     "conveyor_username": false,
-    "social_url": "https://steemit.com"
+    "social_url": "https://hive.blog"
 }

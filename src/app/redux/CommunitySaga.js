@@ -169,7 +169,7 @@ export function* createCommunityAccount(createCommunityAction) {
     );
     try {
         const op = {
-            fee: '3.000 STEEM',
+            fee: '3.000 HIVE',
             creator: accountName,
             new_account_name: communityOwnerName,
             owner: generateAuth(
@@ -199,7 +199,7 @@ export function* createCommunityAccount(createCommunityAction) {
             transactionActions.broadcastOperation({
                 type: 'account_create',
                 confirm:
-                    'This operation will cost 3 STEEM. Would you like to proceed?',
+                    'This operation will cost 3 HIVE. Would you like to proceed?',
                 operation: op,
                 successCallback: res => {
                     createAccountSuccessCB();

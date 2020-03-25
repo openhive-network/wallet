@@ -5,21 +5,21 @@ class Privacy extends React.Component {
         return (
             <div className="Privacy row">
                 <div className="column large-12">
-                    <h1>Steemit, Inc Privacy Policy</h1>
+                    <h1>Hive.blog Privacy Policy</h1>
                     <h2>Effective: May 25, 2018</h2>
                     <p className="c0">
                         <span className="c1" />
                     </p>
                     <p className="c2">
                         <span>
-                            This Privacy Policy describes how Steemit collects,
+                            This Privacy Policy describes how Hive.blog collects,
                             uses and discloses information, and what choices you
                             have with respect to the information. This Policy
                             applies to the
                         </span>
                         <span>
-                            &nbsp;Steemit.com, steemit subdomains (e.g.,
-                            signup.steemit.com) and services
+                            &nbsp;Hive.blog, Hive.blog subdomains (e.g.,
+                            signup.hive.blog) and services
                         </span>
                         <span className="c1">
                             &nbsp;(collectively, &ldquo;Services&rdquo;).
@@ -33,8 +33,8 @@ class Privacy extends React.Component {
                     </p>
                     <p className="c2">
                         <span className="c1">
-                            When we refer to &ldquo;Steemit&rdquo;, we mean the
-                            Steemit entity that acts as the controller of your
+                            When we refer to &ldquo;Hive.blog&rdquo;, we mean the
+                            Hive.blog entity that acts as the controller of your
                             information.
                         </span>
                     </p>
@@ -402,7 +402,7 @@ class Privacy extends React.Component {
                             You may access information that you have voluntarily
                             provided through your account on the Services, and
                             to review, correct, or delete it by sending a
-                            request to privacy@steemit.com. You can request to
+                            request to privacy@hive.blog. You can request to
                             change contact choices, opt-out of our sharing with
                             others, and update your personal information and
                             preferences. We may require that you are the you are
@@ -414,7 +414,7 @@ class Privacy extends React.Component {
                         <span className="c8 c12">
                             <a
                                 className="c5"
-                                href="https://www.google.com/url?q=https://github.com/steemit/conveyor%23get_user_data-username&amp;sa=D&amp;ust=1527292847102000"
+                                href=""
                             >
                                 here
                             </a>
@@ -429,7 +429,7 @@ class Privacy extends React.Component {
                         <span className="c1">
                             &nbsp;We welcome your comments or questions about
                             this Policy, and you may contact us at:
-                            privacy@steemit.com.
+                            privacy@hive.blog.
                         </span>
                     </p>
                     <p className="c0">
@@ -548,7 +548,7 @@ class Privacy extends React.Component {
                             information, which are described in the table below.
                             If you have questions about the legal bases under
                             which we process your personal information, contact
-                            us at legal@steemit.com.
+                            us at legal@hive.blog.
                         </span>
                     </p>
                     <p className="c0">
@@ -606,7 +606,7 @@ class Privacy extends React.Component {
                             Where our use of your personal information is based
                             upon your consent, you have the right to withdraw it
                             anytime in the manner indicated in the Service or by
-                            contacting us at privacy@steemit.com
+                            contacting us at privacy@hive.blog
                         </span>
                     </p>
                     <p className="c0">
@@ -728,7 +728,7 @@ class Privacy extends React.Component {
                     <p className="c2">
                         <span>
                             You can submit these requests by email to
-                            privacy@steemit.com. We may request specific
+                            privacy@hive.blog. We may request specific
                             information from you to help us confirm your
                             identity and process your request. Applicable law
                             may require or permit us to decline your request. If
@@ -737,7 +737,7 @@ class Privacy extends React.Component {
                             submit a complaint about our use of your personal
                             information or response to your requests regarding
                             your personal information, you may contact us at
-                            privacy@steemit.com or submit a complaint to the
+                            privacy@hive.blog or submit a complaint to the
                             data protection regulator in your jurisdiction. You
                             can find your data protection regulator{' '}
                         </span>

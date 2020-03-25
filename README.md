@@ -1,25 +1,24 @@
+# Hive.Blog
 
-# Condenser [![CircleCI](https://circleci.com/gh/steemit/wallet.svg?style=svg)](https://circleci.com/gh/steemit/wallet)
 
-
-Condenser is the react.js web interface to the world's first and best
-blockchain-based social media platform, steemit.com.  It uses
-[STEEM](https://github.com/steemit/steem), a blockchain powered by DPoS Governance and ChainBase DB to store JSON-based content for a plethora of web
+Hive.blog is the react.js web interface to the world's best
+blockchain-based social media platform, hive.blog.  It uses
+[HIVE](https://github.com/openhive-network/hive), a blockchain powered by DPoS Governance and ChainBase DB to store JSON-based content for a plethora of web
 applications.   
 
-## Why would I want to use Condenser (steemit.com front-end)?
+## Why would I want to use Hive.blog?
 
-* Learning how to build blockchain-based web applications using STEEM as a
+* Learning how to build blockchain-based web applications using HIVE as a
   content storage mechanism in react.js
-* Reviewing the inner workings of the steemit.com social media platform
-* Assisting with software development for steemit.com
+* Reviewing the inner workings of the hive.blog social media platform
+* Assisting with software development for hive.blog
 
 ## Installation
 
 #### Docker
 
 We highly recommend using docker to run condenser in production. This is how we run the
-live steemit.com site and it is the most supported (and fastest) method of
+live hive.blog site and it is the most supported (and fastest) method of
 both building and running condenser. We will always have the latest version
 of condenser (master branch) available on Docker Hub. Configuration settings
 can be set using environment variables (see configuration section below for
@@ -109,13 +108,13 @@ yarn run start
 It will take quite a bit longer to start in this mode (~60s) as it needs to
 build and start the webpack-dev-server.
 
-By default you will be connected to steemit.com's public steem node at
-`wss://steemd.steeemit.com`. This is actually on the real blockchain and
+By default you will be connected to hive.blog's public hive node at
+`https://api.hive.blog`. This is actually on the real blockchain and
 you would use your regular account name and credentials to login - there is
 not an official separate testnet at this time. If you intend to run a
 full-fledged site relying on your own, we recommend looking into running a
-copy of `steemd` locally instead
-[https://github.com/steemit/steem](https://github.com/steemit/steem).
+copy of `hived` locally instead
+[https://github.com/openhive-network/hive](https://github.com/openhive-network/hive).
 
 #### Debugging SSR code
 
@@ -134,8 +133,8 @@ stored in `config/defaults.json`.
 Environment variables using an example like this:
 
 ```bash
-export SDC_CLIENT_STEEMD_URL="wss://steemd.steemit.com"
-export SDC_SERVER_STEEMD_URL="wss://steemd.steemit.com"
+export SDC_CLIENT_HIVED_URL="https://api.hive.blog"
+export SDC_SERVER_HIVED_URL="https://api.hive.blog"
 ```
 
 Keep in mind environment variables only exist in your active session, so if
@@ -304,6 +303,6 @@ docker run --network container:condenser steemit/condenser-blackboxtest:latest
 
 To report a non-critical issue, please file an issue on this GitHub project.
 
-If you find a security issue please report details to: security@steemit.com
+If you find a security issue please report details to: security@hive.blog
 
 We will evaluate the risk and make a patch available before filing the issue.

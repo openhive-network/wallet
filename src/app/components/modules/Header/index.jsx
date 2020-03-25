@@ -14,7 +14,7 @@ import * as userActions from 'app/redux/UserReducer';
 import * as appActions from 'app/redux/AppReducer';
 import Userpic from 'app/components/elements/Userpic';
 import { SIGNUP_URL } from 'shared/constants';
-import SteemLogo from 'app/components/elements/SteemLogo';
+import HiveLogo from 'app/components/elements/HiveLogo';
 import normalizeProfile from 'app/utils/NormalizeProfile';
 
 class Header extends React.Component {
@@ -149,7 +149,7 @@ class Header extends React.Component {
                     <div className="small-5 large-6 columns Header__logotype">
                         {/*LOGO*/}
                         <Link to="/">
-                            <SteemLogo />
+                            <HiveLogo nightmodeEnabled={nightmodeEnabled} />
                         </Link>
                     </div>
 
@@ -235,7 +235,7 @@ const mapStateToProps = (state, ownProps) => {
         username,
         loggedIn,
         userPath,
-        nightmodeEnabled: state.user.getIn(['user_preferences', 'nightmode']),
+        nightmodeEnabled: state.app.getIn(['user_preferences', 'nightmode']),
         account_meta: user_profile,
         current_account_name,
         ...ownProps,
@@ -263,6 +263,9 @@ const mapDispatchToProps = dispatch => ({
     },
 });
 
-const connectedHeader = connect(mapStateToProps, mapDispatchToProps)(Header);
+const connectedHeader = connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(Header);
 
 export default connectedHeader;

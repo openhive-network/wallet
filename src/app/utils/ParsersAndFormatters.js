@@ -104,7 +104,7 @@ export function translateError(string) {
             return tt(
                 'g.vote_currently_exists_user_must_be_indicate_a_to_reject_witness'
             );
-        case 'Only one Steem account allowed per IP address every 10 minutes':
+        case 'Only one Hive account allowed per IP address every 10 minutes':
             return tt(
                 'g.only_one_APP_NAME_account_allowed_per_ip_address_every_10_minutes'
             );

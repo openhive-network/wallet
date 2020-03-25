@@ -6,7 +6,7 @@ import * as transactionActions from 'app/redux/TransactionReducer';
 import * as globalActions from 'app/redux/GlobalReducer';
 import * as userActions from 'app/redux/UserReducer';
 import { validate_account_name } from 'app/utils/ChainValidation';
-import { hasCompatibleKeychain } from 'app/utils/SteemKeychain';
+import { hasCompatibleKeychain } from 'app/utils/HiveKeychain';
 import runTests from 'app/utils/BrowserTests';
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
 import reactForm from 'app/utils/ReactForm';
@@ -18,7 +18,6 @@ import { SIGNUP_URL } from 'shared/constants';
 
 class LoginForm extends Component {
     static propTypes = {
-        // Steemit.
         loginError: PropTypes.string,
         onCancel: PropTypes.func,
     };
@@ -82,10 +81,12 @@ class LoginForm extends Component {
                 password: useKeychain
                     ? null
                     : !values.password
-                      ? tt('g.required')
-                      : PublicKey.fromString(values.password)
-                        ? tt('loginform_jsx.you_need_a_private_password_or_key')
-                        : null,
+                        ? tt('g.required')
+                        : PublicKey.fromString(values.password)
+                            ? tt(
+                                  'loginform_jsx.you_need_a_private_password_or_key'
+                              )
+                            : null,
             }),
         });
     }
@@ -304,7 +305,7 @@ class LoginForm extends Component {
                     className="button hollow"
                     onClick={this.SignUp}
                 >
-                    {tt('loginform_jsx.sign_up_get_steem')}
+                    {tt('loginform_jsx.sign_up_get_hive')}
                 </button>
             </div>
         );
@@ -463,7 +464,7 @@ function urlAccountName() {
 }
 
 function checkPasswordChecksum(password) {
-    // A Steemit generated password is a WIF prefixed with a P ..
+    // A Hive generated password is a WIF prefixed with a P ..
     // It is possible to login directly with a WIF
     const wif = /^P/.test(password) ? password.substring(1) : password;
 

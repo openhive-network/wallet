@@ -78,22 +78,25 @@
       padding-right: 20px;
     }
 
-    .token-steem {
-      background: url('/images/token-steem.svg');
+    .token-hive {
+      background: url('/images/token-hive.svg');
+      background-size: 46px 46px;
       width: 46px;
       height: 46px;
     }
 
-    .token-steem-power {
+    .token-hive-power {
       display: inline-block;
-      background: url('/images/token-steem-power.svg');
+      background: url('/images/token-hive-power.svg');
+      background-size: 46px 46px;
       width: 46px;
       height: 46px;
     }
 
-    .token-sbd {
+    .token-hbd {
       display: inline-block;
-      background: url('/images/token-sbd.svg');
+      background: url('/images/token-hbd.svg');
+      background-size: 46px 46px;
       width: 46px;
       height: 46px;
     }

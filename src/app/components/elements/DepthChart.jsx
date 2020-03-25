@@ -17,7 +17,7 @@ const power = 100;
 const precision = 1000;
 
 function orderEqual(a, b) {
-    return a.price === b.price && a.steem === b.steem && a.sbd === b.sbd;
+    return a.price === b.price && a.hive === b.hive && a.hbd === b.hbd;
 }
 
 function ordersEqual(a, b) {
@@ -101,7 +101,7 @@ function generateBidAsk(bidsArray, asksArray) {
         let ttl = 0;
         return orders
             .map(o => {
-                ttl += o.sbd;
+                ttl += o.hbd;
                 return [o.price * power, ttl];
             })
             .sort((a, b) => {

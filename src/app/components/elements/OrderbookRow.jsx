@@ -64,8 +64,8 @@ export default class OrderRow extends React.Component {
         const bid = side === 'bids';
 
         const totalTD = <td>{total.toFixed(3)}</td>;
-        const sbd = <td>{order.getStringSBD()}</td>;
-        const steem = <td>{order.getStringSteem()}</td>;
+        const hbd = <td>{order.getStringHBD()}</td>;
+        const hive = <td>{order.getStringHive()}</td>;
         const price = (
             <td>
                 <strong>{order.getStringPrice()}</strong>
@@ -78,8 +78,8 @@ export default class OrderRow extends React.Component {
                 className={this.state.animate ? 'animate' : ''}
             >
                 {bid ? totalTD : price}
-                {bid ? sbd : steem}
-                {bid ? steem : sbd}
+                {bid ? hbd : hive}
+                {bid ? hive : hbd}
                 {bid ? price : totalTD}
             </tr>
         );

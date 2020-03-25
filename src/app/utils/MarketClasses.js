@@ -11,17 +11,17 @@ class Order {
                 ? roundUp(this.price, 6)
                 : Math.max(roundDown(this.price, 6), 0.000001);
         this.stringPrice = this.price.toFixed(6);
-        this.steem = parseInt(order.steem, 10);
-        this.sbd = parseInt(order.sbd, 10);
+        this.hive = parseInt(order.steem, 10);
+        this.hbd = parseInt(order.sbd, 10);
         this.date = order.created;
     }
 
-    getSteemAmount() {
-        return this.steem / precision;
+    getHiveAmount() {
+        return this.hive / precision;
     }
 
-    getStringSteem() {
-        return this.getSteemAmount().toFixed(3);
+    getStringHive() {
+        return this.getHiveAmount().toFixed(3);
     }
 
     getPrice() {
@@ -32,20 +32,20 @@ class Order {
         return this.stringPrice;
     }
 
-    getStringSBD() {
-        return this.getSBDAmount().toFixed(3);
+    getStringHBD() {
+        return this.getHBDAmount().toFixed(3);
     }
 
-    getSBDAmount() {
-        return this.sbd / precision;
+    getHBDAmount() {
+        return this.hbd / precision;
     }
 
     add(order) {
         return new Order(
             {
                 real_price: this.price,
-                steem: this.steem + order.steem,
-                sbd: this.sbd + order.sbd,
+                steem: this.hive + order.hive,
+                sbd: this.hbd + order.hbd,
                 date: this.date,
             },
             this.type
@@ -54,8 +54,8 @@ class Order {
 
     equals(order) {
         return (
-            this.getStringSBD() === order.getStringSBD() &&
-            this.getStringSteem() === order.getStringSteem() &&
+            this.getStringHBD() === order.getStringHBD() &&
+            this.getStringHive() === order.getStringHive() &&
             this.getStringPrice() === order.getStringPrice()
         );
     }
@@ -72,20 +72,20 @@ class TradeHistory {
             fill.current_pays.indexOf(DEBT_TICKER) !== -1 ? 'bid' : 'ask';
         this.color = this.type == 'bid' ? 'buy-color' : 'sell-color';
         if (this.type === 'bid') {
-            this.sbd = parseFloat(
+            this.hbd = parseFloat(
                 fill.current_pays.split(' ' + DEBT_TICKER)[0]
             );
-            this.steem = parseFloat(
+            this.hive = parseFloat(
                 fill.open_pays.split(' ' + LIQUID_TICKER)[0]
             );
         } else {
-            this.sbd = parseFloat(fill.open_pays.split(' ' + DEBT_TICKER)[0]);
-            this.steem = parseFloat(
+            this.hbd = parseFloat(fill.open_pays.split(' ' + DEBT_TICKER)[0]);
+            this.hive = parseFloat(
                 fill.current_pays.split(' ' + LIQUID_TICKER)[0]
             );
         }
 
-        this.price = this.sbd / this.steem;
+        this.price = this.hbd / this.hive;
         this.price =
             this.type === 'ask'
                 ? roundUp(this.price, 6)
@@ -93,20 +93,20 @@ class TradeHistory {
         this.stringPrice = this.price.toFixed(6);
     }
 
-    getSteemAmount() {
-        return this.steem;
+    getHiveAmount() {
+        return this.hive;
     }
 
-    getStringSteem() {
-        return this.getSteemAmount().toFixed(3);
+    getStringHive() {
+        return this.getHiveAmount().toFixed(3);
     }
 
-    getSBDAmount() {
-        return this.sbd;
+    getHBDAmount() {
+        return this.hbd;
     }
 
-    getStringSBD() {
-        return this.getSBDAmount().toFixed(3);
+    getStringHBD() {
+        return this.getHBDAmount().toFixed(3);
     }
 
     getPrice() {
@@ -119,8 +119,8 @@ class TradeHistory {
 
     equals(order) {
         return (
-            this.getStringSBD() === order.getStringSBD() &&
-            this.getStringSteem() === order.getStringSteem() &&
+            this.getStringHBD() === order.getStringHBD() &&
+            this.getStringHive() === order.getStringHive() &&
             this.getStringPrice() === order.getStringPrice()
         );
     }

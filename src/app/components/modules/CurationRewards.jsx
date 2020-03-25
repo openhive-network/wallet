@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import TransferHistoryRow from 'app/components/cards/TransferHistoryRow';
 import {
     numberWithCommas,
-    vestsToSp,
+    vestsToHp,
     assetFloat,
 } from 'app/utils/StateFunctions';
 import tt from 'counterpart';
@@ -26,7 +26,7 @@ class CurationRewards extends React.Component {
         this.onShowDeposit = () => {
             this.setState({ showDeposit: !this.state.showDeposit });
         };
-        this.onShowDepositSteem = () => {
+        this.onShowDepositHive = () => {
             this.setState({
                 showDeposit: !this.state.showDeposit,
                 depositType: LIQUID_TICKER,
@@ -163,7 +163,7 @@ class CurationRewards extends React.Component {
                     </div>
                     <div className="column small-12 medium-4">
                         {numberWithCommas(
-                            vestsToSp(
+                            vestsToHp(
                                 this.props.state,
                                 rewardsWeek + ' ' + VEST_TICKER
                             )
