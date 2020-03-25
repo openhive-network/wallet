@@ -252,7 +252,7 @@ function checkIfSameUser(usernamea, usernameb, valueIfSame = true) {
 function linkifyUsername(linkText, username = '') {
     if (username == '') username = linkText;
     return (
-        <a href={`https://steemit.com/@${username}`} target="_blank">
+        <a href={`https://hive.blog/@${username}`} target="_blank">
             {linkText}
         </a>
     );
@@ -265,7 +265,7 @@ function linkifyUsername(linkText, username = '') {
  * @returns {string} - return a URL string
  */
 function urlifyPermlink(username, permlink) {
-    return `https://steemit.com/@${username}/${permlink}`;
+    return `https://hive.blog/@${username}/${permlink}`;
 }
 
 /**

@@ -59,7 +59,7 @@ and voters ("curators").
 
 HIVE, Hive Power (HP) and Hive Dollars (HBD) are the three forms of digital
 currency used by the Hive Blockchain. More information
-[here](https://steemit.com/faq.html#What_is_the_difference_between_HIVE__HIVE_Power__and_Hive_Dollars).
+[here](https://hive.blog/faq.html#What_is_the_difference_between_HIVE__HIVE_Power__and_Hive_Dollars).
 
 
 ##### Additional resources

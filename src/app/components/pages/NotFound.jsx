@@ -1,7 +1,6 @@
 import React from 'react';
-import SvgImage from 'app/components/elements/SvgImage';
 import { Link } from 'react-router';
-import Icon from 'app/components/elements/Icon';
+import HiveLogo from 'app/components/elements/HiveLogo';
 
 class NotFound extends React.Component {
     render() {
@@ -13,11 +12,11 @@ class NotFound extends React.Component {
                             <ul className="menu">
                                 <li className="Header__top-logo">
                                     <Link to="/">
-                                        <Icon name="steem" size="2x" />
+                                        <HiveLogo />
                                     </Link>
                                 </li>
-                                <li className="Header__top-steemit show-for-medium noPrint">
-                                    <a href="/">steemit</a>
+                                <li className="Header__top-hive show-for-medium noPrint">
+                                    <a href="/">hive</a>
                                 </li>
                             </ul>
                         </div>
