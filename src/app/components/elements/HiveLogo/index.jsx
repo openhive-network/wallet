@@ -3,8 +3,8 @@ import PropTypes from 'prop-types';
 
 const HiveLogo = ({ nightmodeEnabled }) => {
     const logo = nightmodeEnabled
-        ? '/images/hive-blog-logo-nightmode.svg'
-        : '/images/hive-blog-logo.svg';
+        ? '/images/hive-wallet-logo-nightmode.svg'
+        : '/images/hive-wallet-logo.svg';
 
     return (
         <span className="logo">
