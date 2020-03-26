@@ -43,7 +43,7 @@ export default function ProposalList(props) {
                 <div className="proposals__votes">
                     {tt('proposals.vote_hp')}
                 </div>
-                <div className="proposals__avater"> </div>
+                <div className="proposals__avatar"> </div>
                 <div className="proposals__description">
                     {tt('proposals.proposal')}
                 </div>
