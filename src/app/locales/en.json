@@ -909,5 +909,20 @@
         },
         "confirm_remove_proposal_description":
             "Proposal removal is permanent and the fee paid for creating the proposal is not refundable."
+    },
+    "proposals": {
+        "wait_for_proposal_load":
+            "The proposals are now being loaded, it will be worth the wait!",
+        "sorry_cannot_display":
+            "Sorry, I can't show you any proposals right now.",
+        "no_proposal_matching":
+            "It's probably because there are not any matching your criteria.",
+        "vote_hp": "Vote HP",
+        "proposal": "Proposal",
+        "amount": "Amount",
+        "by": "by",
+        "for": "for",
+        "daily": "Daily",
+        "duration": "Duration"
     }
 }

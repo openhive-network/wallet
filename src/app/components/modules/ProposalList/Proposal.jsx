@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Moment from 'moment';
 import NumAbbr from 'number-abbreviate';
+import tt from 'counterpart';
 import { numberWithCommas, vestsToHpf } from 'app/utils/StateFunctions';
 
 import Icon from 'app/components/elements/Icon';
@@ -39,14 +40,6 @@ export default function Proposal(props) {
     return (
         <div className="proposals__row">
             <div className="proposals__votes">
-                <a onClick={onVote}>
-                    <span className={classUp}>
-                        <Icon
-                            name={isVoting ? 'empty' : 'chevron-up-circle'}
-                            className="upvote"
-                        />
-                    </span>
-                </a>
                 <span>
                     {abbreviateNumber(
                         simpleVotesToHp(
@@ -56,6 +49,21 @@ export default function Proposal(props) {
                         )
                     )}
                 </span>
+                <a onClick={onVote}>
+                    <span className={classUp}>
+                        <Icon
+                            name={isVoting ? 'empty' : 'chevron-up-circle'}
+                            className="upvote"
+                        />
+                    </span>
+                </a>
+            </div>
+            <div className="proposals__avatar">
+                <img
+                    src={`https://images.hive.blog/100x100/https://images.hive.blog/u/${creator}/avatar`}
+                    alt={creator}
+                    className="image__round"
+                />
             </div>
             <div className="proposals__description">
                 <span>
@@ -83,8 +91,9 @@ export default function Proposal(props) {
                 </small>
                 <br />
                 <small>
-                    by {linkifyUsername(creator)}
-                    {creator != receiver ? ' for ' : null}
+                    {tt('proposals.by')}
+                    {linkifyUsername(creator)}
+                    {creator != receiver ? ` ${tt('proposals.for')} ` : null}
                     {creator != receiver
                         ? linkifyUsername(
                               checkIfSameUser(creator, receiver, 'themselves.'),
@@ -100,8 +109,9 @@ export default function Proposal(props) {
                     </a>
                 </span>
                 <small>
-                    {abbreviateNumber(daily_pay.split(' HBD')[0])} HBD per day
-                    for {durationInDays} days
+                    {tt('proposals.daily')}:{' '}
+                    {abbreviateNumber(daily_pay.split(' HBD')[0])} HBD<br />
+                    {tt('proposals.duration')}: {durationInDays} days
                 </small>
             </div>
         </div>
