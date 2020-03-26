@@ -30,10 +30,10 @@
             display: flex;
             align-items: center;
             max-width: 200px;
-            width: 20%;
+            width: 15%;
             @media only screen and (max-width: 768px) {
                 justify-content: center;
-                width: 30%;
+                width: 20%;
             }
         }
         .proposals__amount {
@@ -50,6 +50,9 @@
             align-items: center;
             max-width: 800px;
             width: 60%;
+        }
+        .proposals__avatar {
+            width: 65px;
         }
     }
     .proposals__row {
