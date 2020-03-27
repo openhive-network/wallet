@@ -354,7 +354,7 @@ class LoginForm extends Component {
                             ref="pw"
                             placeholder={
                                 loginType === 'basic'
-                                    ? tt('loginform_jsx.enter_steem_key')
+                                    ? tt('loginform_jsx.enter_hive_key')
                                     : tt('loginform_jsx.password_or_wif')
                             }
                             {...password.props}
