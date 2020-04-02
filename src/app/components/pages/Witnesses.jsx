@@ -1,4 +1,5 @@
 import React from 'react';
+import classnames from 'classnames';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
@@ -66,6 +67,21 @@ class Witnesses extends React.Component {
         };
     }
 
+    componentDidMount() {
+        if (typeof document !== 'undefined') {
+            setTimeout(() => {
+                const highlightedWitnessElement = document.querySelector(
+                    '.Witnesses__highlight'
+                );
+                highlightedWitnessElement.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'center',
+                    inline: 'center',
+                });
+            }, 1000);
+        }
+    }
+
     shouldComponentUpdate(np, ns) {
         return (
             !is(np.witness_votes, this.props.witness_votes) ||
@@ -92,6 +108,7 @@ class Witnesses extends React.Component {
             accountWitnessProxy,
             onWitnessChange,
         } = this;
+        const witnessToHighlight = this.props.location.query.highlight;
         const sorted_witnesses = this.props.witnesses.sort((a, b) =>
             Long.fromString(String(b.get('votes'))).subtract(
                 Long.fromString(String(a.get('votes'))).toString()
@@ -99,9 +116,13 @@ class Witnesses extends React.Component {
         );
         let witness_vote_count = 30;
         let rank = 1;
+        let foundWitnessToHighlight = false;
 
         const witnesses = sorted_witnesses.map(item => {
             const owner = item.get('owner');
+            if (owner === witnessToHighlight) {
+                foundWitnessToHighlight = true;
+            }
             const totalVotesVests = item.get('votes');
             const totalVotesHp = numberWithCommas(
                 vestsToHp(
@@ -154,7 +175,12 @@ class Witnesses extends React.Component {
                 : {};
 
             return (
-                <tr key={owner}>
+                <tr
+                    key={owner}
+                    className={classnames({
+                        Witnesses__highlight: witnessToHighlight === owner,
+                    })}
+                >
                     <td className="Witnesses__rank">
                         {rank < 10 && '0'}
                         {rank++}
@@ -227,6 +253,10 @@ class Witnesses extends React.Component {
                 </tr>
             );
         });
+
+        if (foundWitnessToHighlight === false) {
+            this.setState({ customUsername: witnessToHighlight });
+        }
 
         let addl_witnesses = false;
         if (witness_votes) {
@@ -327,7 +357,12 @@ class Witnesses extends React.Component {
                 )}
 
                 {current_proxy ? null : (
-                    <div className="row">
+                    <div
+                        className={classnames('row', {
+                            Witnesses__highlight:
+                                foundWitnessToHighlight === false,
+                        })}
+                    >
                         <div className="column">
                             <p>
                                 {tt(

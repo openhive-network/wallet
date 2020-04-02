@@ -11,6 +11,9 @@
 	       fill: themed('textColorAccentHover');
 	    }
 	}
+    table tbody tr.Witnesses__highlight {
+        background-color: pink;
+    }
     td.Witnesses__info {
         display: flex;
         flex-direction: row;
@@ -56,6 +59,9 @@
         @media only screen and (min-width: 780px) {
             display: none;
         }
+    }
+    div.Witnesses__highlight form input.input-group-field {
+        box-shadow: 0px 0px 3px 3px pink;
     }
 }
 
