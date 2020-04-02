@@ -8,11 +8,12 @@ import links from 'app/utils/Links';
 import Icon from 'app/components/elements/Icon';
 import * as transactionActions from 'app/redux/TransactionReducer';
 import Userpic from 'app/components/elements/Userpic';
+import TimeAgoWrapper from 'app/components/elements/TimeAgoWrapper';
+import { formatLargeNumber } from 'app/utils/ParsersAndFormatters';
 import ByteBuffer from 'bytebuffer';
 import { is, Set, List } from 'immutable';
 import * as globalActions from 'app/redux/GlobalReducer';
 import { vestsToHpf, numberWithCommas } from 'app/utils/StateFunctions';
-import { FormattedHTMLMessage } from 'app/Translator';
 import tt from 'counterpart';
 
 const Long = ByteBuffer.Long;
@@ -23,6 +24,7 @@ const DISABLED_SIGNING_KEY = 'STM1111111111111111111111111111111114T1Anm';
 function _blockGap(head_block, last_block) {
     if (!last_block || last_block < 1) return 'forever';
     const secs = (head_block - last_block) * 3;
+    if (secs < 60) return 'just now';
     if (secs < 120) return 'recently';
     const mins = Math.floor(secs / 60);
     if (mins < 120) return mins + ' mins ago';
@@ -75,11 +77,13 @@ class Witnesses extends React.Component {
                 const highlightedWitnessElement = document.querySelector(
                     '.Witnesses__highlight'
                 );
-                highlightedWitnessElement.scrollIntoView({
-                    behavior: 'smooth',
-                    block: 'center',
-                    inline: 'center',
-                });
+                if (highlightedWitnessElement) {
+                    highlightedWitnessElement.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'center',
+                        inline: 'center',
+                    });
+                }
             }, 1000);
         }
     }
@@ -131,17 +135,15 @@ class Witnesses extends React.Component {
                 this.props.state,
                 `${totalVotesVests / 1000000} VESTS`
             );
-            const totalVotesHp = numberWithCommas(totalVotesHpf.toFixed(3));
+            const totalVotesHp = formatLargeNumber(totalVotesHpf, 0);
 
             let requiredHpToRankUp = '';
             if (previousTotalVoteHpf !== 0) {
                 requiredHpToRankUp = (
                     <small>
                         {tt('witnesses_jsx.hp_required_to_rank_up', {
-                            votehp: numberWithCommas(
-                                (previousTotalVoteHpf - totalVotesHpf).toFixed(
-                                    3
-                                )
+                            votehp: formatLargeNumber(
+                                previousTotalVoteHpf - totalVotesHpf
                             ),
                         })}
                     </small>
@@ -153,7 +155,6 @@ class Witnesses extends React.Component {
             const thread = item.get('url').replace('steemit.com', 'hive.blog');
             const myVote = witness_votes ? witness_votes.has(owner) : null;
             const signingKey = item.get('signing_key');
-            const missedBlocks = item.get('total_missed');
             const witnessCreated = item.get('created');
             const accountBirthday = Moment.utc(witnessCreated).format('ll');
             const now = Moment();
@@ -175,6 +176,8 @@ class Witnesses extends React.Component {
 
             const lastBlock = item.get('last_confirmed_block_num');
             const runningVersion = item.get('running_version');
+            const sbdExchangeRate = item.get('sbd_exchange_rate');
+            const sbdExchangeUpdateDate = item.get('last_sbd_exchange_update');
             const noBlock7days = (head_block - lastBlock) * 3 > 604800;
             const isDisabled =
                 signingKey == DISABLED_SIGNING_KEY || noBlock7days;
@@ -258,9 +261,17 @@ class Witnesses extends React.Component {
                             </div>
                             <div>
                                 <small>
-                                    {tt('witnesses_jsx.running_version')} v{
+                                    Produced block{' '}
+                                    <Link
+                                        to={`https://hiveblocks.com/b/${lastBlock}`}
+                                        target="_blank"
+                                    >
+                                        #{lastBlock}
+                                    </Link>{' '}
+                                    {_blockGap(head_block, lastBlock)} on v{
                                         runningVersion
                                     }
+                                    <br />
                                     {isDisabled &&
                                         `, ${tt(
                                             'witnesses_jsx.disabled'
@@ -273,13 +284,6 @@ class Witnesses extends React.Component {
                                     )}
                                 </small>
                             </div>
-                            <div className="Witnesses__votes">
-                                <small>
-                                    {tt('witnesses_jsx.received_hp_votes', {
-                                        votehp: `${totalVotesHp} HP`,
-                                    })}
-                                </small>
-                            </div>
                             {!isDisabled && (
                                 <div className="witness__thread">
                                     <small>{witness_link}</small>
@@ -287,18 +291,16 @@ class Witnesses extends React.Component {
                             )}
                         </div>
                     </td>
-                    <td className="Witnesses__votes">
+                    <td>
                         {`${totalVotesHp} HP`}
                         {!isDisabled && <div>{requiredHpToRankUp}</div>}
                     </td>
-                    <td>{missedBlocks} blocks</td>
                     <td>
-                        <Link
-                            to={`https://hiveblocks.com/b/${lastBlock}`}
-                            target="_blank"
-                        >
-                            #{lastBlock} <Icon name="extlink" />
-                        </Link>
+                        ${parseFloat(sbdExchangeRate.get('base'))}
+                        <br />
+                        <small>
+                            <TimeAgoWrapper date={sbdExchangeUpdateDate} />
+                        </small>
                     </td>
                 </tr>
             );
@@ -375,12 +377,6 @@ class Witnesses extends React.Component {
                                         'witnesses_jsx.you_can_vote_for_maximum_of_witnesses'
                                     )}.
                                 </p>
-                                <p>
-                                    <FormattedHTMLMessage
-                                        className="secondary"
-                                        id="witnesses_jsx.missed_block_notes"
-                                    />
-                                </p>
                             </div>
                         )}
                     </div>
@@ -396,12 +392,7 @@ class Witnesses extends React.Component {
                                         <th className="Witnesses__votes">
                                             {tt('witnesses_jsx.votes_received')}
                                         </th>
-                                        <th>
-                                            {tt('witnesses_jsx.missed_blocks')}
-                                        </th>
-                                        <th>
-                                            {tt('witnesses_jsx.last_block')}
-                                        </th>
+                                        <th>Price feed</th>
                                     </tr>
                                 </thead>
                                 <tbody>{witnesses.toArray()}</tbody>

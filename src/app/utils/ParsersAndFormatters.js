@@ -77,7 +77,32 @@ export function countDecimals(amount) {
     const parts = amount.split('.');
     return parts.length > 2
         ? undefined
-        : parts.length === 1 ? 0 : parts[1].length;
+        : parts.length === 1
+            ? 0
+            : parts[1].length;
+}
+
+export function formatLargeNumber(number, decimals) {
+    const symbols = [
+        { value: 1, symbol: '' },
+        { value: 1e3, symbol: 'k' },
+        { value: 1e6, symbol: 'M' },
+        { value: 1e9, symbol: 'G' },
+        { value: 1e12, symbol: 'T' },
+        { value: 1e15, symbol: 'P' },
+        { value: 1e18, symbol: 'E' },
+    ];
+
+    const regexp = /\.0+$|(\.[0-9]*[1-9])0+$/;
+    for (let i = symbols.length - 1; i > 0; i--) {
+        if (number >= symbols[i].value) {
+            return (
+                (number / symbols[i].value)
+                    .toFixed(decimals)
+                    .replace(regexp, '$1') + symbols[i].symbol
+            );
+        }
+    }
 }
 
 // this function searches for right translation of provided error (usually from back-end)
