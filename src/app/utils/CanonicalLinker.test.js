@@ -36,7 +36,7 @@ describe('makeCanonicalLink', () => {
         [
             'handles posts from steemit',
             { ...post_data, json_metadata: { app: 'steemit/0.1' } },
-            'https://hive.blog/testing/@test/test-post',
+            'https://steemit.com/testing/@test/test-post',
         ],
         [
             'handles badly formatted app strings',
@@ -45,7 +45,7 @@ describe('makeCanonicalLink', () => {
         ],
         [
             'handles objects as apps',
-            { ...post_data, json_metadata: { app: { this_is: 'an objct' } } },
+            { ...post_data, json_metadata: { app: { this_is: 'an object' } } },
             'https://hive.blog/testing/@test/test-post',
         ],
     ];
