@@ -254,10 +254,6 @@ class Witnesses extends React.Component {
             );
         });
 
-        if (foundWitnessToHighlight === false) {
-            this.setState({ customUsername: witnessToHighlight });
-        }
-
         let addl_witnesses = false;
         if (witness_votes) {
             witness_vote_count -= witness_votes.size;
@@ -380,7 +376,11 @@ class Witnesses extends React.Component {
                                             width: '75%',
                                             maxWidth: '20rem',
                                         }}
-                                        value={customUsername}
+                                        value={
+                                            foundWitnessToHighlight === true
+                                                ? customUsername
+                                                : witnessToHighlight
+                                        }
                                         onChange={onWitnessChange}
                                     />
                                     <div className="input-group-button">
