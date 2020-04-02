@@ -252,7 +252,11 @@
             "warning":
                 "Legitimate users, including employees of Hive, will never ask you for a private key or master password.",
             "checkbox": "I understand"
-        }
+        },
+        "days": "days",
+        "weeks": "weeks",
+        "months": "months",
+        "years": "years"
     },
     "navigation": {
         "about": "About Hive",
@@ -503,7 +507,10 @@
         "running_version": "Running version",
         "received_hp_votes": "Received %(votehp)s worth of votes",
         "votes_received": "Votes received",
-        "hp_required_to_rank_up": "Needs %(votehp)s to level up"
+        "hp_required_to_rank_up": "Needs %(votehp)s to level up",
+        "missed_block_notes":
+            "<strong>Notes:</strong> missed blocks are collected since the first day of operation of each witness. Blocks can be missed for various reasons including technical issues, misconfiguration etc... They are sometimes unavoidable like in the case of an unexpected or urgent HardFork etc... and the higher your rank, the higher the chance it can happen. You should not make your witness vote decision on this total number of missed blocks alone.",
+        "witness_age": "Witness age"
     },
     "votesandcomments_jsx": {
         "no_responses_yet_click_to_respond":

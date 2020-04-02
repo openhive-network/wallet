@@ -1,4 +1,5 @@
 import React from 'react';
+import Moment from 'moment';
 import classnames from 'classnames';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
@@ -11,6 +12,7 @@ import ByteBuffer from 'bytebuffer';
 import { is, Set, List } from 'immutable';
 import * as globalActions from 'app/redux/GlobalReducer';
 import { vestsToHpf, numberWithCommas } from 'app/utils/StateFunctions';
+import { FormattedHTMLMessage } from 'app/Translator';
 import tt from 'counterpart';
 
 const Long = ByteBuffer.Long;
@@ -152,6 +154,25 @@ class Witnesses extends React.Component {
             const myVote = witness_votes ? witness_votes.has(owner) : null;
             const signingKey = item.get('signing_key');
             const missedBlocks = item.get('total_missed');
+            const witnessCreated = item.get('created');
+            const accountBirthday = Moment.utc(witnessCreated).format('ll');
+            const now = Moment();
+            const witnessAgeDays = now.diff(accountBirthday, 'days');
+            const witnessAgeWeeks = now.diff(accountBirthday, 'weeks');
+            const witnessAgeMonths = now.diff(accountBirthday, 'months');
+            const witnessAgeYears = now.diff(accountBirthday, 'years');
+
+            let witnessAge = `${witnessAgeDays} ${tt('g.days')}`;
+            if (witnessCreated === '1970-01-01T00:00:00') {
+                witnessAge = 'over 3 years';
+            } else if (witnessAgeYears > 0) {
+                witnessAge = `${witnessAgeYears} ${tt('g.years')}`;
+            } else if (witnessAgeMonths > 0) {
+                witnessAge = `${witnessAgeMonths} ${tt('g.months')}`;
+            } else if (witnessAgeWeeks > 0) {
+                witnessAge = `${witnessAgeWeeks} ${tt('g.weeks')}`;
+            }
+
             const lastBlock = item.get('last_confirmed_block_num');
             const runningVersion = item.get('running_version');
             const noBlock7days = (head_block - lastBlock) * 3 > 604800;
@@ -244,6 +265,9 @@ class Witnesses extends React.Component {
                                         `, ${tt(
                                             'witnesses_jsx.disabled'
                                         )} ${_blockGap(head_block, lastBlock)}`}
+                                    <br />
+                                    {tt('witnesses_jsx.witness_age')}:{' '}
+                                    {witnessAge}
                                 </small>
                             </div>
                             <div className="Witnesses__votes">
@@ -335,17 +359,25 @@ class Witnesses extends React.Component {
                     <div className="column">
                         <h2>{tt('witnesses_jsx.top_witnesses')}</h2>
                         {current_proxy && current_proxy.length ? null : (
-                            <p>
-                                <strong>
+                            <div>
+                                <p>
+                                    <strong>
+                                        {tt(
+                                            'witnesses_jsx.you_have_votes_remaining',
+                                            { count: witness_vote_count }
+                                        )}.
+                                    </strong>{' '}
                                     {tt(
-                                        'witnesses_jsx.you_have_votes_remaining',
-                                        { count: witness_vote_count }
+                                        'witnesses_jsx.you_can_vote_for_maximum_of_witnesses'
                                     )}.
-                                </strong>{' '}
-                                {tt(
-                                    'witnesses_jsx.you_can_vote_for_maximum_of_witnesses'
-                                )}.
-                            </p>
+                                </p>
+                                <p>
+                                    <FormattedHTMLMessage
+                                        className="secondary"
+                                        id="witnesses_jsx.missed_block_notes"
+                                    />
+                                </p>
+                            </div>
                         )}
                     </div>
                 </div>
