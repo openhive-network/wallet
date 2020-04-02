@@ -1,22 +1,28 @@
-
 .Witnesses {
 	.extlink path {
 		transition: 0.2s all ease-in-out;
-	     @include themify($themes) { 
-	       fill: themed('textColorAccent');  
-	    }   		
+	     @include themify($themes) {
+	       fill: themed('textColorAccent');
+	    }
 	}
 	a:hover .extlink path {
 		transition: 0.2s all ease-in-out;
-	     @include themify($themes) { 
-	       fill: themed('textColorAccentHover');  
-	    }   		
+	     @include themify($themes) {
+	       fill: themed('textColorAccentHover');
+	    }
 	}
-	td > a {
-		@extend .link;
-		@extend .link--primary;		
-	}
-
+    td.Witnesses__info {
+        display: flex;
+        flex-direction: row;
+    }
+    td.Witnesses__rank {
+        white-space: nowrap;
+    }
+    td.Witnesses__info .Userpic {
+        @media only screen and (max-width: 779px) {
+            display: none;
+        }
+    }
 	.button {
 		background-color: $color-text-hive-red;
 		text-shadow: 0 1px 0 rgba(0,0,0,0.20);
@@ -24,7 +30,33 @@
 		&:hover {
 			background-color: $color-hive-red;
 		}
-	}		
+	}
+    div.Witnesses__info {
+        display: flex;
+        flex-direction: column;
+        margin-left: 15px;
+
+        @media only screen and (max-width: 779px) {
+            margin-left: 0;
+        }
+    }
+    div.Witnesses__info a:first-child {
+        font-weight: bold;
+    }
+    div.Witnesses__info .witness__thread a {
+        @extend .link;
+        @extend .link--primary;
+    }
+    th.Witnesses__votes, td.Witnesses__votes {
+        @media only screen and (max-width: 779px) {
+            display: none;
+        }
+    }
+    div.Witnesses__votes {
+        @media only screen and (min-width: 780px) {
+            display: none;
+        }
+    }
 }
 
 

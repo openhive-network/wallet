@@ -475,8 +475,8 @@
         }
     },
     "witnesses_jsx": {
-        "witness_thread": "witness thread",
-        "external_site": "external site",
+        "witness_thread": "Open witness annoucement",
+        "external_site": "Open external site",
         "disabled": "disabled",
         "top_witnesses": "Witness Voting",
         "you_have_votes_remaining": {
@@ -487,7 +487,7 @@
         "you_can_vote_for_maximum_of_witnesses":
             "You can vote for a maximum of 30 witnesses",
         "witness": "Witness",
-        "information": "Information",
+        "information": "More Information",
         "if_you_want_to_vote_outside_of_top_enter_account_name":
             "If you would like to vote for a witness outside of the top 100, enter the account name below to cast a vote",
         "set_witness_proxy":
@@ -497,7 +497,12 @@
         "witness_proxy_current": "Your current proxy is",
         "witness_proxy_set": "Set proxy",
         "witness_proxy_clear": "Clear proxy",
-        "proxy_update_error": "Your proxy was not updated"
+        "proxy_update_error": "Your proxy was not updated",
+        "missed_blocks": "Missed blocks",
+        "last_block": "Last block",
+        "running_version": "Running version",
+        "received_hp_votes": "Received %(votehp)s worth of votes",
+        "votes_received": "Votes received"
     },
     "votesandcomments_jsx": {
         "no_responses_yet_click_to_respond":

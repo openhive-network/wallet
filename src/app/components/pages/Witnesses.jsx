@@ -5,9 +5,11 @@ import { Link } from 'react-router';
 import links from 'app/utils/Links';
 import Icon from 'app/components/elements/Icon';
 import * as transactionActions from 'app/redux/TransactionReducer';
+import Userpic from 'app/components/elements/Userpic';
 import ByteBuffer from 'bytebuffer';
 import { is, Set, List } from 'immutable';
 import * as globalActions from 'app/redux/GlobalReducer';
+import { vestsToHp, numberWithCommas } from 'app/utils/StateFunctions';
 import tt from 'counterpart';
 
 const Long = ByteBuffer.Long;
@@ -100,10 +102,19 @@ class Witnesses extends React.Component {
 
         const witnesses = sorted_witnesses.map(item => {
             const owner = item.get('owner');
-            const thread = item.get('url');
+            const totalVotesVests = item.get('votes');
+            const totalVotesHp = numberWithCommas(
+                vestsToHp(
+                    this.props.state,
+                    `${totalVotesVests / 1000000} VESTS`
+                )
+            );
+            const thread = item.get('url').replace('steemit.com', 'hive.blog');
             const myVote = witness_votes ? witness_votes.has(owner) : null;
             const signingKey = item.get('signing_key');
+            const missedBlocks = item.get('total_missed');
             const lastBlock = item.get('last_confirmed_block_num');
+            const runningVersion = item.get('running_version');
             const noBlock7days = (head_block - lastBlock) * 3 > 604800;
             const isDisabled =
                 signingKey == DISABLED_SIGNING_KEY || noBlock7days;
@@ -144,7 +155,7 @@ class Witnesses extends React.Component {
 
             return (
                 <tr key={owner}>
-                    <td width="75">
+                    <td className="Witnesses__rank">
                         {rank < 10 && '0'}
                         {rank++}
                         &nbsp;&nbsp;
@@ -170,19 +181,49 @@ class Witnesses extends React.Component {
                             )}
                         </span>
                     </td>
-                    <td>
+                    <td className="Witnesses__info">
                         <Link to={'/@' + owner} style={ownerStyle}>
-                            {owner}
+                            <Userpic account={owner} size="small" />
                         </Link>
-                        {isDisabled && (
-                            <small>
-                                {' '}
-                                ({tt('witnesses_jsx.disabled')}{' '}
-                                {_blockGap(head_block, lastBlock)})
-                            </small>
-                        )}
+                        <div className="Witnesses__info">
+                            <div>
+                                <Link to={'/@' + owner} style={ownerStyle}>
+                                    {owner}
+                                </Link>
+                            </div>
+                            <div>
+                                <small>
+                                    {tt('witnesses_jsx.running_version')} v{
+                                        runningVersion
+                                    }
+                                    {isDisabled &&
+                                        `, ${tt(
+                                            'witnesses_jsx.disabled'
+                                        )} ${_blockGap(head_block, lastBlock)}`}
+                                </small>
+                            </div>
+                            <div className="Witnesses__votes">
+                                <small>
+                                    {tt('witnesses_jsx.received_hp_votes', {
+                                        votehp: `${totalVotesHp} HP`,
+                                    })}
+                                </small>
+                            </div>
+                            <div className="witness__thread">
+                                <small>{witness_link}</small>
+                            </div>
+                        </div>
                     </td>
-                    <td>{witness_link}</td>
+                    <td className="Witnesses__votes">{`${totalVotesHp} HP`}</td>
+                    <td>{missedBlocks} blocks</td>
+                    <td>
+                        <Link
+                            to={`https://hiveblocks.com/b/${lastBlock}`}
+                            target="_blank"
+                        >
+                            #{lastBlock} <Icon name="extlink" />
+                        </Link>
+                    </td>
                 </tr>
             );
         });
@@ -266,10 +307,16 @@ class Witnesses extends React.Component {
                             <table>
                                 <thead>
                                     <tr>
-                                        <th />
+                                        <th>Rank</th>
                                         <th>{tt('witnesses_jsx.witness')}</th>
+                                        <th className="Witnesses__votes">
+                                            {tt('witnesses_jsx.votes_received')}
+                                        </th>
                                         <th>
-                                            {tt('witnesses_jsx.information')}
+                                            {tt('witnesses_jsx.missed_blocks')}
+                                        </th>
+                                        <th>
+                                            {tt('witnesses_jsx.last_block')}
                                         </th>
                                     </tr>
                                 </thead>
@@ -438,6 +485,7 @@ module.exports = {
                 witness_votes,
                 witnessVotesInProgress,
                 current_proxy,
+                state,
             };
         },
         dispatch => {
