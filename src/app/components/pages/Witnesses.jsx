@@ -356,6 +356,7 @@ class Witnesses extends React.Component {
                     <div
                         className={classnames('row', {
                             Witnesses__highlight:
+                                witnessToHighlight &&
                                 foundWitnessToHighlight === false,
                         })}
                     >
