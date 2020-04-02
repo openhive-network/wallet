@@ -502,7 +502,8 @@
         "last_block": "Last block",
         "running_version": "Running version",
         "received_hp_votes": "Received %(votehp)s worth of votes",
-        "votes_received": "Votes received"
+        "votes_received": "Votes received",
+        "hp_required_to_rank_up": "Needs %(votehp)s to level up"
     },
     "votesandcomments_jsx": {
         "no_responses_yet_click_to_respond":

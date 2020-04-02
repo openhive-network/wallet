@@ -10,7 +10,7 @@ import Userpic from 'app/components/elements/Userpic';
 import ByteBuffer from 'bytebuffer';
 import { is, Set, List } from 'immutable';
 import * as globalActions from 'app/redux/GlobalReducer';
-import { vestsToHp, numberWithCommas } from 'app/utils/StateFunctions';
+import { vestsToHpf, numberWithCommas } from 'app/utils/StateFunctions';
 import tt from 'counterpart';
 
 const Long = ByteBuffer.Long;
@@ -117,6 +117,7 @@ class Witnesses extends React.Component {
         let witness_vote_count = 30;
         let rank = 1;
         let foundWitnessToHighlight = false;
+        let previousTotalVoteHpf = 0;
 
         const witnesses = sorted_witnesses.map(item => {
             const owner = item.get('owner');
@@ -124,12 +125,29 @@ class Witnesses extends React.Component {
                 foundWitnessToHighlight = true;
             }
             const totalVotesVests = item.get('votes');
-            const totalVotesHp = numberWithCommas(
-                vestsToHp(
-                    this.props.state,
-                    `${totalVotesVests / 1000000} VESTS`
-                )
+            const totalVotesHpf = vestsToHpf(
+                this.props.state,
+                `${totalVotesVests / 1000000} VESTS`
             );
+            const totalVotesHp = numberWithCommas(totalVotesHpf.toFixed(3));
+
+            let requiredHpToRankUp = '';
+            if (previousTotalVoteHpf !== 0) {
+                requiredHpToRankUp = (
+                    <small>
+                        {tt('witnesses_jsx.hp_required_to_rank_up', {
+                            votehp: numberWithCommas(
+                                (previousTotalVoteHpf - totalVotesHpf).toFixed(
+                                    3
+                                )
+                            ),
+                        })}
+                    </small>
+                );
+            }
+
+            previousTotalVoteHpf = totalVotesHpf;
+
             const thread = item.get('url').replace('steemit.com', 'hive.blog');
             const myVote = witness_votes ? witness_votes.has(owner) : null;
             const signingKey = item.get('signing_key');
@@ -240,7 +258,11 @@ class Witnesses extends React.Component {
                             </div>
                         </div>
                     </td>
-                    <td className="Witnesses__votes">{`${totalVotesHp} HP`}</td>
+                    <td className="Witnesses__votes">
+                        {`${totalVotesHp} HP`}
+                        <br />
+                        {requiredHpToRankUp}
+                    </td>
                     <td>{missedBlocks} blocks</td>
                     <td>
                         <Link
