@@ -265,9 +265,12 @@ class Witnesses extends React.Component {
                                         `, ${tt(
                                             'witnesses_jsx.disabled'
                                         )} ${_blockGap(head_block, lastBlock)}`}
-                                    <br />
-                                    {tt('witnesses_jsx.witness_age')}:{' '}
-                                    {witnessAge}
+                                    {!isDisabled && (
+                                        <div>
+                                            {tt('witnesses_jsx.witness_age')}:{' '}
+                                            {witnessAge}
+                                        </div>
+                                    )}
                                 </small>
                             </div>
                             <div className="Witnesses__votes">
@@ -277,15 +280,16 @@ class Witnesses extends React.Component {
                                     })}
                                 </small>
                             </div>
-                            <div className="witness__thread">
-                                <small>{witness_link}</small>
-                            </div>
+                            {!isDisabled && (
+                                <div className="witness__thread">
+                                    <small>{witness_link}</small>
+                                </div>
+                            )}
                         </div>
                     </td>
                     <td className="Witnesses__votes">
                         {`${totalVotesHp} HP`}
-                        <br />
-                        {requiredHpToRankUp}
+                        {!isDisabled && <div>{requiredHpToRankUp}</div>}
                     </td>
                     <td>{missedBlocks} blocks</td>
                     <td>
