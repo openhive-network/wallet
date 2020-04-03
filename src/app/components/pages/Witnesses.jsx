@@ -56,6 +56,7 @@ class Witnesses extends React.Component {
             proxy: '',
             proxyFailed: false,
             witnessAccounts: {},
+            witnessToHighlight: '',
         };
         this.accountWitnessVote = (accountName, approve, e) => {
             e.preventDefault();
@@ -79,22 +80,12 @@ class Witnesses extends React.Component {
     }
 
     componentDidMount() {
+        this.setState({
+            witnessToHighlight: this.props.location.query.highlight,
+        });
         this.loadWitnessAccounts();
 
-        if (typeof document !== 'undefined') {
-            setTimeout(() => {
-                const highlightedWitnessElement = document.querySelector(
-                    '.Witnesses__highlight'
-                );
-                if (highlightedWitnessElement) {
-                    highlightedWitnessElement.scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'center',
-                        inline: 'center',
-                    });
-                }
-            }, 1000);
-        }
+        this.scrollToHighlightedWitness();
     }
 
     shouldComponentUpdate(np, ns) {
@@ -107,7 +98,8 @@ class Witnesses extends React.Component {
             ns.customUsername !== this.state.customUsername ||
             ns.proxy !== this.state.proxy ||
             ns.proxyFailed !== this.state.proxyFailed ||
-            ns.witnessAccounts !== this.state.witnessAccounts
+            ns.witnessAccounts !== this.state.witnessAccounts ||
+            ns.witnessToHighlight !== this.state.witnessToHighlight
         );
     }
 
@@ -151,6 +143,29 @@ class Witnesses extends React.Component {
         return true;
     }
 
+    scrollToHighlightedWitness() {
+        if (typeof document !== 'undefined') {
+            setTimeout(() => {
+                const highlightedWitnessElement = document.querySelector(
+                    '.Witnesses__highlight'
+                );
+                if (highlightedWitnessElement) {
+                    highlightedWitnessElement.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'center',
+                        inline: 'center',
+                    });
+                }
+            }, 1000);
+        }
+    }
+
+    updateWitnessToHighlight(witness) {
+        this.setState({ witnessToHighlight: witness });
+        this.scrollToHighlightedWitness();
+        window.history.pushState('', '', `/~witnesses?highlight=${witness}`);
+    }
+
     render() {
         const {
             props: {
@@ -159,12 +174,17 @@ class Witnesses extends React.Component {
                 current_proxy,
                 head_block,
             },
-            state: { customUsername, proxy, witnessAccounts },
+            state: {
+                customUsername,
+                proxy,
+                witnessAccounts,
+                witnessToHighlight,
+            },
             accountWitnessVote,
             accountWitnessProxy,
             onWitnessChange,
+            updateWitnessToHighlight,
         } = this;
-        const witnessToHighlight = this.props.location.query.highlight;
         const sorted_witnesses = this.props.witnesses.sort((a, b) =>
             Long.fromString(String(b.get('votes'))).subtract(
                 Long.fromString(String(a.get('votes'))).toString()
@@ -314,6 +334,21 @@ class Witnesses extends React.Component {
                             <div>
                                 <Link to={'/@' + owner} style={ownerStyle}>
                                     {owner}
+                                </Link>
+                                <Link
+                                    to={`/~witnesses?highlight=${owner}`}
+                                    onClick={event => {
+                                        event.preventDefault();
+                                        updateWitnessToHighlight.apply(this, [
+                                            owner,
+                                        ]);
+                                    }}
+                                >
+                                    <Icon
+                                        name="chain"
+                                        size="0.7x"
+                                        className="Witnesses__permlink"
+                                    />
                                 </Link>
                             </div>
                             <div>
