@@ -256,8 +256,7 @@ class Witnesses extends React.Component {
             const sbdExchangeRate = item.get('sbd_exchange_rate');
             const sbdExchangeUpdateDate = item.get('last_sbd_exchange_update');
             const noBlock7days = (head_block - lastBlock) * 3 > 604800;
-            const isDisabled =
-                signingKey == DISABLED_SIGNING_KEY || noBlock7days;
+            const isDisabled = signingKey == DISABLED_SIGNING_KEY;
             const votingActive = witnessVotesInProgress.has(owner);
             const classUp =
                 'Voting__button Voting__button-up' +
@@ -328,7 +327,13 @@ class Witnesses extends React.Component {
                     </td>
                     <td className="Witnesses__info">
                         <Link to={'/@' + owner} style={ownerStyle}>
-                            <Userpic account={owner} size="small" />
+                            <Userpic
+                                account={owner}
+                                size="small"
+                                className={classnames({
+                                    disabled: isDisabled,
+                                })}
+                            />
                         </Link>
                         <div className="Witnesses__info">
                             <div>
@@ -353,30 +358,55 @@ class Witnesses extends React.Component {
                             </div>
                             <div>
                                 <small>
-                                    {witnessDescription && (
-                                        <div className="Witnesses__description">
-                                            {witnessDescription}
+                                    {noBlock7days && (
+                                        <div>
+                                            <strong>
+                                                <span
+                                                    role="img"
+                                                    aria-label={tt(
+                                                        'witnesses_jsx.not_produced_over_a_week'
+                                                    )}
+                                                >
+                                                    ⚠️
+                                                </span>
+                                                {tt(
+                                                    'witnesses_jsx.not_produced_over_a_week'
+                                                )}
+                                            </strong>
                                         </div>
                                     )}
-                                    Produced block{' '}
-                                    <Link
-                                        to={`https://hiveblocks.com/b/${lastBlock}`}
-                                        target="_blank"
-                                    >
-                                        #{lastBlock}
-                                    </Link>{' '}
-                                    {_blockGap(head_block, lastBlock)} on v{
-                                        runningVersion
-                                    }
-                                    <br />
-                                    {isDisabled &&
-                                        `, ${tt(
-                                            'witnesses_jsx.disabled'
-                                        )} ${_blockGap(head_block, lastBlock)}`}
+                                    <div>
+                                        {witnessDescription && (
+                                            <div className="Witnesses__description">
+                                                {witnessDescription}
+                                            </div>
+                                        )}
+                                        {tt('witnesses_jsx.last_block')}{' '}
+                                        <Link
+                                            to={`https://hiveblocks.com/b/${lastBlock}`}
+                                            target="_blank"
+                                        >
+                                            #{lastBlock}
+                                        </Link>{' '}
+                                        {_blockGap(head_block, lastBlock)} on v{
+                                            runningVersion
+                                        }
+                                    </div>
+                                    {isDisabled && (
+                                        <div>
+                                            {`${tt(
+                                                'witnesses_jsx.disabled'
+                                            )} ${_blockGap(
+                                                head_block,
+                                                lastBlock
+                                            )}`}
+                                        </div>
+                                    )}
                                     {!isDisabled && (
                                         <div>
-                                            {tt('witnesses_jsx.witness_age')}:{' '}
-                                            {witnessAge}
+                                            {`${tt(
+                                                'witnesses_jsx.witness_age'
+                                            )}: ${witnessAge}`}
                                         </div>
                                     )}
                                 </small>

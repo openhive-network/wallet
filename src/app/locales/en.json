@@ -481,7 +481,7 @@
     "witnesses_jsx": {
         "witness_thread": "Open witness annoucement",
         "external_site": "Open external site",
-        "disabled": "disabled",
+        "disabled": "Disabled",
         "top_witnesses": "Witness Voting",
         "you_have_votes_remaining": {
             "zero": "You have no votes remaining",
@@ -505,7 +505,10 @@
         "missed_blocks": "Missed blocks",
         "votes_received": "Votes received",
         "hp_required_to_rank_up": "Needs %(votehp)s to level up",
-        "witness_age": "Witness age"
+        "witness_age": "Witness age",
+        "not_produced_over_a_week":
+            "Has not produced any blocks for over a week.",
+        "last_block": "Last block"
     },
     "votesandcomments_jsx": {
         "no_responses_yet_click_to_respond":

@@ -26,6 +26,9 @@
             display: none;
         }
     }
+    td.Witnesses__info .Userpic.disabled {
+        opacity: 0.4;
+    }
 	.button {
 		background-color: $color-text-hive-red;
 		text-shadow: 0 1px 0 rgba(0,0,0,0.20);
