@@ -1,5 +1,6 @@
 import React from 'react';
 import Moment from 'moment';
+import { api } from '@steemit/steem-js';
 import classnames from 'classnames';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
@@ -13,8 +14,9 @@ import { formatLargeNumber } from 'app/utils/ParsersAndFormatters';
 import ByteBuffer from 'bytebuffer';
 import { is, Set, List } from 'immutable';
 import * as globalActions from 'app/redux/GlobalReducer';
-import { vestsToHpf, numberWithCommas } from 'app/utils/StateFunctions';
+import { vestsToHpf } from 'app/utils/StateFunctions';
 import tt from 'counterpart';
+import _ from 'lodash';
 
 const Long = ByteBuffer.Long;
 const { string, func, object } = PropTypes;
@@ -49,7 +51,12 @@ class Witnesses extends React.Component {
 
     constructor() {
         super();
-        this.state = { customUsername: '', proxy: '', proxyFailed: false };
+        this.state = {
+            customUsername: '',
+            proxy: '',
+            proxyFailed: false,
+            witnessAccounts: {},
+        };
         this.accountWitnessVote = (accountName, approve, e) => {
             e.preventDefault();
             const { username, accountWitnessVote } = this.props;
@@ -72,6 +79,8 @@ class Witnesses extends React.Component {
     }
 
     componentDidMount() {
+        this.loadWitnessAccounts();
+
         if (typeof document !== 'undefined') {
             setTimeout(() => {
                 const highlightedWitnessElement = document.querySelector(
@@ -97,8 +106,49 @@ class Witnesses extends React.Component {
             np.username !== this.props.username ||
             ns.customUsername !== this.state.customUsername ||
             ns.proxy !== this.state.proxy ||
-            ns.proxyFailed !== this.state.proxyFailed
+            ns.proxyFailed !== this.state.proxyFailed ||
+            ns.witnessAccounts !== this.state.witnessAccounts
         );
+    }
+
+    async loadWitnessAccounts() {
+        const witnessAccounts = this.state.witnessAccounts;
+        const { witnesses } = this.props;
+        const witnessOwners = [[]];
+        let chunksCount = 0;
+
+        witnesses.map(item => {
+            if (witnessOwners[chunksCount].length >= 20) {
+                chunksCount += 1;
+                witnessOwners[chunksCount] = [];
+            }
+            witnessOwners[chunksCount].push(item.get('owner'));
+            return true;
+        });
+
+        for (let oi = 0; oi < witnessOwners.length; oi += 1) {
+            const owners = witnessOwners[oi];
+            const res = await api.getAccountsAsync(owners);
+            if (!(res && res.length > 0)) {
+                console.error(tt('g.account_not_found'));
+                return false;
+            }
+
+            for (let ri = 0; ri < res.length; ri += 1) {
+                const witnessAccount = res[ri];
+                let jsonMetadata = { witness_description: '' };
+                if (
+                    witnessAccount.hasOwnProperty('json_metadata') &&
+                    witnessAccount.json_metadata
+                ) {
+                    jsonMetadata = JSON.parse(witnessAccount.json_metadata);
+                }
+                witnessAccounts[witnessAccount.name] = jsonMetadata;
+            }
+        }
+
+        this.setState({ witnessAccounts: { ...witnessAccounts } });
+        return true;
     }
 
     render() {
@@ -109,7 +159,7 @@ class Witnesses extends React.Component {
                 current_proxy,
                 head_block,
             },
-            state: { customUsername, proxy },
+            state: { customUsername, proxy, witnessAccounts },
             accountWitnessVote,
             accountWitnessProxy,
             onWitnessChange,
@@ -130,6 +180,11 @@ class Witnesses extends React.Component {
             if (owner === witnessToHighlight) {
                 foundWitnessToHighlight = true;
             }
+            const witnessDescription = _.get(
+                witnessAccounts[owner],
+                'profile.witness_description',
+                null
+            );
             const totalVotesVests = item.get('votes');
             const totalVotesHpf = vestsToHpf(
                 this.props.state,
@@ -156,7 +211,9 @@ class Witnesses extends React.Component {
             const myVote = witness_votes ? witness_votes.has(owner) : null;
             const signingKey = item.get('signing_key');
             const witnessCreated = item.get('created');
-            const accountBirthday = Moment.utc(witnessCreated).format('ll');
+            const accountBirthday = Moment.utc(`${witnessCreated}Z`).format(
+                'll'
+            );
             const now = Moment();
             const witnessAgeDays = now.diff(accountBirthday, 'days');
             const witnessAgeWeeks = now.diff(accountBirthday, 'weeks');
@@ -261,6 +318,11 @@ class Witnesses extends React.Component {
                             </div>
                             <div>
                                 <small>
+                                    {witnessDescription && (
+                                        <div className="Witnesses__description">
+                                            {witnessDescription}
+                                        </div>
+                                    )}
                                     Produced block{' '}
                                     <Link
                                         to={`https://hiveblocks.com/b/${lastBlock}`}
