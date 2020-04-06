@@ -13,10 +13,6 @@
     margin-left: auto;
     margin-right: auto;
 
-    img.image__round {
-        border-radius: 50px;
-    }
-
     .proposals__header {
         flex-direction: row;
         justify-content: center;
@@ -86,6 +82,10 @@
             width: 65px;
             height: 65px;
             padding-left: 15px;
+
+            @media only screen and (max-width: 768px) {
+                width: 90px;
+            }
         }
 
         .proposals__votes {

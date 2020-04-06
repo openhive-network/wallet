@@ -252,7 +252,11 @@
             "warning":
                 "Legitimate users, including employees of Hive, will never ask you for a private key or master password.",
             "checkbox": "I understand"
-        }
+        },
+        "days": "days",
+        "weeks": "weeks",
+        "months": "months",
+        "years": "years"
     },
     "navigation": {
         "about": "About Hive",
@@ -475,9 +479,9 @@
         }
     },
     "witnesses_jsx": {
-        "witness_thread": "witness thread",
-        "external_site": "external site",
-        "disabled": "disabled",
+        "witness_thread": "Open witness annoucement",
+        "external_site": "Open external site",
+        "disabled": "Disabled",
         "top_witnesses": "Witness Voting",
         "you_have_votes_remaining": {
             "zero": "You have no votes remaining",
@@ -487,7 +491,7 @@
         "you_can_vote_for_maximum_of_witnesses":
             "You can vote for a maximum of 30 witnesses",
         "witness": "Witness",
-        "information": "Information",
+        "information": "More Information",
         "if_you_want_to_vote_outside_of_top_enter_account_name":
             "If you would like to vote for a witness outside of the top 100, enter the account name below to cast a vote",
         "set_witness_proxy":
@@ -497,7 +501,14 @@
         "witness_proxy_current": "Your current proxy is",
         "witness_proxy_set": "Set proxy",
         "witness_proxy_clear": "Clear proxy",
-        "proxy_update_error": "Your proxy was not updated"
+        "proxy_update_error": "Your proxy was not updated",
+        "missed_blocks": "Missed blocks",
+        "votes_received": "Votes received",
+        "hp_required_to_rank_up": "Needs %(votehp)s to level up",
+        "witness_age": "Witness age",
+        "not_produced_over_a_week":
+            "Has not produced any blocks for over a week.",
+        "last_block": "Last block"
     },
     "votesandcomments_jsx": {
         "no_responses_yet_click_to_respond":

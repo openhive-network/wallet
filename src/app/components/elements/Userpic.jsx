@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import classnames from 'classnames';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
@@ -20,7 +21,7 @@ class Userpic extends Component {
     shouldComponentUpdate = shouldComponentUpdate(this, 'Userpic');
 
     render() {
-        const { account, json_metadata, size } = this.props;
+        const { account, json_metadata, size, className = '' } = this.props;
         const hideIfDefault = this.props.hideIfDefault || false;
         const avSize = size && sizeList.indexOf(size) > -1 ? '/' + size : '';
 
@@ -41,7 +42,9 @@ class Userpic extends Component {
                 'url(' + imageProxy() + `u/${account}/avatar${avSize})`,
         };
 
-        return <div className="Userpic" style={style} />;
+        return (
+            <div className={classnames('Userpic', className)} style={style} />
+        );
     }
 }
 

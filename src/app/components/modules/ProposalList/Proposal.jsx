@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import Moment from 'moment';
 import NumAbbr from 'number-abbreviate';
 import tt from 'counterpart';
+import Userpic from 'app/components/elements/Userpic';
 import { numberWithCommas, vestsToHpf } from 'app/utils/StateFunctions';
 
 import Icon from 'app/components/elements/Icon';
@@ -59,11 +60,7 @@ export default function Proposal(props) {
                 </a>
             </div>
             <div className="proposals__avatar">
-                <img
-                    src={`https://images.hive.blog/100x100/https://images.hive.blog/u/${creator}/avatar`}
-                    alt={creator}
-                    className="image__round"
-                />
+                <Userpic account={creator} />
             </div>
             <div className="proposals__description">
                 <span>
