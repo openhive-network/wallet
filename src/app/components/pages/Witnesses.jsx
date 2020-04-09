@@ -128,13 +128,24 @@ class Witnesses extends React.Component {
 
             for (let ri = 0; ri < res.length; ri += 1) {
                 const witnessAccount = res[ri];
+                const jsonMetadataString = _.get(
+                    witnessAccount,
+                    'json_metadata',
+                    ''
+                );
+                const postingJsonMetadataString = _.get(
+                    witnessAccount,
+                    'posting_json_metadata',
+                    jsonMetadataString
+                );
+
                 let jsonMetadata = { witness_description: '' };
-                if (
-                    witnessAccount.hasOwnProperty('json_metadata') &&
-                    witnessAccount.json_metadata
-                ) {
-                    jsonMetadata = JSON.parse(witnessAccount.json_metadata);
+                try {
+                    jsonMetadata = JSON.parse(postingJsonMetadataString);
+                } catch (err) {
+                    // Use default value
                 }
+
                 witnessAccounts[witnessAccount.name] = jsonMetadata;
             }
         }
@@ -194,6 +205,7 @@ class Witnesses extends React.Component {
         let rank = 1;
         let foundWitnessToHighlight = false;
         let previousTotalVoteHpf = 0;
+        const now = Moment();
 
         const witnesses = sorted_witnesses.map(item => {
             const owner = item.get('owner');
@@ -231,10 +243,8 @@ class Witnesses extends React.Component {
             const myVote = witness_votes ? witness_votes.has(owner) : null;
             const signingKey = item.get('signing_key');
             const witnessCreated = item.get('created');
-            const accountBirthday = Moment.utc(`${witnessCreated}Z`).format(
-                'll'
-            );
-            const now = Moment();
+
+            const accountBirthday = Moment(`${witnessCreated}Z`);
             const witnessAgeDays = now.diff(accountBirthday, 'days');
             const witnessAgeWeeks = now.diff(accountBirthday, 'weeks');
             const witnessAgeMonths = now.diff(accountBirthday, 'months');
