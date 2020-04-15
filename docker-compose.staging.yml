@@ -21,7 +21,7 @@ services:
             SDC_HELMET_CONNECTSRC: "'self' https://api.hive.blog https://anyx.io https://wallet.hive.blog https://images.hive.blog https://staging-wallet.hive.io"
             WALLET_URL: https://staging-wallet.hive.io
         networks:
-            - proxy_reverse-proxy
+            - condenser_reverse-proxy
             - back
         links:
             - hive_mysql
@@ -60,13 +60,13 @@ services:
         ports:
             - "3306"
         networks:
-            - proxy_reverse-proxy
+            - condenser_reverse-proxy
             - back
         restart: always
 
 networks:
-    proxy_reverse-proxy:
+    condenser_reverse-proxy:
         external:
-            name: proxy_reverse-proxy
+            name: condenser_reverse-proxy
     back:
         driver: bridge
