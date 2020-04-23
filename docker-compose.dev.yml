@@ -1,8 +1,9 @@
-version: "3"
+version: "3.7"
 services:
     hive_wallet:
-        build: .
-        image: hive/wallet:latest
+        build:
+            context: .
+            target: development
         container_name: wallet
         ports:
             - 80:8080
@@ -22,7 +23,6 @@ services:
         volumes:
             - ./yarn.lock:/var/app/yarn.lock
             - ./package.json:/var/app/package.json
-            - ./dev-start.sh:/var/app/dev-start.sh:delegated
-            - ./dev-ssr.sh:/var/app/dev-ssr.sh:delegated
             - ./src:/var/app/src:delegated
-        command: bash dev-start.sh
+            - ./webpack:/var/app/webpack:delegated
+            - ./config:/var/app/config:delegated
