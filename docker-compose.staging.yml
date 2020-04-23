@@ -1,0 +1,72 @@
+version: "3"
+services:
+    hive_wallet:
+        build: .
+        image: hive/wallet:staging
+        container_name: hive_wallet
+        # ports:
+        #   - "80"
+        environment:
+            VIRTUAL_HOST: staging-wallet.hive.io
+            VIRTUAL_PORT: 8081
+            LETSENCRYPT_HOST: staging-wallet.hive.io
+            LETSENCRYPT_EMAIL: certs@hive.io
+            SDC_DATABASE_URL: mysql://root:mysecret@hive_mysql/hive_wallet
+            SDC_CLIENT_HIVED_URL: https://anyx.io
+            SDC_SERVER_HIVED_URL: https://anyx.io
+            SDC_DISABLE_SIGNUPS: 1
+            SDC_SITE_DOMAIN: staging-wallet.hive.io
+            SDC_IMAGE_PROXY_PREFIX: https://images.hive.blog/
+            SDC_UPLOAD_IMAGE_URL: https://images.hive.blog
+            SDC_HELMET_CONNECTSRC: "'self' https://api.hive.blog https://anyx.io https://wallet.hive.blog https://images.hive.blog https://staging-wallet.hive.io"
+            WALLET_URL: https://staging-wallet.hive.io
+        networks:
+            - condenser_reverse-proxy
+            - back
+        links:
+            - hive_mysql
+        restart: always
+
+#    wallet_stg:
+#        build: .
+#        image: hive/wallet:staging
+#        container_name: wallet_stg
+#        environment:
+#            VIRTUAL_HOST: staging.hive.blog
+#            VIRTUAL_PORT: 8080
+#            SDC_CLIENT_STEEMD_URL: https://api.hive.blog
+#            SDC_SERVER_STEEMD_URL: https://api.hive.blog
+#            SDC_DISABLE_SIGNUPS: 1
+#            SDC_SITE_DOMAIN: staging.hive.blog
+#            SDC_IMAGE_PROXY_PREFIX: https://steemitimages.com/
+#            SDC_UPLOAD_IMAGE_URL: https://steemitimages.com
+#            SDC_HELMET_CONNECTSRC: "'self' https://api.hive.blog https://staging.hive.blog https://steemitimages.com"
+#            WALLET_URL: https://wallet.hive.blog
+#        networks:
+#            - proxy_reverse-proxy
+#        restart: always
+
+    hive_mysql:
+        image: mysql:5.7
+        container_name: hive_mysql
+        volumes:
+            - ./dbdata:/var/lib/mysql
+            - ./src:/usr/local/src
+        environment:
+            MYSQL_ROOT_PASSWORD: mysecret
+            MYSQL_DATABASE: hive_wallet
+            MYSQL_USER: root
+            MYSQL_PASSWORD: mysecret
+        ports:
+            - "3306"
+        networks:
+            - condenser_reverse-proxy
+            - back
+        restart: always
+
+networks:
+    condenser_reverse-proxy:
+        external:
+            name: condenser_reverse-proxy
+    back:
+        driver: bridge
