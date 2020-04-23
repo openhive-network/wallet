@@ -50,12 +50,12 @@ class Market extends React.Component {
     componentWillReceiveProps(np) {
         if (!this.props.ticker && np.ticker) {
             const { lowest_ask, highest_bid } = np.ticker;
-            if (this.refs.buySteem_price)
-                this.refs.buySteem_price.value = parseFloat(lowest_ask).toFixed(
+            if (this.refs.buyHive_price)
+                this.refs.buyHive_price.value = parseFloat(lowest_ask).toFixed(
                     6
                 );
-            if (this.refs.sellSteem_price)
-                this.refs.sellSteem_price.value = parseFloat(
+            if (this.refs.sellHive_price)
+                this.refs.sellHive_price.value = parseFloat(
                     highest_bid
                 ).toFixed(6);
         }
@@ -107,15 +107,15 @@ class Market extends React.Component {
         return tc || bc || oc;
     };
 
-    buySteem = e => {
+    buyHive = e => {
         e.preventDefault();
         const { placeOrder, user } = this.props;
         if (!user) return;
         const amount_to_sell = parseFloat(
-            ReactDOM.findDOMNode(this.refs.buySteem_total).value
+            ReactDOM.findDOMNode(this.refs.buyHive_total).value
         );
         const min_to_receive = parseFloat(
-            ReactDOM.findDOMNode(this.refs.buySteem_amount).value
+            ReactDOM.findDOMNode(this.refs.buyHive_amount).value
         );
         const price = (amount_to_sell / min_to_receive).toFixed(6);
         const { lowest_ask } = this.props.ticker;
@@ -132,15 +132,15 @@ class Market extends React.Component {
             }
         );
     };
-    sellSteem = e => {
+    sellHive = e => {
         e.preventDefault();
         const { placeOrder, user } = this.props;
         if (!user) return;
         const min_to_receive = parseFloat(
-            ReactDOM.findDOMNode(this.refs.sellSteem_total).value
+            ReactDOM.findDOMNode(this.refs.sellHive_total).value
         );
         const amount_to_sell = parseFloat(
-            ReactDOM.findDOMNode(this.refs.sellSteem_amount).value
+            ReactDOM.findDOMNode(this.refs.sellHive_amount).value
         );
         const price = (min_to_receive / amount_to_sell).toFixed(6);
         const { highest_bid } = this.props.ticker;
@@ -170,30 +170,30 @@ class Market extends React.Component {
     setFormPrice = price => {
         const p = parseFloat(price);
 
-        this.refs.sellSteem_price.value = p.toFixed(6);
-        this.refs.buySteem_price.value = p.toFixed(6);
+        this.refs.sellHive_price.value = p.toFixed(6);
+        this.refs.buyHive_price.value = p.toFixed(6);
 
-        const samount = parseFloat(this.refs.sellSteem_amount.value);
+        const samount = parseFloat(this.refs.sellHive_amount.value);
         if (samount >= 0)
-            this.refs.sellSteem_total.value = roundDown(p * samount, 3);
+            this.refs.sellHive_total.value = roundDown(p * samount, 3);
 
-        const bamount = parseFloat(this.refs.buySteem_amount.value);
+        const bamount = parseFloat(this.refs.buyHive_amount.value);
         if (bamount >= 0)
-            this.refs.buySteem_total.value = roundUp(p * bamount, 3);
+            this.refs.buyHive_total.value = roundUp(p * bamount, 3);
 
-        this.validateBuySteem();
-        this.validateSellSteem();
+        this.validateBuyHive();
+        this.validateSellHive();
     };
 
     percentDiff = (marketPrice, userPrice) => {
         marketPrice = parseFloat(marketPrice);
-        return 100 * (userPrice - marketPrice) / marketPrice;
+        return (100 * (userPrice - marketPrice)) / marketPrice;
     };
 
-    validateBuySteem = () => {
-        const amount = parseFloat(this.refs.buySteem_amount.value);
-        const price = parseFloat(this.refs.buySteem_price.value);
-        const total = parseFloat(this.refs.buySteem_total.value);
+    validateBuyHive = () => {
+        const amount = parseFloat(this.refs.buyHive_amount.value);
+        const price = parseFloat(this.refs.buyHive_price.value);
+        const total = parseFloat(this.refs.buyHive_total.value);
         const valid = amount > 0 && price > 0 && total > 0;
         const { lowest_ask } = this.props.ticker;
         this.setState({
@@ -203,10 +203,10 @@ class Market extends React.Component {
         });
     };
 
-    validateSellSteem = () => {
-        const amount = parseFloat(this.refs.sellSteem_amount.value);
-        const price = parseFloat(this.refs.sellSteem_price.value);
-        const total = parseFloat(this.refs.sellSteem_total.value);
+    validateSellHive = () => {
+        const amount = parseFloat(this.refs.sellHive_amount.value);
+        const price = parseFloat(this.refs.sellHive_price.value);
+        const total = parseFloat(this.refs.sellHive_total.value);
         const valid = amount > 0 && price > 0 && total > 0;
         const { highest_bid } = this.props.ticker;
         this.setState({
@@ -222,12 +222,12 @@ class Market extends React.Component {
 
     render() {
         const {
-            sellSteem,
-            buySteem,
+            sellHive,
+            buyHive,
             cancelOrderClick,
             setFormPrice,
-            validateBuySteem,
-            validateSellSteem,
+            validateBuyHive,
+            validateSellHive,
             handleToggleOpenOrdersSort,
         } = this;
         const {
@@ -291,12 +291,7 @@ class Market extends React.Component {
                         last !== null &&
                         o.getStringPrice() === last.getStringPrice()
                     ) {
-                        //if(last !== null && o.price == last.price) {
                         buff[buff.length - 1] = buff[buff.length - 1].add(o);
-                        // buff[buff.length-1].steem += o.steem
-                        // buff[buff.length-1].sbd   += o.sbd
-                        // buff[buff.length-1].sbd_depth = o.sbd_depth
-                        // buff[buff.length-1].steem_depth = o.steem_depth
                     } else {
                         buff.push(o);
                     }
@@ -324,8 +319,8 @@ class Market extends React.Component {
                             {CURRENCY_SIGN}
                             {o.price.toFixed(6)}
                         </td>
-                        <td>{o.steem}</td>
-                        <td>{o.sbd.replace('SBD', DEBT_TOKEN_SHORT)}</td>
+                        <td>{o.hive}</td>
+                        <td>{o.hbd.replace('HBD', DEBT_TOKEN_SHORT)}</td>
                         <td>
                             <a
                                 href="#"
@@ -400,10 +395,10 @@ class Market extends React.Component {
                             </th>
                             <th
                                 className={classNames(
-                                    activeClass('sbd'),
+                                    activeClass('hbd'),
                                     'sortable'
                                 )}
-                                onClick={e => handleToggleOpenOrdersSort('sbd')}
+                                onClick={e => handleToggleOpenOrdersSort('hbd')}
                             >
                                 {`${DEBT_TOKEN_SHORT} (${CURRENCY_SIGN})`}
                             </th>
@@ -467,9 +462,9 @@ class Market extends React.Component {
                                 <li>
                                     <b>{tt('market_jsx.spread')}</b>{' '}
                                     {(
-                                        200 *
-                                        (ticker.lowest_ask -
-                                            ticker.highest_bid) /
+                                        (200 *
+                                            (ticker.lowest_ask -
+                                                ticker.highest_bid)) /
                                         (ticker.highest_bid + ticker.lowest_ask)
                                     ).toFixed(3)}%
                                 </li>
@@ -500,7 +495,7 @@ class Market extends React.Component {
                                 LIQUID_TOKEN,
                             })}
                         </h4>
-                        <form className="Market__orderform" onSubmit={buySteem}>
+                        <form className="Market__orderform" onSubmit={buyHive}>
                             <div className="row">
                                 <div className="column small-3 large-2">
                                     <label>{tt('g.price')}</label>
@@ -515,28 +510,26 @@ class Market extends React.Component {
                                                     : '')
                                             }
                                             type="text"
-                                            ref="buySteem_price"
+                                            ref="buyHive_price"
                                             placeholder="0.0"
                                             onChange={e => {
                                                 const amount = parseFloat(
-                                                    this.refs.buySteem_amount
+                                                    this.refs.buyHive_amount
                                                         .value
                                                 );
                                                 const price = parseFloat(
-                                                    this.refs.buySteem_price
+                                                    this.refs.buyHive_price
                                                         .value
                                                 );
                                                 if (amount >= 0 && price >= 0)
-                                                    this.refs.buySteem_total.value = roundUp(
+                                                    this.refs.buyHive_total.value = roundUp(
                                                         price * amount,
                                                         3
                                                     );
-                                                validateBuySteem();
+                                                validateBuyHive();
                                             }}
                                         />
-                                        <span className="input-group-label uppercase">{`${
-                                            DEBT_TOKEN_SHORT
-                                        }/${LIQUID_TOKEN}`}</span>
+                                        <span className="input-group-label uppercase">{`${DEBT_TOKEN_SHORT}/${LIQUID_TOKEN}`}</span>
                                     </div>
                                 </div>
                             </div>
@@ -550,23 +543,23 @@ class Market extends React.Component {
                                         <input
                                             className="input-group-field"
                                             type="text"
-                                            ref="buySteem_amount"
+                                            ref="buyHive_amount"
                                             placeholder="0.0"
                                             onChange={e => {
                                                 const price = parseFloat(
-                                                    this.refs.buySteem_price
+                                                    this.refs.buyHive_price
                                                         .value
                                                 );
                                                 const amount = parseFloat(
-                                                    this.refs.buySteem_amount
+                                                    this.refs.buyHive_amount
                                                         .value
                                                 );
                                                 if (price >= 0 && amount >= 0)
-                                                    this.refs.buySteem_total.value = roundUp(
+                                                    this.refs.buyHive_total.value = roundUp(
                                                         price * amount,
                                                         3
                                                     );
-                                                validateBuySteem();
+                                                validateBuyHive();
                                             }}
                                         />
                                         <span className="input-group-label uppercase">
@@ -586,28 +579,26 @@ class Market extends React.Component {
                                         <input
                                             className="input-group-field"
                                             type="text"
-                                            ref="buySteem_total"
+                                            ref="buyHive_total"
                                             placeholder="0.0"
                                             onChange={e => {
                                                 const price = parseFloat(
-                                                    this.refs.buySteem_price
+                                                    this.refs.buyHive_price
                                                         .value
                                                 );
                                                 const total = parseFloat(
-                                                    this.refs.buySteem_total
+                                                    this.refs.buyHive_total
                                                         .value
                                                 );
                                                 if (total >= 0 && price >= 0)
-                                                    this.refs.buySteem_amount.value = roundUp(
+                                                    this.refs.buyHive_amount.value = roundUp(
                                                         total / price,
                                                         3
                                                     );
-                                                validateBuySteem();
+                                                validateBuyHive();
                                             }}
                                         />
-                                        <span className="input-group-label">{`${
-                                            DEBT_TOKEN_SHORT
-                                        } (${CURRENCY_SIGN})`}</span>
+                                        <span className="input-group-label">{`${DEBT_TOKEN_SHORT} (${CURRENCY_SIGN})`}</span>
                                     </div>
                                 </div>
                             </div>
@@ -633,27 +624,27 @@ class Market extends React.Component {
                                                         e.preventDefault();
                                                         const price = parseFloat(
                                                             this.refs
-                                                                .buySteem_price
+                                                                .buyHive_price
                                                                 .value
                                                         );
                                                         const total = account.sbd_balance.split(
                                                             ' '
                                                         )[0];
-                                                        this.refs.buySteem_total.value = total;
+                                                        this.refs.buyHive_total.value = total;
                                                         if (price >= 0)
-                                                            this.refs.buySteem_amount.value = roundDown(
+                                                            this.refs.buyHive_amount.value = roundDown(
                                                                 parseFloat(
                                                                     total
                                                                 ) / price,
                                                                 3
                                                             ).toFixed(3);
-                                                        validateBuySteem();
+                                                        validateBuyHive();
                                                     }}
                                                 >
                                                     {tt('market_jsx.available')}:
                                                 </a>{' '}
                                                 {account.sbd_balance.replace(
-                                                    'SBD',
+                                                    'HBD',
                                                     DEBT_TOKEN_SHORT
                                                 )}
                                             </small>
@@ -667,21 +658,20 @@ class Market extends React.Component {
                                                 onClick={e => {
                                                     e.preventDefault();
                                                     const amount = parseFloat(
-                                                        this.refs
-                                                            .buySteem_amount
+                                                        this.refs.buyHive_amount
                                                             .value
                                                     );
                                                     const price = parseFloat(
                                                         ticker.lowest_ask
                                                     );
-                                                    this.refs.buySteem_price.value =
+                                                    this.refs.buyHive_price.value =
                                                         ticker.lowest_ask;
                                                     if (amount >= 0)
-                                                        this.refs.buySteem_total.value = roundUp(
+                                                        this.refs.buyHive_total.value = roundUp(
                                                             amount * price,
                                                             3
                                                         ).toFixed(3);
-                                                    validateBuySteem();
+                                                    validateBuyHive();
                                                 }}
                                             >
                                                 {tt('market_jsx.lowest_ask')}:
@@ -701,10 +691,7 @@ class Market extends React.Component {
                             })}
                         </h4>
 
-                        <form
-                            className="Market__orderform"
-                            onSubmit={sellSteem}
-                        >
+                        <form className="Market__orderform" onSubmit={sellHive}>
                             <div className="row">
                                 <div className="column small-3 large-2">
                                     <label>{tt('g.price')}</label>
@@ -719,28 +706,26 @@ class Market extends React.Component {
                                                     : '')
                                             }
                                             type="text"
-                                            ref="sellSteem_price"
+                                            ref="sellHive_price"
                                             placeholder="0.0"
                                             onChange={e => {
                                                 const amount = parseFloat(
-                                                    this.refs.sellSteem_amount
+                                                    this.refs.sellHive_amount
                                                         .value
                                                 );
                                                 const price = parseFloat(
-                                                    this.refs.sellSteem_price
+                                                    this.refs.sellHive_price
                                                         .value
                                                 );
                                                 if (amount >= 0 && price >= 0)
-                                                    this.refs.sellSteem_total.value = roundDown(
+                                                    this.refs.sellHive_total.value = roundDown(
                                                         price * amount,
                                                         3
                                                     );
-                                                validateSellSteem();
+                                                validateSellHive();
                                             }}
                                         />
-                                        <span className="input-group-label uppercase">{`${
-                                            DEBT_TOKEN_SHORT
-                                        }/${LIQUID_TOKEN}`}</span>
+                                        <span className="input-group-label uppercase">{`${DEBT_TOKEN_SHORT}/${LIQUID_TOKEN}`}</span>
                                     </div>
                                 </div>
                             </div>
@@ -754,23 +739,23 @@ class Market extends React.Component {
                                         <input
                                             className="input-group-field"
                                             type="text"
-                                            ref="sellSteem_amount"
+                                            ref="sellHive_amount"
                                             placeholder="0.0"
                                             onChange={e => {
                                                 const price = parseFloat(
-                                                    this.refs.sellSteem_price
+                                                    this.refs.sellHive_price
                                                         .value
                                                 );
                                                 const amount = parseFloat(
-                                                    this.refs.sellSteem_amount
+                                                    this.refs.sellHive_amount
                                                         .value
                                                 );
                                                 if (price >= 0 && amount >= 0)
-                                                    this.refs.sellSteem_total.value = roundDown(
+                                                    this.refs.sellHive_total.value = roundDown(
                                                         price * amount,
                                                         3
                                                     );
-                                                validateSellSteem();
+                                                validateSellHive();
                                             }}
                                         />
                                         <span className="input-group-label uppercase">
@@ -789,28 +774,26 @@ class Market extends React.Component {
                                         <input
                                             className="input-group-field"
                                             type="text"
-                                            ref="sellSteem_total"
+                                            ref="sellHive_total"
                                             placeholder="0.0"
                                             onChange={e => {
                                                 const price = parseFloat(
-                                                    this.refs.sellSteem_price
+                                                    this.refs.sellHive_price
                                                         .value
                                                 );
                                                 const total = parseFloat(
-                                                    this.refs.sellSteem_total
+                                                    this.refs.sellHive_total
                                                         .value
                                                 );
                                                 if (price >= 0 && total >= 0)
-                                                    this.refs.sellSteem_amount.value = roundUp(
+                                                    this.refs.sellHive_amount.value = roundUp(
                                                         total / price,
                                                         3
                                                     );
-                                                validateSellSteem();
+                                                validateSellHive();
                                             }}
                                         />
-                                        <span className="input-group-label">{`${
-                                            DEBT_TOKEN_SHORT
-                                        } (${CURRENCY_SIGN})`}</span>
+                                        <span className="input-group-label">{`${DEBT_TOKEN_SHORT} (${CURRENCY_SIGN})`}</span>
                                     </div>
                                 </div>
                             </div>
@@ -836,22 +819,22 @@ class Market extends React.Component {
                                                         e.preventDefault();
                                                         const price = parseFloat(
                                                             this.refs
-                                                                .sellSteem_price
+                                                                .sellHive_price
                                                                 .value
                                                         );
                                                         const amount = account.balance.split(
                                                             ' '
                                                         )[0];
-                                                        this.refs.sellSteem_amount.value = amount;
+                                                        this.refs.sellHive_amount.value = amount;
                                                         if (price >= 0)
-                                                            this.refs.sellSteem_total.value = roundDown(
+                                                            this.refs.sellHive_total.value = roundDown(
                                                                 price *
                                                                     parseFloat(
                                                                         amount
                                                                     ),
                                                                 3
                                                             );
-                                                        validateSellSteem();
+                                                        validateSellHive();
                                                     }}
                                                 >
                                                     {tt('market_jsx.available')}:
@@ -871,19 +854,19 @@ class Market extends React.Component {
                                                     e.preventDefault();
                                                     const amount = parseFloat(
                                                         this.refs
-                                                            .sellSteem_amount
+                                                            .sellHive_amount
                                                             .value
                                                     );
                                                     const price =
                                                         ticker.highest_bid;
-                                                    this.refs.sellSteem_price.value = price;
+                                                    this.refs.sellHive_price.value = price;
                                                     if (amount >= 0)
-                                                        this.refs.sellSteem_total.value = roundDown(
+                                                        this.refs.sellHive_total.value = roundDown(
                                                             parseFloat(price) *
                                                                 amount,
                                                             3
                                                         );
-                                                    validateSellSteem();
+                                                    validateSellHive();
                                                 }}
                                             >
                                                 {tt('market_jsx.highest_bid')}:
@@ -1007,7 +990,7 @@ module.exports = {
                 fill_or_kill = false,
                 expiration = DEFAULT_EXPIRE
             ) => {
-                // create_order jsc 12345 "1.000 SBD" "100.000 STEEM" true 1467122240 false
+                // create_order jsc 12345 "1.000 HBD" "100.000 HIVE" true 1467122240 false
 
                 // Padd amounts to 3 decimal places
                 amount_to_sell = amount_to_sell.replace(

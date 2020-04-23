@@ -150,7 +150,7 @@ export default function useGeneralApi(app) {
             //     order: [['id', 'DESC']]
             // });
             // if (existing_created_account) {
-            //     throw new Error("Only one Steem account per user is allowed in order to prevent abuse");
+            //     throw new Error("Only one Hive account per user is allowed in order to prevent abuse");
             // }
 
             const remote_ip = getRemoteIp(this.req);
@@ -170,7 +170,7 @@ export default function useGeneralApi(app) {
                         } #${user_id}, IP ${remote_ip}`
                     );
                     throw new Error(
-                        'Only one Steem account allowed per IP address every 10 minutes'
+                        'Only one Hive account allowed per IP address every 10 minutes'
                     );
                 }
             }

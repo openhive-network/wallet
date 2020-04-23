@@ -11,6 +11,7 @@ import { actions as fetchDataSagaActions } from 'app/redux/FetchDataSaga';
 import Icon from 'app/components/elements/Icon';
 import UserKeys from 'app/components/elements/UserKeys';
 import PasswordReset from 'app/components/elements/PasswordReset';
+import CreateCommunity from 'app/components/elements/CreateCommunity';
 import UserWallet from 'app/components/modules/UserWallet';
 import Settings from 'app/components/modules/Settings';
 import CurationRewards from 'app/components/modules/CurationRewards';
@@ -34,7 +35,6 @@ import DropdownMenu from 'app/components/elements/DropdownMenu';
 export default class UserProfile extends React.Component {
     constructor() {
         super();
-        this.state = { showResteem: true };
         this.onPrint = () => {
             window.print();
         };
@@ -47,8 +47,7 @@ export default class UserProfile extends React.Component {
             np.wifShown !== this.props.wifShown ||
             np.globalStatus !== this.props.globalStatus ||
             np.loading !== this.props.loading ||
-            np.location.pathname !== this.props.location.pathname ||
-            ns.showResteem !== this.state.showResteem
+            np.location.pathname !== this.props.location.pathname
         );
     }
 
@@ -59,7 +58,6 @@ export default class UserProfile extends React.Component {
 
     render() {
         const {
-            state: { showResteem },
             props: {
                 currentUser,
                 wifShown,
@@ -160,6 +158,22 @@ export default class UserProfile extends React.Component {
                     </div>
                     <br />
                     <PasswordReset account={accountImm} />
+                </div>
+            );
+        } else if (section === 'communities') {
+            walletClass = 'active';
+            tab_content = (
+                <div>
+                    <div className="row">
+                        <div className="column">
+                            <WalletSubMenu
+                                accountname={account.name}
+                                isMyAccount={isMyAccount}
+                            />
+                        </div>
+                    </div>
+                    <br />
+                    <CreateCommunity account={accountImm} />
                 </div>
             );
         } else {

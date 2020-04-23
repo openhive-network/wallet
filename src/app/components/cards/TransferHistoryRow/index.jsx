@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router';
 import TimeAgoWrapper from 'app/components/elements/TimeAgoWrapper';
 import Memo from 'app/components/elements/Memo';
-import { numberWithCommas, vestsToSp } from 'app/utils/StateFunctions';
+import { numberWithCommas, vestsToHp } from 'app/utils/StateFunctions';
 import tt from 'counterpart';
 import GDPRUserList from 'app/utils/GDPRUserList';
 
@@ -40,7 +40,7 @@ class TransferHistoryRow extends React.Component {
                         'transferhistoryrow_jsx.transfer_to_vesting.from_self.no_to',
                         { amount }
                     );
-                    // tt('g.transfer') + amount + tt('g.to') + 'STEEM POWER';
+                    // tt('g.transfer') + amount + tt('g.to') + 'HIVE POWER';
                 } else {
                     message = (
                         <span>
@@ -51,7 +51,7 @@ class TransferHistoryRow extends React.Component {
                             {otherAccountLink(data.to)}
                         </span>
                     );
-                    // tt('g.transfer') + amount + ' STEEM POWER' + tt('g.to');
+                    // tt('g.transfer') + amount + ' HIVE POWER' + tt('g.to');
                 }
             } else if (data.to === context) {
                 message = (
@@ -63,7 +63,7 @@ class TransferHistoryRow extends React.Component {
                         {otherAccountLink(data.from)}
                     </span>
                 );
-                // tt('g.receive') + amount + ' STEEM POWER' + tt('g.from');
+                // tt('g.receive') + amount + ' HIVE POWER' + tt('g.from');
             } else {
                 message = (
                     <span>
@@ -77,7 +77,7 @@ class TransferHistoryRow extends React.Component {
                         {otherAccountLink(data.to)}
                     </span>
                 );
-                // tt('g.transfer') + amount + ' STEEM POWER' + tt('g.from') +data.from + tt('g.to');
+                // tt('g.transfer') + amount + ' HIVE POWER' + tt('g.from') +data.from + tt('g.to');
             }
         } else if (
             /^transfer$|^transfer_to_savings$|^transfer_from_savings$/.test(
@@ -89,8 +89,8 @@ class TransferHistoryRow extends React.Component {
                 type === 'transfer_to_savings'
                     ? 'to_savings'
                     : type === 'transfer_from_savings'
-                      ? 'from_savings'
-                      : 'not_savings';
+                        ? 'from_savings'
+                        : 'not_savings';
 
             if (data.from === context) {
                 // Semi-bad behavior - passing `type` to translation engine -- @todo better somehow?
@@ -176,7 +176,7 @@ class TransferHistoryRow extends React.Component {
                 message = tt('transferhistoryrow_jsx.withdraw_vesting', {
                     powerdown_vests,
                 });
-            // tt('transferhistoryrow_jsx.start_power_down_of') + ' ' + powerdown_vests + ' STEEM';
+            // tt('transferhistoryrow_jsx.start_power_down_of') + ' ' + powerdown_vests + ' HIVE';
         } else if (type === 'curation_reward') {
             message = (
                 <span>
@@ -190,22 +190,22 @@ class TransferHistoryRow extends React.Component {
                     )}
                 </span>
             );
-            // `${curation_reward} STEEM POWER` + tt('g.for');
+            // `${curation_reward} HIVE POWER` + tt('g.for');
         } else if (type === 'author_reward') {
-            let steem_payout = '';
-            if (data.steem_payout !== '0.000 STEEM')
-                steem_payout = ', ' + data.steem_payout;
+            let hive_payout = '';
+            if (data.steem_payout !== '0.000 HIVE')
+                hive_payout = ', ' + data.steem_payout;
             message = (
                 <span>
                     {tt('transferhistoryrow_jsx.author_reward', {
                         author_reward,
-                        steem_payout,
-                        sbd_payout: data.sbd_payout,
+                        hive_payout,
+                        hbd_payout: data.sbd_payout,
                     })}
                     {postLink(socialUrl, data.author, data.permlink)}
                 </span>
             );
-            // `${data.sbd_payout}${steem_payout}, ${tt( 'g.and' )} ${author_reward} STEEM POWER ${tt('g.for')}`;
+            // `${data.sbd_payout}${hive_payout}, ${tt( 'g.and' )} ${author_reward} HIVE POWER ${tt('g.for')}`;
         } else if (type === 'claim_reward_balance') {
             const rewards = [];
             if (parseFloat(data.reward_steem.split(' ')[0]) > 0)
@@ -213,7 +213,7 @@ class TransferHistoryRow extends React.Component {
             if (parseFloat(data.reward_sbd.split(' ')[0]) > 0)
                 rewards.push(data.reward_sbd);
             if (parseFloat(data.reward_vests.split(' ')[0]) > 0)
-                rewards.push(`${reward_vests} STEEM POWER`);
+                rewards.push(`${reward_vests} HIVE POWER`);
 
             switch (rewards.length) {
                 case 3:
@@ -281,7 +281,7 @@ class TransferHistoryRow extends React.Component {
                 author: data.author,
                 permlink: data.permlink,
             });
-            // `${benefactor_reward} STEEM POWER for ${ data.author }/${data.permlink}`;
+            // `${benefactor_reward} HIVE POWER for ${ data.author }/${data.permlink}`;
         } else {
             message = JSON.stringify({ type, ...data }, null, 2);
         }
@@ -328,23 +328,23 @@ export default connect(
         const data = op[1].op[1];
         const powerdown_vests =
             type === 'withdraw_vesting'
-                ? numberWithCommas(vestsToSp(state, data.vesting_shares))
+                ? numberWithCommas(vestsToHp(state, data.vesting_shares))
                 : undefined;
         const reward_vests =
             type === 'claim_reward_balance'
-                ? numberWithCommas(vestsToSp(state, data.reward_vests))
+                ? numberWithCommas(vestsToHp(state, data.reward_vests))
                 : undefined;
         const curation_reward =
             type === 'curation_reward'
-                ? numberWithCommas(vestsToSp(state, data.reward))
+                ? numberWithCommas(vestsToHp(state, data.reward))
                 : undefined;
         const author_reward =
             type === 'author_reward'
-                ? numberWithCommas(vestsToSp(state, data.vesting_payout))
+                ? numberWithCommas(vestsToHp(state, data.vesting_payout))
                 : undefined;
         const benefactor_reward =
             type === 'comment_benefactor_reward'
-                ? numberWithCommas(vestsToSp(state, data.reward))
+                ? numberWithCommas(vestsToHp(state, data.reward))
                 : undefined;
         const socialUrl = state.app.get('socialUrl');
         return {

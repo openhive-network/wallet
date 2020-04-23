@@ -31,10 +31,6 @@ class Approval extends React.Component {
                         you're approved, you'll be sent a link to finalize your
                         account!
                     </p>
-                    <p>
-                        You'll be among the earliest members of the Steemit
-                        community!
-                    </p>
                 </div>
             );
         } else {
@@ -51,10 +47,6 @@ class Approval extends React.Component {
                         it over for approval. As soon as your turn is up and
                         you're approved, you'll be sent a link to finalize your
                         account!
-                    </p>
-                    <p>
-                        You'll be among the earliest members of the Steemit
-                        community!
                     </p>
                 </div>
             );

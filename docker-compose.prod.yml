@@ -1,0 +1,70 @@
+version: "3"
+services:
+    hive_wallet:
+        build: .
+        image: hive/wallet:latest
+        container_name: hive_wallet
+        ports:
+          - "80"
+        environment:
+            VIRTUAL_HOST: wallet.hive.blog
+            VIRTUAL_PORT: 8080
+            SDC_DATABASE_URL: mysql://root:mysecret@hive_mysql/hive_wallet
+            SDC_CLIENT_HIVED_URL: https://anyx.io
+            SDC_SERVER_HIVED_URL: https://anyx.io
+            SDC_DISABLE_SIGNUPS: 1
+            SDC_SITE_DOMAIN: wallet.hive.blog
+            SDC_IMAGE_PROXY_PREFIX: https://images.hive.blog/
+            SDC_UPLOAD_IMAGE_URL: https://images.hive.blog
+            SDC_HELMET_CONNECTSRC: "'self' https://api.hive.blog https://anyx.io https://wallet.hive.blog https://images.hive.blog"
+            WALLET_URL: https://wallet.hive.blog
+        networks:
+            - proxy_reverse-proxy
+            - back
+        links:
+            - hive_mysql
+        restart: always
+
+#    wallet_stg:
+#        build: .
+#        image: hive/wallet:staging
+#        container_name: wallet_stg
+#        environment:
+#            VIRTUAL_HOST: staging.hive.blog
+#            VIRTUAL_PORT: 8080
+#            SDC_CLIENT_STEEMD_URL: https://api.hive.blog
+#            SDC_SERVER_STEEMD_URL: https://api.hive.blog
+#            SDC_DISABLE_SIGNUPS: 1
+#            SDC_SITE_DOMAIN: staging.hive.blog
+#            SDC_IMAGE_PROXY_PREFIX: https://steemitimages.com/
+#            SDC_UPLOAD_IMAGE_URL: https://steemitimages.com
+#            SDC_HELMET_CONNECTSRC: "'self' https://api.hive.blog https://staging.hive.blog https://steemitimages.com"
+#            WALLET_URL: https://wallet.hive.blog
+#        networks:
+#            - proxy_reverse-proxy
+#        restart: always
+
+    hive_mysql:
+        image: mysql:5.7
+        container_name: hive_mysql
+        volumes:
+            - ./dbdata:/var/lib/mysql
+            - ./src:/usr/local/src
+        environment:
+            MYSQL_ROOT_PASSWORD: mysecret
+            MYSQL_DATABASE: hive_wallet
+            MYSQL_USER: root
+            MYSQL_PASSWORD: mysecret
+        ports:
+            - "3306"
+        networks:
+            - proxy_reverse-proxy
+            - back
+        restart: always
+
+networks:
+    proxy_reverse-proxy:
+        external:
+            name: proxy_reverse-proxy
+    back:
+        driver: bridge

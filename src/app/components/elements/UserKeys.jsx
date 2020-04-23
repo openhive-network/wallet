@@ -107,7 +107,7 @@ class UserKeys extends Component {
                         <h1>Keys & Permissions </h1>
                         <p className="UserKeys__p">
                             Any password or key is more likely to get
-                            compromised the more it is used. That's why Steem
+                            compromised the more it is used. That's why Hive
                             uses a hierarchical key system to keep you safe. You
                             are issued with four keys which have different
                             permissions. For example, the Posting Key (which is
@@ -118,18 +118,11 @@ class UserKeys extends Component {
                             wallet related actions.
                         </p>
                         <p className="UserKeys__p">
-                            Please take note of your Steem Keys listed below.
+                            Please take note of your Hive Keys listed below.
                             Ideally, use a Password Manager (like 1Password or
                             LastPass) or store an offline copy safely (on a
                             piece of paper or on a file on a USB drive).
                         </p>
-                        <h5>Learn more</h5>
-                        <a
-                            className="UserKeys__link"
-                            href="https://steemit.com/steem/@steemitblog/steem-basics-understanding-private-keys-part-1"
-                        >
-                            Understanding Private Keys Part 1
-                        </a>
                     </div>
                     <div className="UserKeys__intro-col">
                         <img
@@ -153,8 +146,8 @@ class UserKeys extends Component {
                                 to this key.
                             </p>
                             <p className="key__description">
-                                Use this key to log in to other Steem-powered
-                                social networks like Steemit, Busy and eSteem.
+                                Use this key to log in to other Hive-powered
+                                social networks like Hive.blog, Busy and Esteem.
                                 Store this key safely.
                             </p>
                             <Keys
@@ -181,7 +174,7 @@ class UserKeys extends Component {
                                     Upvote or downvote
                                 </li>
                                 <li className="permissions__li">
-                                    Resteem content
+                                    Reblog content
                                 </li>
                                 <li className="permissions__li">
                                     Follow people
@@ -233,10 +226,10 @@ class UserKeys extends Component {
                                     Transfer tokens
                                 </li>
                                 <li className="permissions__li">
-                                    Power STEEM up or down
+                                    Power HIVE up or down
                                 </li>
                                 <li className="permissions__li">
-                                    SBD conversion
+                                    HBD conversion
                                 </li>
                                 <li className="permissions__li">
                                     Vote for witnesses
@@ -348,12 +341,12 @@ class UserKeys extends Component {
                         <div className="public-keys__intro">
                             <h3 className="public-keys__h3">Public Keys</h3>
                             <p className="public-keys__description">
-                                Each Steem Key has a public and private key to
+                                Each Hive Key has a public and private key to
                                 encrypt and decrypt data. Public keys are
                                 associated with usernames and can be used to
                                 look up associated transactions on the
                                 blockchain. Your public keys are not required
-                                for login on Steemit.com and you don't need to
+                                for login on Hive.blog and you don't need to
                                 store these safely.
                             </p>
                             <p className="public-keys__description">
@@ -362,11 +355,11 @@ class UserKeys extends Component {
                                 <a
                                     className="public-keys__link"
                                     href={
-                                        'https://steemd.com/@' +
+                                        'https://hiveblocks.com/@' +
                                         account.get('name')
                                     }
                                 >
-                                    steemd.com/@{account.get('name')}
+                                    hiveblocks.com/@{account.get('name')}
                                 </a>
                             </p>
                         </div>

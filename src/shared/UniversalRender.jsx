@@ -236,7 +236,7 @@ export async function serverRender(
     } catch (e) {
         console.error('Routing error:', e.toString(), location);
         return {
-            title: 'Routing error - Steemit Wallet',
+            title: 'Routing error - Hive Wallet',
             statusCode: 500,
             body: renderToString(
                 ErrorPage ? <ErrorPage /> : <span>Routing error</span>
@@ -247,7 +247,7 @@ export async function serverRender(
     if (error || !renderProps) {
         // debug('error')('Router error', error);
         return {
-            title: 'Page Not Found - Steemit Wallet',
+            title: 'Page Not Found - Hive Wallet',
             statusCode: 404,
             body: renderToString(<NotFound />),
         };
@@ -270,7 +270,7 @@ export async function serverRender(
         ) {
             // protect for invalid account
             return {
-                title: 'User Not Found - Steemit Wallet',
+                title: 'User Not Found - Hive Wallet',
                 statusCode: 404,
                 body: renderToString(<NotFound />),
             };
@@ -291,7 +291,7 @@ export async function serverRender(
         if (location.match(routeRegex.UserProfile1)) {
             console.error('User/not found: ', location);
             return {
-                title: 'Page Not Found - Steemit Wallet',
+                title: 'Page Not Found - Hive Wallet',
                 statusCode: 404,
                 body: renderToString(<NotFound />),
             };
@@ -301,7 +301,7 @@ export async function serverRender(
             const stack_trace = e.stack || '[no stack]';
             console.error('State/store error: ', msg, stack_trace);
             return {
-                title: 'Server error - Steemit',
+                title: 'Server error - Hive',
                 statusCode: 500,
                 body: renderToString(<ErrorPage />),
             };
@@ -328,8 +328,8 @@ export async function serverRender(
     }
 
     return {
-        title: 'Steemit Wallet',
-        titleBase: 'Steemit Wallet - ',
+        title: 'Hive Wallet',
+        titleBase: 'Hive Wallet - ',
         meta,
         statusCode: status,
         body: Iso.render(app, server_store.getState()),

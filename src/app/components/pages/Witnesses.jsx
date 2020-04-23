@@ -1,14 +1,22 @@
 import React from 'react';
+import Moment from 'moment';
+import { api } from '@steemit/steem-js';
+import classnames from 'classnames';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
 import links from 'app/utils/Links';
 import Icon from 'app/components/elements/Icon';
 import * as transactionActions from 'app/redux/TransactionReducer';
+import Userpic from 'app/components/elements/Userpic';
+import TimeAgoWrapper from 'app/components/elements/TimeAgoWrapper';
+import { formatLargeNumber } from 'app/utils/ParsersAndFormatters';
 import ByteBuffer from 'bytebuffer';
 import { is, Set, List } from 'immutable';
 import * as globalActions from 'app/redux/GlobalReducer';
+import { vestsToHpf } from 'app/utils/StateFunctions';
 import tt from 'counterpart';
+import _ from 'lodash';
 
 const Long = ByteBuffer.Long;
 const { string, func, object } = PropTypes;
@@ -18,6 +26,7 @@ const DISABLED_SIGNING_KEY = 'STM1111111111111111111111111111111114T1Anm';
 function _blockGap(head_block, last_block) {
     if (!last_block || last_block < 1) return 'forever';
     const secs = (head_block - last_block) * 3;
+    if (secs < 60) return 'just now';
     if (secs < 120) return 'recently';
     const mins = Math.floor(secs / 60);
     if (mins < 120) return mins + ' mins ago';
@@ -42,7 +51,13 @@ class Witnesses extends React.Component {
 
     constructor() {
         super();
-        this.state = { customUsername: '', proxy: '', proxyFailed: false };
+        this.state = {
+            customUsername: '',
+            proxy: '',
+            proxyFailed: false,
+            witnessAccounts: {},
+            witnessToHighlight: '',
+        };
         this.accountWitnessVote = (accountName, approve, e) => {
             e.preventDefault();
             const { username, accountWitnessVote } = this.props;
@@ -64,6 +79,15 @@ class Witnesses extends React.Component {
         };
     }
 
+    componentDidMount() {
+        this.setState({
+            witnessToHighlight: this.props.location.query.highlight,
+        });
+        this.loadWitnessAccounts();
+
+        this.scrollToHighlightedWitness();
+    }
+
     shouldComponentUpdate(np, ns) {
         return (
             !is(np.witness_votes, this.props.witness_votes) ||
@@ -73,8 +97,84 @@ class Witnesses extends React.Component {
             np.username !== this.props.username ||
             ns.customUsername !== this.state.customUsername ||
             ns.proxy !== this.state.proxy ||
-            ns.proxyFailed !== this.state.proxyFailed
+            ns.proxyFailed !== this.state.proxyFailed ||
+            ns.witnessAccounts !== this.state.witnessAccounts ||
+            ns.witnessToHighlight !== this.state.witnessToHighlight
         );
+    }
+
+    async loadWitnessAccounts() {
+        const witnessAccounts = this.state.witnessAccounts;
+        const { witnesses } = this.props;
+        const witnessOwners = [[]];
+        let chunksCount = 0;
+
+        witnesses.map(item => {
+            if (witnessOwners[chunksCount].length >= 20) {
+                chunksCount += 1;
+                witnessOwners[chunksCount] = [];
+            }
+            witnessOwners[chunksCount].push(item.get('owner'));
+            return true;
+        });
+
+        for (let oi = 0; oi < witnessOwners.length; oi += 1) {
+            const owners = witnessOwners[oi];
+            const res = await api.getAccountsAsync(owners);
+            if (!(res && res.length > 0)) {
+                console.error(tt('g.account_not_found'));
+                return false;
+            }
+
+            for (let ri = 0; ri < res.length; ri += 1) {
+                const witnessAccount = res[ri];
+                const jsonMetadataString = _.get(
+                    witnessAccount,
+                    'json_metadata',
+                    ''
+                );
+                const postingJsonMetadataString = _.get(
+                    witnessAccount,
+                    'posting_json_metadata',
+                    jsonMetadataString
+                );
+
+                let jsonMetadata = { witness_description: '' };
+                try {
+                    jsonMetadata = JSON.parse(postingJsonMetadataString);
+                } catch (err) {
+                    // Use default value
+                }
+
+                witnessAccounts[witnessAccount.name] = jsonMetadata;
+            }
+        }
+
+        this.setState({ witnessAccounts: { ...witnessAccounts } });
+        return true;
+    }
+
+    scrollToHighlightedWitness() {
+        if (typeof document !== 'undefined') {
+            setTimeout(() => {
+                const highlightedWitnessElement = document.querySelector(
+                    '.Witnesses__highlight'
+                );
+                if (highlightedWitnessElement) {
+                    highlightedWitnessElement.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'center',
+                        inline: 'center',
+                    });
+                }
+            }, 1000);
+        }
+    }
+
+    updateWitnessToHighlight(witness) {
+        this.setState({ witnessToHighlight: witness });
+        this.scrollToHighlightedWitness();
+        window.history.pushState('', '', `/~witnesses?highlight=${witness}`);
     }
 
     render() {
@@ -85,10 +185,16 @@ class Witnesses extends React.Component {
                 current_proxy,
                 head_block,
             },
-            state: { customUsername, proxy },
+            state: {
+                customUsername,
+                proxy,
+                witnessAccounts,
+                witnessToHighlight,
+            },
             accountWitnessVote,
             accountWitnessProxy,
             onWitnessChange,
+            updateWitnessToHighlight,
         } = this;
         const sorted_witnesses = this.props.witnesses.sort((a, b) =>
             Long.fromString(String(b.get('votes'))).subtract(
@@ -97,16 +203,70 @@ class Witnesses extends React.Component {
         );
         let witness_vote_count = 30;
         let rank = 1;
+        let foundWitnessToHighlight = false;
+        let previousTotalVoteHpf = 0;
+        const now = Moment();
 
         const witnesses = sorted_witnesses.map(item => {
             const owner = item.get('owner');
-            const thread = item.get('url');
+            if (owner === witnessToHighlight) {
+                foundWitnessToHighlight = true;
+            }
+            const witnessDescription = _.get(
+                witnessAccounts[owner],
+                'profile.witness_description',
+                null
+            );
+            const totalVotesVests = item.get('votes');
+            const totalVotesHpf = vestsToHpf(
+                this.props.state,
+                `${totalVotesVests / 1000000} VESTS`
+            );
+            const totalVotesHp = formatLargeNumber(totalVotesHpf, 0);
+
+            let requiredHpToRankUp = '';
+            if (previousTotalVoteHpf !== 0) {
+                requiredHpToRankUp = (
+                    <small>
+                        {tt('witnesses_jsx.hp_required_to_rank_up', {
+                            votehp: formatLargeNumber(
+                                previousTotalVoteHpf - totalVotesHpf
+                            ),
+                        })}
+                    </small>
+                );
+            }
+
+            previousTotalVoteHpf = totalVotesHpf;
+
+            const thread = item.get('url').replace('steemit.com', 'hive.blog');
             const myVote = witness_votes ? witness_votes.has(owner) : null;
             const signingKey = item.get('signing_key');
+            const witnessCreated = item.get('created');
+
+            const accountBirthday = Moment(`${witnessCreated}Z`);
+            const witnessAgeDays = now.diff(accountBirthday, 'days');
+            const witnessAgeWeeks = now.diff(accountBirthday, 'weeks');
+            const witnessAgeMonths = now.diff(accountBirthday, 'months');
+            const witnessAgeYears = now.diff(accountBirthday, 'years');
+
+            let witnessAge = `${witnessAgeDays} ${tt('g.days')}`;
+            if (witnessCreated === '1970-01-01T00:00:00') {
+                witnessAge = 'over 3 years';
+            } else if (witnessAgeYears > 0) {
+                witnessAge = `${witnessAgeYears} ${tt('g.years')}`;
+            } else if (witnessAgeMonths > 0) {
+                witnessAge = `${witnessAgeMonths} ${tt('g.months')}`;
+            } else if (witnessAgeWeeks > 0) {
+                witnessAge = `${witnessAgeWeeks} ${tt('g.weeks')}`;
+            }
+
             const lastBlock = item.get('last_confirmed_block_num');
+            const runningVersion = item.get('running_version');
+            const sbdExchangeRate = item.get('sbd_exchange_rate');
+            const sbdExchangeUpdateDate = item.get('last_sbd_exchange_update');
             const noBlock7days = (head_block - lastBlock) * 3 > 604800;
-            const isDisabled =
-                signingKey == DISABLED_SIGNING_KEY || noBlock7days;
+            const isDisabled = signingKey == DISABLED_SIGNING_KEY;
             const votingActive = witnessVotesInProgress.has(owner);
             const classUp =
                 'Voting__button Voting__button-up' +
@@ -143,8 +303,13 @@ class Witnesses extends React.Component {
                 : {};
 
             return (
-                <tr key={owner}>
-                    <td width="75">
+                <tr
+                    key={owner}
+                    className={classnames({
+                        Witnesses__highlight: witnessToHighlight === owner,
+                    })}
+                >
+                    <td className="Witnesses__rank">
                         {rank < 10 && '0'}
                         {rank++}
                         &nbsp;&nbsp;
@@ -170,19 +335,110 @@ class Witnesses extends React.Component {
                             )}
                         </span>
                     </td>
-                    <td>
+                    <td className="Witnesses__info">
                         <Link to={'/@' + owner} style={ownerStyle}>
-                            {owner}
+                            <Userpic
+                                account={owner}
+                                size="small"
+                                className={classnames({
+                                    disabled: isDisabled,
+                                })}
+                            />
                         </Link>
-                        {isDisabled && (
-                            <small>
-                                {' '}
-                                ({tt('witnesses_jsx.disabled')}{' '}
-                                {_blockGap(head_block, lastBlock)})
-                            </small>
-                        )}
+                        <div className="Witnesses__info">
+                            <div>
+                                <Link to={'/@' + owner} style={ownerStyle}>
+                                    {owner}
+                                </Link>
+                                <Link
+                                    to={`/~witnesses?highlight=${owner}`}
+                                    onClick={event => {
+                                        event.preventDefault();
+                                        updateWitnessToHighlight.apply(this, [
+                                            owner,
+                                        ]);
+                                    }}
+                                >
+                                    <Icon
+                                        name="chain"
+                                        size="0.7x"
+                                        className="Witnesses__permlink"
+                                    />
+                                </Link>
+                            </div>
+                            <div>
+                                <small>
+                                    {noBlock7days && (
+                                        <div>
+                                            <strong>
+                                                <span
+                                                    role="img"
+                                                    aria-label={tt(
+                                                        'witnesses_jsx.not_produced_over_a_week'
+                                                    )}
+                                                >
+                                                    ⚠️
+                                                </span>
+                                                {tt(
+                                                    'witnesses_jsx.not_produced_over_a_week'
+                                                )}
+                                            </strong>
+                                        </div>
+                                    )}
+                                    <div>
+                                        {witnessDescription && (
+                                            <div className="Witnesses__description">
+                                                {witnessDescription}
+                                            </div>
+                                        )}
+                                        {tt('witnesses_jsx.last_block')}{' '}
+                                        <Link
+                                            to={`https://hiveblocks.com/b/${lastBlock}`}
+                                            target="_blank"
+                                        >
+                                            #{lastBlock}
+                                        </Link>{' '}
+                                        {_blockGap(head_block, lastBlock)} on v{
+                                            runningVersion
+                                        }
+                                    </div>
+                                    {isDisabled && (
+                                        <div>
+                                            {`${tt(
+                                                'witnesses_jsx.disabled'
+                                            )} ${_blockGap(
+                                                head_block,
+                                                lastBlock
+                                            )}`}
+                                        </div>
+                                    )}
+                                    {!isDisabled && (
+                                        <div>
+                                            {`${tt(
+                                                'witnesses_jsx.witness_age'
+                                            )}: ${witnessAge}`}
+                                        </div>
+                                    )}
+                                </small>
+                            </div>
+                            {!isDisabled && (
+                                <div className="witness__thread">
+                                    <small>{witness_link}</small>
+                                </div>
+                            )}
+                        </div>
                     </td>
-                    <td>{witness_link}</td>
+                    <td>
+                        {`${totalVotesHp} HP`}
+                        {!isDisabled && <div>{requiredHpToRankUp}</div>}
+                    </td>
+                    <td>
+                        ${parseFloat(sbdExchangeRate.get('base'))}
+                        <br />
+                        <small>
+                            <TimeAgoWrapper date={sbdExchangeUpdateDate} />
+                        </small>
+                    </td>
                 </tr>
             );
         });
@@ -246,17 +502,19 @@ class Witnesses extends React.Component {
                     <div className="column">
                         <h2>{tt('witnesses_jsx.top_witnesses')}</h2>
                         {current_proxy && current_proxy.length ? null : (
-                            <p>
-                                <strong>
+                            <div>
+                                <p>
+                                    <strong>
+                                        {tt(
+                                            'witnesses_jsx.you_have_votes_remaining',
+                                            { count: witness_vote_count }
+                                        )}.
+                                    </strong>{' '}
                                     {tt(
-                                        'witnesses_jsx.you_have_votes_remaining',
-                                        { count: witness_vote_count }
+                                        'witnesses_jsx.you_can_vote_for_maximum_of_witnesses'
                                     )}.
-                                </strong>{' '}
-                                {tt(
-                                    'witnesses_jsx.you_can_vote_for_maximum_of_witnesses'
-                                )}.
-                            </p>
+                                </p>
+                            </div>
                         )}
                     </div>
                 </div>
@@ -266,11 +524,12 @@ class Witnesses extends React.Component {
                             <table>
                                 <thead>
                                     <tr>
-                                        <th />
+                                        <th>Rank</th>
                                         <th>{tt('witnesses_jsx.witness')}</th>
-                                        <th>
-                                            {tt('witnesses_jsx.information')}
+                                        <th className="Witnesses__votes">
+                                            {tt('witnesses_jsx.votes_received')}
                                         </th>
+                                        <th>Price feed</th>
                                     </tr>
                                 </thead>
                                 <tbody>{witnesses.toArray()}</tbody>
@@ -280,7 +539,13 @@ class Witnesses extends React.Component {
                 )}
 
                 {current_proxy ? null : (
-                    <div className="row">
+                    <div
+                        className={classnames('row', {
+                            Witnesses__highlight:
+                                witnessToHighlight &&
+                                foundWitnessToHighlight === false,
+                        })}
+                    >
                         <div className="column">
                             <p>
                                 {tt(
@@ -298,7 +563,11 @@ class Witnesses extends React.Component {
                                             width: '75%',
                                             maxWidth: '20rem',
                                         }}
-                                        value={customUsername}
+                                        value={
+                                            foundWitnessToHighlight === true
+                                                ? customUsername
+                                                : witnessToHighlight
+                                        }
                                         onChange={onWitnessChange}
                                     />
                                     <div className="input-group-button">
@@ -438,6 +707,7 @@ module.exports = {
                 witness_votes,
                 witnessVotesInProgress,
                 current_proxy,
+                state,
             };
         },
         dispatch => {

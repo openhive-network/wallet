@@ -9,10 +9,10 @@ import TransferHistoryRow from 'app/components/cards/TransferHistoryRow';
 import TimeAgoWrapper from 'app/components/elements/TimeAgoWrapper';
 import {
     numberWithCommas,
-    vestingSteem,
-    delegatedSteem,
-    powerdownSteem,
-    pricePerSteem,
+    vestingHive,
+    delegatedHive,
+    powerdownHive,
+    pricePerHive,
 } from 'app/utils/StateFunctions';
 import WalletSubMenu from 'app/components/elements/WalletSubMenu';
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
@@ -36,44 +36,44 @@ class UserWallet extends React.Component {
         this.state = {
             claimInProgress: false,
         };
-        this.onShowDepositSteem = e => {
+        this.onShowDepositHive = e => {
             if (e && e.preventDefault) e.preventDefault();
             const name = this.props.currentUser.get('username');
             const new_window = window.open();
             new_window.opener = null;
             new_window.location =
-                'https://blocktrades.us/?input_coin_type=eth&output_coin_type=steem&receive_address=' +
+                'https://blocktrades.us/?input_coin_type=eth&output_coin_type=hive&receive_address=' +
                 name;
         };
-        this.onShowWithdrawSteem = e => {
+        this.onShowWithdrawHive = e => {
             e.preventDefault();
             const new_window = window.open();
             new_window.opener = null;
             new_window.location =
-                'https://blocktrades.us/unregistered_trade/steem/eth';
+                'https://blocktrades.us/unregistered_trade/hive/eth';
         };
         this.onShowDepositPower = (currentUserName, e) => {
             e.preventDefault();
             const new_window = window.open();
             new_window.opener = null;
             new_window.location =
-                'https://blocktrades.us/?input_coin_type=eth&output_coin_type=steem_power&receive_address=' +
+                'https://blocktrades.us/?input_coin_type=eth&output_coin_type=hive_power&receive_address=' +
                 currentUserName;
         };
-        this.onShowDepositSBD = (currentUserName, e) => {
+        this.onShowDepositHBD = (currentUserName, e) => {
             e.preventDefault();
             const new_window = window.open();
             new_window.opener = null;
             new_window.location =
-                'https://blocktrades.us/?input_coin_type=eth&output_coin_type=sbd&receive_address=' +
+                'https://blocktrades.us/?input_coin_type=eth&output_coin_type=hbd&receive_address=' +
                 currentUserName;
         };
-        this.onShowWithdrawSBD = e => {
+        this.onShowWithdrawHBD = e => {
             e.preventDefault();
             const new_window = window.open();
             new_window.opener = null;
             new_window.location =
-                'https://blocktrades.us/unregistered_trade/sbd/eth';
+                'https://blocktrades.us/unregistered_trade/hbd/eth';
         };
         this.shouldComponentUpdate = shouldComponentUpdate(this, 'UserWallet');
     }
@@ -121,15 +121,15 @@ class UserWallet extends React.Component {
 
     render() {
         const {
-            onShowDepositSteem,
-            onShowWithdrawSteem,
-            onShowDepositSBD,
-            onShowWithdrawSBD,
+            onShowDepositHive,
+            onShowWithdrawHive,
+            onShowDepositHBD,
+            onShowWithdrawHBD,
             onShowDepositPower,
         } = this;
         const {
-            convertToSteem,
-            price_per_steem,
+            convertToHive,
+            price_per_hive,
             savings_withdraws,
             account,
             currentUser,
@@ -143,9 +143,9 @@ class UserWallet extends React.Component {
         // do not render if state appears to contain only lite account info
         if (!account.has('vesting_shares')) return null;
 
-        let vesting_steem = vestingSteem(account.toJS(), gprops);
-        let delegated_steem = delegatedSteem(account.toJS(), gprops);
-        let powerdown_steem = powerdownSteem(account.toJS(), gprops);
+        let vesting_hive = vestingHive(account.toJS(), gprops);
+        let delegated_hive = delegatedHive(account.toJS(), gprops);
+        let powerdown_hive = powerdownHive(account.toJS(), gprops);
 
         let isMyAccount =
             currentUser && currentUser.get('username') === account.get('name');
@@ -163,7 +163,7 @@ class UserWallet extends React.Component {
         };
 
         const savings_balance = account.get('savings_balance');
-        const savings_sbd_balance = account.get('savings_sbd_balance');
+        const savings_hbd_balance = account.get('savings_sbd_balance');
 
         const powerDown = (cancel, e) => {
             e.preventDefault();
@@ -204,14 +204,14 @@ class UserWallet extends React.Component {
 
         // Sum savings withrawals
         let savings_pending = 0,
-            savings_sbd_pending = 0;
+            savings_hbd_pending = 0;
         if (savings_withdraws) {
             savings_withdraws.forEach(withdraw => {
                 const [amount, asset] = withdraw.get('amount').split(' ');
-                if (asset === 'STEEM') savings_pending += parseFloat(amount);
+                if (asset === 'HIVE') savings_pending += parseFloat(amount);
                 else {
-                    if (asset === 'SBD')
-                        savings_sbd_pending += parseFloat(amount);
+                    if (asset === 'HBD')
+                        savings_hbd_pending += parseFloat(amount);
                 }
             });
         }
@@ -231,7 +231,7 @@ class UserWallet extends React.Component {
                 if (finishTime < currentTime) return out;
 
                 const amount = parseFloat(
-                    item.getIn([1, 'op', 1, 'amount']).replace(' SBD', '')
+                    item.getIn([1, 'op', 1, 'amount']).replace(' HBD', '')
                 );
                 conversionValue += amount;
 
@@ -254,52 +254,52 @@ class UserWallet extends React.Component {
                 ]);
             }, []);
 
-        const balance_steem = parseFloat(account.get('balance').split(' ')[0]);
-        const saving_balance_steem = parseFloat(savings_balance.split(' ')[0]);
+        const balance_hive = parseFloat(account.get('balance').split(' ')[0]);
+        const saving_balance_hive = parseFloat(savings_balance.split(' ')[0]);
         const divesting =
             parseFloat(account.get('vesting_withdraw_rate').split(' ')[0]) >
             0.0;
-        const sbd_balance = parseFloat(account.get('sbd_balance'));
-        const sbd_balance_savings = parseFloat(
-            savings_sbd_balance.split(' ')[0]
+        const hbd_balance = parseFloat(account.get('sbd_balance'));
+        const hbd_balance_savings = parseFloat(
+            savings_hbd_balance.split(' ')[0]
         );
-        const sbdOrders =
+        const hbdOrders =
             !open_orders || !isMyAccount
                 ? 0
                 : open_orders.reduce((o, order) => {
-                      if (order.sell_price.base.indexOf('SBD') !== -1) {
+                      if (order.sell_price.base.indexOf('HBD') !== -1) {
                           o += order.for_sale;
                       }
                       return o;
                   }, 0) / assetPrecision;
 
-        const steemOrders =
+        const hiveOrders =
             !open_orders || !isMyAccount
                 ? 0
                 : open_orders.reduce((o, order) => {
-                      if (order.sell_price.base.indexOf('STEEM') !== -1) {
+                      if (order.sell_price.base.indexOf('HIVE') !== -1) {
                           o += order.for_sale;
                       }
                       return o;
                   }, 0) / assetPrecision;
 
         // set displayed estimated value
-        const total_sbd =
-            sbd_balance +
-            sbd_balance_savings +
-            savings_sbd_pending +
-            sbdOrders +
+        const total_hbd =
+            hbd_balance +
+            hbd_balance_savings +
+            savings_hbd_pending +
+            hbdOrders +
             conversionValue;
-        const total_steem =
-            vesting_steem +
-            balance_steem +
-            saving_balance_steem +
+        const total_hive =
+            vesting_hive +
+            balance_hive +
+            saving_balance_hive +
             savings_pending +
-            steemOrders;
+            hiveOrders;
         let total_value =
             '$' +
             numberWithCommas(
-                (total_steem * price_per_steem + total_sbd).toFixed(2)
+                (total_hive * price_per_hive + total_hbd).toFixed(2)
             );
 
         // format spacing on estimated value based on account state
@@ -326,7 +326,7 @@ class UserWallet extends React.Component {
                 }
 
                 if (
-                    data.sbd_payout === '0.000 SBD' &&
+                    data.hbd_payout === '0.000 HBD' &&
                     data.vesting_payout === '0.000000 VESTS'
                 )
                     return null;
@@ -341,24 +341,16 @@ class UserWallet extends React.Component {
             .filter(el => !!el)
             .reverse();
 
-        let steem_menu = [
+        let hive_menu = [
             {
                 value: tt('userwallet_jsx.transfer'),
                 link: '#',
-                onClick: showTransfer.bind(
-                    this,
-                    'STEEM',
-                    'Transfer to Account'
-                ),
+                onClick: showTransfer.bind(this, 'HIVE', 'Transfer to Account'),
             },
             {
                 value: tt('userwallet_jsx.transfer_to_savings'),
                 link: '#',
-                onClick: showTransfer.bind(
-                    this,
-                    'STEEM',
-                    'Transfer to Savings'
-                ),
+                onClick: showTransfer.bind(this, 'HIVE', 'Transfer to Savings'),
             },
             {
                 value: tt('userwallet_jsx.power_up'),
@@ -381,30 +373,30 @@ class UserWallet extends React.Component {
             {
                 value: tt('g.transfer'),
                 link: '#',
-                onClick: showTransfer.bind(this, 'SBD', 'Transfer to Account'),
+                onClick: showTransfer.bind(this, 'HBD', 'Transfer to Account'),
             },
             {
                 value: tt('userwallet_jsx.transfer_to_savings'),
                 link: '#',
-                onClick: showTransfer.bind(this, 'SBD', 'Transfer to Savings'),
+                onClick: showTransfer.bind(this, 'HBD', 'Transfer to Savings'),
             },
             { value: tt('userwallet_jsx.market'), link: '/market' },
         ];
         if (isMyAccount) {
-            steem_menu.push({
+            hive_menu.push({
                 value: tt('g.buy'),
                 link: '#',
-                onClick: onShowDepositSteem.bind(
+                onClick: onShowDepositHive.bind(
                     this,
                     currentUser.get('username')
                 ),
             });
-            steem_menu.push({
+            hive_menu.push({
                 value: tt('g.sell'),
                 link: '#',
-                onClick: onShowWithdrawSteem,
+                onClick: onShowWithdrawHive,
             });
-            steem_menu.push({
+            hive_menu.push({
                 value: tt('userwallet_jsx.market'),
                 link: '/market',
             });
@@ -419,7 +411,7 @@ class UserWallet extends React.Component {
             dollar_menu.push({
                 value: tt('g.buy'),
                 link: '#',
-                onClick: onShowDepositSBD.bind(
+                onClick: onShowDepositHBD.bind(
                     this,
                     currentUser.get('username')
                 ),
@@ -427,7 +419,7 @@ class UserWallet extends React.Component {
             dollar_menu.push({
                 value: tt('g.sell'),
                 link: '#',
-                onClick: onShowWithdrawSBD,
+                onClick: onShowWithdrawHBD,
             });
         }
         if (divesting) {
@@ -438,26 +430,24 @@ class UserWallet extends React.Component {
             });
         }
 
-        const steem_balance_str = numberWithCommas(balance_steem.toFixed(3));
-        const steem_orders_balance_str = numberWithCommas(
-            steemOrders.toFixed(3)
-        );
-        const power_balance_str = numberWithCommas(vesting_steem.toFixed(3));
+        const hive_balance_str = numberWithCommas(balance_hive.toFixed(3));
+        const hive_orders_balance_str = numberWithCommas(hiveOrders.toFixed(3));
+        const power_balance_str = numberWithCommas(vesting_hive.toFixed(3));
         const received_power_balance_str =
-            (delegated_steem < 0 ? '+' : '') +
-            numberWithCommas((-delegated_steem).toFixed(3));
+            (delegated_hive < 0 ? '+' : '') +
+            numberWithCommas((-delegated_hive).toFixed(3));
         const powerdown_balance_str = numberWithCommas(
-            powerdown_steem.toFixed(3)
+            powerdown_hive.toFixed(3)
         );
-        const sbd_balance_str = numberWithCommas('$' + sbd_balance.toFixed(3)); // formatDecimal(account.sbd_balance, 3)
-        const sbd_orders_balance_str = numberWithCommas(
-            '$' + sbdOrders.toFixed(3)
+        const hbd_balance_str = numberWithCommas('$' + hbd_balance.toFixed(3)); // formatDecimal(account.sbd_balance, 3)
+        const hbd_orders_balance_str = numberWithCommas(
+            '$' + hbdOrders.toFixed(3)
         );
         const savings_balance_str = numberWithCommas(
-            saving_balance_steem.toFixed(3) + ' STEEM'
+            saving_balance_hive.toFixed(3) + ' HIVE'
         );
-        const savings_sbd_balance_str = numberWithCommas(
-            '$' + sbd_balance_savings.toFixed(3)
+        const savings_hbd_balance_str = numberWithCommas(
+            '$' + hbd_balance_savings.toFixed(3)
         );
 
         const savings_menu = [
@@ -466,41 +456,41 @@ class UserWallet extends React.Component {
                     LIQUID_TOKEN,
                 }),
                 link: '#',
-                onClick: showTransfer.bind(this, 'STEEM', 'Savings Withdraw'),
+                onClick: showTransfer.bind(this, 'HIVE', 'Savings Withdraw'),
             },
         ];
-        const savings_sbd_menu = [
+        const savings_hbd_menu = [
             {
                 value: tt('userwallet_jsx.withdraw_DEBT_TOKENS', {
                     DEBT_TOKENS,
                 }),
                 link: '#',
-                onClick: showTransfer.bind(this, 'SBD', 'Savings Withdraw'),
+                onClick: showTransfer.bind(this, 'HBD', 'Savings Withdraw'),
             },
         ];
         // set dynamic secondary wallet values
-        const sbdInterest = this.props.sbd_interest / 100;
-        const sbdMessage = (
+        const hbdInterest = this.props.hbd_interest / 100;
+        const hbdMessage = (
             <span>{tt('userwallet_jsx.tradeable_tokens_transferred')}</span>
         );
 
-        const reward_steem =
+        const reward_hive =
             parseFloat(account.get('reward_steem_balance').split(' ')[0]) > 0
                 ? account.get('reward_steem_balance')
                 : null;
-        const reward_sbd =
+        const reward_hbd =
             parseFloat(account.get('reward_sbd_balance').split(' ')[0]) > 0
                 ? account.get('reward_sbd_balance')
                 : null;
-        const reward_sp =
+        const reward_hp =
             parseFloat(account.get('reward_vesting_steem').split(' ')[0]) > 0
-                ? account.get('reward_vesting_steem').replace('STEEM', 'SP')
+                ? account.get('reward_vesting_steem').replace('HIVE', 'HP')
                 : null;
 
         let rewards = [];
-        if (reward_steem) rewards.push(reward_steem);
-        if (reward_sbd) rewards.push(reward_sbd);
-        if (reward_sp) rewards.push(reward_sp);
+        if (reward_hive) rewards.push(reward_hive);
+        if (reward_hbd) rewards.push(reward_hbd);
+        if (reward_hp) rewards.push(reward_hp);
 
         let rewards_str;
         switch (rewards.length) {
@@ -539,10 +529,10 @@ class UserWallet extends React.Component {
             );
         }
 
-        let spApr = 0;
+        let hpApr;
         try {
             // TODO: occasionally fails. grops not loaded yet?
-            spApr = this.getCurrentApr(gprops);
+            hpApr = this.getCurrentApr(gprops);
         } catch (e) {}
 
         return (
@@ -559,11 +549,11 @@ class UserWallet extends React.Component {
                         <div className="columns shrink">
                             {isMyAccount && (
                                 <button
-                                    className="UserWallet__buysp button hollow"
-                                    onClick={onShowDepositSteem}
+                                    className="UserWallet__buyhp button hollow"
+                                    onClick={onShowDepositHive}
                                 >
                                     {tt(
-                                        'userwallet_jsx.buy_steem_or_steem_power'
+                                        'userwallet_jsx.buy_hive_or_hive_power'
                                     )}
                                 </button>
                             )}
@@ -572,7 +562,7 @@ class UserWallet extends React.Component {
                 </div>
                 <div className="UserWallet__balance row">
                     <div className="column small-12 medium-8">
-                        STEEM
+                        HIVE
                         <FormattedHTMLMessage
                             className="secondary"
                             id="tips_js.liquid_token"
@@ -583,14 +573,14 @@ class UserWallet extends React.Component {
                         {isMyAccount ? (
                             <DropdownMenu
                                 className="Wallet_dropdown"
-                                items={steem_menu}
+                                items={hive_menu}
                                 el="li"
-                                selected={steem_balance_str + ' STEEM'}
+                                selected={hive_balance_str + ' HIVE'}
                             />
                         ) : (
-                            steem_balance_str + ' STEEM'
+                            hive_balance_str + ' HIVE'
                         )}
-                        {steemOrders ? (
+                        {hiveOrders ? (
                             <div
                                 style={{
                                     paddingRight: isMyAccount
@@ -600,7 +590,7 @@ class UserWallet extends React.Component {
                             >
                                 <Link to="/market">
                                     <Tooltip t={tt('market_jsx.open_orders')}>
-                                        (+{steem_orders_balance_str} STEEM)
+                                        (+{hive_orders_balance_str} HIVE)
                                     </Tooltip>
                                 </Link>
                             </div>
@@ -609,24 +599,26 @@ class UserWallet extends React.Component {
                 </div>
                 <div className="UserWallet__balance row zebra">
                     <div className="column small-12 medium-8">
-                        STEEM POWER
+                        HIVE POWER
                         <FormattedHTMLMessage
                             className="secondary"
                             id="tips_js.influence_token"
                         />
-                        {delegated_steem != 0 ? (
+                        {delegated_hive != 0 ? (
                             <span className="secondary">
                                 {tt(
-                                    'tips_js.part_of_your_steem_power_is_currently_delegated',
+                                    'tips_js.part_of_your_hive_power_is_currently_delegated',
                                     { user_name: account.get('name') }
                                 )}
                             </span>
                         ) : null}
-                        <FormattedHTMLMessage
-                            className="secondary"
-                            id="tips_js.steem_power_apr"
-                            params={{ value: spApr.toFixed(2) }}
-                        />{' '}
+                        {hpApr && (
+                            <FormattedHTMLMessage
+                                className="secondary"
+                                id="tips_js.hive_power_apr"
+                                params={{ value: hpApr.toFixed(2) }}
+                            />
+                        )}{' '}
                     </div>
                     <div className="column small-12 medium-4">
                         {isMyAccount ? (
@@ -634,12 +626,12 @@ class UserWallet extends React.Component {
                                 className="Wallet_dropdown"
                                 items={power_menu}
                                 el="li"
-                                selected={power_balance_str + ' STEEM'}
+                                selected={power_balance_str + ' HIVE'}
                             />
                         ) : (
-                            power_balance_str + ' STEEM'
+                            power_balance_str + ' HIVE'
                         )}
-                        {delegated_steem != 0 ? (
+                        {delegated_hive != 0 ? (
                             <div
                                 style={{
                                     paddingRight: isMyAccount
@@ -647,8 +639,8 @@ class UserWallet extends React.Component {
                                         : null,
                                 }}
                             >
-                                <Tooltip t="STEEM POWER delegated to/from this account">
-                                    ({received_power_balance_str} STEEM)
+                                <Tooltip t="HIVE POWER delegated to/from this account">
+                                    ({received_power_balance_str} HIVE)
                                 </Tooltip>
                             </div>
                         ) : null}
@@ -656,8 +648,8 @@ class UserWallet extends React.Component {
                 </div>
                 <div className="UserWallet__balance row">
                     <div className="column small-12 medium-8">
-                        STEEM DOLLARS
-                        <div className="secondary">{sbdMessage}</div>
+                        HIVE DOLLARS
+                        <div className="secondary">{hbdMessage}</div>
                     </div>
                     <div className="column small-12 medium-4">
                         {isMyAccount ? (
@@ -665,12 +657,12 @@ class UserWallet extends React.Component {
                                 className="Wallet_dropdown"
                                 items={dollar_menu}
                                 el="li"
-                                selected={sbd_balance_str}
+                                selected={hbd_balance_str}
                             />
                         ) : (
-                            sbd_balance_str
+                            hbd_balance_str
                         )}
-                        {sbdOrders ? (
+                        {hbdOrders ? (
                             <div
                                 style={{
                                     paddingRight: isMyAccount
@@ -680,7 +672,7 @@ class UserWallet extends React.Component {
                             >
                                 <Link to="/market">
                                     <Tooltip t={tt('market_jsx.open_orders')}>
-                                        (+{sbd_orders_balance_str})
+                                        (+{hbd_orders_balance_str})
                                     </Tooltip>
                                 </Link>
                             </div>
@@ -714,12 +706,12 @@ class UserWallet extends React.Component {
                         {isMyAccount ? (
                             <DropdownMenu
                                 className="Wallet_dropdown"
-                                items={savings_sbd_menu}
+                                items={savings_hbd_menu}
                                 el="li"
-                                selected={savings_sbd_balance_str}
+                                selected={savings_hbd_balance_str}
                             />
                         ) : (
-                            savings_sbd_balance_str
+                            savings_hbd_balance_str
                         )}
                     </div>
                 </div>
@@ -736,7 +728,7 @@ class UserWallet extends React.Component {
                 </div>
                 <div className="UserWallet__balance row">
                     <div className="column small-12">
-                        {powerdown_steem != 0 && (
+                        {powerdown_hive != 0 && (
                             <span>
                                 {tt(
                                     'userwallet_jsx.next_power_down_is_scheduled_to_happen'
@@ -746,7 +738,7 @@ class UserWallet extends React.Component {
                                         'next_vesting_withdrawal'
                                     )}
                                 />{' '}
-                                {'(~' + powerdown_balance_str + ' STEEM)'}.
+                                {'(~' + powerdown_balance_str + ' HIVE)'}.
                             </span>
                         )}
                     </div>
@@ -800,16 +792,16 @@ class UserWallet extends React.Component {
 export default connect(
     // mapStateToProps
     (state, ownProps) => {
-        const price_per_steem = pricePerSteem(state);
+        const price_per_hive = pricePerHive(state);
         const savings_withdraws = state.user.get('savings_withdraws');
         const gprops = state.global.get('props');
-        const sbd_interest = gprops.get('sbd_interest_rate');
+        const hbd_interest = gprops.get('sbd_interest_rate');
         return {
             ...ownProps,
             open_orders: state.market.get('open_orders'),
-            price_per_steem,
+            price_per_hive,
             savings_withdraws,
-            sbd_interest,
+            hbd_interest,
             gprops,
         };
     },
@@ -838,10 +830,10 @@ export default connect(
                 })
             );
         },
-        convertToSteem: e => {
-            //post 2018-01-31 if no calls to this function exist may be safe to remove. Investigate use of ConvertToSteem.jsx
+        convertToHive: e => {
+            //post 2018-01-31 if no calls to this function exist may be safe to remove. Investigate use of ConvertToHive.jsx
             e.preventDefault();
-            const name = 'convertToSteem';
+            const name = 'convertToHive';
             dispatch(globalActions.showDialog({ name }));
         },
     })

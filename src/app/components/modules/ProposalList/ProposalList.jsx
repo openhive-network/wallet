@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-
+import tt from 'counterpart';
+import LoadingIndicator from 'app/components/elements/LoadingIndicator';
 import ProposalContainer from './ProposalContainer';
 
 export default function ProposalList(props) {
@@ -9,33 +10,46 @@ export default function ProposalList(props) {
 
     if (!loading && proposalCount == 0) {
         return (
-            <center>
-                <h5>
-                    Sorry, I can't show you any proposals right now.<br />
-                    <small>
-                        It's probably because there are not any matching your
-                        criteria.
-                    </small>
-                </h5>
-            </center>
+            <div className="ProposalsList">
+                <center>
+                    <h5>
+                        {tt('proposals.sorry_cannot_display')}
+                        <br />
+                        <small>{tt('proposals.no_proposal_matching')}</small>
+                    </h5>
+                </center>
+            </div>
         );
     } else if (loading && proposals.length == 0) {
         return (
-            <center>
-                <h5>
-                    Loading<br />
-                    <small>It's worth the wait. ;)</small>
-                </h5>
-            </center>
+            <div className="ProposalsList">
+                <center>
+                    <span>
+                        <LoadingIndicator type="circle" />
+                    </span>
+                    <h5>
+                        {tt('g.loading')}
+                        <br />
+                        <small>{tt('proposals.wait_for_proposal_load')}</small>
+                    </h5>
+                </center>
+            </div>
         );
     }
 
     return (
         <div className="ProposalsList">
             <div className="proposals__header">
-                <div className="proposals__votes">Vote SP</div>
-                <div className="proposals__description">Proposal</div>
-                <div className="proposals__amount">Amount</div>
+                <div className="proposals__votes">
+                    {tt('proposals.vote_hp')}
+                </div>
+                <div className="proposals__avatar"> </div>
+                <div className="proposals__description">
+                    {tt('proposals.proposal')}
+                </div>
+                <div className="proposals__amount">
+                    {tt('proposals.amount')}
+                </div>
             </div>
             {proposals.map(proposal => (
                 <ProposalContainer

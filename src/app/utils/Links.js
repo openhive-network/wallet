@@ -19,13 +19,10 @@ const urlSet = ({ domain = domainPath, path } = {}) => {
 */
 export const any = (flags = 'i') => new RegExp(urlSet(), flags);
 export const local = (flags = 'i') =>
-    new RegExp(
-        urlSet({ domain: '(?:localhost|(?:.*\\.)?steemit.com)' }),
-        flags
-    );
+    new RegExp(urlSet({ domain: '(?:localhost|(?:.*\\.)?hive.blog)' }), flags);
 export const remote = (flags = 'i') =>
     new RegExp(
-        urlSet({ domain: `(?!localhost|(?:.*\\.)?steemit.com)${domainPath}` }),
+        urlSet({ domain: `(?!localhost|(?:.*\\.)?hive.blog)${domainPath}` }),
         flags
     );
 export const youTube = (flags = 'i') =>
@@ -81,7 +78,9 @@ export const makeParams = (params, prefix) => {
     if (paramsList.length > 0) {
         return (
             (prefix !== false
-                ? typeof prefix === 'string' ? prefix : '?'
+                ? typeof prefix === 'string'
+                    ? prefix
+                    : '?'
                 : '') + paramsList.join('&')
         );
     }

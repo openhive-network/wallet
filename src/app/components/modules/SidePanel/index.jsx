@@ -73,8 +73,7 @@ const SidePanel = ({ alignment, visible, hideSidePanel, username }) => {
                 link: `/~witnesses`,
             },
             {
-                value: 'proposals',
-                label: tt('navigation.steem_proposals'),
+                label: tt('navigation.hive_proposals'),
                 link: `/proposals`,
             },
         ],
@@ -83,13 +82,13 @@ const SidePanel = ({ alignment, visible, hideSidePanel, username }) => {
                 value: 'blocktrades',
                 label: 'Blocktrades',
                 link: username
-                    ? `https://blocktrades.us/?input_coin_type=eth&output_coin_type=steem&receive_address=${username}`
-                    : `https://blocktrades.us/?input_coin_type=eth&output_coin_type=steem`,
+                    ? `https://blocktrades.us/?input_coin_type=eth&output_coin_type=hive&receive_address=${username}`
+                    : `https://blocktrades.us/?input_coin_type=eth&output_coin_type=hive`,
             },
             {
-                value: 'gopax',
-                label: 'GOPAX',
-                link: 'https://www.gopax.co.kr/exchange/steem-krw/',
+                value: 'ionomy',
+                label: 'Ionomy',
+                link: 'https://ionomy.com/en/markets/btc-hive',
             },
         ],
         external: [
@@ -99,47 +98,27 @@ const SidePanel = ({ alignment, visible, hideSidePanel, username }) => {
                 link: 'https://steem.chat/home',
             },
             {
-                value: 'jobs',
-                label: tt('navigation.jobs'),
-                link: 'https://jobs.lever.co/steemit',
-            },
-            {
                 value: 'tools',
                 label: tt('navigation.app_center'),
-                link: 'https://steemprojects.com/',
-            },
-            {
-                value: 'business',
-                label: tt('navigation.business_center'),
-                link: 'https://steemeconomy.com/',
-            },
-            {
-                value: 'api_docs',
-                label: tt('navigation.api_docs'),
-                link: 'https://developers.steem.io/',
+                link: 'https://hiveprojects.io/',
             },
         ],
         organizational: [
             {
-                value: 'bluepaper',
+                label: tt('navigation.api_docs'),
+                link: 'https://developers.hive.blog/',
+            },
+            {
                 label: tt('navigation.bluepaper'),
-                link: 'https://steem.io/steem-bluepaper.pdf',
+                link: 'https://hive.io/hive-bluepaper.pdf',
             },
             {
-                value: 'smt_whitepaper',
                 label: tt('navigation.smt_whitepaper'),
-                link: 'https://smt.steem.io/',
+                link: 'https://hive.io/hive-smt-whitepaper.pdf',
             },
             {
-                value: 'whitepaper',
                 label: tt('navigation.whitepaper'),
-                link: 'https://steem.io/SteemWhitePaper.pdf',
-            },
-            {
-                value: 'about',
-                label: tt('navigation.about'),
-                link: '/about.html',
-                internal: true,
+                link: 'https://hive.io/hive-whitepaper.pdf',
             },
         ],
         legal: [
@@ -161,9 +140,8 @@ const SidePanel = ({ alignment, visible, hideSidePanel, username }) => {
                 link: '/login.html',
             },
             {
-                value: 'signup',
                 label: tt('g.sign_up'),
-                link: 'https://signup.steemit.com',
+                link: 'https://signup.hive.blog',
             },
             {
                 value: 'post',

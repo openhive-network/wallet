@@ -7,7 +7,6 @@ import tt from 'counterpart';
 
 class ConfirmTransactionForm extends Component {
     static propTypes = {
-        //Steemit
         onCancel: PropTypes.func,
         warning: PropTypes.string,
         checkbox: PropTypes.string,
@@ -91,6 +90,7 @@ class ConfirmTransactionForm extends Component {
                 <button
                     type="button hollow"
                     className="button hollow"
+                    style={{ float: 'right' }}
                     onClick={onCancel}
                 >
                     {tt('g.cancel')}

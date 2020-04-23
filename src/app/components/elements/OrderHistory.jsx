@@ -40,7 +40,7 @@ export default class OrderHistory extends React.Component {
                             key={
                                 order.date.getTime() +
                                 order.getStringPrice() +
-                                order.getStringSBD()
+                                order.getStringHBD()
                             }
                             index={index}
                             order={order}
