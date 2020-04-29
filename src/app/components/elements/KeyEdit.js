@@ -4,7 +4,7 @@ import LoadingIndicator from 'app/components/elements/LoadingIndicator';
 import { reduxForm } from 'redux-form'; // @deprecated, instead use: app/utils/ReactForm.js
 import { cleanReduxInput } from 'app/utils/ReduxForms';
 import tt from 'counterpart';
-import { PrivateKey, PublicKey } from '@steemit/steem-js/lib/auth/ecc';
+import { PrivateKey, PublicKey } from '@hiveio/hive-js/lib/auth/ecc';
 
 class KeyEdit extends Component {
     static propTypes = {
@@ -45,7 +45,9 @@ class KeyEdit extends Component {
         }, 300);
     }
     componentWillReceiveProps(nextProps) {
-        const { fields: { password, confirm } } = nextProps;
+        const {
+            fields: { password, confirm },
+        } = nextProps;
         let isWif;
         try {
             PrivateKey.fromWif(password.value);
@@ -162,10 +164,10 @@ const keyValidate = values => ({
     password: !values.password
         ? tt('g.required')
         : values.password.length < 32
-          ? tt('g.password_must_be_characters_or_more', { amount: 32 })
-          : PublicKey.fromString(values.password)
-            ? tt('g.need_password_or_key')
-            : null,
+            ? tt('g.password_must_be_characters_or_more', { amount: 32 })
+            : PublicKey.fromString(values.password)
+                ? tt('g.need_password_or_key')
+                : null,
     confirm:
         values.confirm !== values.password
             ? tt('g.passwords_do_not_match')

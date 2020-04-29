@@ -9,7 +9,7 @@ import Iso from 'iso';
 import { clientRender } from 'shared/UniversalRender';
 import ConsoleExports from './utils/ConsoleExports';
 import { serverApiRecordEvent } from 'app/utils/ServerApiClient';
-import * as steem from '@steemit/steem-js';
+import * as hive from '@hiveio/hive-js';
 import { determineViewMode } from 'app/utils/Links';
 import frontendLogger from 'app/utils/FrontendLogger';
 
@@ -32,13 +32,22 @@ function runApp(initial_state) {
     console.log('Initial state', initial_state);
 
     const config = initial_state.offchain.config;
-    steem.api.setOptions({
-        url: config.hived_connection_client,
+    const alternativeApiEndpoints = config.alternative_api_endpoints;
+    const currentApiEndpoint =
+        localStorage.getItem('user_preferred_api_endpoint') === null
+            ? config.hived_connection_client
+            : localStorage.getItem('user_preferred_api_endpoint');
+
+    hive.api.setOptions({
+        url: currentApiEndpoint,
         retry: true,
         useAppbaseApi: !!config.hived_use_appbase,
+        alternative_api_endpoints: alternativeApiEndpoints,
+        failover_threshold: config.failover_threshold,
     });
-    steem.config.set('address_prefix', config.address_prefix);
-    steem.config.set('chain_id', config.chain_id);
+    hive.config.set('address_prefix', config.address_prefix);
+    hive.config.set('chain_id', config.chain_id);
+
     window.$STM_Config = config;
     plugins(config);
     if (initial_state.offchain.serverBusy) {

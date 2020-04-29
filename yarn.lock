@@ -132,30 +132,10 @@
     lodash "^4.17.13"
     to-fast-properties "^2.0.0"
 
-"@steem/crypto-session@git+https://github.com/steemit/crypto-session.git#83a90b319ce5bc6a70362d52a15a815de7e729bb":
-  version "1.0.3"
-  resolved "git+https://github.com/steemit/crypto-session.git#83a90b319ce5bc6a70362d52a15a815de7e729bb"
-  dependencies:
-    koa-session "3"
-    libsodium "^0.4.8"
-    libsodium-wrappers "^0.4.8"
-
-"@steemit/libcrypto@^1.0.1":
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/@steemit/libcrypto/-/libcrypto-1.0.1.tgz#c31ab3e5deb667628169b3d54d746b015de31a79"
-  integrity sha512-g2y4OrELuPGLLu3GjVaPbVvY/K+4oPGOrv9ec013o/ZB76R9UQ1ufYD9RM5tKxHXpFhzj2k0JgoKYWkdVheFVA==
-
-"@steemit/rpc-auth@^1.1.1":
-  version "1.1.1"
-  resolved "https://registry.yarnpkg.com/@steemit/rpc-auth/-/rpc-auth-1.1.1.tgz#8f6239e89783d2b251b49e9e1b9486b5d167f944"
-  integrity sha512-Eb8BW3O1y4+/+Dbf+LqGVmgXYqyfHxP9mBlmzkpjXiIepTpxoK90NIGrneqcnEGq0TR2nSt4BVv9Ur9c+hxoig==
-  dependencies:
-    "@steemit/libcrypto" "^1.0.1"
-
-"@steemit/steem-js@0.7.6":
-  version "0.7.6"
-  resolved "https://registry.yarnpkg.com/@steemit/steem-js/-/steem-js-0.7.6.tgz#1a76725910e2ba1b8c61cc05d78cb080fc0a7bd1"
-  integrity sha512-iYpxZR1l8wtCDVAZhXIyMQwp8FKhNXwUJbHetw3csPYicWNqWmCOL05rzoG4TLEb+LSOffttbs/btj02XiaDxQ==
+"@hiveio/hive-js@0.1.0":
+  version "0.1.0"
+  resolved "https://registry.yarnpkg.com/@hiveio/hive-js/-/hive-js-0.1.0.tgz#962c3381bb83882957095629d2f284bcd06715eb"
+  integrity sha512-fYeGKcDEvDurQlkUNRq/mbUiz2Dgzce0y3b7bRaUtQUm4F/ZdJU3993+4DMRRQlZeGlhmFMLKbopaTUOLYOyhg==
   dependencies:
     "@steemit/rpc-auth" "^1.1.1"
     bigi "^1.4.2"
@@ -175,6 +155,26 @@
     retry "^0.12.0"
     secure-random "^1.1.2"
     ws "^3.3.2"
+
+"@steem/crypto-session@git+https://github.com/steemit/crypto-session.git#83a90b319ce5bc6a70362d52a15a815de7e729bb":
+  version "1.0.3"
+  resolved "git+https://github.com/steemit/crypto-session.git#83a90b319ce5bc6a70362d52a15a815de7e729bb"
+  dependencies:
+    koa-session "3"
+    libsodium "^0.4.8"
+    libsodium-wrappers "^0.4.8"
+
+"@steemit/libcrypto@^1.0.1":
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/@steemit/libcrypto/-/libcrypto-1.0.1.tgz#c31ab3e5deb667628169b3d54d746b015de31a79"
+  integrity sha512-g2y4OrELuPGLLu3GjVaPbVvY/K+4oPGOrv9ec013o/ZB76R9UQ1ufYD9RM5tKxHXpFhzj2k0JgoKYWkdVheFVA==
+
+"@steemit/rpc-auth@^1.1.1":
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/@steemit/rpc-auth/-/rpc-auth-1.1.1.tgz#8f6239e89783d2b251b49e9e1b9486b5d167f944"
+  integrity sha512-Eb8BW3O1y4+/+Dbf+LqGVmgXYqyfHxP9mBlmzkpjXiIepTpxoK90NIGrneqcnEGq0TR2nSt4BVv9Ur9c+hxoig==
+  dependencies:
+    "@steemit/libcrypto" "^1.0.1"
 
 "@types/color-name@^1.1.1":
   version "1.1.1"

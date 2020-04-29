@@ -1,6 +1,6 @@
 import React from 'react';
 import Moment from 'moment';
-import { api } from '@steemit/steem-js';
+import { api } from '@hiveio/hive-js';
 import classnames from 'classnames';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';

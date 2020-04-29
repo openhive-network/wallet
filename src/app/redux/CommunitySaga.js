@@ -1,6 +1,6 @@
 import { call, put, takeLatest, select } from 'redux-saga/effects';
-import { api, broadcast, auth } from '@steemit/steem-js';
-import { PrivateKey } from '@steemit/steem-js/lib/auth/ecc';
+import { api, broadcast, auth } from '@hiveio/hive-js';
+import { PrivateKey } from '@hiveio/hive-js/lib/auth/ecc';
 import * as communityActions from './CommunityReducer';
 import * as transactionActions from './TransactionReducer';
 import { wait } from './MarketSaga';
