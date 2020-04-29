@@ -2,12 +2,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import tt from 'counterpart';
-import {
-    PrivateKey,
-    PublicKey,
-    key_utils,
-} from '@steemit/steem-js/lib/auth/ecc';
-import { api } from '@steemit/steem-js';
+import { PrivateKey, PublicKey, key_utils } from '@hiveio/hive-js/lib/auth/ecc';
+import { api } from '@hiveio/hive-js';
 
 import * as transactionActions from 'app/redux/TransactionReducer';
 import * as appActions from 'app/redux/AppReducer';
@@ -85,9 +81,7 @@ class ChangePassword extends React.Component {
             if (onClose) onClose();
             if (resetForm) resetForm();
             notify('Password Updated');
-            window.location = `/login.html#account=${
-                accountName
-            }&msg=passwordupdated`;
+            window.location = `/login.html#account=${accountName}&msg=passwordupdated`;
         };
         const error = e => {
             this.setState({ loading: false, error: e });
@@ -342,13 +336,13 @@ const keyValidate = values => ({
     password: !values.password
         ? tt('g.required')
         : PublicKey.fromString(values.password)
-          ? tt('g.you_need_private_password_or_key_not_a_public_key')
-          : null,
+            ? tt('g.you_need_private_password_or_key_not_a_public_key')
+            : null,
     confirmPassword: !values.confirmPassword
         ? tt('g.required')
         : values.confirmPassword.trim() !== newWif
-          ? tt('g.passwords_do_not_match')
-          : null,
+            ? tt('g.passwords_do_not_match')
+            : null,
     confirmCheck: !values.confirmCheck ? tt('g.required') : null,
     confirmSaved: !values.confirmSaved ? tt('g.required') : null,
 });

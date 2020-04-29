@@ -1,6 +1,6 @@
 import config from 'config';
 
-import * as steem from '@steemit/steem-js';
+import * as hive from '@hiveio/hive-js';
 
 const path = require('path');
 const ROOT = path.join(__dirname, '../..');
@@ -15,6 +15,10 @@ require('module').Module._initPaths();
 
 // Load Intl polyfill
 // require('utils/intl-polyfill')(require('./config/init').locales);
+
+const alternativeApiEndpoints = config
+    .get('alternative_api_endpoints')
+    .split(' ');
 
 global.$STM_Config = {
     fb_app: config.get('facebook_app_id'),
@@ -33,6 +37,8 @@ global.$STM_Config = {
     facebook_app_id: config.get('facebook_app_id'),
     google_analytics_id: config.get('google_analytics_id'),
     social_url: config.get('social_url'),
+    failover_threshold: config.get('failover_threshold'),
+    alternative_api_endpoints: alternativeApiEndpoints,
 };
 
 const WebpackIsomorphicTools = require('webpack-isomorphic-tools');
@@ -43,7 +49,7 @@ global.webpackIsomorphicTools = new WebpackIsomorphicTools(
 );
 
 global.webpackIsomorphicTools.server(ROOT, () => {
-    steem.api.setOptions({
+    hive.api.setOptions({
         url: config.hived_connection_server,
         retry: {
             retries: 10,
@@ -53,9 +59,11 @@ global.webpackIsomorphicTools.server(ROOT, () => {
             randomize: true,
         },
         useAppbaseApi: !!config.hived_use_appbase,
+        alternative_api_endpoints: alternativeApiEndpoints,
+        failover_threshold: config.get('failover_threshold'),
     });
-    steem.config.set('address_prefix', config.get('address_prefix'));
-    steem.config.set('chain_id', config.get('chain_id'));
+    hive.config.set('address_prefix', config.get('address_prefix'));
+    hive.config.set('chain_id', config.get('chain_id'));
 
     // const CliWalletClient = require('shared/api_client/CliWalletClient').default;
     // if (process.env.NODE_ENV === 'production') connect_promises.push(CliWalletClient.instance().connect_promise());

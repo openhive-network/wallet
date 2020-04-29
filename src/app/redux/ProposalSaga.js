@@ -1,4 +1,4 @@
-import { api } from '@steemit/steem-js';
+import { api } from '@hiveio/hive-js';
 import { call, put, takeEvery } from 'redux-saga/effects';
 import * as proposalActions from './ProposalReducer';
 
