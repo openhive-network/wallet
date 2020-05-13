@@ -106,7 +106,7 @@ const SidePanel = ({ alignment, visible, hideSidePanel, username }) => {
         organizational: [
             {
                 label: tt('navigation.api_docs'),
-                link: 'https://developers.hive.blog/',
+                link: 'https://developers.hive.io/',
             },
             {
                 label: tt('navigation.bluepaper'),
