@@ -25,7 +25,8 @@ const SidePanel = ({ alignment, visible, hideSidePanel, username }) => {
                     target={i.internal ? null : '_blank'}
                     rel="noopener noreferrer"
                 >
-                    {i.label}&nbsp;<Icon name="extlink" />
+                    {i.label}&nbsp;
+                    <Icon name="extlink" />
                 </a>
             </li>
         );
@@ -92,11 +93,11 @@ const SidePanel = ({ alignment, visible, hideSidePanel, username }) => {
             },
         ],
         external: [
-            {
-                value: 'chat',
-                label: tt('navigation.chat'),
-                link: 'https://steem.chat/home',
-            },
+            // {
+            //     value: 'chat',
+            //     label: tt('navigation.chat'),
+            //     link: 'https://steem.chat/home',
+            // },
             {
                 value: 'tools',
                 label: tt('navigation.app_center'),

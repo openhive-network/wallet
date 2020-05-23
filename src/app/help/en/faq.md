@@ -569,6 +569,8 @@ HIVE and HBD are listed on the following exchanges:
 | [BitShares](https://wallet.bitshares.org/)      | Y      |   Y |
 | [BlockTrades](https://blocktrades.us) | Y      |    Y |
 | [Ionomy](https://ionomy.com) | Y | N |
+| [Bittrex](https://bittrex.com) | Y      |    Y |
+| [Huobi](https://www.huobi.pro/)  | Y | N |
 
 <a href="#Table_of_Contents_Economics">^</a>
 ## <span id="What_is_the_reward_pool">What is the reward pool?</span>

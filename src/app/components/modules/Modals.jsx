@@ -78,13 +78,13 @@ class Modals extends React.Component {
         } = this.props;
 
         const notifications_array = notifications
-            ? notifications.toArray().map(n => {
+            ? notifications.toArray().map((n) => {
                   n.onClick = () => removeNotification(n.key);
                   return n;
               })
             : [];
 
-        const buyHivePower = e => {
+        const buyHivePower = (e) => {
             if (e && e.preventDefault) e.preventDefault();
             const new_window = window.open();
             new_window.opener = null;
@@ -146,6 +146,9 @@ class Modals extends React.Component {
                             </p>
                             <ol>
                                 <li>
+                                    {tt('modals_jsx.out_of_bandwidth_option_4')}
+                                </li>
+                                <li>
                                     {tt('modals_jsx.out_of_bandwidth_option_1')}
                                 </li>
                                 <li>
@@ -164,7 +167,7 @@ class Modals extends React.Component {
                 <NotificationStack
                     style={false}
                     notifications={notifications_array}
-                    onDismiss={n => removeNotification(n.key)}
+                    onDismiss={(n) => removeNotification(n.key)}
                 />
             </div>
         );
@@ -172,7 +175,7 @@ class Modals extends React.Component {
 }
 
 export default connect(
-    state => {
+    (state) => {
         return {
             username: state.user.getIn(['current', 'username']),
             show_login_modal: state.user.get('show_login_modal'),
@@ -196,35 +199,35 @@ export default connect(
             ),
         };
     },
-    dispatch => ({
-        hideLogin: e => {
+    (dispatch) => ({
+        hideLogin: (e) => {
             if (e) e.preventDefault();
             dispatch(userActions.hideLogin());
         },
-        hideConfirm: e => {
+        hideConfirm: (e) => {
             if (e) e.preventDefault();
             dispatch(transactionActions.hideConfirm());
         },
-        hideTransfer: e => {
+        hideTransfer: (e) => {
             if (e) e.preventDefault();
             dispatch(userActions.hideTransfer());
         },
-        hidePowerdown: e => {
+        hidePowerdown: (e) => {
             if (e) e.preventDefault();
             dispatch(userActions.hidePowerdown());
         },
-        hideSignUp: e => {
+        hideSignUp: (e) => {
             if (e) e.preventDefault();
             dispatch(userActions.hideSignUp());
         },
-        hideBandwidthError: e => {
+        hideBandwidthError: (e) => {
             if (e) e.preventDefault();
             dispatch(
                 transactionActions.dismissError({ key: 'bandwidthError' })
             );
         },
         // example: addNotification: ({key, message}) => dispatch({type: 'ADD_NOTIFICATION', payload: {key, message}}),
-        removeNotification: key =>
+        removeNotification: (key) =>
             dispatch(appActions.removeNotification({ key })),
     })
 )(Modals);
