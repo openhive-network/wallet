@@ -2,12 +2,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import tt from 'counterpart';
-import {
-    vestingSteem,
-    delegatedSteem,
-    powerdownSteem,
-    pricePerSteem,
-} from 'app/utils/StateFunctions';
 import WalletSubMenu from 'app/components/elements/WalletSubMenu';
 import ConfirmDelegationTransfer from 'app/components/elements/ConfirmDelegationTransfer';
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
@@ -24,14 +18,12 @@ class Delegations extends React.Component {
     }
 
     componentWillMount() {
-        this.props.vestingDelegationsLoading(true);
-        this.props.getVestingDelegations(
-            this.props.account.get('name'),
-            (err, res) => {
-                this.props.setVestingDelegations(res);
-                this.props.vestingDelegationsLoading(false);
-            }
-        );
+        const { props } = this;
+        props.vestingDelegationsLoading(true);
+        props.getVestingDelegations(props.account.get('name'), (err, res) => {
+            props.setVestingDelegations(res);
+            props.vestingDelegationsLoading(false);
+        });
     }
 
     render() {
@@ -48,7 +40,7 @@ class Delegations extends React.Component {
             vestingDelegationsLoading,
         } = this.props;
 
-        const convertVestsToSteem = vests => {
+        const convertVestsToSteem = (vests) => {
             return ((vests * totalVestingFund) / totalVestingShares).toFixed(2);
         };
 
@@ -60,54 +52,50 @@ class Delegations extends React.Component {
         // do not render if state appears to contain only lite account info
         if (!account.has('vesting_shares')) return null;
 
-        const showTransferHandler = delegatee => {
+        const showTransferHandler = (delegatee) => {
+            const { accountProp } = this.props;
             const refetchCB = () => {
                 vestingDelegationsLoading(true);
-                getVestingDelegations(
-                    this.props.account.get('name'),
-                    (err, res) => {
-                        setVestingDelegations(res);
-                        vestingDelegationsLoading(false);
-                    }
-                );
+                getVestingDelegations(accountProp.get('name'), (err, res) => {
+                    setVestingDelegations(res);
+                    vestingDelegationsLoading(false);
+                });
             };
-            revokeDelegation(
-                this.props.account.get('name'),
-                delegatee,
-                refetchCB
-            );
+            revokeDelegation(accountProp.get('name'), delegatee, refetchCB);
         };
 
         /// transfer log
-        let idx = 0;
         // https://github.com/steemit/steem-js/tree/master/doc#get-vesting-delegations
         const delegation_log = vestingDelegations ? (
-            vestingDelegations.map(item => {
+            vestingDelegations.map((item) => {
                 const vestsAsSteem = convertVestsToSteem(
                     parseFloat(item.vesting_shares)
                 );
                 return (
                     <tr
-                        key={`${item.delegator}--${item.delegatee}--${
-                            item.min_delegation_time
-                        }`}
+                        key={`${item.delegator}--${item.delegatee}--${item.min_delegation_time}`}
                     >
-                        <td className={'red'}>{vestsAsSteem} STEEM</td>
+                        <td className="red">
+                            {vestsAsSteem}
+                            HP
+                        </td>
                         <td>{item.delegatee}</td>
                         <td>
                             <TimeAgoWrapper date={item.min_delegation_time} />
                         </td>
                         {isMyAccount && (
                             <td>
-                                <span
-                                    onClick={e => {
+                                <button
+                                    className="delegations__revoke button hollow"
+                                    onClick={(e) => {
                                         e.preventDefault();
                                         showTransferHandler(item.delegatee);
                                     }}
+                                    type="button"
                                 >
                                     {' '}
-                                    Revoke{' '}
-                                </span>
+                                    {tt('delegations_jsx.revoke')}{' '}
+                                </button>
                             </td>
                         )}
                     </tr>
@@ -131,7 +119,7 @@ class Delegations extends React.Component {
                 </div>
                 <div className="row">
                     <div className="column small-12">
-                        <h4>Delegations</h4>
+                        <h4>{tt('delegations_jsx.delegations')}</h4>
                         {vestingDelegationsPending && (
                             <LoadingIndicator type="circle" />
                         )}
@@ -182,24 +170,26 @@ export default connect(
         };
     },
     // mapDispatchToProps
-    dispatch => ({
+    (dispatch) => ({
         getVestingDelegations: (account, successCallback) => {
             dispatch(
                 userActions.getVestingDelegations({ account, successCallback })
             );
         },
-        setVestingDelegations: payload => {
+        setVestingDelegations: (payload) => {
             dispatch(userActions.setVestingDelegations(payload));
         },
-        vestingDelegationsLoading: payload => {
+        vestingDelegationsLoading: (payload) => {
             dispatch(userActions.vestingDelegationsLoading(payload));
         },
         revokeDelegation: (username, to, refetchDelegations) => {
+            const vests = parseFloat(0, 10).toFixed(6);
             const operation = {
                 delegator: username,
                 delegatee: to,
                 // Revoke is always 0
-                vesting_shares: parseFloat(0, 10).toFixed(6) + ' ' + 'VESTS',
+                // eslint-disable-next-line no-useless-concat
+                vesting_shares: `${vests} VESTS`,
             };
 
             const confirm = () => (

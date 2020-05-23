@@ -255,15 +255,8 @@ class TransferForm extends Component {
 
     assetBalanceClick = (e) => {
         e.preventDefault();
-        // Convert '9.999 HIVE' to 9.999
-        this.state.amount.props.onChange(this.balanceValue().split(' ')[0]);
-    };
-
-    onChangeTo = (value) => {
-        this.state.to.props.onChange(value.toLowerCase().trim());
-        this.setState({
-            to: { ...this.state.to, value: value.toLowerCase().trim() },
-        });
+        const { state } = this;
+        state.amount.props.onChange(parseFloat(this.balanceValue()).toFixed(3));
     };
 
     render() {
@@ -497,7 +490,7 @@ class TransferForm extends Component {
                                             border: 'none',
                                         }}
                                     >
-                                        <option value="STEEM">STEEM</option>
+                                        <option value="HIVE">HIVE</option>
                                     </select>
                                 </span>
                             )}
@@ -615,7 +608,7 @@ const AssetBalance = ({ onClick, balanceValue }) => (
         onClick={onClick}
         style={{ borderBottom: '#A09F9F 1px dotted', cursor: 'pointer' }}
     >
-        {tt('g.balance', { balanceValue })}
+        {tt('g.balance', { balanceValue: balanceValue.toFixed(3) })}
     </a>
 );
 
