@@ -75,10 +75,7 @@ class Delegations extends React.Component {
                     <tr
                         key={`${item.delegator}--${item.delegatee}--${item.min_delegation_time}`}
                     >
-                        <td className="red">
-                            {vestsAsSteem}
-                            HP
-                        </td>
+                        <td className="red">{vestsAsSteem} HP</td>
                         <td>{item.delegatee}</td>
                         <td>
                             <TimeAgoWrapper date={item.min_delegation_time} />
