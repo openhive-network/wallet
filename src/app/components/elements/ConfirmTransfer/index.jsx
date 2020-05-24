@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 const ConfirmTransfer = ({ operation }) => {
     const info = Object.keys(operation).map((k, i) => {
-        if (k === '')
+        if (k !== '')
             return (
                 <div key={`transaction-group-${i}`} className="input-group">
                     <span

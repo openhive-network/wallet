@@ -237,18 +237,24 @@ class TransferForm extends Component {
                 : null;
         if (toDelegate) {
             balanceValue = currentAccount.get('savings_balance');
+            const vestingShares = parseFloat(
+                currentAccount.get('vesting_shares')
+            );
+            const toWithdraw = parseFloat(currentAccount.get('to_withdraw'));
+            const withdrawn = parseFloat(currentAccount.get('withdrawn'));
+            const delegatedVestingShares = parseFloat(
+                currentAccount.get('delegated_vesting_shares')
+            );
 
             // Available Vests Calculation.
             const avail =
-                parseFloat(currentAccount.get('vesting_shares')) -
-                (parseFloat(currentAccount.get('to_withdraw')) -
-                    parseFloat(currentAccount.get('withdrawn'))) /
-                    1e6 -
-                parseFloat(currentAccount.get('delegated_vesting_shares'));
+                vestingShares -
+                (toWithdraw - withdrawn) / 1e6 -
+                delegatedVestingShares;
             // Representation of available Vests as Hive.
             const vestSteem = totalVestingFund * (avail / totalVestingShares);
 
-            balanceValue = vestSteem;
+            balanceValue = `${vestSteem.toFixed(3)} HIVE`;
         }
         return balanceValue;
     }
@@ -453,7 +459,7 @@ class TransferForm extends Component {
                                 spellCheck="false"
                                 disabled={loading}
                             />
-                            {asset.value !== 'VESTS' && (
+                            {asset && asset.value !== 'VESTS' && (
                                 <span
                                     className="input-group-label"
                                     style={{ paddingLeft: 0, paddingRight: 0 }}
@@ -474,7 +480,7 @@ class TransferForm extends Component {
                                     </select>
                                 </span>
                             )}
-                            {asset.value === 'VESTS' && (
+                            {asset && asset.value === 'VESTS' && (
                                 <span
                                     className="input-group-label"
                                     style={{ paddingLeft: 0, paddingRight: 0 }}
@@ -603,14 +609,16 @@ class TransferForm extends Component {
     }
 }
 
-const AssetBalance = ({ onClick, balanceValue }) => (
-    <a
-        onClick={onClick}
-        style={{ borderBottom: '#A09F9F 1px dotted', cursor: 'pointer' }}
-    >
-        {tt('g.balance', { balanceValue: balanceValue.toFixed(3) })}
-    </a>
-);
+const AssetBalance = ({ onClick, balanceValue }) => {
+    return (
+        <a
+            onClick={onClick}
+            style={{ borderBottom: '#A09F9F 1px dotted', cursor: 'pointer' }}
+        >
+            {tt('g.balance', { balanceValue })}
+        </a>
+    );
+};
 
 import { connect } from 'react-redux';
 
