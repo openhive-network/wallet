@@ -16,24 +16,31 @@ class Proposals extends React.Component {
             limit: 10,
             last_proposal: false,
             status: 'all',
+            order_by: 'by_total_votes',
+            order_direction: 'descending',
         };
     }
     async componentWillMount() {
         await this.load();
     }
 
-    async load(quiet = false) {
+    async load(quiet = false, options = {}) {
         if (quiet) {
             this.setState({ loading: true });
         }
 
+        // eslint-disable-next-line react/destructuring-assignment
+        const { status, order_by, order_direction } = options;
+
+        console.log(options);
+
         const proposals =
             (await this.getAllProposals(
                 this.state.last_proposal,
-                'by_total_votes',
-                'descending',
+                order_by || this.state.order_by,
+                order_direction || this.state.order_direction,
                 this.state.limit + this.state.proposals.length,
-                this.state.status
+                status || this.state.status
             )) || [];
 
         let last_proposal = false;
@@ -47,6 +54,21 @@ class Proposals extends React.Component {
             last_proposal,
         });
     }
+
+    onFilterProposals = async (status) => {
+        this.setState({ status });
+        await this.load(false, { status });
+    };
+
+    onOrderProposals = async (order_by) => {
+        this.setState({ order_by });
+        await this.load(false, { order_by });
+    };
+
+    onOrderDirection = async (order_direction) => {
+        this.setState({ order_direction });
+        await this.load(false, { order_direction });
+    };
 
     getAllProposals(last_proposal, order_by, order_direction, limit, status) {
         return this.props.listProposals({
@@ -73,13 +95,19 @@ class Proposals extends React.Component {
         );
     };
 
-    onClickLoadMoreProposals = e => {
+    onClickLoadMoreProposals = (e) => {
         e.preventDefault();
         this.load();
     };
 
     render() {
-        const { proposals, loading } = this.state;
+        const {
+            proposals,
+            loading,
+            status,
+            order_by,
+            order_direction,
+        } = this.state;
         let showBottomLoading = false;
         if (loading && proposals && proposals.length > 0) {
             showBottomLoading = true;
@@ -90,6 +118,12 @@ class Proposals extends React.Component {
                     voteOnProposal={this.voteOnProposal}
                     proposals={proposals}
                     loading={loading}
+                    onFilter={this.onFilterProposals}
+                    onOrder={this.onOrderProposals}
+                    onOrderDirection={this.onOrderDirection}
+                    status={status}
+                    orderBy={order_by}
+                    orderDirection={order_direction}
                 />
                 <center style={{ paddingTop: '1em', paddingBottom: '1em' }}>
                     {!loading ? (
@@ -115,7 +149,7 @@ Proposals.propTypes = {
 module.exports = {
     path: 'proposals',
     component: connect(
-        state => {
+        (state) => {
             const user = state.user.get('current');
             const currentUser = user && user.get('username');
             const proposals = state.proposal.get('proposals', List());
@@ -131,7 +165,7 @@ module.exports = {
                 last_id,
             };
         },
-        dispatch => {
+        (dispatch) => {
             return {
                 voteOnProposal: (
                     voter,
@@ -195,7 +229,8 @@ module.exports = {
                         })
                     );
                 },
-                listProposals: payload => {
+                listProposals: (payload) => {
+                    console.log(payload);
                     return new Promise((resolve, reject) => {
                         dispatch(
                             proposalActions.listProposals({
