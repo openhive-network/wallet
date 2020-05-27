@@ -4,7 +4,7 @@ import Moment from 'moment';
 import NumAbbr from 'number-abbreviate';
 import tt from 'counterpart';
 import Userpic from 'app/components/elements/Userpic';
-import { numberWithCommas, vestsToHpf } from 'app/utils/StateFunctions';
+import { numberWithCommas } from 'app/utils/StateFunctions';
 
 import Icon from 'app/components/elements/Icon';
 
@@ -13,6 +13,8 @@ const numAbbr = new NumAbbr();
 export default function Proposal(props) {
     const {
         id,
+        start_date,
+        end_date,
         creator,
         receiver,
         daily_pay,
@@ -22,14 +24,14 @@ export default function Proposal(props) {
         onVote,
         isVoting,
         voteFailed,
-        voteSucceeded,
+        // voteSucceeded,
         isUpVoted,
         total_vesting_shares,
         total_vesting_fund_steem,
     } = props;
 
-    const start = new Date(props.start_date);
-    const end = new Date(props.end_date);
+    const start = new Date(start_date);
+    const end = new Date(end_date);
     const durationInDays = Moment(end).diff(Moment(start), 'days');
     const totalPayout = durationInDays * daily_pay.split(' HBD')[0]; // ¯\_(ツ)_/¯
 
@@ -69,6 +71,7 @@ export default function Proposal(props) {
                         target="_blank"
                         alt={startedOrFinishedInWordsLongVersion(start, end)}
                         title={startedOrFinishedInWordsLongVersion(start, end)}
+                        rel="noreferrer noopener"
                     >
                         {subject}
                         <span
@@ -84,31 +87,41 @@ export default function Proposal(props) {
                 </span>
                 <br />
                 <small className="date">
-                    {formatDate(start)} through {formatDate(end)}
+                    {tt('proposals.startEndDates', {
+                        start: formatDate(start),
+                        end: formatDate(end),
+                    })}
                 </small>
                 <br />
                 <small>
-                    {tt('proposals.by')}
+                    {tt('proposals.proposalId', { id })} {tt('proposals.by')}{' '}
                     {linkifyUsername(creator)}
-                    {creator != receiver ? ` ${tt('proposals.for')} ` : null}
-                    {creator != receiver
-                        ? linkifyUsername(
-                              checkIfSameUser(creator, receiver, 'themselves.'),
-                              receiver
-                          )
-                        : null}
+                    {creator !== receiver && (
+                        <span>
+                            {' '}
+                            {tt('proposals.for')} {linkifyUsername(receiver)}
+                        </span>
+                    )}
                 </small>
             </div>
             <div className="proposals__amount">
                 <span>
                     <a href="#" title={formatCurrency(totalPayout)}>
-                        <em>{abbreviateNumber(totalPayout)} HBD</em>
+                        <em>
+                            {tt('proposals.amountHbd', {
+                                amount: abbreviateNumber(totalPayout),
+                            })}
+                        </em>
                     </a>
                 </span>
                 <small>
-                    {tt('proposals.daily')}:{' '}
-                    {abbreviateNumber(daily_pay.split(' HBD')[0])} HBD<br />
-                    {tt('proposals.duration')}: {durationInDays} days
+                    {tt('proposals.dailyAmount', {
+                        amount: abbreviateNumber(daily_pay.split(' HBD')[0]),
+                    })}
+                    <br />
+                    {tt('proposals.duration', {
+                        duration: durationInDays,
+                    })}
                 </small>
             </div>
         </div>
@@ -231,23 +244,6 @@ function durationInWords(duration) {
     const a = Moment(now);
     const b = Moment(now + duration);
     return b.from(a);
-}
-
-/**
- * Given two usernames, see if they are the same. Optionally. specify a value to return if they are the same. If not the same, returns username b.
- * @param {string} usernamea- usernamea
- * @param {string} usernameb- usernameb
- * @param {string} valueIfSame - value to return if the two usernames match. default true
- * @returns {bool|string} - returns usernameb if it doesn't match usernameb.
- */
-function checkIfSameUser(usernamea, usernameb, valueIfSame = true) {
-    if (
-        `${usernamea.toLowerCase()}`.trim() ==
-        `${usernameb.toLowerCase()}`.trim()
-    ) {
-        return valueIfSame;
-    }
-    return usernameb;
 }
 
 /**

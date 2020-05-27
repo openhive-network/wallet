@@ -788,9 +788,12 @@
         "vote_hp": "Vote HP",
         "proposal": "Proposal",
         "amount": "Amount",
+        "amountHbd": "Amount %(amount)s HBD",
         "by": "by",
         "for": "for",
-        "daily": "Daily",
-        "duration": "Duration"
+        "proposalId": "Proposal #%(id)s",
+        "duration": "Duration: %(duration)s days",
+        "dailyAmount": "Daily: %(amount)s HBD",
+        "startEndDates": "%(start)s through %(end)s"
     }
 }
