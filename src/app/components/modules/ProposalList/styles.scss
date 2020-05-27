@@ -1,4 +1,6 @@
 .ProposalsList {
+    max-width: 1000px;
+    width: 100%;
     flex-direction: column;
     display: flex;
     padding-top: 20px;
@@ -8,156 +10,214 @@
     }
     @media only screen and (max-width: 768px) {
         width: 98%;
+        padding: 0.5rem;
     }
 
     margin-left: auto;
     margin-right: auto;
 
     .proposals__header {
-        flex-direction: row;
-        justify-content: center;
         display: flex;
+        justify-content: space-between;
+        align-items: flex-end;
+        margin-bottom: 1em;
 
-        @media only screen and (max-width: 768px) {
-            padding-left: 1em;
+        .proposals__title {
+            font-size: 1.5rem !important;
+            font-weight: bold;
         }
 
-        .proposals__votes {
+        .proposals__filters {
             display: flex;
-            align-items: center;
-            max-width: 200px;
-            width: 15%;
-            @media only screen and (max-width: 768px) {
-                justify-content: center;
-                width: 20%;
+            justify-content: flex-end;
+
+            .proposals__select {
+                display: flex;
+                flex-direction: column;
+                font-size: 0.7rem;
+                font-weight: bold;
+                padding-top: 3px;
+                margin-right: 0.5rem;
+                select {
+                    width: fit-content;
+
+                    &:not(:last-child) {
+                        margin-right: 0.5em;
+                    }
+
+                    @media only screen and (max-width: 768px) {
+                        height: 2rem;
+                        padding: 0.3rem;
+                    }
+                }
+            }
+
+            .proposals__order_direction {
+                cursor: pointer;
+                display: flex;
+                align-items: flex-end;
+
+                &:hover {
+                    opacity: 0.8;
+                }
+
+                .direction {
+                    font-size: 1.7rem;
+
+                    &.active {
+                        color: $color-red;
+                    }
+                }
             }
         }
-        .proposals__amount {
-            display: flex;
-            align-items: center;
-            max-width: 200px;
-            width: 20%;
-
-            flex-direction: row;
-            justify-content: flex-start;
-        }
-        .proposals__description {
-            display: flex;
-            align-items: center;
-            max-width: 800px;
-            width: 60%;
-        }
-        .proposals__avatar {
-            width: 65px;
-        }
     }
-    .proposals__row {
+
+    .proposals__item {
         @include themify($themes) {
             border-radius: themed('roundedCorners');
-            border: themed('border');
             background-color: themed('moduleBackgroundColor');
         }
-        padding: 10px;
+        box-shadow: 1px 1px 5px 1px rgba(0, 0, 0, 0.05);
         margin-bottom: 15px;
-        flex-direction: row;
-        justify-content: center;
         display: flex;
 
         @media only screen and (max-width: 768px) {
+            flex-direction: column;
             padding-top: 0.7em;
             padding-bottom: 0.7em;
         }
 
-        small {
-            @media only screen and (max-width: 768px) {
-                font-size: 0.7em;
-            }
-            @include themify($themes) {
-                color: themed('textColorSecondary');
-            }
+        .proposals__content,
+        .proposals__votes {
+            display: flex;
+            padding: 10px;
         }
 
-        .proposals__avatar {
-            overflow: hidden;
-            width: 65px;
-            height: 65px;
-            padding-left: 15px;
+        .proposals__content {
+            flex: 0.9;
+            flex-direction: column;
 
-            @media only screen and (max-width: 768px) {
-                width: 90px;
+            .title {
+                font-size: 1.4em;
+                display: block;
+
+                &:hover {
+                    opacity: 0.7;
+                }
+
+                .id {
+                    font-weight: bold;
+                    @include themify($themes) {
+                        color: themed('textColorSecondary');
+                    }
+                }
+            }
+
+            .description {
+                display: flex;
+                margin: 0.5rem 0;
+
+                @include themify($themes) {
+                    color: themed('textColorSecondary');
+                }
+
+                .date {
+                    margin-right: 1rem;
+                    min-width: 250px;
+                }
+
+                .amount {
+                    span {
+                        font-weight: bold;
+                        @include themify($themes) {
+                            color: themed('colorAccent');
+                        }
+                    }
+                }
+
+                .status {
+                    font-weight: 400;
+                    display: flex;
+                    align-items: center;
+                    padding: 0 0.2rem;
+                    margin: 0 1rem 0 0.5rem;
+                    border-radius: 0.3rem;
+                    font-size: 0.7rem;
+                    @include themify($themes) {
+                        border: 1px solid themed('colorAccent');
+                        color: themed('colorAccent');
+                    }
+                }
+
+                @media only screen and (max-width: 768px) {
+                    flex-direction: column;
+                    align-items: flex-start;
+
+                    .amount {
+                        margin: 0.5rem 0;
+                    }
+
+                    .status {
+                        margin: 0;
+                        margin-bottom: 0.5rem;
+                    }
+                }
+            }
+
+            .details {
+                display: flex;
+                align-items: center;
+
+                .Userpic {
+                    height: 30px;
+                    width: 30px;
+                    margin-right: 0.5rem;
+                }
             }
         }
 
         .proposals__votes {
+            flex: 0.1;
+            position: relative;
             display: flex;
+            flex-direction: column;
+            justify-content: space-around;
             align-items: center;
-            max-width: 200px;
-            @include themify($themes) {
-                border-right: themed('border');
+
+            &::before {
+                position: absolute;
+                content: '';
+                background: rgba($color: #000000, $alpha: 0.15);
+                left: 0;
+                height: 90%;
+                width: 1px;
+                top: 50%;
+                transform: translateY(-50%);
             }
 
-            @media only screen and (min-width: 768px) {
+            div {
                 font-size: 1.5em;
-                flex-direction: column;
-                justify-content: flex-start;
-                width: 15%;
-            }
-            @media only screen and (max-width: 768px) {
-                font-size: 0.8em;
-                flex-direction: row-reverse;
-                justify-content: center;
-                align-items: flex-start;
-                padding-top: 0.1em;
-                width: 20%;
             }
 
             a {
-                padding-right: 10px;
+                span, svg {
+                    height: 1.5rem !important;
+                    width: 1.5rem !important;
+                }
             }
-        }
-        .proposals__amount {
-            display: flex;
-            max-width: 200px;
-            width: 20%;
-            flex-direction: column;
-            align-items: flex-start;
-            padding-left: 15px;
-            @media only screen and (max-width: 768px) {
-                padding-left: 7px;
-            }
-        }
 
-        .proposals__description {
-            max-width: 800px;
-            width: 60%;
-            padding-left: 15px;
             @media only screen and (max-width: 768px) {
-                padding-left: 7px;
-            }
-            @include themify($themes) {
-                border-right: themed('border');
-            }
-            .date {
-                @include themify($themes) {
-                    color: themed('textColorSecondary');
-                }
-                @media only screen and (max-width: 768px) {
-                    font-size: 0.7em;
+                flex-direction: row;
+                justify-content: space-between;
+
+                &::before {
+                    height: 1px;
+                    width: calc(100% - 20px);
+                    top: 0;
+                    left: 50%;
+                    transform: translateX(-50%);
                 }
             }
-        }
-    }
-    .proposals__statusTag {
-        font-weight: 400;
-        display: inline;
-        padding: 0.1rem 0.2rem;
-        margin: 0 1rem 0 0.5rem;
-        border-radius: 0.3rem;
-        font-size: 0.7rem;
-        vertical-align: 15%;
-        @include themify($themes) {
-            background-color: themed('colorAccent');
-            color: themed('buttonText');
         }
     }
 }
