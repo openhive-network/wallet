@@ -32,14 +32,22 @@ class Proposals extends React.Component {
         // eslint-disable-next-line react/destructuring-assignment
         const { status, order_by, order_direction } = options;
 
-        console.log(options);
+        const isFiltering = !!(status || order_by || order_direction);
+
+        let limit;
+
+        if (isFiltering) {
+            limit = this.state.limit;
+        } else {
+            limit = this.state.limit + this.state.proposals.length;
+        }
 
         const proposals =
             (await this.getAllProposals(
                 this.state.last_proposal,
                 order_by || this.state.order_by,
                 order_direction || this.state.order_direction,
-                this.state.limit + this.state.proposals.length,
+                limit,
                 status || this.state.status
             )) || [];
 
@@ -52,6 +60,7 @@ class Proposals extends React.Component {
             proposals,
             loading: false,
             last_proposal,
+            limit,
         });
     }
 
@@ -230,7 +239,6 @@ module.exports = {
                     );
                 },
                 listProposals: (payload) => {
-                    console.log(payload);
                     return new Promise((resolve, reject) => {
                         dispatch(
                             proposalActions.listProposals({
