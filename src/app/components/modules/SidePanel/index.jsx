@@ -93,11 +93,11 @@ const SidePanel = ({ alignment, visible, hideSidePanel, username }) => {
             },
         ],
         external: [
-            // {
-            //     value: 'chat',
-            //     label: tt('navigation.chat'),
-            //     link: 'https://steem.chat/home',
-            // },
+            {
+                value: 'chat',
+                label: tt('navigation.chat'),
+                link: 'https://openhive.chat/home',
+            },
             {
                 value: 'tools',
                 label: tt('navigation.app_center'),
