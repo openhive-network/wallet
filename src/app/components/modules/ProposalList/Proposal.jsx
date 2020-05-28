@@ -7,6 +7,7 @@ import tt from 'counterpart';
 import cx from 'classnames';
 import Userpic, { SIZE_SMALL } from 'app/components/elements/Userpic';
 import { numberWithCommas } from 'app/utils/StateFunctions';
+import { APP_URL } from 'app/client_config';
 
 import Icon from 'app/components/elements/Icon';
 
@@ -245,7 +246,7 @@ function durationInWords(duration) {
 function linkifyUsername(linkText, username = '') {
     if (username == '') username = linkText;
     return (
-        <a href={`https://hive.blog/@${username}`} target="_blank">
+        <a href={`${APP_URL}/@${username}`} target="_blank">
             {linkText}
         </a>
     );
@@ -258,7 +259,7 @@ function linkifyUsername(linkText, username = '') {
  * @returns {string} - return a URL string
  */
 function urlifyPermlink(username, permlink) {
-    return `https://hive.blog/@${username}/${permlink}`;
+    return `${APP_URL}/@${username}/${permlink}`;
 }
 
 /**
