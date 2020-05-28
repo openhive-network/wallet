@@ -31,8 +31,6 @@ export function Proposal(props) {
         isUpVoted,
         total_vesting_shares,
         total_vesting_fund_steem,
-        start_date,
-        end_date,
     } = props;
 
     const start = new Date(start_date);
