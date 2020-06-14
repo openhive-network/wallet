@@ -25,7 +25,8 @@ const SidePanel = ({ alignment, visible, hideSidePanel, username }) => {
                     target={i.internal ? null : '_blank'}
                     rel="noopener noreferrer"
                 >
-                    {i.label}&nbsp;<Icon name="extlink" />
+                    {i.label}&nbsp;
+                    <Icon name="extlink" />
                 </a>
             </li>
         );

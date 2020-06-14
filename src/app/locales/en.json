@@ -7,6 +7,7 @@
         "ask": "Ask",
         "balance": "Balance: %(balanceValue)s",
         "balances": "Balances",
+        "delegations": "Delegations",
         "bid": "Bid",
         "blog": "Blog",
         "browse": "Browse",
@@ -27,8 +28,7 @@
         "community_password_is": "Your password is",
         "community_creating": "Your community is being created...",
         "community_visit": "Visit your community",
-        "community_error":
-            "Oops, there was an error creating the community, please try again.",
+        "community_error": "Oops, there was an error creating the community, please try again.",
         "community_create": "CREATE A COMMUNITY",
         "community_description": "About",
         "confirm": "Confirm",
@@ -72,8 +72,7 @@
         "password": "Password",
         "payouts": "Payouts",
         "permissions": "Keys & Permissions",
-        "phishy_message":
-            "Link expanded to plain text; beware of a potential phishing attempt",
+        "phishy_message": "Link expanded to plain text; beware of a potential phishing attempt",
         "post": "Post",
         "post_as_user": "Post as %(username)s",
         "posts": "Posts",
@@ -146,20 +145,14 @@
         "account_name": "Account Name",
         "recover_your_account": "recover your account",
         "reset_usernames_password": "Reset %(username)s's Password",
-        "this_will_update_usernames_authtype_key":
-            "This will update %(username)s %(authType)s key",
+        "this_will_update_usernames_authtype_key": "This will update %(username)s %(authType)s key",
         "passwords_do_not_match": "Passwords do not match",
-        "you_need_private_password_or_key_not_a_public_key":
-            "You need a private password or key (not a public key)",
+        "you_need_private_password_or_key_not_a_public_key": "You need a private password or key (not a public key)",
         "the_rules_of_APP_NAME": {
-            "one":
-                "The first rule of %(APP_NAME)s is: Do not lose your password.",
-            "second":
-                "The second rule of %(APP_NAME)s is: Do not lose your password.",
-            "third":
-                "The third rule of %(APP_NAME)s is: We cannot recover your password.",
-            "fourth":
-                "The fourth rule: If you can remember the password, it's not secure.",
+            "one": "The first rule of %(APP_NAME)s is: Do not lose your password.",
+            "second": "The second rule of %(APP_NAME)s is: Do not lose your password.",
+            "third": "The third rule of %(APP_NAME)s is: We cannot recover your password.",
+            "fourth": "The fourth rule: If you can remember the password, it's not secure.",
             "fifth": "The fifth rule: Use only randomly-generated passwords.",
             "sixth": "The sixth rule: Do not tell anyone your password.",
             "seventh": "The seventh rule: Always back up your password."
@@ -167,38 +160,28 @@
         "recover_password": "Recover Account",
         "current_password": "Current Password",
         "generated_password": "Generated Password",
-        "backup_password_by_storing_it":
-            "Back it up by storing in your password manager or a text file",
-        "enter_account_show_password":
-            "Enter a valid account name to show the password",
+        "backup_password_by_storing_it": "Back it up by storing in your password manager or a text file",
+        "enter_account_show_password": "Enter a valid account name to show the password",
         "click_to_generate_password": "Click to generate password",
         "re_enter_generate_password": "Re-enter Generated Password",
-        "understand_that_APP_NAME_cannot_recover_password":
-            "I understand that %(APP_NAME)s cannot recover lost passwords",
+        "understand_that_APP_NAME_cannot_recover_password": "I understand that %(APP_NAME)s cannot recover lost passwords",
         "i_saved_password": "I have securely saved my generated password",
         "update_password": "Update Password",
         "confirm_password": "Confirm Password",
         "account_updated": "Account Updated",
-        "password_must_be_characters_or_more":
-            "Password must be %(amount)s characters or more",
-        "need_password_or_key":
-            "You need a private password or key (not a public key)",
+        "password_must_be_characters_or_more": "Password must be %(amount)s characters or more",
+        "need_password_or_key": "You need a private password or key (not a public key)",
         "login_to_see_memo": "login to see memo",
         "new_password": "New Password",
         "incorrect_password": "Incorrect password",
         "username_does_not_exist": "Username does not exist",
-        "account_name_should_start_with_a_letter":
-            "Account name should start with a letter.",
+        "account_name_should_start_with_a_letter": "Account name should start with a letter.",
         "account_name_should_be_shorter": "Account name should be shorter.",
         "account_name_should_be_longer": "Account name should be longer.",
-        "account_name_should_have_only_letters_digits_or_dashes":
-            "Account name should have only letters, digits, periods or dashes.",
-        "cannot_increase_reward_of_post_within_the_last_minute_before_payout":
-            "Cannot increase reward of post within the last minute before payout",
-        "vote_currently_exists_user_must_be_indicate_a_to_reject_witness":
-            "vote currently exists, user must be indicate a desire to reject witness",
-        "only_one_APP_NAME_account_allowed_per_ip_address_every_10_minutes":
-            "Only one Hive account allowed per IP address every 10 minutes",
+        "account_name_should_have_only_letters_digits_or_dashes": "Account name should have only letters, digits, periods or dashes.",
+        "cannot_increase_reward_of_post_within_the_last_minute_before_payout": "Cannot increase reward of post within the last minute before payout",
+        "vote_currently_exists_user_must_be_indicate_a_to_reject_witness": "vote currently exists, user must be indicate a desire to reject witness",
+        "only_one_APP_NAME_account_allowed_per_ip_address_every_10_minutes": "Only one Hive account allowed per IP address every 10 minutes",
         "write_your_story": "Write your story...",
         "remember_voting_and_posting_key": "Remember voting & posting key",
         "auto_login_question_mark": "Auto login?",
@@ -206,23 +189,18 @@
         "show_private_key": "Show private key",
         "login_to_show": "Login to show",
         "not_valid_email": "Not valid email",
-        "thank_you_for_being_an_early_visitor_to_APP_NAME":
-            "Thank you for being an early visitor to %(APP_NAME)s. We will get back to you at the earliest possible opportunity.",
+        "thank_you_for_being_an_early_visitor_to_APP_NAME": "Thank you for being an early visitor to %(APP_NAME)s. We will get back to you at the earliest possible opportunity.",
         "author_rewards": "Author rewards",
         "curation_rewards": "Curation rewards",
-        "sorry_your_reddit_account_doesnt_have_enough_karma":
-            "Sorry, your Reddit account doesn't have enough Reddit Karma to qualify for a free sign up. Please add your email for a place on the waiting list",
+        "sorry_your_reddit_account_doesnt_have_enough_karma": "Sorry, your Reddit account doesn't have enough Reddit Karma to qualify for a free sign up. Please add your email for a place on the waiting list",
         "register_with_facebook": "Register with Facebook",
-        "or_click_the_button_below_to_register_with_facebook":
-            "Or click the button below to register with Facebook",
+        "or_click_the_button_below_to_register_with_facebook": "Or click the button below to register with Facebook",
         "server_returned_error": "server returned error",
         "APP_NAME_support": "%(APP_NAME)s Support",
         "please_email_questions_to": "Please email your questions to",
         "next_7_strings_single_block": {
-            "authors_get_paid_when_people_like_you_upvote_their_post":
-                "Authors get paid when people like you upvote their post",
-            "if_you_enjoyed_what_you_read_earn_amount":
-                "If you enjoyed what you read here, create your account today and start earning FREE HIVE!",
+            "authors_get_paid_when_people_like_you_upvote_their_post": "Authors get paid when people like you upvote their post",
+            "if_you_enjoyed_what_you_read_earn_amount": "If you enjoyed what you read here, create your account today and start earning FREE HIVE!",
             "free_hive": "FREE HIVE!",
             "sign_up_earn_hive": "Sign up now to earn "
         },
@@ -231,8 +209,7 @@
             "show_less": "Show fewer",
             "value_posts": "low value posts"
         },
-        "read_only_mode":
-            "Due to server maintenance we are running in read only mode. We are sorry for the inconvenience.",
+        "read_only_mode": "Due to server maintenance we are running in read only mode. We are sorry for the inconvenience.",
         "tags_and_topics": "Tags",
         "show_more_topics": "View all tags",
         "basic": "Basic",
@@ -248,10 +225,8 @@
             "other": "%(count)s Responses"
         },
         "post_key_warning": {
-            "confirm":
-                "You are about to publish a HIVE private key or master password. You will probably lose control of the associated account and all its funds.",
-            "warning":
-                "Legitimate users, including employees of Hive, will never ask you for a private key or master password.",
+            "confirm": "You are about to publish a HIVE private key or master password. You will probably lose control of the associated account and all its funds.",
+            "warning": "Legitimate users, including employees of Hive, will never ask you for a private key or master password.",
             "checkbox": "I understand"
         },
         "days": "days",
@@ -290,25 +265,20 @@
     "reply_editor": {
         "shorten_title": "Shorten title",
         "exceeds_maximum_length": "Exceeds maximum length (%(maxKb)sKB)",
-        "including_the_category":
-            " (including the category '%(rootCategory)s')",
-        "use_limited_amount_of_tags":
-            "You have %(tagsLength)s tags total%(includingCategory)s. Please use only 5 in your post and category line.",
-        "are_you_sure_you_want_to_clear_this_form":
-            "Are you sure you want to exit the comment editor?",
+        "including_the_category": " (including the category '%(rootCategory)s')",
+        "use_limited_amount_of_tags": "You have %(tagsLength)s tags total%(includingCategory)s. Please use only 5 in your post and category line.",
+        "are_you_sure_you_want_to_clear_this_form": "Are you sure you want to exit the comment editor?",
         "uploading": "Uploading...",
         "draft_saved": "Draft saved.",
         "editor": "Editor",
-        "insert_images_by_dragging_dropping":
-            "Insert images by dragging & dropping, ",
+        "insert_images_by_dragging_dropping": "Insert images by dragging & dropping, ",
         "pasting_from_the_clipboard": "pasting from the clipboard, ",
         "selecting_them": "selecting them",
         "image_upload": "Image upload",
         "power_up_100": "Power Up 100%%",
         "default_50_50": "50%% HBD / 50%% HP",
         "decline_payout": "Decline Payout",
-        "check_this_to_auto_upvote_your_post":
-            "Check this to auto-upvote your post",
+        "check_this_to_auto_upvote_your_post": "Check this to auto-upvote your post",
         "markdown_styling_guide": "Markdown Styling Guide",
         "or_by": "or by",
         "title": "Title",
@@ -317,42 +287,34 @@
         "advanced_settings": "Advanced settings"
     },
     "category_selector_jsx": {
-        "tag_your_story":
-            "Tag (up to 5 tags), the first tag is your main category.",
+        "tag_your_story": "Tag (up to 5 tags), the first tag is your main category.",
         "select_a_tag": "Select a tag",
-        "maximum_tag_length_is_24_characters":
-            "Maximum tag length is 24 characters",
-        "use_limited_amount_of_categories":
-            "Please use only %(amount)s categories",
+        "maximum_tag_length_is_24_characters": "Maximum tag length is 24 characters",
+        "use_limited_amount_of_categories": "Please use only %(amount)s categories",
         "use_only_lowercase_letters": "Use only lowercase letters",
         "use_one_dash": "Use only one dash",
         "use_spaces_to_separate_tags": "Use spaces to separate tags",
-        "use_only_allowed_characters":
-            "Use only lowercase letters, digits and one dash",
+        "use_only_allowed_characters": "Use only lowercase letters, digits and one dash",
         "must_start_with_a_letter": "Must start with a letter",
         "must_end_with_a_letter_or_number": "Must end with a letter or number"
     },
     "post_advanced_settings_jsx": {
         "payout_option_header": "Author rewards",
-        "payout_option_description":
-            "What type of tokens do you want as rewards from this post?",
+        "payout_option_description": "What type of tokens do you want as rewards from this post?",
         "current_default": "Default",
         "update_default_in_settings": "Update"
     },
     "postfull_jsx": {
-        "this_post_is_not_available_due_to_a_copyright_claim":
-            "This post is not available due to a copyright claim.",
+        "this_post_is_not_available_due_to_a_copyright_claim": "This post is not available due to a copyright claim.",
         "share_on_facebook": "Share on Facebook",
         "share_on_twitter": "Share on Twitter",
         "share_on_reddit": "Share on Reddit",
         "share_on_linkedin": "Share on Linkedin",
         "recent_password": "Recent Password",
-        "in_week_convert_DEBT_TOKEN_to_LIQUID_TOKEN":
-            "In 3.5 days, convert %(amount)s %(DEBT_TOKEN)s into %(LIQUID_TOKEN)s",
+        "in_week_convert_DEBT_TOKEN_to_LIQUID_TOKEN": "In 3.5 days, convert %(amount)s %(DEBT_TOKEN)s into %(LIQUID_TOKEN)s",
         "view_the_full_context": "View the full context",
         "view_the_direct_parent": "View the direct parent",
-        "you_are_viewing_a_single_comments_thread_from":
-            "You are viewing a single comment's thread from"
+        "you_are_viewing_a_single_comments_thread_from": "You are viewing a single comment's thread from"
     },
     "market_jsx": {
         "action": "Action",
@@ -368,51 +330,36 @@
         "sell_orders": "Sell Orders",
         "trade_history": "Trade History",
         "open_orders": "Open Orders",
-        "sell_amount_for_atleast":
-            "Sell %(amount_to_sell)s for at least %(min_to_receive)s (%(effectivePrice)s)",
-        "buy_atleast_amount_for":
-            "Buy at least %(min_to_receive)s for %(amount_to_sell)s (%(effectivePrice)s)",
-        "price_warning_above":
-            "This price is well above the current market price of %(marketPrice)s, are you sure?",
-        "price_warning_below":
-            "This price is well below the current market price of %(marketPrice)s, are you sure?",
+        "sell_amount_for_atleast": "Sell %(amount_to_sell)s for at least %(min_to_receive)s (%(effectivePrice)s)",
+        "buy_atleast_amount_for": "Buy at least %(min_to_receive)s for %(amount_to_sell)s (%(effectivePrice)s)",
+        "price_warning_above": "This price is well above the current market price of %(marketPrice)s, are you sure?",
+        "price_warning_below": "This price is well below the current market price of %(marketPrice)s, are you sure?",
         "order_cancel_confirm": "Cancel order %(order_id)s from %(user)s?",
         "order_cancelled": "Order %(order_id)s cancelled.",
         "higher": "Higher",
         "lower": "Lower",
-        "total_DEBT_TOKEN_SHORT_CURRENCY_SIGN":
-            "Total %(DEBT_TOKEN_SHORT)s (%(CURRENCY_SIGN)s)",
+        "total_DEBT_TOKEN_SHORT_CURRENCY_SIGN": "Total %(DEBT_TOKEN_SHORT)s (%(CURRENCY_SIGN)s)",
         "order_placed": "Order placed: %(order)s"
     },
     "recoveraccountstep1_jsx": {
         "begin_recovery": "Begin Recovery",
         "not_valid": "Not valid",
         "account_name_is_not_found": "Account name is not found",
-        "unable_to_recover_account_not_change_ownership_recently":
-            "We are unable to recover this account, it has not changed ownership recently.",
-        "password_not_used_in_last_days":
-            "This password was not used on this account in the last 30 days.",
-        "request_already_submitted_contact_support":
-            "Your request has been already submitted and we are working on it. Please contact %(SUPPORT_EMAIL)s for the status of your request.",
-        "recover_account_intro":
-            "From time to time, a Hiver's owner key may be compromised. Stolen Account Recovery gives the rightful account owner 30 days to recover their account from the moment the thief changed their owner key. Stolen Account Recovery can only be used on %(APP_URL)s if the account owner had previously listed '%(APP_NAME)s' as their account trustee and complied with %(APP_NAME)s's Terms of Service.",
-        "login_with_facebook_or_reddit_media_to_verify_identity":
-            "Please login with Facebook or Reddit to verify your identity",
-        "login_with_social_media_to_verify_identity":
-            "Please login with %(provider)s to verify your identity",
-        "enter_email_toverify_identity":
-            "We need to verify your identity. Please enter your email address below to begin the verification.",
+        "unable_to_recover_account_not_change_ownership_recently": "We are unable to recover this account, it has not changed ownership recently.",
+        "password_not_used_in_last_days": "This password was not used on this account in the last 30 days.",
+        "request_already_submitted_contact_support": "Your request has been already submitted and we are working on it. Please contact %(SUPPORT_EMAIL)s for the status of your request.",
+        "recover_account_intro": "From time to time, a Hiver's owner key may be compromised. Stolen Account Recovery gives the rightful account owner 30 days to recover their account from the moment the thief changed their owner key. Stolen Account Recovery can only be used on %(APP_URL)s if the account owner had previously listed '%(APP_NAME)s' as their account trustee and complied with %(APP_NAME)s's Terms of Service.",
+        "login_with_facebook_or_reddit_media_to_verify_identity": "Please login with Facebook or Reddit to verify your identity",
+        "login_with_social_media_to_verify_identity": "Please login with %(provider)s to verify your identity",
+        "enter_email_toverify_identity": "We need to verify your identity. Please enter your email address below to begin the verification.",
         "continue_with_email": "Continue with Email",
-        "thanks_for_submitting_request_for_account_recovery":
-            "Thanks for submitting your request for Account Recovery using %(APP_NAME)s's blockchain-based multi factor authentication. We will respond to you as quickly as possible, however, please expect there may be some delay in response due to high volume of emails. Please be prepared to verify your identity.",
+        "thanks_for_submitting_request_for_account_recovery": "Thanks for submitting your request for Account Recovery using %(APP_NAME)s's blockchain-based multi factor authentication. We will respond to you as quickly as possible, however, please expect there may be some delay in response due to high volume of emails. Please be prepared to verify your identity.",
         "recovering_account": "Recovering account",
         "recover_account": "Recover Account",
         "checking_account_owner": "Checking account owner",
         "sending_recovery_request": "Sending recovery request",
-        "cant_confirm_account_ownership":
-            "We can't confirm account ownership. Check your password",
-        "account_recovery_request_not_confirmed":
-            "Account recovery request is not confirmed yet, please get back later, thank you for your patience."
+        "cant_confirm_account_ownership": "We can't confirm account ownership. Check your password",
+        "account_recovery_request_not_confirmed": "Account recovery request is not confirmed yet, please get back later, thank you for your patience."
     },
     "user_profile": {
         "unknown_account": "Unknown Account",
@@ -421,26 +368,21 @@
         "read_the_quick_start_guide": "Read The Quick Start Guide",
         "browse_the_faq": "Browse The FAQ",
         "followers": "Followers",
-        "this_is_users_reputations_score_it_is_based_on_history_of_votes":
-            "This is %(name)s's reputation score.\n\nThe reputation score is based on the history of votes received by the account, and is used to hide low quality content.",
+        "this_is_users_reputations_score_it_is_based_on_history_of_votes": "This is %(name)s's reputation score.\n\nThe reputation score is based on the history of votes received by the account, and is used to hide low quality content.",
         "show_all": "Show All"
     },
     "authorrewards_jsx": {
-        "estimated_author_rewards_last_week":
-            "Estimated author rewards last week",
+        "estimated_author_rewards_last_week": "Estimated author rewards last week",
         "author_rewards_history": "Author Rewards History"
     },
     "curationrewards_jsx": {
-        "estimated_curation_rewards_last_week":
-            "Estimated curation rewards last week",
+        "estimated_curation_rewards_last_week": "Estimated curation rewards last week",
         "curation_rewards_history": "Curation Rewards History"
     },
     "post_jsx": {
-        "now_showing_comments_with_low_ratings":
-            "Now showing comments with low ratings",
+        "now_showing_comments_with_low_ratings": "Now showing comments with low ratings",
         "sort_order": "Sort Order",
-        "comments_were_hidden_due_to_low_ratings":
-            "Comments were hidden due to low ratings",
+        "comments_were_hidden_due_to_low_ratings": "Comments were hidden due to low ratings",
         "comment_sort_order": {
             "trending": "Trending",
             "votes": "Votes",
@@ -449,13 +391,11 @@
         }
     },
     "voting_jsx": {
-        "flagging_post_can_remove_rewards_the_flag_should_be_used_for_the_following":
-            "Flagging a post can remove rewards and make this material less visible. Some common reasons to flag",
+        "flagging_post_can_remove_rewards_the_flag_should_be_used_for_the_following": "Flagging a post can remove rewards and make this material less visible. Some common reasons to flag",
         "disagreement_on_rewards": "Disagreement on rewards",
         "fraud_or_plagiarism": "Fraud or Plagiarism",
         "hate_speech_or_internet_trolling": "Hate Speech or Internet Trolling",
-        "intentional_miss_categorized_content_or_spam":
-            "Intentional miss-categorized content or Spam",
+        "intentional_miss_categorized_content_or_spam": "Intentional miss-categorized content or Spam",
         "pending_payout": "Pending Payout $%(value)s",
         "payout_declined": "Payout Declined",
         "max_accepted_payout": "Max Accepted Payout $%(value)s",
@@ -464,14 +404,11 @@
         "past_payouts_author": " - Author $%(value)s",
         "past_payouts_curators": " - Curators $%(value)s",
         "removing_your_vote": "Removing your vote",
-        "removing_your_vote_will_reset_curation_rewards_for_this_post":
-            "Removing your vote will reset your curation rewards for this post",
+        "removing_your_vote_will_reset_curation_rewards_for_this_post": "Removing your vote will reset your curation rewards for this post",
         "changing_to_an_upvote": "Changing to an Up-Vote",
-        "changing_to_an_upvote_will_reset_curation_rewards_for_this_post":
-            "Changing to an Up-Vote will reset your curation rewards for this post",
+        "changing_to_an_upvote_will_reset_curation_rewards_for_this_post": "Changing to an Up-Vote will reset your curation rewards for this post",
         "changing_to_a_downvote": "Changing to a Down-Vote",
-        "changing_to_a_downvote_will_reset_curation_rewards_for_this_post":
-            "Changing to a Down-Vote will reset your curation rewards for this post",
+        "changing_to_a_downvote_will_reset_curation_rewards_for_this_post": "Changing to a Down-Vote will reset your curation rewards for this post",
         "confirm_flag": "Confirm Flag",
         "and_more": "and %(count)s more",
         "votes_plural": {
@@ -489,16 +426,12 @@
             "one": "You have 1 vote remaining",
             "other": "You have %(count)s votes remaining"
         },
-        "you_can_vote_for_maximum_of_witnesses":
-            "You can vote for a maximum of 30 witnesses",
+        "you_can_vote_for_maximum_of_witnesses": "You can vote for a maximum of 30 witnesses",
         "witness": "Witness",
         "information": "More Information",
-        "if_you_want_to_vote_outside_of_top_enter_account_name":
-            "If you would like to vote for a witness outside of the top 100, enter the account name below to cast a vote",
-        "set_witness_proxy":
-            "You can also choose a proxy that will vote for witnesses for you. This will reset your current witness selection.",
-        "witness_set":
-            "You have set a voting proxy. If you would like to re-enable manual voting, please clear your proxy.",
+        "if_you_want_to_vote_outside_of_top_enter_account_name": "If you would like to vote for a witness outside of the top 100, enter the account name below to cast a vote",
+        "set_witness_proxy": "You can also choose a proxy that will vote for witnesses for you. This will reset your current witness selection.",
+        "witness_set": "You have set a voting proxy. If you would like to re-enable manual voting, please clear your proxy.",
         "witness_proxy_current": "Your current proxy is",
         "witness_proxy_set": "Set proxy",
         "witness_proxy_clear": "Clear proxy",
@@ -507,13 +440,11 @@
         "votes_received": "Votes received",
         "hp_required_to_rank_up": "Needs %(votehp)s to level up",
         "witness_age": "Witness age",
-        "not_produced_over_a_week":
-            "Has not produced any blocks for over a week.",
+        "not_produced_over_a_week": "Has not produced any blocks for over a week.",
         "last_block": "Last block"
     },
     "votesandcomments_jsx": {
-        "no_responses_yet_click_to_respond":
-            "No responses yet. Click to respond.",
+        "no_responses_yet_click_to_respond": "No responses yet. Click to respond.",
         "response_count_tooltip": {
             "zero": "no responses. Click to respond.",
             "one": "1 response. Click to respond.",
@@ -530,118 +461,83 @@
         "private": "Private",
         "public_something_key": "Public %(key)s Key",
         "private_something_key": "Private %(key)s Key",
-        "posting_key_is_required_it_should_be_different":
-            "The posting key is used for posting and voting. It should be different from the active and owner keys.",
-        "the_active_key_is_used_to_make_transfers_and_place_orders":
-            "The active key is used to make transfers and place orders in the internal market.",
-        "the_owner_key_is_required_to_change_other_keys":
-            "The owner key is required to change the other keys.",
-        "the_private_key_or_password_should_be_kept_offline":
-            "The private key or password for the owner key should be kept offline as much as possible.",
-        "the_memo_key_is_used_to_create_and_read_memos":
-            "This key can be used to send and view encrypted memos on the Hive blockchain."
+        "posting_key_is_required_it_should_be_different": "The posting key is used for posting and voting. It should be different from the active and owner keys.",
+        "the_active_key_is_used_to_make_transfers_and_place_orders": "The active key is used to make transfers and place orders in the internal market.",
+        "the_owner_key_is_required_to_change_other_keys": "The owner key is required to change the other keys.",
+        "the_private_key_or_password_should_be_kept_offline": "The private key or password for the owner key should be kept offline as much as possible.",
+        "the_memo_key_is_used_to_create_and_read_memos": "This key can be used to send and view encrypted memos on the Hive blockchain."
     },
     "suggestpassword_jsx": {
-        "APP_NAME_cannot_recover_passwords_keep_this_page_in_a_secure_location":
-            "%(APP_NAME)s cannot recover passwords. Keep this page in a secure location, such as a fireproof safe or safety deposit box.",
+        "APP_NAME_cannot_recover_passwords_keep_this_page_in_a_secure_location": "%(APP_NAME)s cannot recover passwords. Keep this page in a secure location, such as a fireproof safe or safety deposit box.",
         "APP_NAME_password_backup": "%(APP_NAME)s Password Backup",
-        "APP_NAME_password_backup_required":
-            "%(APP_NAME)s Password Backup (required)",
-        "after_printing_write_down_your_user_name":
-            "After printing, write down your user name"
+        "APP_NAME_password_backup_required": "%(APP_NAME)s Password Backup (required)",
+        "after_printing_write_down_your_user_name": "After printing, write down your user name"
     },
     "converttohive_jsx": {
-        "your_existing_DEBT_TOKEN_are_liquid_and_transferable":
-            "Your existing %(DEBT_TOKEN)s are liquid and transferable. Instead you may wish to trade %(DEBT_TOKEN)s directly in this site under %(link)s or transfer to an external market.",
-        "this_is_a_price_feed_conversion":
-            "This is a price feed conversion. The 3.5 day delay is necessary to prevent abuse from gaming the price feed average.",
+        "your_existing_DEBT_TOKEN_are_liquid_and_transferable": "Your existing %(DEBT_TOKEN)s are liquid and transferable. Instead you may wish to trade %(DEBT_TOKEN)s directly in this site under %(link)s or transfer to an external market.",
+        "this_is_a_price_feed_conversion": "This is a price feed conversion. The 3.5 day delay is necessary to prevent abuse from gaming the price feed average.",
         "convert_to_LIQUID_TOKEN": "Convert to %(LIQUID_TOKEN)s",
-        "DEBT_TOKEN_will_be_unavailable":
-            "This action will take place 3.5 days from now and can not be canceled. These %(DEBT_TOKEN)s will immediately become unavailable."
+        "DEBT_TOKEN_will_be_unavailable": "This action will take place 3.5 days from now and can not be canceled. These %(DEBT_TOKEN)s will immediately become unavailable."
     },
     "tips_js": {
-        "liquid_token":
-            "Tradeable tokens that may be transferred anywhere at anytime.<br/>%(LIQUID_TOKEN)s can be converted to %(VESTING_TOKEN)s in a process called powering up.",
-        "influence_token":
-            "Influence tokens which give you more control over post payouts and allow you to earn on curation rewards.",
-        "estimated_value":
-            "The estimated value is based on an average value of %(LIQUID_TOKEN)s in US dollars.",
-        "non_transferable":
-            "%(VESTING_TOKEN)s is non-transferable and requires 3 months (13 payments) to convert back to %(LIQUID_TOKEN)s.",
-        "converted_VESTING_TOKEN_can_be_sent_to_yourself_but_can_not_transfer_again":
-            "Converted %(VESTING_TOKEN)s can be sent to yourself or someone else but can not transfer again without converting back to %(LIQUID_TOKEN)s.",
-        "part_of_your_hive_power_is_currently_delegated":
-            "Part of %(user_name)s's HIVE POWER is currently delegated. Delegation is donated for influence or to help new users perform actions on Hive. Your delegation amount can fluctuate.",
-        "hive_power_apr":
-            "HIVE POWER increases at an APR of approximately %(value)s&#37;, subject to blockchain variance. <a href=\"/faq.html#How_many_new_tokens_are_generated_by_the_blockchain\">See FAQ for details</a>."
+        "liquid_token": "Tradeable tokens that may be transferred anywhere at anytime.<br/>%(LIQUID_TOKEN)s can be converted to %(VESTING_TOKEN)s in a process called powering up.",
+        "influence_token": "Influence tokens which give you more control over post payouts and allow you to earn on curation rewards.",
+        "estimated_value": "The estimated value is based on an average value of %(LIQUID_TOKEN)s in US dollars.",
+        "non_transferable": "%(VESTING_TOKEN)s is non-transferable and requires 3 months (13 payments) to convert back to %(LIQUID_TOKEN)s.",
+        "converted_VESTING_TOKEN_can_be_sent_to_yourself_but_can_not_transfer_again": "Converted %(VESTING_TOKEN)s can be sent to yourself or someone else but can not transfer again without converting back to %(LIQUID_TOKEN)s.",
+        "part_of_your_hive_power_is_currently_delegated": "Part of %(user_name)s's HIVE POWER is currently delegated. Delegation is donated for influence or to help new users perform actions on Hive. Your delegation amount can fluctuate.",
+        "hive_power_apr": "HIVE POWER increases at an APR of approximately %(value)s&#37;, subject to blockchain variance. <a href=\"/faq.html#How_many_new_tokens_are_generated_by_the_blockchain\">See FAQ for details</a>."
     },
     "promote_post_jsx": {
         "promote_post": "Promote Post",
-        "spend_your_DEBT_TOKEN_to_advertise_this_post":
-            "Spend your %(DEBT_TOKEN)s's to advertise this post in the promoted content section",
-        "you_successfully_promoted_this_post":
-            "You successfully promoted this post",
-        "this_post_was_hidden_due_to_low_ratings":
-            "This post was hidden due to low ratings"
+        "spend_your_DEBT_TOKEN_to_advertise_this_post": "Spend your %(DEBT_TOKEN)s's to advertise this post in the promoted content section",
+        "you_successfully_promoted_this_post": "You successfully promoted this post",
+        "this_post_was_hidden_due_to_low_ratings": "This post was hidden due to low ratings"
     },
     "about_jsx": {
         "about_app": "About %(APP_NAME)s",
-        "about_app_details":
-            "%(APP_NAME)s is a social media platform where everyone gets paid for creating and curating content. It leverages a robust digital points system, called Hive, that supports real value for digital rewards through market price discovery and liquidity.",
+        "about_app_details": "%(APP_NAME)s is a social media platform where everyone gets paid for creating and curating content. It leverages a robust digital points system, called Hive, that supports real value for digital rewards through market price discovery and liquidity.",
         "learn_more_at_app_url": "Learn more at %(APP_URL)s",
         "resources": "Resources"
     },
     "markdownviewer_jsx": {
-        "images_were_hidden_due_to_low_ratings":
-            "Images were hidden due to low ratings."
+        "images_were_hidden_due_to_low_ratings": "Images were hidden due to low ratings."
     },
     "transferhistoryrow_jsx": {
         "to_savings": "to savings",
         "from_savings": "from savings",
-        "cancel_transfer_from_savings":
-            "Cancel transfer from savings (request %(request_id)s)",
+        "cancel_transfer_from_savings": "Cancel transfer from savings (request %(request_id)s)",
         "stop_power_down": "Stop power down",
         "withdraw_vesting": "Start power down of %(powerdown_vests)s HIVE",
         "start_power_down_of": "Start power down of",
         "receive_interest_of": "Receive interest of",
         "bad_actor_caution": "Caution",
-        "bad_actor_explained":
-            "This is from an account that looks fraudulent. If you wish, you may temporarily reveal this memo which may contain dangerous links.",
+        "bad_actor_explained": "This is from an account that looks fraudulent. If you wish, you may temporarily reveal this memo which may contain dangerous links.",
         "bad_actor_reveal_memo": "I understand the risk; show anyway.",
         "from_negative_rep_user_caution": "Caution",
-        "from_negative_rep_user_explained":
-            "This is from an account with a bad reputation. If you wish, you may temporarily reveal this memo which may contain dangerous links.",
-        "from_negative_rep_user_reveal_memo":
-            "I understand the risk; show anyway.",
+        "from_negative_rep_user_explained": "This is from an account with a bad reputation. If you wish, you may temporarily reveal this memo which may contain dangerous links.",
+        "from_negative_rep_user_reveal_memo": "I understand the risk; show anyway.",
         "curation_reward": "%(curation_reward)s HIVE POWER for ",
-        "author_reward":
-            "%(hbd_payout)s%(hive_payout)s and %(author_reward)s HIVE POWER for ",
+        "author_reward": "%(hbd_payout)s%(hive_payout)s and %(author_reward)s HIVE POWER for ",
         "claim_reward_balance": {
-            "three_rewards":
-                "Claim rewards: %(first_reward)s, %(second_reward)s and %(third_reward)s",
-            "two_rewards":
-                "Claim rewards: %(first_reward)s and %(second_reward)s",
+            "three_rewards": "Claim rewards: %(first_reward)s, %(second_reward)s and %(third_reward)s",
+            "two_rewards": "Claim rewards: %(first_reward)s and %(second_reward)s",
             "one_reward": "Claim rewards: %(reward)s"
         },
         "interest": "Receive interest of %(interest)s",
-        "fill_convert_request":
-            "Fill convert request: %(amount_in)s for %(amount_out)s",
+        "fill_convert_request": "Fill convert request: %(amount_in)s for %(amount_out)s",
         "fill_order": {
-            "filled_by_current_owner":
-                "Paid %(open_pays)s for %(current_pays)s",
-            "open_owner_filled_my_order":
-                "Paid %(current_pays)s for %(open_pays)s"
+            "filled_by_current_owner": "Paid %(open_pays)s for %(current_pays)s",
+            "open_owner_filled_my_order": "Paid %(current_pays)s for %(open_pays)s"
         },
-        "comment_benefactor_reward":
-            "%(benefactor_reward)s HIVE POWER for %(author)s/%(permlink)s",
+        "comment_benefactor_reward": "%(benefactor_reward)s HIVE POWER for %(author)s/%(permlink)s",
         "transfer_to_vesting": {
             "from_self": {
                 "no_to": "Transfer %(amount)s to HIVE POWER",
                 "to_someone": "Transfer %(amount)s HIVE POWER to "
             },
             "to_self": "Receive %(amount)s HIVE POWER from ",
-            "from_user_to_user":
-                " Transfer %(amount)s HIVE POWER from %(from) to "
+            "from_user_to_user": " Transfer %(amount)s HIVE POWER from %(from) to "
         },
         "transfer": {
             "from_self": {
@@ -655,10 +551,8 @@
                 "not_savings": "Received %(amount)s from "
             },
             "to_someone_from_someone": {
-                "to_savings":
-                    "Transfer to savings %(amount)s from %(from)s to %(to)s",
-                "from_savings":
-                    "Transfer from savings %(amount)s from %(from)s to %(to)s",
+                "to_savings": "Transfer to savings %(amount)s from %(from)s to %(to)s",
+                "from_savings": "Transfer from savings %(amount)s from %(from)s to %(to)s",
                 "not_savings": "Transfer %(amount)s from %(from)s to %(to)s"
             }
         },
@@ -690,44 +584,31 @@
         "hive_proposals": "Hive Proposals"
     },
     "loginform_jsx": {
-        "you_need_a_private_password_or_key":
-            "You need a private password or key (not a public key)",
+        "you_need_a_private_password_or_key": "You need a private password or key (not a public key)",
         "cryptography_test_failed": "Cryptography test failed",
-        "unable_to_log_you_in":
-            "We will be unable to log you in with this browser.",
+        "unable_to_log_you_in": "We will be unable to log you in with this browser.",
         "the_latest_versions_of": "The latest versions of ",
-        "are_well_tested_and_known_to_work_with":
-            "are well tested and known to work with %(APP_URL)s.",
-        "due_to_server_maintenance":
-            "Due to server maintenance we are running in read only mode. We are sorry for the inconvenience.",
+        "are_well_tested_and_known_to_work_with": "are well tested and known to work with %(APP_URL)s.",
+        "due_to_server_maintenance": "Due to server maintenance we are running in read only mode. We are sorry for the inconvenience.",
         "login_to_vote": "Login to Vote",
         "login_to_post": "Login to Post",
         "login_to_comment": "Login to Comment",
         "posting": "Posting",
         "active_or_owner": "Active or Owner",
-        "this_password_is_bound_to_your_account_owner_key":
-            "This password is bound to your account's owner key and can not be used to login to this site.",
+        "this_password_is_bound_to_your_account_owner_key": "This password is bound to your account's owner key and can not be used to login to this site.",
         "however_you_can_use_it_to": "However, you can use it to ",
         "update_your_password": "update your password",
-        "to_obtain_a_more_secure_set_of_keys":
-            "to obtain a more secure set of keys.",
-        "this_password_is_bound_to_your_account_active_key":
-            "This password is bound to your account's active key and can not be used to login to this page.",
-        "you_may_use_this_active_key_on_other_more":
-            "You may use this active key on other more secure pages like the Wallet or Market pages.",
-        "you_account_has_been_successfully_created":
-            "You account has been successfully created!",
-        "you_account_has_been_successfully_recovered":
-            "You account has been successfully recovered!",
-        "password_update_success":
-            "The password for %(accountName)s was successfully updated",
-        "password_info":
-            "This password or private key was entered incorrectly.  There is probably a handwriting or data-entry error.  Hint: A password or private key generated by Hive will never contain 0 (zero), O (capital o), I (capital i) and l (lower case L) characters.",
+        "to_obtain_a_more_secure_set_of_keys": "to obtain a more secure set of keys.",
+        "this_password_is_bound_to_your_account_active_key": "This password is bound to your account's active key and can not be used to login to this page.",
+        "you_may_use_this_active_key_on_other_more": "You may use this active key on other more secure pages like the Wallet or Market pages.",
+        "you_account_has_been_successfully_created": "You account has been successfully created!",
+        "you_account_has_been_successfully_recovered": "You account has been successfully recovered!",
+        "password_update_success": "The password for %(accountName)s was successfully updated",
+        "password_info": "This password or private key was entered incorrectly.  There is probably a handwriting or data-entry error.  Hint: A password or private key generated by Hive will never contain 0 (zero), O (capital o), I (capital i) and l (lower case L) characters.",
         "enter_your_username": "Enter your username",
         "enter_hive_key": "Enter a Hive key (ideally your Posting Key)",
         "password_or_wif": "Password or WIF",
-        "this_operation_requires_your_key_or_master_password":
-            "This operation requires your %(authType)s key or Master password.",
+        "this_operation_requires_your_key_or_master_password": "This operation requires your %(authType)s key or Master password.",
         "keep_me_logged_in": "Keep me logged in",
         "signup_button": "Sign up now to earn ",
         "signup_button_emphasis": "FREE HIVE!",
@@ -742,22 +623,14 @@
         "account_name_should_not_be_empty": "Account name should not be empty.",
         "account_name_should_be_longer": "Account name should be longer.",
         "account_name_should_be_shorter": "Account name should be shorter.",
-        "each_account_segment_should_start_with_a_letter":
-            "Each account segment should start with a letter.",
-        "each_account_segment_should_have_only_letters_digits_or_dashes":
-            "Each account segment should have only letters, digits, or dashes.",
-        "each_account_segment_should_have_only_one_dash_in_a_row":
-            "Each account segment should have only one dash in a row.",
-        "each_account_segment_should_end_with_a_letter_or_digit":
-            "Each account segment should end with a letter or digit.",
-        "each_account_segment_should_be_longer":
-            "Each account segment should be longer.",
-        "verified_exchange_no_memo":
-            "You must include a memo for your exchange transfer.",
-        "badactor":
-            "Use caution sending to this account. Please double check your spelling for possible phishing.",
-        "memo_has_privatekey":
-            "Please do not include what appears to be a private key or password.",
+        "each_account_segment_should_start_with_a_letter": "Each account segment should start with a letter.",
+        "each_account_segment_should_have_only_letters_digits_or_dashes": "Each account segment should have only letters, digits, or dashes.",
+        "each_account_segment_should_have_only_one_dash_in_a_row": "Each account segment should have only one dash in a row.",
+        "each_account_segment_should_end_with_a_letter_or_digit": "Each account segment should end with a letter or digit.",
+        "each_account_segment_should_be_longer": "Each account segment should be longer.",
+        "verified_exchange_no_memo": "You must include a memo for your exchange transfer.",
+        "badactor": "Use caution sending to this account. Please double check your spelling for possible phishing.",
+        "memo_has_privatekey": "Please do not include what appears to be a private key or password.",
         "memo_is_privatekey": "Do not use private keys in memos.",
         "memo_is_password": "Do not use passwords in memos."
     },
@@ -797,24 +670,22 @@
         "this_memo_is_private": "This memo is private",
         "this_memo_is_public": "This memo is public",
         "convert_to_VESTING_TOKEN": "Convert to %(VESTING_TOKEN)s",
-        "balance_subject_to_3_day_withdraw_waiting_period":
-            "Balances subject to 3 day withdraw waiting period.",
+        "balance_subject_to_3_day_withdraw_waiting_period": "Balances subject to 3 day withdraw waiting period.",
         "move_funds_to_another_account": "Move funds to another Hive account.",
-        "protect_funds_by_requiring_a_3_day_withdraw_waiting_period":
-            "Protect funds by requiring a 3 day withdraw waiting period.",
-        "withdraw_funds_after_the_required_3_day_waiting_period":
-            "Withdraw funds after the required 3 day waiting period.",
+        "protect_funds_by_requiring_a_3_day_withdraw_waiting_period": "Protect funds by requiring a 3 day withdraw waiting period.",
+        "withdraw_funds_after_the_required_3_day_waiting_period": "Withdraw funds after the required 3 day waiting period.",
         "from": "From",
         "to": "To",
-        "asset_currently_collecting":
-            "%(asset)s currently collecting %(interest)s%% APR.",
-        "beware_of_spam_and_phishing_links":
-            "Beware of spam and phishing links in transfer memos. Do not open links from users you do not trust. Do not provide your private keys to any third party websites.",
-        "transactions_make_take_a_few_minutes":
-            "Transactions will not show until they are confirmed on the blockchain, which may take a few minutes.",
+        "asset_currently_collecting": "%(asset)s currently collecting %(interest)s%% APR.",
+        "beware_of_spam_and_phishing_links": "Beware of spam and phishing links in transfer memos. Do not open links from users you do not trust. Do not provide your private keys to any third party websites.",
+        "transactions_make_take_a_few_minutes": "Transactions will not show until they are confirmed on the blockchain, which may take a few minutes.",
         "autocomplete_previous_transfers": "previous transfers",
         "autocomplete_user_following": "following",
         "confirm_transfer": "Transfer %(amount)s from %(from)s to %(to)s?"
+    },
+    "delegations_jsx": {
+        "revoke": "Revoke",
+        "delegations": "Delegations"
     },
     "userwallet_jsx": {
         "transfer": "Transfer",
@@ -823,18 +694,16 @@
         "transfer_to_savings": "Transfer to Savings",
         "power_up": "Power Up",
         "power_down": "Power Down",
+        "delegate": "Delegate",
         "market": "Market",
         "convert_to_LIQUID_TOKEN": "Convert to %(LIQUID_TOKEN)s",
         "withdraw_LIQUID_TOKEN": "Withdraw %(LIQUID_TOKEN)s",
         "withdraw_DEBT_TOKENS": "Withdraw %(DEBT_TOKENS)s",
-        "tokens_worth_about_1_of_LIQUID_TICKER":
-            "Tokens worth about $1.00 of %(LIQUID_TICKER)s, currently collecting %(hbdInterest)s%% APR.",
-        "tradeable_tokens_transferred":
-            "Tradeable tokens that may be transferred anywhere at anytime.",
+        "tokens_worth_about_1_of_LIQUID_TICKER": "Tokens worth about $1.00 of %(LIQUID_TICKER)s, currently collecting %(hbdInterest)s%% APR.",
+        "tradeable_tokens_transferred": "Tradeable tokens that may be transferred anywhere at anytime.",
         "savings": "SAVINGS",
         "estimated_account_value": "Estimated Account Value",
-        "next_power_down_is_scheduled_to_happen":
-            "The next power down is scheduled to happen",
+        "next_power_down_is_scheduled_to_happen": "The next power down is scheduled to happen",
         "transfers_are_temporary_disabled": "Transfers are temporary disabled.",
         "history": "HISTORY",
         "redeem_rewards": "Redeem Rewards (Transfer to Balance)",
@@ -843,20 +712,15 @@
     "powerdown_jsx": {
         "power_down": "Power Down",
         "amount": "Amount",
-        "already_power_down":
-            "You are already powering down %(AMOUNT)s %(LIQUID_TICKER)s (%(WITHDRAWN)s %(LIQUID_TICKER)s paid out so far). Note that if you change the power down amount the payout schedule will reset.",
-        "delegating":
-            "You are delegating %(AMOUNT)s %(LIQUID_TICKER)s. That amount is locked up and not available to power down until the delegation is removed and 5 days have passed.",
+        "already_power_down": "You are already powering down %(AMOUNT)s %(LIQUID_TICKER)s (%(WITHDRAWN)s %(LIQUID_TICKER)s paid out so far). Note that if you change the power down amount the payout schedule will reset.",
+        "delegating": "You are delegating %(AMOUNT)s %(LIQUID_TICKER)s. That amount is locked up and not available to power down until the delegation is removed and 5 days have passed.",
         "per_week": "That's ~%(AMOUNT)s %(LIQUID_TICKER)s per week.",
-        "warning":
-            "Leaving less than %(AMOUNT)s %(VESTING_TOKEN)s in your account is not recommended and can leave your account in a unusable state.",
+        "warning": "Leaving less than %(AMOUNT)s %(VESTING_TOKEN)s in your account is not recommended and can leave your account in a unusable state.",
         "error": "Unable to power down (ERROR: %(MESSAGE)s)"
     },
     "checkloginowner_jsx": {
-        "your_password_permissions_were_reduced":
-            "Your password permissions were reduced",
-        "if_you_did_not_make_this_change":
-            "If you did not make this change please",
+        "your_password_permissions_were_reduced": "Your password permissions were reduced",
+        "if_you_did_not_make_this_change": "If you did not make this change please",
         "ownership_changed_on": "Ownership Changed On ",
         "deadline_for_recovery_is": "Deadline for recovery is",
         "i_understand_dont_show_again": "I understand, don't show me again"
@@ -864,8 +728,7 @@
     "termsagree_jsx": {
         "please_review": "Please review our terms to continue",
         "hi_user": "Hi %(username)s,",
-        "blurb":
-            "Our Terms of Service set the rules and guidelines that you must accept and follow in order to use Hive and our Privacy Policy explains the type of information we collect and what we do with it. Don't worry, we don't sell your data to anyone. We do use it to meet legal requirements and to learn how to make Hive better.",
+        "blurb": "Our Terms of Service set the rules and guidelines that you must accept and follow in order to use Hive and our Privacy Policy explains the type of information we collect and what we do with it. Don't worry, we don't sell your data to anyone. We do use it to meet legal requirements and to learn how to make Hive better.",
         "i_agree_to_hiveblogs": "I agree to Hive.blog's",
         "terms_of_service": "Terms of Service",
         "privacy_policy": "Privacy Policy",
@@ -878,15 +741,13 @@
     "modals_jsx": {
         "your_transaction_failed": "Your transaction failed to process",
         "out_of_bandwidth_title": "Why? You've run out of Resource Credits",
-        "out_of_bandwidth_reason":
-            "Actions such as posting and voting use computing resources, placing a real cost on the community members who run the Hive blockchain for everyone.",
-        "out_of_bandwidth_reason_2":
-            "To keep things free, Hive intelligently allocates Resource Credits to each user based on their Hive Power holdings, which can be used to submit a limited number of feeless transactions. When a user runs low on Resource Credits, they will either need to wait for them to recharge, or purchase additional Hive Power. This system prioritizes actions by good community members while limiting spam.",
+        "out_of_bandwidth_reason": "Actions such as posting and voting use computing resources, placing a real cost on the community members who run the Hive blockchain for everyone.",
+        "out_of_bandwidth_reason_2": "To keep things free, Hive intelligently allocates Resource Credits to each user based on their Hive Power holdings, which can be used to submit a limited number of feeless transactions. When a user runs low on Resource Credits, they will either need to wait for them to recharge, or purchase additional Hive Power. This system prioritizes actions by good community members while limiting spam.",
         "out_of_bandwidth_option_title": "To keep interacting on Hive:",
         "out_of_bandwidth_option_1": "Buy and hold more Hive Power",
-        "out_of_bandwidth_option_2":
-            "Wait until your Resource Credits recharge",
-        "out_of_bandwidth_option_3": "Wait until the network usage decreases"
+        "out_of_bandwidth_option_2": "Wait until your Resource Credits recharge",
+        "out_of_bandwidth_option_3": "Wait until the network usage decreases",
+        "out_of_bandwidth_option_4": "Power up more Steem"
     },
     "sanitizedlink_jsx": {
         "phishylink_caution": "Link hidden; phishing attempt",
@@ -894,8 +755,7 @@
     },
     "wallet_index": {
         "title": "Hive wallet login",
-        "description":
-            "Welcome to Hive's official Hive blockchain wallet. Use it to transfer Hive tokens, Power up, vote for Hive Witnesses and change your Hive profile details.",
+        "description": "Welcome to Hive's official Hive blockchain wallet. Use it to transfer Hive tokens, Power up, vote for Hive Witnesses and change your Hive profile details.",
         "login": "Login",
         "hive_tokens": "Hive tokens",
         "hive_symbol": "HIVE",
@@ -919,22 +779,21 @@
             "permlink": "",
             "subject": "Subject"
         },
-        "confirm_remove_proposal_description":
-            "Proposal removal is permanent and the fee paid for creating the proposal is not refundable."
+        "confirm_remove_proposal_description": "Proposal removal is permanent and the fee paid for creating the proposal is not refundable."
     },
     "proposals": {
-        "wait_for_proposal_load":
-            "The proposals are now being loaded, it will be worth the wait!",
-        "sorry_cannot_display":
-            "Sorry, I can't show you any proposals right now.",
-        "no_proposal_matching":
-            "It's probably because there are not any matching your criteria.",
+        "wait_for_proposal_load": "The proposals are now being loaded, it will be worth the wait!",
+        "sorry_cannot_display": "Sorry, I can't show you any proposals right now.",
+        "no_proposal_matching": "It's probably because there are not any matching your criteria.",
         "vote_hp": "Vote HP",
         "proposal": "Proposal",
         "amount": "Amount",
+        "amountHbd": "Amount %(amount)s HBD",
         "by": "by",
         "for": "for",
-        "daily": "Daily",
-        "duration": "Duration"
+        "proposalId": "Proposal #%(id)s",
+        "duration": "Duration: %(duration)s days",
+        "dailyAmount": "Daily: %(amount)s HBD",
+        "startEndDates": "%(start)s through %(end)s"
     }
 }
