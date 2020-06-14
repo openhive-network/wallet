@@ -32,10 +32,11 @@ export function serverApiRecordEvent(type, val, rate_limit_ms = 5000) {
     if (last_call && new Date() - last_call < rate_limit_ms) return;
     last_call = new Date();
     const value = val && val.stack ? `${val.toString()} | ${val.stack}` : val;
+    return;
     api.call(
         'overseer.collect',
         { collection: 'event', metadata: { type, value } },
-        error => {
+        (error) => {
             if (error) console.warn('overseer error', error, error.data);
         }
     );
@@ -83,7 +84,7 @@ export function isTosAccepted() {
     const request = Object.assign({}, request_base, {
         body: JSON.stringify({ csrf: window.$STM_csrf }),
     });
-    return fetch('/api/v1/isTosAccepted', request).then(res => res.json());
+    return fetch('/api/v1/isTosAccepted', request).then((res) => res.json());
 }
 
 export function acceptTos() {

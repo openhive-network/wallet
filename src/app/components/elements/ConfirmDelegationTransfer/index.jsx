@@ -10,7 +10,7 @@ const ConfirmDelegationTransfer = ({ operation, amount }) => {
                         key={`transaction-label-${i}`}
                         className="input-group-label"
                     >
-                        STEEM
+                        HIVE
                     </span>
                     <input
                         className="input-group-field"
