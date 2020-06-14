@@ -113,7 +113,7 @@
 - <a href="#What_is_considered_spam_or_abuse">What is considered spam or abuse?</a>
 - <a href="#What_are_Hive_s_policies_on_plagiarism">What are Hive.blog’s policies on plagiarism?</a>
 - <a href="#Is_it_okay_to_use_random_pictures_from_the_internet">Is it okay to use random pictures from the internet?</a>
-- <a href="#What_is_Steemcleaners">What is Steemcleaners?</a>
+- <a href="#What_is_Hivewatchers">What is Hivewatchers?</a>
 - <a href="#What_is__cheetah">What is @cheetah?</a>
 - <a href="#Where_do_I_report_a_post_or_comment_that_contains_plagiarism__spam__or_abuse">Where do I report a post or comment that contains plagiarism, spam, or abuse?</a>
 
@@ -125,7 +125,7 @@
 - <a href="#Why_does_my_reputation_score_matter">Why does my reputation score matter?</a>
 
 ### <span id="Table_of_Contents_Followers__Feeds_and_Reblog">Followers, Feeds, and Reblog</span>
-- <a href="#What_is_Rehiving">What is Rehiving?</a>
+- <a href="#What_is_Reblogging">What is Reblogging?</a>
 - <a href="#Can_I_share_on_other_social_media">Can I share on other social media?</a>
 
 ### <span id="Table_of_Contents_Blockchain">Blockchain</span>
@@ -569,6 +569,8 @@ HIVE and HBD are listed on the following exchanges:
 | [BitShares](https://wallet.bitshares.org/)      | Y      |   Y |
 | [BlockTrades](https://blocktrades.us) | Y      |    Y |
 | [Ionomy](https://ionomy.com) | Y | N |
+| [Bittrex](https://bittrex.com) | Y      |    Y |
+| [Huobi](https://www.huobi.pro/)  | Y | N |
 
 <a href="#Table_of_Contents_Economics">^</a>
 ## <span id="What_is_the_reward_pool">What is the reward pool?</span>
@@ -761,7 +763,7 @@ New users can only upvote and downvote with 100% voting strength.
 
 Once you reach about 500 Hive Power, you will see a vote slider appear when you vote. You can use the slider to adjust the weight of your vote, between 1% and 100% voting strength. Voting with less than 100% voting weight will use up less voting mana, but it will also have less of an influence on the post or comment's rewards.
 
-<img src="https://steemitimages.com/DQmV6c21tzSrgXwPHx4tvuc1UiCXBEvzkLBH9QCZHtVN6Ma/image.png">
+<img src="https://images.hive.blog/DQmV6c21tzSrgXwPHx4tvuc1UiCXBEvzkLBH9QCZHtVN6Ma/image.png">
 
 <a href="#Table_of_Contents_Voting_and_Curating">^</a>
 ## <span id="Where_can_I_check_my_voting_mana">Where can I check my voting mana?</span>
@@ -860,7 +862,7 @@ Using random pictures from the internet without giving credit is discouraged. Yo
 <a href="#Table_of_Contents_Plagiarism__Spam__and_Abuse">^</a>
 ## <span id="Where_do_I_report_a_post_or_comment_that_contains_plagiarism__spam__or_abuse">Where do I report a post or comment that contains plagiarism, spam, or abuse?</span>
 
-You can report any abusive content to the <a href="https://openhive.chat/channel/hiveabuse">#hiveabuse</a> channel on <a href="https://openhive.chat/home">openhive.chat</a>.
+You can report any abusive content to the <a href="https://openhive.chat/channel/hiveabuse">#hiveabuse</a> channel on <a href="https://openhive.chat/home">OpenHive.Chat</a>.
 
 <a href="#Table_of_Contents_Plagiarism__Spam__and_Abuse">^</a>
 # Reputation
@@ -1044,7 +1046,7 @@ If your tokens are in Hive Power, it is impossible for a hacker to take out more
 <a href="#Table_of_Contents_Security">^</a>
 ## <span id="How_do_I_report_a_security_vulnerability">How do I report a security vulnerability?</span>
 
-If you find a security issue please report the details to security@hive.io.
+If you find a security issue please report the details to privacy@hive.io.
 
 <a href="#Table_of_Contents_Security">^</a>
 # Developers
@@ -1100,7 +1102,7 @@ Each account can vote for up to 30 witnesses.
 
 ## <span id="Where_can_I_ask_for_help_if_my_question_was_not_answered_here">Where can I ask for help if my question was not answered here?</span>
 
-If you post your question in the <a href="https://openhive.chat/channel/help">#help</a> channel on <a href="https://openhive.chat/home">openhive.chat</a>, the users there may be able to help.
+If you post your question in the <a href="https://openhive.chat/channel/help">#help</a> channel on <a href="https://openhive.chat/home">OpenHive.Chat</a>, the users there may be able to help.
 Alternatively, there is a <a href="https://discord.gg/ZcG7jgX">Hive Discord</a> channel that may be able to answer your questions.
 
 You can also create a post on hive.blog with the tag #help, and someone in the community may be able to answer it.

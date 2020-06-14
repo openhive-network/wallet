@@ -13,7 +13,7 @@ import {
     browserHistory,
 } from 'react-router';
 import { Provider } from 'react-redux';
-import { api } from '@steemit/steem-js';
+import { api } from '@hiveio/hive-js';
 
 import RootRoute from 'app/RootRoute';
 import * as appActions from 'app/redux/AppReducer';
@@ -427,6 +427,8 @@ function getUrlFromLocation(location) {
         url = url.replace(/\/permissions$/, '/transfers');
     if (url.indexOf('/password') !== -1)
         url = url.replace(/\/password$/, '/transfers');
+    if (url.indexOf('/delegations') !== -1)
+        url = url.replace(/\/delegations$/, '/transfers');
 
     return url;
 }

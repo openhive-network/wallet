@@ -36,16 +36,16 @@ class UserWallet extends React.Component {
         this.state = {
             claimInProgress: false,
         };
-        this.onShowDepositHive = e => {
+        this.onShowDepositHive = (e) => {
             if (e && e.preventDefault) e.preventDefault();
-            const name = this.props.currentUser.get('username');
+            // const name = this.props.currentUser.get('username');
             const new_window = window.open();
             new_window.opener = null;
             new_window.location =
                 'https://blocktrades.us/?input_coin_type=eth&output_coin_type=hive&receive_address=' +
                 name;
         };
-        this.onShowWithdrawHive = e => {
+        this.onShowWithdrawHive = (e) => {
             e.preventDefault();
             const new_window = window.open();
             new_window.opener = null;
@@ -68,7 +68,7 @@ class UserWallet extends React.Component {
                 'https://blocktrades.us/?input_coin_type=eth&output_coin_type=hbd&receive_address=' +
                 currentUserName;
         };
-        this.onShowWithdrawHBD = e => {
+        this.onShowWithdrawHBD = (e) => {
             e.preventDefault();
             const new_window = window.open();
             new_window.opener = null;
@@ -78,12 +78,12 @@ class UserWallet extends React.Component {
         this.shouldComponentUpdate = shouldComponentUpdate(this, 'UserWallet');
     }
 
-    handleClaimRewards = account => {
+    handleClaimRewards = (account) => {
         this.setState({ claimInProgress: true }); // disable the claim button
         this.props.claimRewards(account);
     };
 
-    getCurrentApr = gprops => {
+    getCurrentApr = (gprops) => {
         // The inflation was set to 9.5% at block 7m
         const initialInflationRate = 9.5;
         const initialBlock = 7000000;
@@ -143,11 +143,11 @@ class UserWallet extends React.Component {
         // do not render if state appears to contain only lite account info
         if (!account.has('vesting_shares')) return null;
 
-        let vesting_hive = vestingHive(account.toJS(), gprops);
-        let delegated_hive = delegatedHive(account.toJS(), gprops);
-        let powerdown_hive = powerdownHive(account.toJS(), gprops);
+        const vesting_hive = vestingHive(account.toJS(), gprops);
+        const delegated_hive = delegatedHive(account.toJS(), gprops);
+        const powerdown_hive = powerdownHive(account.toJS(), gprops);
 
-        let isMyAccount =
+        const isMyAccount =
             currentUser && currentUser.get('username') === account.get('name');
 
         const disabledWarning = false;
@@ -173,7 +173,7 @@ class UserWallet extends React.Component {
                     ? '0.000000 VESTS'
                     : account.get('vesting_shares');
                 this.setState({ toggleDivestError: null });
-                const errorCallback = e2 => {
+                const errorCallback = (e2) => {
                     this.setState({ toggleDivestError: e2.toString() });
                 };
                 const successCallback = () => {
@@ -206,7 +206,7 @@ class UserWallet extends React.Component {
         let savings_pending = 0,
             savings_hbd_pending = 0;
         if (savings_withdraws) {
-            savings_withdraws.forEach(withdraw => {
+            savings_withdraws.forEach((withdraw) => {
                 const [amount, asset] = withdraw.get('amount').split(' ');
                 if (asset === 'HIVE') savings_pending += parseFloat(amount);
                 else {
@@ -243,11 +243,13 @@ class UserWallet extends React.Component {
                             })}
                         >
                             <span>
-                                (+{tt('userwallet_jsx.in_conversion', {
+                                (+
+                                {tt('userwallet_jsx.in_conversion', {
                                     amount: numberWithCommas(
                                         '$' + amount.toFixed(3)
                                     ),
-                                })})
+                                })}
+                                )
                             </span>
                         </Tooltip>
                     </div>,
@@ -312,7 +314,7 @@ class UserWallet extends React.Component {
         let idx = 0;
         const transfer_log = account
             .get('transfer_history')
-            .map(item => {
+            .map((item) => {
                 const data = item.getIn([1, 'op', 1]);
                 const type = item.getIn([1, 'op', 0]);
 
@@ -338,7 +340,7 @@ class UserWallet extends React.Component {
                     />
                 );
             })
-            .filter(el => !!el)
+            .filter((el) => !!el)
             .reverse();
 
         let hive_menu = [
@@ -362,14 +364,23 @@ class UserWallet extends React.Component {
                 ),
             },
         ];
-        let power_menu = [
+        const power_menu = [
             {
                 value: tt('userwallet_jsx.power_down'),
                 link: '#',
                 onClick: powerDown.bind(this, false),
             },
+            {
+                value: tt('userwallet_jsx.delegate'),
+                link: '#',
+                onClick: showTransfer.bind(
+                    this,
+                    'DELEGATE_VESTS',
+                    'Delegate to Account'
+                ),
+            },
         ];
-        let dollar_menu = [
+        const dollar_menu = [
             {
                 value: tt('g.transfer'),
                 link: '#',
@@ -400,14 +411,14 @@ class UserWallet extends React.Component {
                 value: tt('userwallet_jsx.market'),
                 link: '/market',
             });
-            power_menu.push({
-                value: tt('g.buy'),
-                link: '#',
-                onClick: onShowDepositPower.bind(
-                    this,
-                    currentUser.get('username')
-                ),
-            });
+            // power_menu.push({
+            //     value: tt('g.buy'),
+            //     link: '#',
+            //     onClick: onShowDepositPower.bind(
+            //         this,
+            //         currentUser.get('username')
+            //     ),
+            // });
             dollar_menu.push({
                 value: tt('g.buy'),
                 link: '#',
@@ -487,7 +498,7 @@ class UserWallet extends React.Component {
                 ? account.get('reward_vesting_steem').replace('HIVE', 'HP')
                 : null;
 
-        let rewards = [];
+        const rewards = [];
         if (reward_hive) rewards.push(reward_hive);
         if (reward_hbd) rewards.push(reward_hbd);
         if (reward_hp) rewards.push(reward_hp);
@@ -517,7 +528,7 @@ class UserWallet extends React.Component {
                             <button
                                 disabled={this.state.claimInProgress}
                                 className="button"
-                                onClick={e => {
+                                onClick={(e) => {
                                     this.handleClaimRewards(account);
                                 }}
                             >
@@ -806,8 +817,8 @@ export default connect(
         };
     },
     // mapDispatchToProps
-    dispatch => ({
-        claimRewards: account => {
+    (dispatch) => ({
+        claimRewards: (account) => {
             const username = account.get('name');
             const successCallback = () => {
                 dispatch(
@@ -830,7 +841,7 @@ export default connect(
                 })
             );
         },
-        convertToHive: e => {
+        convertToHive: (e) => {
             //post 2018-01-31 if no calls to this function exist may be safe to remove. Investigate use of ConvertToHive.jsx
             e.preventDefault();
             const name = 'convertToHive';

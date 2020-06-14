@@ -4,9 +4,9 @@ import { parsePayoutAmount, repLog10 } from 'app/utils/ParsersAndFormatters';
 import { Long } from 'bytebuffer';
 import { VEST_TICKER, LIQUID_TICKER } from 'app/client_config';
 import { fromJS } from 'immutable';
-import { formatter } from '@steemit/steem-js';
+import { formatter } from '@hiveio/hive-js';
 
-export const numberWithCommas = x => x.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+export const numberWithCommas = (x) => x.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 
 export function vestsToHpf(state, vesting_shares) {
     const { global } = state;
@@ -135,7 +135,7 @@ export function contentStats(content) {
 
     // TODO: breaks if content has no active_votes attribute.
 
-    content.get('active_votes').forEach(v => {
+    content.get('active_votes').forEach((v) => {
         const sign = Math.sign(v.get('percent'));
         if (sign === 0) return;
         total_votes += 1;
@@ -194,7 +194,7 @@ export function contentStats(content) {
     }
     tags.push(content.get('category'));
     tags = filterTags(tags);
-    const isNsfw = tags.filter(tag => tag && tag.match(/^nsfw$/i)).length > 0;
+    const isNsfw = tags.filter((tag) => tag && tag.match(/^nsfw$/i)).length > 0;
 
     return {
         hide,
@@ -211,7 +211,7 @@ export function contentStats(content) {
 
 export function filterTags(tags) {
     return tags
-        .filter(tag => typeof tag === 'string')
+        .filter((tag) => typeof tag === 'string')
         .filter((value, index, self) => value && self.indexOf(value) === index);
 }
 
@@ -221,10 +221,7 @@ export function pricePerHive(state) {
         state.global.get('feed_price')
     );
     if (feed_price && feed_price.has('base') && feed_price.has('quote')) {
-        // Temporary replacements until we switch to hive-js.
         const feedPriceJs = feed_price.toJS();
-        feedPriceJs.base = feedPriceJs.base.replace('HBD', 'SBD');
-        feedPriceJs.quote = feedPriceJs.quote.replace('HIVE', 'STEEM');
         return formatter.pricePerSteem(feedPriceJs);
     }
     return undefined;

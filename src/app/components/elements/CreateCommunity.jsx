@@ -3,7 +3,7 @@ import { APP_NAME } from 'app/client_config';
 import { connect } from 'react-redux';
 import * as communityActions from 'app/redux/CommunityReducer';
 import tt from 'counterpart';
-import { key_utils } from '@steemit/steem-js/lib/auth/ecc';
+import { key_utils } from '@hiveio/hive-js/lib/auth/ecc';
 import LoadingIndicator from 'app/components/elements/LoadingIndicator';
 import Unicode from 'app/utils/Unicode';
 

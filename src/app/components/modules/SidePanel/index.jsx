@@ -25,7 +25,8 @@ const SidePanel = ({ alignment, visible, hideSidePanel, username }) => {
                     target={i.internal ? null : '_blank'}
                     rel="noopener noreferrer"
                 >
-                    {i.label}&nbsp;<Icon name="extlink" />
+                    {i.label}&nbsp;
+                    <Icon name="extlink" />
                 </a>
             </li>
         );
@@ -95,7 +96,7 @@ const SidePanel = ({ alignment, visible, hideSidePanel, username }) => {
             {
                 value: 'chat',
                 label: tt('navigation.chat'),
-                link: 'https://steem.chat/home',
+                link: 'https://openhive.chat/home',
             },
             {
                 value: 'tools',
@@ -106,7 +107,7 @@ const SidePanel = ({ alignment, visible, hideSidePanel, username }) => {
         organizational: [
             {
                 label: tt('navigation.api_docs'),
-                link: 'https://developers.hive.blog/',
+                link: 'https://developers.hive.io/',
             },
             {
                 label: tt('navigation.bluepaper'),

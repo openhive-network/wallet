@@ -43,11 +43,11 @@ from those profiles.
 
 ### 5. Sign up for Hive Chat
 
-A lot of users mingle and chat in [Steem.chat](https://steem.chat/). It is a
+A lot of users mingle and chat in [OpenHive.Chat](https://openhive.chat/). It is a
 great place to meet people!
 
-It's a separate account from your Hive account. Ask questions in the
-[\#help](https://steem.chat/channel/help) channel.
+You log in with your Hive account, using Private Posting Key to confirm your identity.
+Ask questions in the [\#help](https://openhive.chat/channel/help) channel.
 
 
 ### 6. Voting and Tokens
@@ -67,5 +67,5 @@ currency used by the Hive Blockchain. More information
 - [FAQ](https://hive.blog/faq.html) - Answers to commonly asked questions
 - [Hive Bluepaper](https://hive.io/hive-bluepaper.pdf) - Explanation of how the platform works
 - [Hive Whitepaper](https://hive.io/hive-whitepaper.pdf) - Technical details of the Hive blockchain
-- [Apps Built on Hive](https://steemprojects.com/) - Directory of apps, sites and tools built by Hive community
-- [Hive Block Explorer](https://hiveblocks.com/) - Shows the raw Hive blockchain data 
+- [Apps Built on Hive](https://hiverojects.com/) - Directory of apps, sites and tools built by Hive community
+- [Hive Block Explorer](https://hiveblocks.com/) - Shows the raw Hive blockchain data

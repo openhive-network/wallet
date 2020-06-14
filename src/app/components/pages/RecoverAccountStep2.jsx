@@ -2,8 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import tt from 'counterpart';
-import { PrivateKey } from '@steemit/steem-js/lib/auth/ecc';
-import { api } from '@steemit/steem-js';
+import { PrivateKey } from '@hiveio/hive-js/lib/auth/ecc';
+import { api } from '@hiveio/hive-js';
 
 import * as userActions from 'app/redux/UserReducer';
 import * as transactionActions from 'app/redux/TransactionReducer';
@@ -208,9 +208,7 @@ class RecoverAccountStep2 extends React.Component {
         } else {
             if (success) {
                 // submit = <h4>Congratulations! Your account has been recovered. Please login using your new password.</h4>;
-                window.location = `/login.html#account=${
-                    account_to_recover
-                }&msg=accountrecovered`;
+                window.location = `/login.html#account=${account_to_recover}&msg=accountrecovered`;
             } else {
                 submit = (
                     <input

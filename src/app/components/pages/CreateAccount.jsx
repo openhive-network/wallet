@@ -4,10 +4,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
-import { api } from '@steemit/steem-js';
+import { api } from '@hiveio/hive-js';
 
 import LoadingIndicator from 'app/components/elements/LoadingIndicator';
-import { PrivateKey } from '@steemit/steem-js/lib/auth/ecc';
+import { PrivateKey } from '@hiveio/hive-js/lib/auth/ecc';
 import * as userActions from 'app/redux/UserReducer';
 import { validate_account_name } from 'app/utils/ChainValidation';
 import runTests from 'app/utils/BrowserTests';
@@ -123,9 +123,7 @@ class CreateAccount extends React.Component {
                         loading: false,
                     });
                 } else {
-                    window.location = `/login.html#account=${
-                        name
-                    }&msg=accountcreated`;
+                    window.location = `/login.html#account=${name}&msg=accountcreated`;
                 }
             })
             .catch(error => {
@@ -217,9 +215,8 @@ class CreateAccount extends React.Component {
                         <br />
                         <div className="callout alert">
                             <p>
-                                Membership is now under
-                                invitation only because of unexpectedly high
-                                sign up rate.
+                                Membership is now under invitation only because
+                                of unexpectedly high sign up rate.
                             </p>
                         </div>
                     </div>
@@ -286,8 +283,7 @@ class CreateAccount extends React.Component {
                         <div className="callout alert">
                             <p>
                                 It looks like your sign up request is not
-                                approved yet or you already created an account.<br
-                                />
+                                approved yet or you already created an account.<br />
                                 Please try again later or contact{' '}
                                 <a href="mailto:support@hive.blog">
                                     support@hive.blog
@@ -344,14 +340,13 @@ class CreateAccount extends React.Component {
                         {showRules ? (
                             <div className="CreateAccount__rules">
                                 <p>
-                                    The first rule of Hive is: Do not lose
-                                    your password.<br />
+                                    The first rule of Hive is: Do not lose your
+                                    password.<br />
                                     The second rule of Hive is: Do{' '}
-                                    <strong>not</strong> lose your password.<br
-                                    />
-                                    The third rule of Hive is: We cannot
-                                    recover your password, or your account if
-                                    you lose your password.<br />
+                                    <strong>not</strong> lose your password.<br />
+                                    The third rule of Hive is: We cannot recover
+                                    your password, or your account if you lose
+                                    your password.<br />
                                     The forth rule: Do not tell anyone your
                                     password.<br />
                                     The fifth rule: Always back up your
@@ -360,9 +355,9 @@ class CreateAccount extends React.Component {
                                     <br />
                                     Seriously, we are, for technical reasons,
                                     entirely unable to gain access to an account
-                                    without knowing the password. Hive is a
-                                    new model, entirely unlike other sites on
-                                    the Internet. It's not simply policy:{' '}
+                                    without knowing the password. Hive is a new
+                                    model, entirely unlike other sites on the
+                                    Internet. It's not simply policy:{' '}
                                     <strong>
                                         We cannot recover your account or
                                         password if you lose it.
