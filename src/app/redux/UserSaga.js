@@ -22,6 +22,7 @@ import {
 } from 'app/utils/ServerApiClient';
 import { loadFollows } from 'app/redux/FollowSaga';
 import { translate } from 'app/Translator';
+import { setHiveSignerAccessToken } from 'app/utils/HiveSigner';
 
 export const userWatches = [
     takeLatest('@@router/LOCATION_CHANGE', removeHighSecurityKeys), // keep first to remove keys early when a page change happens
@@ -35,7 +36,7 @@ export const userWatches = [
     takeLatest(userActions.GET_VESTING_DELEGATIONS, getVestingDelegationsSaga),
     takeLatest(userActions.LOGIN_ERROR, loginError),
     takeLatest(userActions.LOAD_SAVINGS_WITHDRAW, loadSavingsWithdraw),
-    takeLatest(userActions.ACCEPT_TERMS, function*() {
+    takeLatest(userActions.ACCEPT_TERMS, function* () {
         try {
             yield call(acceptTos);
         } catch (e) {
@@ -75,7 +76,7 @@ function* getVestingDelegationsSaga(action) {
 }
 
 function* loadSavingsWithdraw() {
-    const username = yield select(state =>
+    const username = yield select((state) =>
         state.user.getIn(['current', 'username'])
     );
     const to = yield call([api, api.getSavingsWithdrawToAsync], username);
@@ -101,7 +102,7 @@ const strCmp = (a, b) => (a > b ? 1 : a < b ? -1 : 0);
 
 function* removeHighSecurityKeys({ payload: { pathname } }) {
     const highSecurityPage =
-        highSecurityPages.find(p => p.test(pathname)) != null;
+        highSecurityPages.find((p) => p.test(pathname)) != null;
     // Let the user keep the active key when going from one high security page to another.  This helps when
     // the user logins into the Wallet then the Permissions tab appears (it was hidden).  This keeps them
     // from getting logged out when they click on Permissions (which is really bad because that tab
@@ -109,7 +110,7 @@ function* removeHighSecurityKeys({ payload: { pathname } }) {
     if (!highSecurityPage) yield put(userActions.removeHighSecurityKeys());
 }
 
-const clean = value =>
+const clean = (value) =>
     value == null || value === '' || /null|undefined/.test(value)
         ? undefined
         : value;
@@ -124,18 +125,22 @@ function* usernamePasswordLogin({
         username,
         password,
         useKeychain,
+        access_token,
+        expires_in,
+        useHiveSigner,
+        lastPath,
         saveLogin,
         operationType /*high security*/,
     },
 }) {
-    const current = yield select(state => state.user.get('current'));
+    const current = yield select((state) => state.user.get('current'));
     if (current) {
         const currentUsername = current.get('username');
         yield fork(loadFollows, currentUsername, 'blog');
         yield fork(loadFollows, currentUsername, 'ignore');
     }
 
-    const user = yield select(state => state.user);
+    const user = yield select((state) => state.user);
     const loginType = user.get('login_type');
     const justLoggedIn = loginType === 'basic';
     console.log(
@@ -154,7 +159,8 @@ function* usernamePasswordLogin({
         memoWif,
         login_owner_pubkey,
         login_wif_owner_pubkey,
-        login_with_keychain;
+        login_with_keychain,
+        login_with_hivesigner;
     if (!username && !password) {
         const data = localStorage.getItem('autopost2');
         if (data) {
@@ -167,15 +173,27 @@ function* usernamePasswordLogin({
                 memoWif,
                 login_owner_pubkey,
                 login_with_keychain,
+                login_with_hivesigner,
+                access_token,
+                expires_in,
             ] = extractLoginData(data);
             memoWif = clean(memoWif);
             login_owner_pubkey = clean(login_owner_pubkey);
         }
     }
     // no saved password
-    if (!username || !(password || useKeychain || login_with_keychain)) {
+    if (
+        !username ||
+        !(
+            password ||
+            useKeychain ||
+            login_with_keychain ||
+            useHiveSigner ||
+            login_with_hivesigner
+        )
+    ) {
         console.log('No saved password');
-        const offchain_account = yield select(state =>
+        const offchain_account = yield select((state) =>
             state.offchain.get('account')
         );
         if (offchain_account) serverApiLogout();
@@ -215,8 +233,32 @@ function* usernamePasswordLogin({
         return;
     }
 
+    // return if already logged in using HiveSigner
+    if (login_with_hivesigner) {
+        console.log('Logged in using HiveSigner');
+        if (access_token) {
+            setHiveSignerAccessToken(username, access_token, expires_in);
+            yield put(
+                userActions.setUser({
+                    username,
+                    login_with_hivesigner: true,
+                    access_token,
+                    expires_in,
+                    vesting_shares: account.get('vesting_shares'),
+                    received_vesting_shares: account.get(
+                        'received_vesting_shares'
+                    ),
+                    delegated_vesting_shares: account.get(
+                        'delegated_vesting_shares'
+                    ),
+                })
+            );
+        }
+        return;
+    }
+
     let private_keys;
-    if (!useKeychain) {
+    if (!useKeychain && !useHiveSigner) {
         try {
             const private_key = PrivateKey.fromWif(password);
             login_wif_owner_pubkey = private_key.toPublicKey().toString();
@@ -259,7 +301,7 @@ function* usernamePasswordLogin({
                 login_owner_pubkey,
             },
         });
-        let authority = yield select(state =>
+        let authority = yield select((state) =>
             state.user.getIn(['authority', username])
         );
 
@@ -330,7 +372,7 @@ function* usernamePasswordLogin({
 
     try {
         // const challengeString = yield serverApiLoginChallenge()
-        const offchainData = yield select(state => state.offchain);
+        const offchainData = yield select((state) => state.offchain);
         const serverAccount = offchainData.get('account');
         const challengeString = offchainData.get('login_challenge');
         if (!serverAccount && challengeString) {
@@ -340,12 +382,12 @@ function* usernamePasswordLogin({
             const buf = JSON.stringify(challenge, null, 0);
             const bufSha = hash.sha256(buf);
             if (useKeychain) {
-                const response = yield new Promise(resolve => {
+                const response = yield new Promise((resolve) => {
                     window.hive_keychain.requestSignBuffer(
                         username,
                         buf,
                         'Posting',
-                        response => {
+                        (response) => {
                             resolve(response);
                         }
                     );
@@ -371,6 +413,31 @@ function* usernamePasswordLogin({
                         ),
                     })
                 );
+            } else if (useHiveSigner) {
+                if (access_token) {
+                    // set access setHiveSignerAccessToken
+                    setHiveSignerAccessToken(
+                        username,
+                        access_token,
+                        expires_in
+                    );
+                    // set user data
+                    yield put(
+                        userActions.setUser({
+                            username,
+                            login_with_hivesigner: true,
+                            access_token,
+                            expires_in,
+                            vesting_shares: account.get('vesting_shares'),
+                            received_vesting_shares: account.get(
+                                'received_vesting_shares'
+                            ),
+                            delegated_vesting_shares: account.get(
+                                'delegated_vesting_shares'
+                            ),
+                        })
+                    );
+                }
             } else {
                 const sign = (role, d) => {
                     console.log('Sign before');
@@ -407,6 +474,14 @@ function* usernamePasswordLogin({
 
     // TOS acceptance
     yield fork(promptTosAcceptance, username);
+
+    // Redirect user to the appropriate page after login.
+    const path = useHiveSigner ? lastPath : document.location.pathname;
+    if (path === '/login.html' || path === '/') {
+        browserHistory.push(`/@${username}/transfers`);
+    } else if (useHiveSigner && lastPath) {
+        browserHistory.push(lastPath);
+    }
 }
 
 function* promptTosAcceptance(username) {
@@ -430,7 +505,7 @@ function* getFeatureFlags(username, posting_private) {
                     'conveyor.get_feature_flags',
                     { account: username },
                     'posting',
-                    response => {
+                    (response) => {
                         if (!response.success) {
                             reject(response.message);
                         } else {
@@ -465,13 +540,19 @@ function* saveLogin_localStorage() {
         private_keys,
         login_owner_pubkey,
         login_with_keychain,
-    ] = yield select(state => [
+        login_with_hivesigner,
+        access_token,
+        expires_in,
+    ] = yield select((state) => [
         state.user.getIn(['current', 'username']),
         state.user.getIn(['current', 'private_keys']),
         state.user.getIn(['current', 'login_owner_pubkey']),
         state.user.getIn(['current', 'login_with_keychain']),
+        state.user.getIn(['current', 'login_with_hivesigner']),
+        state.user.getIn(['current', 'access_token']),
+        state.user.getIn(['current', 'expires_in']),
     ]);
-    if (!login_with_keychain && !private_keys) {
+    if (!login_with_keychain && !login_with_hivesigner && !posting_private) {
         console.info('No private keys. May be a username login.');
         return;
     }
@@ -481,11 +562,11 @@ function* saveLogin_localStorage() {
     }
     // Save the lowest security key
     const posting_private = private_keys && private_keys.get('posting_private');
-    if (!login_with_keychain && !posting_private) {
+    if (!login_with_keychain && !login_with_hivesigner && !posting_private) {
         console.error('No posting key to save?');
         return;
     }
-    const account = yield select(state =>
+    const account = yield select((state) =>
         state.global.getIn(['accounts', username])
     );
     if (!account) {
@@ -496,11 +577,11 @@ function* saveLogin_localStorage() {
         ? posting_private.toPublicKey().toString()
         : 'none';
     try {
-        account.getIn(['active', 'key_auths']).forEach(auth => {
+        account.getIn(['active', 'key_auths']).forEach((auth) => {
             if (auth.get(0) === postingPubkey)
                 throw 'Login will not be saved, posting key is the same as active key';
         });
-        account.getIn(['owner', 'key_auths']).forEach(auth => {
+        account.getIn(['owner', 'key_auths']).forEach((auth) => {
             if (auth.get(0) === postingPubkey)
                 throw 'Login will not be saved, posting key is the same as owner key';
         });
@@ -519,7 +600,10 @@ function* saveLogin_localStorage() {
         postingPrivateWif,
         memoWif,
         login_owner_pubkey,
-        login_with_keychain
+        login_with_keychain,
+        login_with_hivesigner,
+        access_token,
+        expires_in
     );
     // autopost is a auto login for a low security key (like the posting key)
     localStorage.setItem('autopost2', data);
@@ -553,17 +637,20 @@ function* loginError({
     If the owner key was changed after the login owner key, this function will find the next owner key history record after the change and store it under user.previous_owner_authority.
 */
 function* lookupPreviousOwnerAuthority({ payload: {} }) {
-    const current = yield select(state => state.user.getIn(['current']));
+    const current = yield select((state) => state.user.getIn(['current']));
     if (!current) return;
 
     const login_owner_pubkey = current.get('login_owner_pubkey');
     if (!login_owner_pubkey) return;
 
     const username = current.get('username');
-    const key_auths = yield select(state =>
+    const key_auths = yield select((state) =>
         state.global.getIn(['accounts', username, 'owner', 'key_auths'])
     );
-    if (key_auths && key_auths.find(key => key.get(0) === login_owner_pubkey)) {
+    if (
+        key_auths &&
+        key_auths.find((key) => key.get(0) === login_owner_pubkey)
+    ) {
         // console.log('UserSaga ---> Login matches current account owner');
         return;
     }
@@ -579,13 +666,13 @@ function* lookupPreviousOwnerAuthority({ payload: {} }) {
         return aa < bb ? -1 : aa > bb ? 1 : 0;
     });
     // console.log('UserSaga ---> owner_history', owner_history.toJS())
-    const previous_owner_authority = owner_history.find(o => {
+    const previous_owner_authority = owner_history.find((o) => {
         const auth = o.get('previous_owner_authority');
         const weight_threshold = auth.get('weight_threshold');
         const key3 = auth
             .get('key_auths')
             .find(
-                key2 =>
+                (key2) =>
                     key2.get(0) === login_owner_pubkey &&
                     key2.get(1) >= weight_threshold
             );
