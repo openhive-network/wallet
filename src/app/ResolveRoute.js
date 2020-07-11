@@ -22,6 +22,9 @@ export default function resolveRoute(path) {
     if (path === '/login.html') {
         return { page: 'Login' };
     }
+    if (path === '/login/hivesigner') {
+        return { page: 'HiveSignerLogin' };
+    }
     if (path === '/privacy.html') {
         return { page: 'Privacy' };
     }

@@ -15,6 +15,8 @@ import tt from 'counterpart';
 import { APP_URL } from 'app/client_config';
 import { PrivateKey, PublicKey } from '@hiveio/hive-js/lib/auth/ecc';
 import { SIGNUP_URL } from 'shared/constants';
+import { hiveSignerClient } from 'app/utils/HiveSigner';
+import { getQueryStringParams } from 'app/utils/Links';
 
 class LoginForm extends Component {
     static propTypes = {
@@ -26,6 +28,7 @@ class LoginForm extends Component {
         super();
         const cryptoTestResult = runTests();
         let cryptographyFailure = false;
+        const isHiveSigner = false;
         this.SignUp = this.SignUp.bind(this);
         if (cryptoTestResult !== undefined) {
             console.error(
@@ -35,12 +38,12 @@ class LoginForm extends Component {
             cryptographyFailure = true;
         }
         const useKeychain = hasCompatibleKeychain();
-        this.state = { useKeychain, cryptographyFailure };
-        this.usernameOnChange = e => {
+        this.state = { useKeychain, cryptographyFailure, isHiveSigner };
+        this.usernameOnChange = (e) => {
             const value = e.target.value.toLowerCase();
             this.state.username.props.onChange(value);
         };
-        this.onCancel = e => {
+        this.onCancel = (e) => {
             if (e.preventDefault) e.preventDefault();
             const { onCancel, loginBroadcastOperation } = this.props;
             const errorCallback =
@@ -52,11 +55,15 @@ class LoginForm extends Component {
         this.qrReader = () => {
             const { qrReader } = props;
             const { password } = this.state;
-            qrReader(data => {
+            qrReader((data) => {
                 password.props.onChange(data);
             });
         };
         this.initForm(props, useKeychain);
+    }
+
+    componentWillMount() {
+        this.loginWithHiveSigner();
     }
 
     componentDidMount() {
@@ -74,19 +81,17 @@ class LoginForm extends Component {
             instance: this,
             fields: ['username', 'password', 'saveLogin:checked'],
             initialValues: props.initialValues,
-            validation: values => ({
+            validation: (values) => ({
                 username: !values.username
                     ? tt('g.required')
                     : validate_account_name(values.username.split('/')[0]),
                 password: useKeychain
                     ? null
                     : !values.password
-                        ? tt('g.required')
-                        : PublicKey.fromString(values.password)
-                            ? tt(
-                                  'loginform_jsx.you_need_a_private_password_or_key'
-                              )
-                            : null,
+                    ? tt('g.required')
+                    : PublicKey.fromString(values.password)
+                    ? tt('loginform_jsx.you_need_a_private_password_or_key')
+                    : null,
             }),
         });
     }
@@ -104,7 +109,7 @@ class LoginForm extends Component {
         serverApiRecordEvent('SignIn', onType);
     }
 
-    onUseKeychainCheckbox = e => {
+    onUseKeychainCheckbox = (e) => {
         const useKeychain = e.target.checked;
         this.setState({ useKeychain });
     };
@@ -119,6 +124,46 @@ class LoginForm extends Component {
     showChangePassword = () => {
         const { username, password } = this.state;
         this.props.showChangePassword(username.value, password.value);
+    };
+
+    onClickHiveSignerBtn = () => {
+        const { saveLogin } = this.state;
+        const { afterLoginRedirectToWelcome } = this.props;
+        hiveSignerClient.login({
+            state: JSON.stringify({
+                lastPath: window.location.pathname,
+                saveLogin: saveLogin.value,
+                afterLoginRedirectToWelcome,
+            }),
+        });
+    };
+
+    loginWithHiveSigner = () => {
+        const path = window.location.pathname;
+        if (path === '/login/hivesigner') {
+            this.setState({
+                isHiveSigner: true,
+            });
+            const params = getQueryStringParams(window.location.search);
+            const { username, access_token, expires_in, state } = params;
+            const {
+                saveLogin,
+                afterLoginRedirectToWelcome,
+                lastPath,
+            } = JSON.parse(state);
+            const { reallySubmit, loginBroadcastOperation } = this.props;
+            const data = {
+                username,
+                access_token,
+                expires_in,
+                saveLogin,
+                loginBroadcastOperation,
+                useHiveSigner: true,
+                lastPath,
+            };
+            console.log('login:hivesigner', data);
+            reallySubmit(data, afterLoginRedirectToWelcome);
+        }
     };
 
     render() {
@@ -178,7 +223,9 @@ class LoginForm extends Component {
 
         const { loginBroadcastOperation, dispatchSubmit, msg } = this.props;
         const { username, password, useKeychain, saveLogin } = this.state;
-        const { submitting, valid, handleSubmit } = this.state.login;
+        const { valid, handleSubmit } = this.state.login;
+        const submitting =
+            this.state.login.submitting || this.state.isHiveSigner;
         const { usernameOnChange, onCancel /*qrReader*/ } = this;
         const disabled = submitting || !valid;
         const opType = loginBroadcastOperation
@@ -362,12 +409,9 @@ class LoginForm extends Component {
                             disabled={submitting}
                         />
                         {error && <div className="error">{error}&nbsp;</div>}
-                        {error &&
-                            password_info && (
-                                <div className="warning">
-                                    {password_info}&nbsp;
-                                </div>
-                            )}
+                        {error && password_info && (
+                            <div className="warning">{password_info}&nbsp;</div>
+                        )}
                     </div>
                 )}
                 {loginBroadcastOperation && (
@@ -392,7 +436,8 @@ class LoginForm extends Component {
                                 checked={useKeychain}
                                 onChange={this.onUseKeychainCheckbox}
                                 disabled={submitting}
-                            />&nbsp;{tt('loginform_jsx.use_keychain')}
+                            />
+                            &nbsp;{tt('loginform_jsx.use_keychain')}
                         </label>
                     </div>
                 )}
@@ -408,7 +453,8 @@ class LoginForm extends Component {
                             {...saveLogin.props}
                             onChange={this.saveLoginToggle}
                             disabled={submitting}
-                        />&nbsp;{tt('loginform_jsx.keep_me_logged_in')}
+                        />
+                        &nbsp;{tt('loginform_jsx.keep_me_logged_in')}
                     </label>
                 </div>
                 <div className="login-modal-buttons">
@@ -432,17 +478,39 @@ class LoginForm extends Component {
                         </button>
                     )}
                 </div>
-                {!isTransfer && signupLink}
             </form>
         );
 
+        const moreLoginMethods = (
+            <div>
+                <br />
+                <a
+                    id="btn-hivesigner"
+                    className="button"
+                    onClick={this.onClickHiveSignerBtn}
+                    disabled={submitting}
+                >
+                    <img src="/images/hivesigner.svg" />
+                </a>
+            </div>
+        );
+
         return (
-            <div className="LoginForm row">
-                <div className="column">
-                    {message}
-                    {titleText}
-                    {form}
+            <div className="LoginForm">
+                <div className="row">
+                    <div className="column">
+                        {message}
+                        {titleText}
+                        {form}
+                    </div>
                 </div>
+                <div className="divider">
+                    <span>{tt('loginform_jsx.more_login_methods')}</span>
+                </div>
+                <div className="row">
+                    <div className="column">{moreLoginMethods}</div>
+                </div>
+                {!isTransfer && signupLink}
             </div>
         );
     }
@@ -524,7 +592,7 @@ export default connect(
     },
 
     // mapDispatchToProps
-    dispatch => ({
+    (dispatch) => ({
         dispatchSubmit: (data, useKeychain, loginBroadcastOperation) => {
             const { password, saveLogin } = data;
             const username = data.username.trim().toLowerCase();
@@ -568,10 +636,42 @@ export default connect(
                 );
             }
         },
+        reallySubmit: (
+            {
+                username,
+                password,
+                saveLogin,
+                loginBroadcastOperation,
+                access_token,
+                expires_in,
+                useHiveSigner,
+                lastPath,
+            },
+            afterLoginRedirectToWelcome
+        ) => {
+            const { type } = loginBroadcastOperation
+                ? loginBroadcastOperation.toJS()
+                : {};
+
+            serverApiRecordEvent('SignIn', type);
+
+            dispatch(
+                userActions.usernamePasswordLogin({
+                    username,
+                    password,
+                    access_token,
+                    expires_in,
+                    lastPath,
+                    useHiveSigner,
+                    saveLogin,
+                    afterLoginRedirectToWelcome,
+                })
+            );
+        },
         clearError: () => {
             if (hasError) dispatch(userActions.loginError({ error: null }));
         },
-        qrReader: dataCallback => {
+        qrReader: (dataCallback) => {
             dispatch(
                 globalActions.showDialog({
                     name: 'qr_reader',
