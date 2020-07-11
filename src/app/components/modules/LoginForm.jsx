@@ -482,16 +482,18 @@ class LoginForm extends Component {
         );
 
         const moreLoginMethods = (
-            <div>
+            <div className="row buttons">
                 <br />
-                <a
-                    id="btn-hivesigner"
-                    className="button"
-                    onClick={this.onClickHiveSignerBtn}
-                    disabled={submitting}
-                >
-                    <img src="/images/hivesigner.svg" />
-                </a>
+                <div className="column">
+                    <a
+                        id="btn-hivesigner"
+                        className="button"
+                        onClick={this.onClickHiveSignerBtn}
+                        disabled={submitting}
+                    >
+                        <img src="/images/hivesigner.svg" />
+                    </a>
+                </div>
             </div>
         );
 
@@ -507,9 +509,7 @@ class LoginForm extends Component {
                 <div className="divider">
                     <span>{tt('loginform_jsx.more_login_methods')}</span>
                 </div>
-                <div className="row">
-                    <div className="column">{moreLoginMethods}</div>
-                </div>
+                {moreLoginMethods}
                 {!isTransfer && signupLink}
             </div>
         );
