@@ -483,7 +483,6 @@ class LoginForm extends Component {
 
         const moreLoginMethods = (
             <div className="row buttons">
-                <br />
                 <div className="column">
                     <a
                         id="btn-hivesigner"
@@ -509,6 +508,7 @@ class LoginForm extends Component {
                 <div className="divider">
                     <span>{tt('loginform_jsx.more_login_methods')}</span>
                 </div>
+                <br />
                 {moreLoginMethods}
                 {!isTransfer && signupLink}
             </div>
