@@ -429,6 +429,7 @@ function getUrlFromLocation(location) {
         url = url.replace(/\/password$/, '/transfers');
     if (url.indexOf('/delegations') !== -1)
         url = url.replace(/\/delegations$/, '/transfers');
+    // Replace /login/hivesigner with /login.html to resolve data correctly for apiGetState
     if (url.indexOf('login/hivesigner') !== -1)
         url = url.replace('/login/hivesigner', '/login.html');
 
