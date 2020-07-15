@@ -335,29 +335,30 @@ function* broadcastPayload({
                     );
                 } else if (isLoggedInWithHiveSigner()) {
                     if (!needsActiveAuth) {
-                        hiveSignerClient.broadcast(operations, function (
-                            err,
-                            result
-                        ) {
-                            if (err) {
-                                reject(err);
-                            } else {
-                                broadcastedEvent();
-                                resolve();
+                        hiveSignerClient.broadcast(
+                            operations,
+                            (err, result) => {
+                                if (err) {
+                                    reject(err.error_description);
+                                } else {
+                                    broadcastedEvent();
+                                    resolve();
+                                }
                             }
-                        });
+                        );
                     } else {
-                        sendOperationsWithHiveSigner(operations, {}, function (
-                            err,
-                            result
-                        ) {
-                            if (err) {
-                                reject(err);
-                            } else {
-                                broadcastedEvent();
-                                resolve();
+                        sendOperationsWithHiveSigner(
+                            operations,
+                            {},
+                            (err, result) => {
+                                if (err) {
+                                    reject(err.error_description);
+                                } else {
+                                    broadcastedEvent();
+                                    resolve();
+                                }
                             }
-                        });
+                        );
                     }
                 } else {
                     broadcast.send(
