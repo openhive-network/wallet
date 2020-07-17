@@ -227,7 +227,8 @@
             "warning": "Legitimate users, including employees of Hive, will never ask you for a private key or master password.",
             "checkbox": "I understand"
         },
-        "post_as": "发布为"
+        "post_as": "发布为",
+        "cannot_decrypt_memo": "无法使用当前登录方法解密备忘录"
     },
     "navigation": {
         "about": "关于",

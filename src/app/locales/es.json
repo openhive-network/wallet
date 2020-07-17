@@ -228,7 +228,8 @@
             "warning": "Los usuarios legítimos, incluidos los empleados de Hive, nunca le pedirán una clave privada o contraseña maestra.",
             "checkbox": "Entiendo"
         },
-        "post_as": "Publicar como"
+        "post_as": "Publicar como",
+        "cannot_decrypt_memo": "no puede descifrar la nota con el método de inicio de sesión actual"
     },
     "navigation": {
         "about": "Sobre",

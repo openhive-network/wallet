@@ -7,6 +7,7 @@ import classnames from 'classnames';
 import { memo } from '@hiveio/hive-js';
 import BadActorList from 'app/utils/BadActorList';
 import { repLog10 } from 'app/utils/ParsersAndFormatters';
+import { isLoggedInWithHiveSigner } from 'app/utils/HiveSigner';
 
 const MINIMUM_REPUTATION = 15;
 
@@ -38,7 +39,7 @@ export class Memo extends React.Component {
         }
     }
 
-    onRevealMemo = e => {
+    onRevealMemo = (e) => {
         e.preventDefault();
         this.setState({ revealMemo: true });
     };
@@ -73,6 +74,8 @@ export class Memo extends React.Component {
             renderText = myAccount
                 ? decodeMemo(memo_private, text)
                 : tt('g.login_to_see_memo');
+        } else if (myAccount && isLoggedInWithHiveSigner()) {
+            renderText = tt('g.cannot_decrypt_memo');
         }
 
         if (isFromBadActor && !this.state.revealMemo) {

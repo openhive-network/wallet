@@ -228,7 +228,8 @@
             "warning": "Legitimate users, including employees of Hive, will never ask you for a private key or master password.",
             "checkbox": "I understand"
         },
-        "post_as": "Poster en tant que"
+        "post_as": "Poster en tant que",
+        "cannot_decrypt_memo": "impossible de déchiffrer le mémo avec la méthode de connexion actuelle"
     },
     "navigation": {
         "about": "A propos",
