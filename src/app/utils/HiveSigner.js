@@ -59,3 +59,11 @@ export const sendOperationsWithHiveSigner = (ops, params, cb) => {
     }
     return webUrl;
 };
+
+export const openHiveSignerAuths = () => {
+    const url = `${HIVE_SIGNER_URL}/auths`;
+    if (isBrowser()) {
+        const win = window.open(url, '_blank');
+        return win.focus();
+    }
+};
