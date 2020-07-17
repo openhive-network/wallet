@@ -229,7 +229,8 @@
             "checkbox": "理解しました。"
         },
         "post_as": "投稿します:",
-        "cannot_decrypt_memo": "現在のログイン方法ではメモを復号化できません"
+        "cannot_decrypt_memo": "現在のログイン方法ではメモを復号化できません",
+        "cannot_encrypt_memo": "現在のログイン方法ではメモを暗号化できません"
     },
     "navigation": {
         "about": "Hiveについて",

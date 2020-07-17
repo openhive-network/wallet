@@ -229,7 +229,8 @@
             "checkbox": "Entiendo"
         },
         "post_as": "Publicar como",
-        "cannot_decrypt_memo": "no puede descifrar la nota con el método de inicio de sesión actual"
+        "cannot_decrypt_memo": "no puede descifrar la nota con el método de inicio de sesión actual",
+        "cannot_encrypt_memo": "no se puede cifrar la nota con el método de inicio de sesión actual"
     },
     "navigation": {
         "about": "Sobre",

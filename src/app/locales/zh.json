@@ -228,7 +228,8 @@
             "checkbox": "I understand"
         },
         "post_as": "发布为",
-        "cannot_decrypt_memo": "无法使用当前登录方法解密备忘录"
+        "cannot_decrypt_memo": "无法使用当前登录方法解密备忘录",
+        "cannot_encrypt_memo": "无法使用当前登录方法加密备忘录"
     },
     "navigation": {
         "about": "关于",

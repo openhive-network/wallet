@@ -229,7 +229,8 @@
             "checkbox": "네 이해합니다."
         },
         "post_as": "Post as",
-        "cannot_decrypt_memo": "현재 로그인 방법으로 메모를 해독 할 수 없습니다"
+        "cannot_decrypt_memo": "현재 로그인 방법으로 메모를 해독 할 수 없습니다",
+        "cannot_encrypt_memo": "현재 로그인 방법으로 메모를 암호화 할 수 없습니다"
     },
     "navigation": {
         "about": "스팀이란?",

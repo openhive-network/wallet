@@ -229,7 +229,8 @@
             "checkbox": "I understand"
         },
         "post_as": "Napisz jako",
-        "cannot_decrypt_memo": "nie można odszyfrować notatki przy użyciu bieżącej metody logowania"
+        "cannot_decrypt_memo": "nie można odszyfrować notatki przy użyciu bieżącej metody logowania",
+        "cannot_encrypt_memo": "nie można zaszyfrować notatki przy użyciu bieżącej metody logowania"
     },
     "navigation": {
         "about": "O Hive",

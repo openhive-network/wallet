@@ -229,7 +229,8 @@
             "checkbox": "I understand"
         },
         "post_as": "Poster en tant que",
-        "cannot_decrypt_memo": "impossible de déchiffrer le mémo avec la méthode de connexion actuelle"
+        "cannot_decrypt_memo": "impossible de déchiffrer le mémo avec la méthode de connexion actuelle",
+        "cannot_encrypt_memo": "impossible de crypter le mémo avec la méthode de connexion actuelle"
     },
     "navigation": {
         "about": "A propos",

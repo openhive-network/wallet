@@ -233,7 +233,8 @@
         "weeks": "weeks",
         "months": "months",
         "years": "years",
-        "cannot_decrypt_memo": "cannot decrypt memo with current login method"
+        "cannot_decrypt_memo": "cannot decrypt memo with current login method",
+        "cannot_encrypt_memo": "cannot encrypt memo with current login method"
     },
     "navigation": {
         "about": "About Hive",

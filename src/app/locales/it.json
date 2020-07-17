@@ -229,7 +229,8 @@
             "checkbox": "I understand"
         },
         "post_as": "Pubblica come",
-        "cannot_decrypt_memo": "impossibile decrittografare il promemoria con il metodo di accesso corrente"
+        "cannot_decrypt_memo": "impossibile decrittografare il promemoria con il metodo di accesso corrente",
+        "cannot_encrypt_memo": "impossibile crittografare il promemoria con il metodo di accesso corrente"
     },
     "navigation": {
         "about": "Circa",

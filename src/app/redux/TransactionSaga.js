@@ -69,10 +69,12 @@ export function* preBroadcast_transfer({ operation }) {
             const memo_private = yield select((state) =>
                 state.user.getIn(['current', 'private_keys', 'memo_private'])
             );
-            if (!memo_private)
-                throw new Error(
-                    'Unable to encrypt memo, missing memo private key'
-                );
+            if (!memo_private) {
+                const msg = isLoggedInWithHiveSigner()
+                    ? tt('g.cannot_encrypt_memo')
+                    : 'Unable to encrypt memo, missing memo private key';
+                throw new Error(msg);
+            }
             const account = yield call(getAccount, operation.to);
             if (!account) throw new Error(`Unknown to account ${operation.to}`);
             const memo_key = account.get('memo_key');
