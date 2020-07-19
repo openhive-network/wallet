@@ -228,7 +228,9 @@
             "warning": "Legitimate users, including employees of Hive, will never ask you for a private key or master password.",
             "checkbox": "I understand"
         },
-        "post_as": "Napisz jako"
+        "post_as": "Napisz jako",
+        "cannot_decrypt_memo": "nie można odszyfrować notatki przy użyciu bieżącej metody logowania",
+        "cannot_encrypt_memo": "nie można zaszyfrować notatki przy użyciu bieżącej metody logowania"
     },
     "navigation": {
         "about": "O Hive",
@@ -610,7 +612,8 @@
         "use_keychain": "Use keychain extension",
         "dont_have_an_account": "Don't have a Hive account?",
         "sign_up_now_to_earn": "Zarejestruj się aby zarabiać ",
-        "free_money": "DARMOWY HIVE!"
+        "free_money": "DARMOWY HIVE!",
+        "more_login_methods": "więcej metod logowania"
     },
     "chainvalidation_js": {
         "account_name_should_not_be_empty": "Account name should not be empty.",

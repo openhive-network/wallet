@@ -92,7 +92,7 @@ export const makeParams = (params, prefix) => {
  * @param {string} search - window.location.search formatted string (may omit '?')
  * @returns {string}
  */
-export const determineViewMode = search => {
+export const determineViewMode = (search) => {
     const searchList =
         search.indexOf('?') === 0
             ? search.substr(1).split('&')
@@ -107,6 +107,25 @@ export const determineViewMode = search => {
         }
     }
     return '';
+};
+
+/**
+ * Returns a new object contains the parameters in a query (window.location.search)
+ * @param query
+ * @returns {*}
+ */
+export const getQueryStringParams = (query) => {
+    return query
+        ? (/^[?#]/.test(query) ? query.slice(1) : query)
+              .split('&')
+              .reduce((params, param) => {
+                  let [key, value] = param.split('=');
+                  params[key] = value
+                      ? decodeURIComponent(value.replace(/\+/g, ' '))
+                      : '';
+                  return params;
+              }, {})
+        : {};
 };
 
 // Original regex

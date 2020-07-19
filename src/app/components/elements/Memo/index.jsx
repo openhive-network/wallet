@@ -7,6 +7,7 @@ import classnames from 'classnames';
 import { memo } from '@hiveio/hive-js';
 import BadActorList from 'app/utils/BadActorList';
 import { repLog10 } from 'app/utils/ParsersAndFormatters';
+import { isLoggedInWithHiveSigner } from 'app/utils/HiveSigner';
 
 const MINIMUM_REPUTATION = 15;
 
@@ -38,7 +39,7 @@ export class Memo extends React.Component {
         }
     }
 
-    onRevealMemo = e => {
+    onRevealMemo = (e) => {
         e.preventDefault();
         this.setState({ revealMemo: true });
     };
@@ -58,21 +59,27 @@ export class Memo extends React.Component {
 
         if (!text || text.length < 1) return <span />;
 
-        const classes = classnames({
-            Memo: true,
-            'Memo--badActor': isFromBadActor,
-            'Memo--fromNegativeRepUser': fromNegativeRepUser,
-            'Memo--private': memo_private,
-        });
-
         let renderText = '';
 
         if (!isEncoded) {
             renderText = text;
-        } else if (memo_private) {
-            renderText = myAccount
-                ? decodeMemo(memo_private, text)
-                : tt('g.login_to_see_memo');
+        } else if (memo_private && myAccount) {
+            renderText = decodeMemo(memo_private, text);
+        }
+
+        // show warning if not permissino to view the memo
+        let noPermission = false;
+        if (isEncoded) {
+            let msg = null;
+            if (memo_private && !myAccount) {
+                msg = tt('g.login_to_see_memo');
+            } else if (myAccount && isLoggedInWithHiveSigner()) {
+                msg = tt('g.cannot_decrypt_memo');
+            }
+            if (msg) {
+                noPermission = true;
+                renderText = <div className="no-permission-caution">{msg}</div>;
+            }
         }
 
         if (isFromBadActor && !this.state.revealMemo) {
@@ -118,6 +125,14 @@ export class Memo extends React.Component {
                 </div>
             );
         }
+
+        const classes = classnames({
+            Memo: true,
+            'Memo--badActor': isFromBadActor,
+            'Memo--fromNegativeRepUser': fromNegativeRepUser,
+            'Memo--private': memo_private,
+            'Memo--noPermission': noPermission,
+        });
 
         return <span className={classes}>{renderText}</span>;
     }

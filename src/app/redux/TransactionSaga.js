@@ -17,6 +17,11 @@ import * as proposalActions from 'app/redux/ProposalReducer';
 import { DEBT_TICKER } from 'app/client_config';
 import { serverApiRecordEvent } from 'app/utils/ServerApiClient';
 import { isLoggedInWithKeychain } from 'app/utils/HiveKeychain';
+import {
+    isLoggedInWithHiveSigner,
+    hiveSignerClient,
+    sendOperationsWithHiveSigner,
+} from 'app/utils/HiveSigner';
 
 function toSteemSymbols(symbol) {
     return symbol.replace('HIVE', 'STEEM').replace('HBD', 'SBD');
@@ -61,13 +66,15 @@ export function* preBroadcast_transfer({ operation }) {
         memoStr = toStringUtf8(memoStr);
         memoStr = memoStr.trim();
         if (/^#/.test(memoStr)) {
-            const memo_private = yield select(state =>
+            const memo_private = yield select((state) =>
                 state.user.getIn(['current', 'private_keys', 'memo_private'])
             );
-            if (!memo_private)
-                throw new Error(
-                    'Unable to encrypt memo, missing memo private key'
-                );
+            if (!memo_private) {
+                const msg = isLoggedInWithHiveSigner()
+                    ? tt('g.cannot_encrypt_memo')
+                    : 'Unable to encrypt memo, missing memo private key';
+                throw new Error(msg);
+            }
             const account = yield call(getAccount, operation.to);
             if (!account) throw new Error(`Unknown to account ${operation.to}`);
             const memo_key = account.get('memo_key');
@@ -77,7 +84,7 @@ export function* preBroadcast_transfer({ operation }) {
     }
     return operation;
 }
-const toStringUtf8 = o =>
+const toStringUtf8 = (o) =>
     o ? (Buffer.isBuffer(o) ? o.toString('utf-8') : o.toString()) : o;
 
 function* preBroadcast_account_witness_vote({ operation, username }) {
@@ -169,7 +176,7 @@ export function* broadcastOperation({
         return;
     }
     try {
-        if (!isLoggedInWithKeychain()) {
+        if (!isLoggedInWithKeychain() && !isLoggedInWithHiveSigner()) {
             if (!keys || keys.length === 0) {
                 payload.keys = [];
                 // user may already be logged in, or just enterend a signing passowrd or wif
@@ -200,8 +207,8 @@ export function* broadcastOperation({
         }
         yield call(broadcastPayload, { payload });
         let eventType = type
-            .replace(/^([a-z])/, g => g.toUpperCase())
-            .replace(/_([a-z])/g, g => g[1].toUpperCase());
+            .replace(/^([a-z])/, (g) => g.toUpperCase())
+            .replace(/_([a-z])/g, (g) => g[1].toUpperCase());
         if (eventType === 'Comment' && !operation.parent_author)
             eventType = 'Post';
         const page =
@@ -281,7 +288,7 @@ function* broadcastPayload({
     };
 
     // get username
-    const currentUser = yield select(state => state.user.get('current'));
+    const currentUser = yield select((state) => state.user.get('current'));
     const currentUsername = currentUser && currentUser.get('username');
     username = username || currentUsername;
 
@@ -313,29 +320,56 @@ function* broadcastPayload({
                     broadcastedEvent();
                 }, 2000);
             } else {
-                if (!isLoggedInWithKeychain()) {
-                    broadcast.send(
-                        { extensions: [], operations },
-                        keys,
-                        err => {
-                            if (err) {
-                                console.error(err);
-                                reject(err);
+                if (isLoggedInWithKeychain()) {
+                    const authType = needsActiveAuth ? 'active' : 'posting';
+                    window.hive_keychain.requestBroadcast(
+                        username,
+                        operations,
+                        authType,
+                        (response) => {
+                            if (!response.success) {
+                                reject(response.message);
                             } else {
                                 broadcastedEvent();
                                 resolve();
                             }
                         }
                     );
+                } else if (isLoggedInWithHiveSigner()) {
+                    if (!needsActiveAuth) {
+                        hiveSignerClient.broadcast(
+                            operations,
+                            (err, result) => {
+                                if (err) {
+                                    reject(err.error_description);
+                                } else {
+                                    broadcastedEvent();
+                                    resolve();
+                                }
+                            }
+                        );
+                    } else {
+                        sendOperationsWithHiveSigner(
+                            operations,
+                            {},
+                            (err, result) => {
+                                if (err) {
+                                    reject(err.error_description);
+                                } else {
+                                    broadcastedEvent();
+                                    resolve();
+                                }
+                            }
+                        );
+                    }
                 } else {
-                    const authType = needsActiveAuth ? 'active' : 'posting';
-                    window.hive_keychain.requestBroadcast(
-                        username,
-                        operations,
-                        authType,
-                        response => {
-                            if (!response.success) {
-                                reject(response.message);
+                    broadcast.send(
+                        { extensions: [], operations },
+                        keys,
+                        (err) => {
+                            if (err) {
+                                console.error(err);
+                                reject(err);
                             } else {
                                 broadcastedEvent();
                                 resolve();
@@ -559,7 +593,7 @@ export function* recoverAccount({
         );
         if (outgoingAutoVestingRoutes && outgoingAutoVestingRoutes.length > 0) {
             yield all(
-                outgoingAutoVestingRoutes.map(ovr => {
+                outgoingAutoVestingRoutes.map((ovr) => {
                     return call(
                         [broadcast, broadcast.setWithdrawVestingRoute],
                         [newActive, ovr.from_account, ovr.to_account, 0, true]
@@ -647,7 +681,7 @@ export function* updateAuthorities({
             key = PrivateKey.fromWif(signingKey);
         } catch (e2) {
             // probably updating a memo .. see if we got an active or owner
-            const auth = authType => {
+            const auth = (authType) => {
                 const priv = PrivateKey.fromSeed(
                     accountName + authType + signingKey
                 );
