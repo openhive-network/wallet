@@ -41,7 +41,7 @@ if (process.env.OFFLINE_SSR_TEST) {
     get_content_perf = require(uri + testDataDir + '/get_content');
 }
 
-const calcOffsetRoot = startEl => {
+const calcOffsetRoot = (startEl) => {
     let offset = 0;
     let el = startEl;
     while (el) {
@@ -193,7 +193,7 @@ class OffsetScrollBehavior extends ScrollBehavior {
 }
 //END: SCROLL CODE
 
-const bindMiddleware = middleware => {
+const bindMiddleware = (middleware) => {
     if (process.env.BROWSER && process.env.NODE_ENV === 'development') {
         const { composeWithDevTools } = require('redux-devtools-extension');
         return composeWithDevTools(applyMiddleware(...middleware));
@@ -202,12 +202,12 @@ const bindMiddleware = middleware => {
 };
 
 const runRouter = (location, routes) => {
-    return new Promise(resolve =>
+    return new Promise((resolve) =>
         match({ routes, location }, (...args) => resolve(args))
     );
 };
 
-const onRouterError = error => {
+const onRouterError = (error) => {
     console.error('onRouterError', error);
 };
 
@@ -359,7 +359,7 @@ export function clientRender(initialState) {
      * When to scroll - on hash link navigation determine if the page should scroll to that element (forward nav, or ignore nav direction)
      */
     const scroll = useScroll({
-        createScrollBehavior: config => new OffsetScrollBehavior(config), //information assembler for has scrolling.
+        createScrollBehavior: (config) => new OffsetScrollBehavior(config), //information assembler for has scrolling.
         shouldUpdateScroll: (prevLocation, { location }) => {
             // eslint-disable-line no-shadow
             //if there is a hash, we may want to scroll to it
@@ -429,6 +429,9 @@ function getUrlFromLocation(location) {
         url = url.replace(/\/password$/, '/transfers');
     if (url.indexOf('/delegations') !== -1)
         url = url.replace(/\/delegations$/, '/transfers');
+    // Replace /login/hivesigner with /login.html to resolve data correctly for apiGetState
+    if (url.indexOf('login/hivesigner') !== -1)
+        url = url.replace('/login/hivesigner', '/login.html');
 
     return url;
 }

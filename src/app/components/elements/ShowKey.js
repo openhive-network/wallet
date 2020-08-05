@@ -6,6 +6,10 @@ import * as userActions from 'app/redux/UserReducer';
 import tt from 'counterpart';
 import * as globalActions from 'app/redux/GlobalReducer';
 import QRCode from 'react-qr';
+import {
+    isLoggedInWithHiveSigner,
+    openHiveSignerAuths,
+} from 'app/utils/HiveSigner';
 
 /** Display a public key.  Offer to show a private key, but only if it matches the provided public key */
 class ShowKey extends Component {
@@ -24,8 +28,12 @@ class ShowKey extends Component {
         this.state = {};
         this.shouldComponentUpdate = shouldComponentUpdate(this, 'ShowKey');
         this.showLogin = () => {
-            const { showLogin, accountName, authType } = this.props;
-            showLogin({ username: accountName });
+            if (isLoggedInWithHiveSigner()) {
+                openHiveSignerAuths();
+            } else {
+                const { showLogin, accountName, authType } = this.props;
+                showLogin({ username: accountName });
+            }
         };
         this.showLogin = this.showLogin.bind(this);
     }
@@ -69,7 +77,10 @@ class ShowKey extends Component {
     };
 
     render() {
-        const { showLogin, props: { pubkey, authType } } = this;
+        const {
+            showLogin,
+            props: { pubkey, authType },
+        } = this;
         const { wif } = this.state;
 
         const qrIcon = (
@@ -135,7 +146,7 @@ class ShowKey extends Component {
 
 export default connect(
     (state, ownProps) => ownProps,
-    dispatch => ({
+    (dispatch) => ({
         showLogin: ({ username, authType }) => {
             dispatch(
                 userActions.showLogin({ loginDefault: { username, authType } })

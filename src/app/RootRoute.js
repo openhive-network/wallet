@@ -19,6 +19,8 @@ export default {
             cb(null, [require('app/components/pages/Faq')]);
         } else if (route.page === 'Login') {
             cb(null, [require('app/components/pages/Login')]);
+        } else if (route.page === 'HiveSignerLogin') {
+            cb(null, [require('app/components/pages/HiveSignerLogin')]);
         } else if (route.page === 'Privacy') {
             cb(null, [require('app/components/pages/Privacy')]);
         } else if (route.page === 'Support') {
@@ -49,7 +51,7 @@ export default {
         } else if (route.page === 'UserProfile') {
             cb(null, [require('app/components/pages/UserProfile')]);
         } else if (route.page === 'Market') {
-            require.ensure([], require => {
+            require.ensure([], (require) => {
                 cb(null, [require('app/components/pages/Market')]);
             });
         } else if (route.page === 'WalletIndex') {
