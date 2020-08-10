@@ -17,9 +17,10 @@ const SidePanel = ({ alignment, visible, hideSidePanel, username }) => {
             : 'SidePanel__hide-signup';
 
     const makeExternalLink = (i, ix, arr) => {
+        if (i === null || i === undefined) return null;
         const cn = ix === arr.length - 1 ? 'last' : null;
         return (
-            <li key={i.value} className={cn}>
+            <li key={i.label + 'ext'} className={cn}>
                 <a
                     href={i.link}
                     target={i.internal ? null : '_blank'}
@@ -35,7 +36,7 @@ const SidePanel = ({ alignment, visible, hideSidePanel, username }) => {
     const makeInternalLink = (i, ix, arr) => {
         const cn = ix === arr.length - 1 ? 'last' : null;
         return (
-            <li key={i.value} className={cn}>
+            <li key={i.label + 'int'} className={cn}>
                 <Link to={i.link}>{i.label}</Link>
             </li>
         );
