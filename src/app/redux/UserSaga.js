@@ -552,10 +552,6 @@ function* saveLogin_localStorage() {
         state.user.getIn(['current', 'access_token']),
         state.user.getIn(['current', 'expires_in']),
     ]);
-    if (!login_with_keychain && !login_with_hivesigner && !posting_private) {
-        console.info('No private keys. May be a username login.');
-        return;
-    }
     if (!username) {
         console.error('Not logged in');
         return;
