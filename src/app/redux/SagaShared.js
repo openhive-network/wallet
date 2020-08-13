@@ -8,19 +8,22 @@ import * as transactionActions from './TransactionReducer';
 import { setUserPreferences } from 'app/utils/ServerApiClient';
 import { getStateAsync } from 'app/utils/steemApi';
 
-const wait = ms =>
-    new Promise(resolve => {
+const wait = (ms) =>
+    new Promise((resolve) => {
         setTimeout(() => resolve(), ms);
     });
 
 export const sharedWatches = [
     takeEvery(globalActions.GET_STATE, getState),
-    takeLatest([appActions.TOGGLE_NIGHTMODE], saveUserPreferences),
+    takeLatest(
+        [appActions.TOGGLE_NIGHTMODE, appActions.SET_USER_PREFERENCES],
+        saveUserPreferences
+    ),
     takeEvery('transaction/ERROR', showTransactionErrorNotification),
 ];
 
 export function* getAccount(username, force = false) {
-    let account = yield select(state =>
+    let account = yield select((state) =>
         state.global.get('accounts').get(username)
     );
 
@@ -58,7 +61,7 @@ export function* getState({ payload: { url } }) {
 }
 
 function* showTransactionErrorNotification() {
-    const errors = yield select(state => state.transaction.get('errors'));
+    const errors = yield select((state) => state.transaction.get('errors'));
     for (const [key, message] of errors) {
         // Do not display a notification for the bandwidthError key.
         if (key !== 'bandwidthError') {
@@ -80,7 +83,7 @@ function* saveUserPreferences({ payload }) {
         return;
     }
 
-    const prefs = yield select(state => state.app.get('user_preferences'));
+    const prefs = yield select((state) => state.app.get('user_preferences'));
     console.log('saveUserPreferences prefs', prefs);
     yield setUserPreferences(prefs.toJS());
 }

@@ -34,8 +34,6 @@ class Settings extends React.Component {
             return null;
         }
 
-        endpoints.push('https://api.hivekikngs.com');
-
         const preferred_api_endpoint = this.getPreferredApiEndpoint();
         const entries = [];
         for (let ei = 0; ei < endpoints.length; ei += 1) {
