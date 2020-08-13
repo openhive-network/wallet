@@ -6,7 +6,7 @@ import o2j from 'shared/clash/object2json';
 import * as hive from '@hiveio/hive-js';
 
 class Settings extends React.Component {
-    handleLanguageChange = event => {
+    handleLanguageChange = (event) => {
         const locale = event.target.value;
         const userPreferences = { ...this.props.user_preferences, locale };
         this.props.setUserPreferences(userPreferences);
@@ -52,7 +52,7 @@ class Settings extends React.Component {
         return entries;
     };
 
-    handlePreferredAPIEndpointChange = event => {
+    handlePreferredAPIEndpointChange = (event) => {
         if (typeof window !== 'undefined') {
             localStorage.setItem(
                 'user_preferred_api_endpoint',
@@ -115,8 +115,8 @@ export default connect(
         };
     },
     // mapDispatchToProps
-    dispatch => ({
-        setUserPreferences: payload => {
+    (dispatch) => ({
+        setUserPreferences: (payload) => {
             dispatch(appActions.setUserPreferences(payload));
         },
     })

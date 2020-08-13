@@ -19,11 +19,24 @@ import { api, broadcast } from '@hiveio/hive-js';
 
 const ACCEPTED_TOS_TAG = 'accepted_tos_20180614';
 
+const _parse = (params) => {
+    if (typeof params === 'string') {
+        try {
+            return JSON.parse(params);
+        } catch (error) {
+            console.error('json_parse', error, params);
+            return {};
+        }
+    } else {
+        return params;
+    }
+};
+
 const mixpanel = config.get('mixpanel')
     ? Mixpanel.init(config.get('mixpanel'))
     : null;
 
-const _stringval = v => (typeof v === 'string' ? v : JSON.stringify(v));
+const _stringval = (v) => (typeof v === 'string' ? v : JSON.stringify(v));
 function logRequest(path, ctx, extra) {
     let d = { ip: getRemoteIp(ctx.req) };
     if (ctx.session) {
@@ -38,13 +51,13 @@ function logRequest(path, ctx, extra) {
         }
     }
     if (extra) {
-        Object.keys(extra).forEach(k => {
+        Object.keys(extra).forEach((k) => {
             const nk = d[k] ? '_' + k : k;
             d[nk] = extra[k];
         });
     }
     const info = Object.keys(d)
-        .map(k => `${k}=${_stringval(d[k])}`)
+        .map((k) => `${k}=${_stringval(d[k])}`)
         .join(' ');
     console.log(`-- /${path} --> ${info}`);
 }
@@ -54,7 +67,7 @@ export default function useGeneralApi(app) {
     app.use(router.routes());
     const koaBody = koa_body();
 
-    router.post('/accounts_wait', koaBody, function*() {
+    router.post('/accounts_wait', koaBody, function* () {
         if (rateLimitReq(this, this.req)) return;
         const params = this.request.body;
         const account =
@@ -76,7 +89,7 @@ export default function useGeneralApi(app) {
                     referrer: this.session.r,
                     created: false,
                 })
-            ).catch(error => {
+            ).catch((error) => {
                 console.error(
                     "!!! Can't create account wait model in /accounts api",
                     this.session.uid,
@@ -96,7 +109,7 @@ export default function useGeneralApi(app) {
         this.body = JSON.stringify({ status: 'ok' });
     });
 
-    router.post('/accounts', koaBody, function*() {
+    router.post('/accounts', koaBody, function* () {
         if (rateLimitReq(this, this.req)) return;
         const params = this.request.body;
         const account =
@@ -165,9 +178,7 @@ export default function useGeneralApi(app) {
                     (Date.now() - same_ip_account.created_at) / 60000;
                 if (minutes < 10) {
                     console.log(
-                        `api /accounts: IP rate limit for user ${
-                            this.session.uid
-                        } #${user_id}, IP ${remote_ip}`
+                        `api /accounts: IP rate limit for user ${this.session.uid} #${user_id}, IP ${remote_ip}`
                     );
                     throw new Error(
                         'Only one Hive account allowed per IP address every 10 minutes'
@@ -271,7 +282,7 @@ export default function useGeneralApi(app) {
      *   owner_key
      *   secret
      */
-    router.post('/create_user', koaBody, function*() {
+    router.post('/create_user', koaBody, function* () {
         const { name, email, owner_key, secret } =
             typeof this.request.body === 'string'
                 ? JSON.parse(this.request.body)
@@ -315,26 +326,14 @@ export default function useGeneralApi(app) {
         }
     });
 
-    router.post('/login_account', koaBody, function*() {
+    router.post('/login_account', koaBody, function* () {
         // if (rateLimitReq(this, this.req)) return;
         const params = this.request.body;
-        const { csrf, account, signatures } =
-            typeof params === 'string' ? JSON.parse(params) : params;
+        const { csrf, account, signatures } = _parse(params);
         if (!checkCSRF(this, csrf)) return;
-
-        // Set auth, to remember if a user is authed on initial login.
-        this.session.auth = true;
-        this.session.save();
 
         logRequest('login_account', this, { account });
         try {
-            const db_account = yield models.Account.findOne({
-                attributes: ['user_id'],
-                where: { name: esc(account) },
-                logging: false,
-            });
-            if (db_account) this.session.user = db_account.user_id;
-
             if (signatures) {
                 if (!this.session.login_challenge) {
                     console.error(
@@ -430,7 +429,7 @@ export default function useGeneralApi(app) {
         }
     });
 
-    router.post('/logout_account', koaBody, function*() {
+    router.post('/logout_account', koaBody, function* () {
         // if (rateLimitReq(this, this.req)) return; - logout maybe immediately followed with login_attempt event
         const params = this.request.body;
         const { csrf } =
@@ -452,7 +451,7 @@ export default function useGeneralApi(app) {
         }
     });
 
-    router.post('/csp_violation', function*() {
+    router.post('/csp_violation', function* () {
         if (rateLimitReq(this, this.req)) return;
         let params;
         try {
@@ -462,9 +461,7 @@ export default function useGeneralApi(app) {
         }
         if (params && params['csp-report']) {
             const csp_report = params['csp-report'];
-            const value = `${csp_report['document-uri']} : ${
-                csp_report['blocked-uri']
-            }`;
+            const value = `${csp_report['document-uri']} : ${csp_report['blocked-uri']}`;
             console.log(
                 '-- /csp_violation -->',
                 value,
@@ -482,7 +479,7 @@ export default function useGeneralApi(app) {
         this.body = '';
     });
 
-    router.post('/save_cords', koaBody, function*() {
+    router.post('/save_cords', koaBody, function* () {
         const params = this.request.body;
         const { csrf, x, y } =
             typeof params === 'string' ? JSON.parse(params) : params;
@@ -512,7 +509,7 @@ export default function useGeneralApi(app) {
         this.body = JSON.stringify({ status: 'ok' });
     });
 
-    router.post('/setUserPreferences', koaBody, function*() {
+    router.post('/setUserPreferences', koaBody, function* () {
         const params = this.request.body;
         const { csrf, payload } =
             typeof params === 'string' ? JSON.parse(params) : params;
@@ -544,7 +541,7 @@ export default function useGeneralApi(app) {
         }
     });
 
-    router.post('/isTosAccepted', koaBody, function*() {
+    router.post('/isTosAccepted', koaBody, function* () {
         const params = this.request.body;
         const { csrf } =
             typeof params === 'string' ? JSON.parse(params) : params;
@@ -579,7 +576,7 @@ export default function useGeneralApi(app) {
         }
     });
 
-    router.post('/acceptTos', koaBody, function*() {
+    router.post('/acceptTos', koaBody, function* () {
         const params = this.request.body;
         const { csrf } =
             typeof params === 'string' ? JSON.parse(params) : params;
@@ -665,7 +662,7 @@ function* createAccount({
     );
 }
 
-const parseSig = hexSig => {
+const parseSig = (hexSig) => {
     try {
         return Signature.fromHex(hexSig);
     } catch (e) {
