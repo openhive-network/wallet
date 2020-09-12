@@ -107,7 +107,7 @@ class Market extends React.Component {
         return tc || bc || oc;
     };
 
-    buyHive = e => {
+    buyHive = (e) => {
         e.preventDefault();
         const { placeOrder, user } = this.props;
         if (!user) return;
@@ -126,13 +126,13 @@ class Market extends React.Component {
             `${CURRENCY_SIGN}${price}/${LIQUID_TICKER}`,
             !!this.state.buy_price_warning,
             lowest_ask,
-            msg => {
+            (msg) => {
                 this.props.notify(msg);
                 this.props.reload(user);
             }
         );
     };
-    sellHive = e => {
+    sellHive = (e) => {
         e.preventDefault();
         const { placeOrder, user } = this.props;
         if (!user) return;
@@ -151,7 +151,7 @@ class Market extends React.Component {
             `${CURRENCY_SIGN}${price}/${LIQUID_TICKER}`,
             !!this.state.sell_price_warning,
             highest_bid,
-            msg => {
+            (msg) => {
                 this.props.notify(msg);
                 this.props.reload(user);
             }
@@ -161,13 +161,13 @@ class Market extends React.Component {
         e.preventDefault();
         const { cancelOrder, user } = this.props;
         if (!user) return;
-        cancelOrder(user, orderid, msg => {
+        cancelOrder(user, orderid, (msg) => {
             this.props.notify(msg);
             this.props.reload(user);
         });
     };
 
-    setFormPrice = price => {
+    setFormPrice = (price) => {
         const p = parseFloat(price);
 
         this.refs.sellHive_price.value = p.toFixed(6);
@@ -272,7 +272,7 @@ class Market extends React.Component {
         function normalizeOrders(orders) {
             if (typeof orders == 'undefined') return { bids: [], asks: [] };
             return ['bids', 'asks'].reduce((out, side) => {
-                out[side] = orders[side].map(o => {
+                out[side] = orders[side].map((o) => {
                     return new Order(o, side);
                 });
                 return out;
@@ -283,7 +283,7 @@ class Market extends React.Component {
             return ['bids', 'asks'].reduce((out, side) => {
                 var buff = [],
                     last = null;
-                orders[side].map(o => {
+                orders[side].map((o) => {
                     // o.price = (side == 'asks') ? roundUp(o.price, 6) : Math.max(roundDown(o.price, 6), 0.000001)
                     // the following line should be checking o.price == last.price but it appears due to inverted prices from API,
                     //   inverting again causes values to not be properly sorted.
@@ -311,7 +311,7 @@ class Market extends React.Component {
         function open_orders_table(open_orders, open_orders_sort) {
             const rows =
                 open_orders &&
-                open_orders.map(o => (
+                open_orders.map((o) => (
                     <tr key={o.orderid}>
                         <td>{o.created.replace('T', ' ')}</td>
                         <td>{o.type == 'ask' ? tt('g.sell') : tt('g.buy')}</td>
@@ -324,7 +324,7 @@ class Market extends React.Component {
                         <td>
                             <a
                                 href="#"
-                                onClick={e => cancelOrderClick(e, o.orderid)}
+                                onClick={(e) => cancelOrderClick(e, o.orderid)}
                             >
                                 {tt('g.cancel')}
                             </a>
@@ -332,7 +332,7 @@ class Market extends React.Component {
                     </tr>
                 ));
 
-            const activeClass = column => {
+            const activeClass = (column) => {
                 if (column === open_orders_sort.get('column')) {
                     const dir =
                         open_orders_sort.get('dir') === -1 ? 'desc' : 'asc';
@@ -350,7 +350,7 @@ class Market extends React.Component {
                                     activeClass('created'),
                                     'sortable'
                                 )}
-                                onClick={e =>
+                                onClick={(e) =>
                                     handleToggleOpenOrdersSort(
                                         'created',
                                         'string'
@@ -364,7 +364,7 @@ class Market extends React.Component {
                                     activeClass('type'),
                                     'sortable'
                                 )}
-                                onClick={e =>
+                                onClick={(e) =>
                                     handleToggleOpenOrdersSort('type', 'string')
                                 }
                             >
@@ -375,7 +375,7 @@ class Market extends React.Component {
                                     activeClass('price'),
                                     'sortable'
                                 )}
-                                onClick={e =>
+                                onClick={(e) =>
                                     handleToggleOpenOrdersSort('price')
                                 }
                             >
@@ -387,7 +387,7 @@ class Market extends React.Component {
                                     'sortable',
                                     'uppercase'
                                 )}
-                                onClick={e =>
+                                onClick={(e) =>
                                     handleToggleOpenOrdersSort('for_sale')
                                 }
                             >
@@ -398,7 +398,9 @@ class Market extends React.Component {
                                     activeClass('hbd'),
                                     'sortable'
                                 )}
-                                onClick={e => handleToggleOpenOrdersSort('hbd')}
+                                onClick={(e) =>
+                                    handleToggleOpenOrdersSort('hbd')
+                                }
                             >
                                 {`${DEBT_TOKEN_SHORT} (${CURRENCY_SIGN})`}
                             </th>
@@ -414,8 +416,8 @@ class Market extends React.Component {
             if (!trades || !trades.length) {
                 return [];
             }
-            const norm = trades => {
-                return trades.map(t => {
+            const norm = (trades) => {
+                return trades.map((t) => {
                     return new TradeHistory(t);
                 });
             };
@@ -466,7 +468,8 @@ class Market extends React.Component {
                                             (ticker.lowest_ask -
                                                 ticker.highest_bid)) /
                                         (ticker.highest_bid + ticker.lowest_ask)
-                                    ).toFixed(3)}%
+                                    ).toFixed(3)}
+                                    %
                                 </li>
                             )}
                         </ul>
@@ -512,7 +515,7 @@ class Market extends React.Component {
                                             type="text"
                                             ref="buyHive_price"
                                             placeholder="0.0"
-                                            onChange={e => {
+                                            onChange={(e) => {
                                                 const amount = parseFloat(
                                                     this.refs.buyHive_amount
                                                         .value
@@ -545,7 +548,7 @@ class Market extends React.Component {
                                             type="text"
                                             ref="buyHive_amount"
                                             placeholder="0.0"
-                                            onChange={e => {
+                                            onChange={(e) => {
                                                 const price = parseFloat(
                                                     this.refs.buyHive_price
                                                         .value
@@ -581,7 +584,7 @@ class Market extends React.Component {
                                             type="text"
                                             ref="buyHive_total"
                                             placeholder="0.0"
-                                            onChange={e => {
+                                            onChange={(e) => {
                                                 const price = parseFloat(
                                                     this.refs.buyHive_price
                                                         .value
@@ -620,7 +623,7 @@ class Market extends React.Component {
                                             <small>
                                                 <a
                                                     href="#"
-                                                    onClick={e => {
+                                                    onClick={(e) => {
                                                         e.preventDefault();
                                                         const price = parseFloat(
                                                             this.refs
@@ -641,7 +644,8 @@ class Market extends React.Component {
                                                         validateBuyHive();
                                                     }}
                                                 >
-                                                    {tt('market_jsx.available')}:
+                                                    {tt('market_jsx.available')}
+                                                    :
                                                 </a>{' '}
                                                 {account.sbd_balance.replace(
                                                     'HBD',
@@ -655,7 +659,7 @@ class Market extends React.Component {
                                         <small>
                                             <a
                                                 href="#"
-                                                onClick={e => {
+                                                onClick={(e) => {
                                                     e.preventDefault();
                                                     const amount = parseFloat(
                                                         this.refs.buyHive_amount
@@ -708,7 +712,7 @@ class Market extends React.Component {
                                             type="text"
                                             ref="sellHive_price"
                                             placeholder="0.0"
-                                            onChange={e => {
+                                            onChange={(e) => {
                                                 const amount = parseFloat(
                                                     this.refs.sellHive_amount
                                                         .value
@@ -741,7 +745,7 @@ class Market extends React.Component {
                                             type="text"
                                             ref="sellHive_amount"
                                             placeholder="0.0"
-                                            onChange={e => {
+                                            onChange={(e) => {
                                                 const price = parseFloat(
                                                     this.refs.sellHive_price
                                                         .value
@@ -776,7 +780,7 @@ class Market extends React.Component {
                                             type="text"
                                             ref="sellHive_total"
                                             placeholder="0.0"
-                                            onChange={e => {
+                                            onChange={(e) => {
                                                 const price = parseFloat(
                                                     this.refs.sellHive_price
                                                         .value
@@ -815,7 +819,7 @@ class Market extends React.Component {
                                             <small>
                                                 <a
                                                     href="#"
-                                                    onClick={e => {
+                                                    onClick={(e) => {
                                                         e.preventDefault();
                                                         const price = parseFloat(
                                                             this.refs
@@ -837,7 +841,8 @@ class Market extends React.Component {
                                                         validateSellHive();
                                                     }}
                                                 >
-                                                    {tt('market_jsx.available')}:
+                                                    {tt('market_jsx.available')}
+                                                    :
                                                 </a>{' '}
                                                 {account.balance.replace(
                                                     LIQUID_TICKER,
@@ -850,7 +855,7 @@ class Market extends React.Component {
                                         <small>
                                             <a
                                                 href="#"
-                                                onClick={e => {
+                                                onClick={(e) => {
                                                     e.preventDefault();
                                                     const amount = parseFloat(
                                                         this.refs
@@ -886,7 +891,7 @@ class Market extends React.Component {
                         <Orderbook
                             side={'bids'}
                             orders={orderbook.bids}
-                            onClick={price => {
+                            onClick={(price) => {
                                 setFormPrice(price);
                             }}
                         />
@@ -897,7 +902,7 @@ class Market extends React.Component {
                         <Orderbook
                             side={'asks'}
                             orders={orderbook.asks}
-                            onClick={price => {
+                            onClick={(price) => {
                                 setFormPrice(price);
                             }}
                         />
@@ -921,11 +926,16 @@ class Market extends React.Component {
         );
     }
 }
-const DEFAULT_EXPIRE = Math.floor(Date.now() / 1000 + 60 * 60 * 24 * 27); // Market orders with expiration greater than 28 days from current Head Block time will be rejected.
+const DEFAULT_EXPIRE = new Date(
+    Math.floor(Date.now() / 1000 + 60 * 60 * 24 * 27) * 1000
+)
+    .toISOString()
+    .split('.')[0]; // Market orders with expiration greater than 28 days from current Head Block time will be rejected.
+
 module.exports = {
     path: 'market',
     component: connect(
-        state => {
+        (state) => {
             const username = state.user.get('current')
                 ? state.user.get('current').get('username')
                 : null;
@@ -942,8 +952,8 @@ module.exports = {
                 open_orders_sort: state.market.get('open_orders_sort'),
             };
         },
-        dispatch => ({
-            notify: message => {
+        (dispatch) => ({
+            notify: (message) => {
                 dispatch(
                     appActions.addNotification({
                         key: 'mkt_' + Date.now(),
@@ -952,7 +962,7 @@ module.exports = {
                     })
                 );
             },
-            reload: username => {
+            reload: (username) => {
                 console.log('Reload market state...');
                 dispatch(marketActions.updateMarket({ username }));
             },
