@@ -23,28 +23,6 @@ import {
     sendOperationsWithHiveSigner,
 } from 'app/utils/HiveSigner';
 
-function toSteemSymbols(symbol) {
-    return symbol.replace('HIVE', 'STEEM').replace('HBD', 'SBD');
-}
-
-/**
- * This is temporary until nodes allow serialization with HIVE symbols
- * instead of STEEM symbols.
- */
-function makeSteemCompatible(type, operation) {
-    if (type == 'limit_order_create') {
-        operation.amount_to_sell = toSteemSymbols(operation.amount_to_sell);
-        operation.min_to_receive = toSteemSymbols(operation.min_to_receive);
-    } else if (type == 'claim_reward_balance') {
-        operation.reward_steem = toSteemSymbols(operation.reward_steem);
-        operation.reward_sbd = toSteemSymbols(operation.reward_sbd);
-    } else if (type == 'account_create') {
-        operation.fee = toSteemSymbols(operation.fee);
-    } else if (operation.amount) {
-        operation.amount = toSteemSymbols(operation.amount);
-    }
-}
-
 export const transactionWatches = [
     takeEvery(transactionActions.BROADCAST_OPERATION, broadcastOperation),
     takeEvery(transactionActions.UPDATE_AUTHORITIES, updateAuthorities),
@@ -259,7 +237,6 @@ function* broadcastPayload({
     {
         const newOps = [];
         for (const [type, operation] of operations) {
-            makeSteemCompatible(type, operation);
             if (hook['preBroadcast_' + type]) {
                 const op = yield call(hook['preBroadcast_' + type], {
                     operation,
