@@ -30,6 +30,28 @@ import DropdownMenu from 'app/components/elements/DropdownMenu';
 
 const assetPrecision = 1000;
 
+const VALID_OPERATION_TYPES = [
+    "transfer",
+    "transfer_to_vesting",
+    "withdraw_vesting",
+    "interest",
+    "liquidity_reward",
+    "author_reward",
+    "curation_reward",
+    "comment_benefactor_reward",
+    "transfer_to_savings",
+    "transfer_from_savings",
+    "escrow_transfer",
+    "cancel_transfer_from_savings",
+    "escrow_approve",
+    "escrow_dispute",
+    "escrow_release",
+    "fill_convert_request",
+    "fill_order",
+    "claim_reward_balance",
+    "producer_reward"
+];
+
 class UserWallet extends React.Component {
     constructor() {
         super();
@@ -163,7 +185,7 @@ class UserWallet extends React.Component {
         };
 
         const savings_balance = account.get('savings_balance');
-        const savings_hbd_balance = account.get('savings_sbd_balance');
+        const savings_hbd_balance = account.get('savings_hbd_balance');
 
         const powerDown = (cancel, e) => {
             e.preventDefault();
@@ -261,7 +283,7 @@ class UserWallet extends React.Component {
         const divesting =
             parseFloat(account.get('vesting_withdraw_rate').split(' ')[0]) >
             0.0;
-        const hbd_balance = parseFloat(account.get('sbd_balance'));
+        const hbd_balance = parseFloat(account.get('hbd_balance'));
         const hbd_balance_savings = parseFloat(
             savings_hbd_balance.split(' ')[0]
         );
@@ -317,6 +339,9 @@ class UserWallet extends React.Component {
             .map((item) => {
                 const data = item.getIn([1, 'op', 1]);
                 const type = item.getIn([1, 'op', 0]);
+
+                if (!VALID_OPERATION_TYPES.includes(type))
+                    return null;
 
                 // Filter out rewards
                 if (
@@ -486,16 +511,16 @@ class UserWallet extends React.Component {
         );
 
         const reward_hive =
-            parseFloat(account.get('reward_steem_balance').split(' ')[0]) > 0
-                ? account.get('reward_steem_balance')
+            parseFloat(account.get('reward_hive_balance').split(' ')[0]) > 0
+                ? account.get('reward_hive_balance')
                 : null;
         const reward_hbd =
-            parseFloat(account.get('reward_sbd_balance').split(' ')[0]) > 0
-                ? account.get('reward_sbd_balance')
+            parseFloat(account.get('reward_hbd_balance').split(' ')[0]) > 0
+                ? account.get('reward_hbd_balance')
                 : null;
         const reward_hp =
-            parseFloat(account.get('reward_vesting_steem').split(' ')[0]) > 0
-                ? account.get('reward_vesting_steem').replace('HIVE', 'HP')
+            parseFloat(account.get('reward_vesting_hive').split(' ')[0]) > 0
+                ? account.get('reward_vesting_hive').replace('HIVE', 'HP')
                 : null;
 
         const rewards = [];
@@ -806,7 +831,7 @@ export default connect(
         const price_per_hive = pricePerHive(state);
         const savings_withdraws = state.user.get('savings_withdraws');
         const gprops = state.global.get('props');
-        const hbd_interest = gprops.get('sbd_interest_rate');
+        const hbd_interest = gprops.get('hbd_interest_rate');
         return {
             ...ownProps,
             open_orders: state.market.get('open_orders'),
@@ -828,8 +853,8 @@ export default connect(
 
             const operation = {
                 account: username,
-                reward_steem: account.get('reward_steem_balance'),
-                reward_sbd: account.get('reward_sbd_balance'),
+                reward_steem: account.get('reward_hive_balance'),
+                reward_sbd: account.get('reward_hbd_balance'),
                 reward_vests: account.get('reward_vesting_balance'),
             };
 
