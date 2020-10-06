@@ -19,7 +19,7 @@ export function vestsToHpf(state, vesting_shares) {
         VEST_TICKER
     );
     const total_vest_hive = assetFloat(
-        global.getIn(['props', 'total_vesting_fund_steem']),
+        global.getIn(['props', 'total_vesting_fund_hive']),
         LIQUID_TICKER
     );
     return total_vest_hive * (vests / total_vests);
@@ -40,7 +40,7 @@ export function spToVestsf(state, hive_power) {
         VEST_TICKER
     );
     const total_vest_hive = assetFloat(
-        global.getIn(['props', 'total_vesting_fund_steem']),
+        global.getIn(['props', 'total_vesting_fund_hive']),
         LIQUID_TICKER
     );
     return (hive_power / total_vest_hive) * total_vests;
@@ -54,7 +54,7 @@ export function vestingHive(account, gprops) {
     const vests = parseFloat(account.vesting_shares.split(' ')[0]);
     const total_vests = parseFloat(gprops.total_vesting_shares.split(' ')[0]);
     const total_vest_hive = parseFloat(
-        gprops.total_vesting_fund_steem.split(' ')[0]
+        gprops.total_vesting_fund_hive.split(' ')[0]
     );
     const vesting_hivef = total_vest_hive * (vests / total_vests);
     return vesting_hivef;
@@ -71,7 +71,7 @@ export function delegatedHive(account, gprops) {
     const vests = delegated_vests - received_vests;
     const total_vests = parseFloat(gprops.total_vesting_shares.split(' ')[0]);
     const total_vest_hive = parseFloat(
-        gprops.total_vesting_fund_steem.split(' ')[0]
+        gprops.total_vesting_fund_hive.split(' ')[0]
     );
     const vesting_hivef = total_vest_hive * (vests / total_vests);
     return vesting_hivef;
@@ -88,7 +88,7 @@ export function powerdownHive(account, gprops) {
     const vests = Math.min(withdraw_rate_vests, remaining_vests);
     const total_vests = parseFloat(gprops.total_vesting_shares.split(' ')[0]);
     const total_vest_hive = parseFloat(
-        gprops.total_vesting_fund_steem.split(' ')[0]
+        gprops.total_vesting_fund_hive.split(' ')[0]
     );
     const powerdown_hivef = total_vest_hive * (vests / total_vests);
     return powerdown_hivef;
