@@ -14,7 +14,7 @@ class ProposalContainer extends React.Component {
             isUpVoted: props.proposal.upVoted,
             // needed from global state object to calculate vests to sp
             total_vesting_shares: props.total_vesting_shares,
-            total_vesting_fund_steem: props.total_vesting_fund_steem,
+            total_vesting_fund_hive: props.total_vesting_fund_hive,
         };
         this.id = this.props.proposal.id;
     }
@@ -64,7 +64,7 @@ class ProposalContainer extends React.Component {
         const {
             proposal,
             total_vesting_shares,
-            total_vesting_fund_steem,
+            total_vesting_fund_hive,
         } = this.props;
         // console.log('ProposalContainer.jsx::render()', this.props);
 
@@ -74,7 +74,7 @@ class ProposalContainer extends React.Component {
                 onVote={this.onVote}
                 {...this.state}
                 total_vesting_shares={total_vesting_shares}
-                total_vesting_fund_steem={total_vesting_fund_steem}
+                total_vesting_fund_hive={total_vesting_fund_hive}
             />
         );
     }
@@ -92,9 +92,9 @@ export default connect((state, ownProps) => {
         'props',
         'total_vesting_shares',
     ]);
-    const total_vesting_fund_steem = state.global.getIn([
+    const total_vesting_fund_hive = state.global.getIn([
         'props',
-        'total_vesting_fund_steem',
+        'total_vesting_fund_hive',
     ]);
-    return { total_vesting_shares, total_vesting_fund_steem, ...ownProps };
+    return { total_vesting_shares, total_vesting_fund_hive, ...ownProps };
 })(ProposalContainer);

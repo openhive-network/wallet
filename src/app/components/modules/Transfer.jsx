@@ -638,11 +638,11 @@ export default connect(
 
         const totalVestingFund = state.global.getIn([
             'props',
-            'total_vesting_fund_steem',
+            'total_vesting_fund_hive',
         ])
             ? parseFloat(
                   state.global
-                      .getIn(['props', 'total_vesting_fund_steem'])
+                      .getIn(['props', 'total_vesting_fund_hive'])
                       .split(' ')[0]
               )
             : 0;

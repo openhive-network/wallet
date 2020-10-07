@@ -27,7 +27,7 @@ export default function Proposal(props) {
         // voteSucceeded,
         isUpVoted,
         total_vesting_shares,
-        total_vesting_fund_steem,
+        total_vesting_fund_hive,
     } = props;
 
     const start = new Date(start_date);
@@ -48,7 +48,7 @@ export default function Proposal(props) {
                         simpleVotesToHp(
                             total_votes,
                             total_vesting_shares,
-                            total_vesting_fund_steem
+                            total_vesting_fund_hive
                         )
                     )}
                 </span>
@@ -143,7 +143,7 @@ Proposal.propTypes = {
     isUpVoted: PropTypes.bool.isRequired,
     // passed through connect from global state object to calc vests to sp
     total_vesting_shares: PropTypes.string.isRequired,
-    total_vesting_fund_steem: PropTypes.string.isRequired,
+    total_vesting_fund_hive: PropTypes.string.isRequired,
 };
 
 /**
@@ -275,16 +275,16 @@ function urlifyPermlink(username, permlink) {
  * Given total votes in vests returns value in HP
  * @param {number} total_votes - total votes on a proposal (vests from API)
  * @param {string} total_vesting_shares - vesting shares with vests symbol on end
- * @param {string} total_vesting_fund_steem - total steem vesting fund with liquid symbol on end
+ * @param {string} total_vesting_fund_hive - total hive vesting fund with liquid symbol on end
  * @returns {number} - return the number converted to HP
  */
 function simpleVotesToHp(
     total_votes,
     total_vesting_shares,
-    total_vesting_fund_steem
+    total_vesting_fund_hive
 ) {
     const total_vests = parseFloat(total_vesting_shares);
-    const total_vest_steem = parseFloat(total_vesting_fund_steem);
+    const total_vest_steem = parseFloat(total_vesting_fund_hive);
     return (total_vest_steem * (total_votes / total_vests) * 0.000001).toFixed(
         2
     );
