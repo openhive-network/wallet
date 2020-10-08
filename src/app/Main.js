@@ -46,7 +46,6 @@ function runApp(initial_state) {
         failover_threshold: config.failover_threshold,
     });
     hive.config.set('address_prefix', config.address_prefix);
-    hive.config.set('chain_id', config.chain_id);
 
     window.$STM_Config = config;
     plugins(config);
