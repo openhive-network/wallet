@@ -48,8 +48,7 @@ const VALID_OPERATION_TYPES = [
     "escrow_release",
     "fill_convert_request",
     "fill_order",
-    "claim_reward_balance",
-    "producer_reward"
+    "claim_reward_balance"
 ];
 
 class UserWallet extends React.Component {
@@ -853,8 +852,8 @@ export default connect(
 
             const operation = {
                 account: username,
-                reward_steem: account.get('reward_hive_balance'),
-                reward_sbd: account.get('reward_hbd_balance'),
+                reward_hive: account.get('reward_hive_balance'),
+                reward_hbd: account.get('reward_hbd_balance'),
                 reward_vests: account.get('reward_vesting_balance'),
             };
 
