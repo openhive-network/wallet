@@ -44,8 +44,11 @@ function runApp(initial_state) {
         useAppbaseApi: !!config.hived_use_appbase,
         alternative_api_endpoints: alternativeApiEndpoints,
         failover_threshold: config.failover_threshold,
+        rebranded_api: true
     });
     hive.config.set('address_prefix', config.address_prefix);
+    hive.config.set('rebranded_api', true);
+    hive.broadcast.updateOperations();
 
     window.$STM_Config = config;
     plugins(config);

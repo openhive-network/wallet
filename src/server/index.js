@@ -62,6 +62,8 @@ global.webpackIsomorphicTools.server(ROOT, () => {
         failover_threshold: config.get('failover_threshold'),
     });
     hive.config.set('address_prefix', config.get('address_prefix'));
+    hive.config.set('rebranded_api', true);
+    hive.broadcast.updateOperations();
 
     // const CliWalletClient = require('shared/api_client/CliWalletClient').default;
     // if (process.env.NODE_ENV === 'production') connect_promises.push(CliWalletClient.instance().connect_promise());
