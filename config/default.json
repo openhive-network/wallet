@@ -7,7 +7,7 @@
         "directives": {
             "childSrc": "'self'",
             "connectSrc":
-                "'self' hive.blog https://api.hive.blog https://anyx.io api.blocktrades.us https://hivesigner.com",
+                "'self' hive.blog https://api.hive.blog https://anyx.io api.blocktrades.us https://hivesigner.com https://beta.openhive.network",
             "defaultSrc": "'self'",
             "fontSrc": "data: fonts.gstatic.com",
             "frameAncestors": "'none'",

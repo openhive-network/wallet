@@ -144,8 +144,8 @@ class TransferForm extends Component {
                         : currentAccount.get('balance')
                     : asset === 'HBD'
                     ? isWithdraw
-                        ? currentAccount.get('savings_sbd_balance')
-                        : currentAccount.get('sbd_balance')
+                        ? currentAccount.get('savings_hbd_balance')
+                        : currentAccount.get('hbd_balance')
                     : null;
             if (!balanceValue) return false;
             const balance = balanceValue.split(' ')[0];
@@ -232,8 +232,8 @@ class TransferForm extends Component {
                     : currentAccount.get('balance')
                 : asset.value === 'HBD'
                 ? isWithdraw
-                    ? currentAccount.get('savings_sbd_balance')
-                    : currentAccount.get('sbd_balance')
+                    ? currentAccount.get('savings_hbd_balance')
+                    : currentAccount.get('hbd_balance')
                 : null;
         if (toDelegate) {
             balanceValue = currentAccount.get('savings_balance');
@@ -638,11 +638,11 @@ export default connect(
 
         const totalVestingFund = state.global.getIn([
             'props',
-            'total_vesting_fund_steem',
+            'total_vesting_fund_hive',
         ])
             ? parseFloat(
                   state.global
-                      .getIn(['props', 'total_vesting_fund_steem'])
+                      .getIn(['props', 'total_vesting_fund_hive'])
                       .split(' ')[0]
               )
             : 0;

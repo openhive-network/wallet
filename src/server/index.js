@@ -25,7 +25,6 @@ global.$STM_Config = {
     hived_connection_client: config.get('hived_connection_client'),
     hived_connection_server: config.get('hived_connection_server'),
     hived_use_appbase: config.get('hived_use_appbase'),
-    chain_id: config.get('chain_id'),
     address_prefix: config.get('address_prefix'),
     img_proxy_prefix: config.get('img_proxy_prefix'),
     ipfs_prefix: config.get('ipfs_prefix'),
@@ -63,7 +62,8 @@ global.webpackIsomorphicTools.server(ROOT, () => {
         failover_threshold: config.get('failover_threshold'),
     });
     hive.config.set('address_prefix', config.get('address_prefix'));
-    hive.config.set('chain_id', config.get('chain_id'));
+    hive.config.set('rebranded_api', true);
+    hive.broadcast.updateOperations();
 
     // const CliWalletClient = require('shared/api_client/CliWalletClient').default;
     // if (process.env.NODE_ENV === 'production') connect_promises.push(CliWalletClient.instance().connect_promise());

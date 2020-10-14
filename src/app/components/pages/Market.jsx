@@ -647,7 +647,7 @@ class Market extends React.Component {
                                                     {tt('market_jsx.available')}
                                                     :
                                                 </a>{' '}
-                                                {account.sbd_balance.replace(
+                                                {account.hbd_balance.replace(
                                                     'HBD',
                                                     DEBT_TOKEN_SHORT
                                                 )}
