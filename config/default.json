@@ -70,12 +70,12 @@
         "auth_token": false
     },
     "upload_image": false,
-    "hived_connection_client": "https://beta.openhive.network",
-    "hived_connection_server": "https://beta.openhive.network",
+    "hived_connection_client": "https://api.hive.blog",
+    "hived_connection_server": "https://api.hive.blog",
     "hived_use_appbase": false,
     "chain_id":
         "0000000000000000000000000000000000000000000000000000000000000000",
-    "alternative_api_endpoints": "https://beta.openhive.network https://api.hive.blog https://anyx.io",
+    "alternative_api_endpoints": "https://api.hive.blog https://anyx.io",
     "failover_threshold": 3,
     "address_prefix": "STM",
     "conveyor_posting_wif": false,
