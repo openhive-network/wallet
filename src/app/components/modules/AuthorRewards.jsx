@@ -52,7 +52,9 @@ class AuthorRewards extends React.Component {
     }
 
     render() {
-        const { state: { historyIndex } } = this;
+        const {
+            state: { historyIndex },
+        } = this;
         const { account_name, transfer_history } = this.props;
 
         /// transfer log
@@ -85,11 +87,11 @@ class AuthorRewards extends React.Component {
                         VEST_TICKER
                     );
                     const hive = assetFloat(
-                        item[1].op[1].steem_payout,
+                        item[1].op[1].hive_payout,
                         LIQUID_TICKER
                     );
                     const hbd = assetFloat(
-                        item[1].op[1].sbd_payout,
+                        item[1].op[1].hbd_payout,
                         DEBT_TICKER
                     );
 
@@ -117,7 +119,7 @@ class AuthorRewards extends React.Component {
                 }
                 return null;
             })
-            .filter(el => !!el);
+            .filter((el) => !!el);
 
         let currentIndex = -1;
         const curationLength = author_log.length;
@@ -186,7 +188,8 @@ class AuthorRewards extends React.Component {
                     <div className="column small-12 medium-8">
                         {tt(
                             'authorrewards_jsx.estimated_author_rewards_last_week'
-                        )}:
+                        )}
+                        :
                     </div>
                     <div className="column small-12 medium-4">
                         {numberWithCommas(
