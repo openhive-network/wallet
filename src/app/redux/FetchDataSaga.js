@@ -35,7 +35,7 @@ export function* fetchState(location_change_action) {
 
     // `ignore_fetch` case should only trigger on initial page load. No need to call
     // fetchState immediately after loading fresh state from the server. Details: #593
-    const server_location = yield select(state =>
+    const server_location = yield select((state) =>
         state.offchain.get('server_location')
     );
     const ignore_fetch = pathname === server_location && is_initial_state;
@@ -86,9 +86,12 @@ function* getTransferUsers(pathname) {
     if (pathname.match(/^\/@([a-z0-9\.-]+)\/transfers/)) {
         const username = pathname.match(/^\/@([a-z0-9\.-]+)/)[1];
 
-        const transferHistory = yield select(state =>
+        const transferHistory = yield select((state) =>
             state.global.getIn(['accounts', username, 'transfer_history'])
         );
+
+        if (transferHistory === null || transferHistory === undefined)
+            return [];
 
         // Find users in the transfer history to consider sending users' reputations.
         const transferUsers = transferHistory.reduce((acc, cur) => {
@@ -148,12 +151,12 @@ function* fetchJson({
 
 // Action creators
 export const actions = {
-    requestData: payload => ({
+    requestData: (payload) => ({
         type: REQUEST_DATA,
         payload,
     }),
 
-    fetchState: payload => ({
+    fetchState: (payload) => ({
         type: FETCH_STATE,
         payload,
     }),

@@ -41,7 +41,7 @@
         "testURL": "http://localhost/"
     },
     "dependencies": {
-        "@hiveio/hive-js": "0.8.4",
+        "@hiveio/hive-js": "0.8.5",
         "@steem/crypto-session": "git+https://github.com/steemit/crypto-session.git#83a90b319ce5bc6a70362d52a15a815de7e729bb",
         "assert": "1.4.1",
         "autoprefixer-loader": "3.2.0",
@@ -68,7 +68,7 @@
         "foundation-sites": "git+https://github.com/steemit/foundation-sites.git#e8e32c715bbc4c822b80b555345f61337269ca78",
         "git-rev-sync": "1.9.1",
         "highcharts": "6.1.0",
-        "hivesigner": "^3.2.0",
+        "hivesigner": "3.2.1",
         "humanize-number": "0.0.2",
         "imports-loader": "0.7.1",
         "intl": "1.2.5",
