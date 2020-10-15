@@ -22,17 +22,25 @@ function initReducer(reducer, type) {
                 state = fromJS(state);
             }
             if (type === 'global') {
-                const content = state.get('content').withMutations(c => {
-                    c.forEach((cc, key) => {
-                        if (!c.getIn([key, 'stats'])) {
-                            // This may have already been set in UniversalRender; if so, then
-                            //   active_votes were cleared from server response. In this case it
-                            //   is important to not try to recalculate the stats. (#1040)
-                            c.setIn([key, 'stats'], fromJS(contentStats(cc)));
-                        }
+                if (
+                    state.get('content') !== null &&
+                    state.get('content') !== undefined
+                ) {
+                    const content = state.get('content').withMutations((c) => {
+                        c.forEach((cc, key) => {
+                            if (!c.getIn([key, 'stats'])) {
+                                // This may have already been set in UniversalRender; if so, then
+                                //   active_votes were cleared from server response. In this case it
+                                //   is important to not try to recalculate the stats. (#1040)
+                                c.setIn(
+                                    [key, 'stats'],
+                                    fromJS(contentStats(cc))
+                                );
+                            }
+                        });
                     });
-                });
-                state = state.set('content', content);
+                    state = state.set('content', content);
+                }
             }
             return state;
         }
