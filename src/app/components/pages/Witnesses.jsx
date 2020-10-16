@@ -64,16 +64,16 @@ class Witnesses extends React.Component {
             this.setState({ customUsername: '' });
             accountWitnessVote(username, accountName, approve);
         };
-        this.onWitnessChange = e => {
+        this.onWitnessChange = (e) => {
             const customUsername = e.target.value;
             this.setState({ customUsername });
             // Force update to ensure witness vote appears
             this.forceUpdate();
         };
-        this.accountWitnessProxy = e => {
+        this.accountWitnessProxy = (e) => {
             e.preventDefault();
             const { username, accountWitnessProxy } = this.props;
-            accountWitnessProxy(username, this.state.proxy, state => {
+            accountWitnessProxy(username, this.state.proxy, (state) => {
                 this.setState(state);
             });
         };
@@ -109,7 +109,7 @@ class Witnesses extends React.Component {
         const witnessOwners = [[]];
         let chunksCount = 0;
 
-        witnesses.map(item => {
+        witnesses.map((item) => {
             if (witnessOwners[chunksCount].length >= 20) {
                 chunksCount += 1;
                 witnessOwners[chunksCount] = [];
@@ -207,7 +207,7 @@ class Witnesses extends React.Component {
         let previousTotalVoteHpf = 0;
         const now = Moment();
 
-        const witnesses = sorted_witnesses.map(item => {
+        const witnesses = sorted_witnesses.map((item) => {
             const owner = item.get('owner');
             if (owner === witnessToHighlight) {
                 foundWitnessToHighlight = true;
@@ -263,8 +263,8 @@ class Witnesses extends React.Component {
 
             const lastBlock = item.get('last_confirmed_block_num');
             const runningVersion = item.get('running_version');
-            const sbdExchangeRate = item.get('sbd_exchange_rate');
-            const sbdExchangeUpdateDate = item.get('last_sbd_exchange_update');
+            const hbdExchangeRate = item.get('hbd_exchange_rate');
+            const hbdExchangeUpdateDate = item.get('last_hbd_exchange_update');
             const noBlock7days = (head_block - lastBlock) * 3 > 604800;
             const isDisabled = signingKey == DISABLED_SIGNING_KEY;
             const votingActive = witnessVotesInProgress.has(owner);
@@ -286,13 +286,15 @@ class Witnesses extends React.Component {
                 } else if (links.remote.test(thread)) {
                     witness_link = (
                         <a href={thread} target="_blank">
-                            {tt('witnesses_jsx.external_site')}&nbsp;<Icon name="extlink" />
+                            {tt('witnesses_jsx.external_site')}&nbsp;
+                            <Icon name="extlink" />
                         </a>
                     );
                 } else {
                     witness_link = (
                         <a href={thread} target="_blank">
-                            {tt('witnesses_jsx.witness_thread')}&nbsp;<Icon name="extlink" />
+                            {tt('witnesses_jsx.witness_thread')}&nbsp;
+                            <Icon name="extlink" />
                         </a>
                     );
                 }
@@ -352,7 +354,7 @@ class Witnesses extends React.Component {
                                 </Link>
                                 <Link
                                     to={`/~witnesses?highlight=${owner}`}
-                                    onClick={event => {
+                                    onClick={(event) => {
                                         event.preventDefault();
                                         updateWitnessToHighlight.apply(this, [
                                             owner,
@@ -398,9 +400,8 @@ class Witnesses extends React.Component {
                                         >
                                             #{lastBlock}
                                         </Link>{' '}
-                                        {_blockGap(head_block, lastBlock)} on v{
-                                            runningVersion
-                                        }
+                                        {_blockGap(head_block, lastBlock)} on v
+                                        {runningVersion}
                                     </div>
                                     {isDisabled && (
                                         <div>
@@ -433,10 +434,10 @@ class Witnesses extends React.Component {
                         {!isDisabled && <div>{requiredHpToRankUp}</div>}
                     </td>
                     <td>
-                        ${parseFloat(sbdExchangeRate.get('base'))}
+                        ${parseFloat(hbdExchangeRate.get('base'))}
                         <br />
                         <small>
-                            <TimeAgoWrapper date={sbdExchangeUpdateDate} />
+                            <TimeAgoWrapper date={hbdExchangeUpdateDate} />
                         </small>
                     </td>
                 </tr>
@@ -448,10 +449,10 @@ class Witnesses extends React.Component {
             witness_vote_count -= witness_votes.size;
             addl_witnesses = witness_votes
                 .union(witnessVotesInProgress)
-                .filter(item => {
+                .filter((item) => {
                     return !sorted_witnesses.has(item);
                 })
-                .map(item => {
+                .map((item) => {
                     const votingActive = witnessVotesInProgress.has(item);
                     const classUp =
                         'Voting__button Voting__button-up' +
@@ -508,11 +509,13 @@ class Witnesses extends React.Component {
                                         {tt(
                                             'witnesses_jsx.you_have_votes_remaining',
                                             { count: witness_vote_count }
-                                        )}.
+                                        )}
+                                        .
                                     </strong>{' '}
                                     {tt(
                                         'witnesses_jsx.you_can_vote_for_maximum_of_witnesses'
-                                    )}.
+                                    )}
+                                    .
                                 </p>
                             </div>
                         )}
@@ -550,7 +553,8 @@ class Witnesses extends React.Component {
                             <p>
                                 {tt(
                                     'witnesses_jsx.if_you_want_to_vote_outside_of_top_enter_account_name'
-                                )}.
+                                )}
+                                .
                             </p>
                             <form>
                                 <div className="input-group">
@@ -650,7 +654,7 @@ class Witnesses extends React.Component {
                                             maxWidth: '20rem',
                                         }}
                                         value={proxy}
-                                        onChange={e => {
+                                        onChange={(e) => {
                                             this.setState({
                                                 proxy: e.target.value,
                                             });
@@ -686,7 +690,7 @@ class Witnesses extends React.Component {
 module.exports = {
     path: '/~witnesses(/:witness)',
     component: connect(
-        state => {
+        (state) => {
             const current_user = state.user.get('current');
             const username = current_user && current_user.get('username');
             const current_account =
@@ -710,7 +714,7 @@ module.exports = {
                 state,
             };
         },
-        dispatch => {
+        (dispatch) => {
             return {
                 accountWitnessVote: (username, witness, approve) => {
                     dispatch(
@@ -743,7 +747,7 @@ module.exports = {
                                     proxy: '',
                                 });
                             },
-                            errorCallback: e => {
+                            errorCallback: (e) => {
                                 console.log('error:', e);
                                 stateCallback({ proxyFailed: true });
                             },
