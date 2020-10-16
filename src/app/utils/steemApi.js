@@ -2,24 +2,45 @@ import { api } from '@hiveio/hive-js';
 
 import stateCleaner from 'app/redux/stateCleaner';
 
+async function getStateForTrending() {
+    let result = {};
+    result.content = {};
+    result.accounts = {};
+    result.props = await api.getDynamicGlobalPropertiesAsync();
+    return result;
+}
+
+async function getStateForWitnesses() {
+    let schedule = await api.getWitnessScheduleAsync();
+    let witnesses = await api.getWitnessesByVoteAsync('', 100);
+    let global_properties = await api.getDynamicGlobalPropertiesAsync();
+
+    let result = {};
+    result.current_route = '/~witnesses';
+    result.props = global_properties;
+    result.tag_idx = {};
+    result.tag_idx.trending = [];
+    result.tags = {};
+    result.content = {};
+    result.accounts = {};
+    result.witnesses = witnesses;
+    result.discussion_idx = {};
+    result.witness_schedule = schedule;
+    result.feed_price = {};
+    result.error = '';
+
+    return result;
+}
+
 export async function getStateAsync(url) {
     // strip off query string
     if (url === 'trending') {
         // [JES] For now, just fake a response. The front page for an unlogged in user doesn't need any of these properties to function
-        let response = {
-            content: {},
-            accounts: {},
-            props: {
-                time: '2020-10-15T17:05:36',
-                hbd_print_rate: 10000,
-                hbd_interest_rate: 0,
-                head_block_number: 47750342,
-                total_vesting_shares: '211898678748.819916 VESTS',
-                total_vesting_fund_hive: '110135222.704 STEEM',
-                last_irreversible_block_num: 47750327,
-            },
-        };
-        return stateCleaner(response);
+        let trending_state = await getStateForTrending();
+        return stateCleaner(trending_state);
+    } else if (url.includes('witness')) {
+        let witness_state = await getStateForWitnesses();
+        return stateCleaner(witness_state);
     }
     let path = url.split('?')[0];
     let fetch_transfers = false;
