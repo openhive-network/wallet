@@ -8,6 +8,25 @@ import PropTypes from 'prop-types';
 import ProposalListContainer from 'app/components/modules/ProposalList/ProposalListContainer';
 
 class Proposals extends React.Component {
+    startValueByOrderType = {
+        by_total_votes: {
+            ascending: [0],
+            descending: [],
+        },
+        by_creator: {
+            ascending: [''],
+            descending: [],
+        },
+        by_start_date: {
+            ascending: [''],
+            descending: [''],
+        },
+        by_end_date: {
+            ascending: [''],
+            descending: [''],
+        },
+    };
+
     constructor(props) {
         super(props);
         this.state = {
@@ -42,13 +61,18 @@ class Proposals extends React.Component {
             limit = this.state.limit + this.state.proposals.length;
         }
 
+        const start = this.startValueByOrderType[
+            order_by || this.state.order_by
+        ][order_direction || this.state.order_direction];
+
         const proposals =
             (await this.getAllProposals(
                 this.state.last_proposal,
                 order_by || this.state.order_by,
                 order_direction || this.state.order_direction,
                 limit,
-                status || this.state.status
+                status || this.state.status,
+                start
             )) || [];
 
         let last_proposal = false;
@@ -79,7 +103,14 @@ class Proposals extends React.Component {
         await this.load(false, { order_direction });
     };
 
-    getAllProposals(last_proposal, order_by, order_direction, limit, status) {
+    getAllProposals(
+        last_proposal,
+        order_by,
+        order_direction,
+        limit,
+        status,
+        start
+    ) {
         return this.props.listProposals({
             voter_id: this.props.currentUser,
             last_proposal,
@@ -87,6 +118,7 @@ class Proposals extends React.Component {
             order_direction,
             limit,
             status,
+            start,
         });
     }
 

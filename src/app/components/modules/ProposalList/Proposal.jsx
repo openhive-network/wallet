@@ -89,16 +89,6 @@ export function Proposal(props) {
                         {creator != receiver
                             ? ` ${tt('proposals.for')} `
                             : null}
-                        {creator != receiver
-                            ? linkifyUsername(
-                                  checkIfSameUser(
-                                      creator,
-                                      receiver,
-                                      'themselves.'
-                                  ),
-                                  receiver
-                              )
-                            : null}
                     </div>
                 </div>
             </div>

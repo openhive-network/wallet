@@ -26,11 +26,10 @@ export function* listProposals({
     order_direction,
     limit,
     status,
+    start,
     resolve,
     reject,
 }) {
-    const start = [];
-
     const proposals = yield call(
         [api, api.listProposalsAsync],
         start,
@@ -57,11 +56,11 @@ export function* listProposals({
             while (true) {
                 nextVotes = yield call(
                     [api, api.listProposalVotesAsync],
-                    [pId, lastVoter],
+                    [voter_id],
                     maxVotes,
-                    order_by,
-                    order_direction,
-                    status
+                    'by_voter_proposal',
+                    'ascending',
+                    'active'
                 );
                 votes = votes.concat(nextVotes);
                 lastVoter = nextVotes[nextVotes.length - 1].voter;

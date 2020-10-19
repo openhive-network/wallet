@@ -27,7 +27,6 @@ export default function ProposalList(props) {
                     <label className="proposals__select">
                         {tt('proposals.status')}
                         <select
-                            defaultValue={status}
                             value={status}
                             onChange={(e) => {
                                 onFilter(e.target.value);
@@ -53,7 +52,6 @@ export default function ProposalList(props) {
                     <label className="proposals__select">
                         {tt('proposals.order')}
                         <select
-                            defaultValue={orderBy}
                             value={orderBy}
                             onChange={(e) => {
                                 onOrder(e.target.value);
