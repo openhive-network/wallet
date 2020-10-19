@@ -41,6 +41,9 @@ export async function getStateAsync(url) {
     } else if (url.includes('witness')) {
         let witness_state = await getStateForWitnesses();
         return stateCleaner(witness_state);
+    } else if (url.includes('proposals')) {
+        let proposals_state = await getStateForWitnesses();
+        return stateCleaner(proposals_state);
     }
     let path = url.split('?')[0];
     let fetch_transfers = false;

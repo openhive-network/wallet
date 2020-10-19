@@ -242,7 +242,9 @@ class Witnesses extends React.Component {
             const thread = item.get('url').replace('steemit.com', 'hive.blog');
             const myVote = witness_votes ? witness_votes.has(owner) : null;
             const signingKey = item.get('signing_key');
-            const witnessCreated = item.get('created');
+            let witnessCreated = item.get('created');
+            if (witnessCreated === '1970-01-01T00:00:00')
+                witnessCreated = '2016-06-01T00:00:00';
 
             const accountBirthday = Moment(`${witnessCreated}Z`);
             const witnessAgeDays = now.diff(accountBirthday, 'days');
