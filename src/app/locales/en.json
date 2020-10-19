@@ -768,22 +768,6 @@
         "hbd_symbol": "HBD",
         "hbd_description": "Seeks price stability with USD"
     },
-    "hive_proposals": {
-        "top_sps": "Hive Proposals",
-        "votes_update_info": "* Only updated once per hour",
-        "table": {
-            "id": "Id",
-            "creator": "Creator",
-            "receiver": "Receiver",
-            "start_date": "Start Date",
-            "end_date": "End Date",
-            "daily_pay": "Daily Pay",
-            "total_votes": "Total Votes*",
-            "permlink": "",
-            "subject": "Subject"
-        },
-        "confirm_remove_proposal_description": "Proposal removal is permanent and the fee paid for creating the proposal is not refundable."
-    },
     "proposals": {
         "wait_for_proposal_load": "The proposals are now being loaded, it will be worth the wait!",
         "sorry_cannot_display": "Sorry, I can't show you any proposals right now.",
@@ -794,9 +778,24 @@
         "amountHbd": "Amount %(amount)s HBD",
         "by": "by",
         "for": "for",
-        "proposalId": "Proposal #%(id)s",
-        "duration": "Duration: %(duration)s days",
-        "dailyAmount": "Daily: %(amount)s HBD",
-        "startEndDates": "%(start)s through %(end)s"
+        "daily": "Daily",
+        "duration": "Duration",
+        "days": "days",
+        "title": "Proposals",
+        "status": "Status",
+        "order": "Order by",
+        "status_options": {
+            "all": "All",
+            "active": "Active",
+            "inactive": "Inactive",
+            "expired": "Expired",
+            "votable": "Votable"
+        },
+        "order_options": {
+            "creator": "Creator",
+            "start_date": "Start Date",
+            "end_date": "End Date",
+            "total_votes": "Total Votes"
+        }
     }
 }

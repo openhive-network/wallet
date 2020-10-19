@@ -1,16 +1,19 @@
+/* eslint-disable react/jsx-one-expression-per-line */
 import React from 'react';
 import PropTypes from 'prop-types';
 import Moment from 'moment';
 import NumAbbr from 'number-abbreviate';
 import tt from 'counterpart';
-import Userpic from 'app/components/elements/Userpic';
+import cx from 'classnames';
+import Userpic, { SIZE_SMALL } from 'app/components/elements/Userpic';
 import { numberWithCommas } from 'app/utils/StateFunctions';
+import { APP_URL } from 'app/client_config';
 
 import Icon from 'app/components/elements/Icon';
 
 const numAbbr = new NumAbbr();
 
-export default function Proposal(props) {
+export function Proposal(props) {
     const {
         id,
         start_date,
@@ -33,25 +36,66 @@ export default function Proposal(props) {
     const start = new Date(start_date);
     const end = new Date(end_date);
     const durationInDays = Moment(end).diff(Moment(start), 'days');
-    const totalPayout = durationInDays * daily_pay.split(' HBD')[0]; // ¯\_(ツ)_/¯
+    const totalPayout = durationInDays * daily_pay.split(' ')[0]; // ¯\_(ツ)_/¯
+    const votesToHP = simpleVotesToHp(
+        total_votes,
+        total_vesting_shares,
+        total_vesting_fund_hive
+    );
 
-    const classUp =
-        'Voting__button Voting__button-up' +
-        (isUpVoted ? ' Voting__button--upvoted' : '') +
-        (voteFailed ? ' Voting__button--downvoted' : '') +
-        (isVoting ? ' votingUp' : '');
+    const classUp = cx('Voting__button', 'Voting__button-up', {
+        'Voting__button--upvoted': isUpVoted,
+        'Voting__button--downvoted': voteFailed,
+        votingUp: isVoting,
+    });
+
     return (
-        <div className="proposals__row">
+        <div className="proposals__item">
+            <div className="proposals__content">
+                <a
+                    className="proposals__row title"
+                    href={urlifyPermlink(creator, permlink)}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    alt={startedOrFinishedInWordsLongVersion(start, end)}
+                    title={startedOrFinishedInWordsLongVersion(start, end)}
+                >
+                    {subject}&nbsp;<span className="id">#{id}</span>
+                </a>
+                <div className="proposals__row description">
+                    <div className="date">
+                        {formatDate(start)}&nbsp;-&nbsp;{formatDate(end)}&nbsp;(
+                        {durationInDays} {tt('proposals.days')})
+                    </div>
+                    <div className="amount">
+                        <span title={formatCurrency(totalPayout)}>
+                            {abbreviateNumber(totalPayout)} HBD
+                        </span>
+                        &nbsp;(
+                        {tt('proposals.daily')}&nbsp;
+                        {abbreviateNumber(daily_pay.split(' ')[0])} HBD)
+                    </div>
+                    <span
+                        className="status"
+                        title={startedOrFinishedInWordsLongVersion(start, end)}
+                    >
+                        {startedOrFinished(start, end)}
+                    </span>
+                </div>
+                <div className="proposals__row details">
+                    <Userpic account={creator} size={SIZE_SMALL} />
+                    <div className="creator">
+                        {tt('proposals.by')}&nbsp;{linkifyUsername(creator)}
+                        {creator != receiver
+                            ? ` ${tt('proposals.for')} `
+                            : null}
+                    </div>
+                </div>
+            </div>
             <div className="proposals__votes">
-                <span>
-                    {abbreviateNumber(
-                        simpleVotesToHp(
-                            total_votes,
-                            total_vesting_shares,
-                            total_vesting_fund_hive
-                        )
-                    )}
-                </span>
+                <div title={`${votesToHP} HP`}>
+                    {abbreviateNumber(votesToHP)}
+                </div>
                 <a onClick={onVote}>
                     <span className={classUp}>
                         <Icon
@@ -60,69 +104,6 @@ export default function Proposal(props) {
                         />
                     </span>
                 </a>
-            </div>
-            <div className="proposals__avatar">
-                <Userpic account={creator} />
-            </div>
-            <div className="proposals__description">
-                <span>
-                    <a
-                        href={urlifyPermlink(creator, permlink)}
-                        target="_blank"
-                        alt={startedOrFinishedInWordsLongVersion(start, end)}
-                        title={startedOrFinishedInWordsLongVersion(start, end)}
-                        rel="noreferrer noopener"
-                    >
-                        {subject}
-                        <span
-                            className="proposals__statusTag"
-                            title={startedOrFinishedInWordsLongVersion(
-                                start,
-                                end
-                            )}
-                        >
-                            {startedOrFinished(start, end)}
-                        </span>
-                    </a>
-                </span>
-                <br />
-                <small className="date">
-                    {tt('proposals.startEndDates', {
-                        start: formatDate(start),
-                        end: formatDate(end),
-                    })}
-                </small>
-                <br />
-                <small>
-                    {tt('proposals.proposalId', { id })} {tt('proposals.by')}{' '}
-                    {linkifyUsername(creator)}
-                    {creator !== receiver && (
-                        <span>
-                            {' '}
-                            {tt('proposals.for')} {linkifyUsername(receiver)}
-                        </span>
-                    )}
-                </small>
-            </div>
-            <div className="proposals__amount">
-                <span>
-                    <a href="#" title={formatCurrency(totalPayout)}>
-                        <em>
-                            {tt('proposals.amountHbd', {
-                                amount: abbreviateNumber(totalPayout),
-                            })}
-                        </em>
-                    </a>
-                </span>
-                <small>
-                    {tt('proposals.dailyAmount', {
-                        amount: abbreviateNumber(daily_pay.split(' HBD')[0]),
-                    })}
-                    <br />
-                    {tt('proposals.duration', {
-                        duration: durationInDays,
-                    })}
-                </small>
             </div>
         </div>
     );
@@ -152,7 +133,7 @@ Proposal.propTypes = {
  * @returns {string} - return a fancy string
  */
 function formatCurrency(amount = 0) {
-    return numberWithCommas(Number.parseFloat(amount).toFixed(2) + 'HBD');
+    return numberWithCommas(Number.parseFloat(amount).toFixed(2) + ' HBD');
 }
 
 /**
@@ -255,7 +236,7 @@ function durationInWords(duration) {
 function linkifyUsername(linkText, username = '') {
     if (username == '') username = linkText;
     return (
-        <a href={`https://hive.blog/@${username}`} target="_blank">
+        <a href={`${APP_URL}/@${username}`} target="_blank">
             {linkText}
         </a>
     );
@@ -268,7 +249,7 @@ function linkifyUsername(linkText, username = '') {
  * @returns {string} - return a URL string
  */
 function urlifyPermlink(username, permlink) {
-    return `https://hive.blog/@${username}/${permlink}`;
+    return `${APP_URL}/@${username}/${permlink}`;
 }
 
 /**
@@ -284,8 +265,10 @@ function simpleVotesToHp(
     total_vesting_fund_hive
 ) {
     const total_vests = parseFloat(total_vesting_shares);
-    const total_vest_steem = parseFloat(total_vesting_fund_hive);
+    const total_vest_steem = parseFloat(total_vesting_fund_hive || 0);
     return (total_vest_steem * (total_votes / total_vests) * 0.000001).toFixed(
         2
     );
 }
+
+export default Proposal;

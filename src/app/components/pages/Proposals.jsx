@@ -8,6 +8,25 @@ import PropTypes from 'prop-types';
 import ProposalListContainer from 'app/components/modules/ProposalList/ProposalListContainer';
 
 class Proposals extends React.Component {
+    startValueByOrderType = {
+        by_total_votes: {
+            ascending: [0],
+            descending: [],
+        },
+        by_creator: {
+            ascending: [''],
+            descending: [],
+        },
+        by_start_date: {
+            ascending: [''],
+            descending: [''],
+        },
+        by_end_date: {
+            ascending: [''],
+            descending: [''],
+        },
+    };
+
     constructor(props) {
         super(props);
         this.state = {
@@ -16,24 +35,44 @@ class Proposals extends React.Component {
             limit: 10,
             last_proposal: false,
             status: 'all',
+            order_by: 'by_total_votes',
+            order_direction: 'descending',
         };
     }
     async componentWillMount() {
         await this.load();
     }
 
-    async load(quiet = false) {
+    async load(quiet = false, options = {}) {
         if (quiet) {
             this.setState({ loading: true });
         }
 
+        // eslint-disable-next-line react/destructuring-assignment
+        const { status, order_by, order_direction } = options;
+
+        const isFiltering = !!(status || order_by || order_direction);
+
+        let limit;
+
+        if (isFiltering) {
+            limit = this.state.limit;
+        } else {
+            limit = this.state.limit + this.state.proposals.length;
+        }
+
+        const start = this.startValueByOrderType[
+            order_by || this.state.order_by
+        ][order_direction || this.state.order_direction];
+
         const proposals =
             (await this.getAllProposals(
                 this.state.last_proposal,
-                'by_total_votes',
-                'descending',
-                this.state.limit + this.state.proposals.length,
-                this.state.status
+                order_by || this.state.order_by,
+                order_direction || this.state.order_direction,
+                limit,
+                status || this.state.status,
+                start
             )) || [];
 
         let last_proposal = false;
@@ -45,10 +84,33 @@ class Proposals extends React.Component {
             proposals,
             loading: false,
             last_proposal,
+            limit,
         });
     }
 
-    getAllProposals(last_proposal, order_by, order_direction, limit, status) {
+    onFilterProposals = async (status) => {
+        this.setState({ status });
+        await this.load(false, { status });
+    };
+
+    onOrderProposals = async (order_by) => {
+        this.setState({ order_by });
+        await this.load(false, { order_by });
+    };
+
+    onOrderDirection = async (order_direction) => {
+        this.setState({ order_direction });
+        await this.load(false, { order_direction });
+    };
+
+    getAllProposals(
+        last_proposal,
+        order_by,
+        order_direction,
+        limit,
+        status,
+        start
+    ) {
         return this.props.listProposals({
             voter_id: this.props.currentUser,
             last_proposal,
@@ -56,6 +118,7 @@ class Proposals extends React.Component {
             order_direction,
             limit,
             status,
+            start,
         });
     }
 
@@ -73,13 +136,19 @@ class Proposals extends React.Component {
         );
     };
 
-    onClickLoadMoreProposals = e => {
+    onClickLoadMoreProposals = (e) => {
         e.preventDefault();
         this.load();
     };
 
     render() {
-        const { proposals, loading } = this.state;
+        const {
+            proposals,
+            loading,
+            status,
+            order_by,
+            order_direction,
+        } = this.state;
         let showBottomLoading = false;
         if (loading && proposals && proposals.length > 0) {
             showBottomLoading = true;
@@ -90,6 +159,12 @@ class Proposals extends React.Component {
                     voteOnProposal={this.voteOnProposal}
                     proposals={proposals}
                     loading={loading}
+                    onFilter={this.onFilterProposals}
+                    onOrder={this.onOrderProposals}
+                    onOrderDirection={this.onOrderDirection}
+                    status={status}
+                    orderBy={order_by}
+                    orderDirection={order_direction}
                 />
                 <center style={{ paddingTop: '1em', paddingBottom: '1em' }}>
                     {!loading ? (
@@ -115,7 +190,7 @@ Proposals.propTypes = {
 module.exports = {
     path: 'proposals',
     component: connect(
-        state => {
+        (state) => {
             const user = state.user.get('current');
             const currentUser = user && user.get('username');
             const proposals = state.proposal.get('proposals', List());
@@ -131,7 +206,7 @@ module.exports = {
                 last_id,
             };
         },
-        dispatch => {
+        (dispatch) => {
             return {
                 voteOnProposal: (
                     voter,
@@ -195,7 +270,7 @@ module.exports = {
                         })
                     );
                 },
-                listProposals: payload => {
+                listProposals: (payload) => {
                     return new Promise((resolve, reject) => {
                         dispatch(
                             proposalActions.listProposals({
