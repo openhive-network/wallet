@@ -26,11 +26,10 @@ export function* listProposals({
     order_direction,
     limit,
     status,
+    start,
     resolve,
     reject,
 }) {
-    const start = [-1, 0];
-
     const proposals = yield call(
         [api, api.listProposalsAsync],
         start,
@@ -40,14 +39,14 @@ export function* listProposals({
         status
     );
 
-    const proposalIds = proposals.map(p => {
+    const proposalIds = proposals.map((p) => {
         return p.id;
     });
 
     let proposalVotesIds = [];
 
     if (voter_id) {
-        let proposalVotes = yield proposalIds.map(function*(pId) {
+        let proposalVotes = yield proposalIds.map(function* (pId) {
             let votes = [];
             let nextVotes = [];
             let lastVoter = '';
@@ -57,17 +56,17 @@ export function* listProposals({
             while (true) {
                 nextVotes = yield call(
                     [api, api.listProposalVotesAsync],
-                    [pId, lastVoter],
+                    [voter_id],
                     maxVotes,
-                    'by_proposal_voter',
+                    'by_voter_proposal',
                     'ascending',
-                    'all'
+                    'active'
                 );
                 votes = votes.concat(nextVotes);
                 lastVoter = nextVotes[nextVotes.length - 1].voter;
                 if (nextVotes.length < maxVotes) return votes;
                 beyondThisProposal = false;
-                nextVotes.map(d => {
+                nextVotes.map((d) => {
                     if (d.proposal.proposal_id != pId)
                         beyondThisProposal = true;
                 });
@@ -78,14 +77,14 @@ export function* listProposals({
         proposalVotes = proposalVotes.reduce((a, b) => a.concat(b), []);
 
         proposalVotesIds = proposalVotes
-            .filter(d => {
+            .filter((d) => {
                 return d.voter == voter_id;
             })
-            .map(p => {
+            .map((p) => {
                 return p.proposal.id;
             });
     }
-    const mungedProposals = proposals.map(p => {
+    const mungedProposals = proposals.map((p) => {
         if (proposalVotesIds.indexOf(p.proposal_id) != -1) {
             p.upVoted = true;
         } else {
@@ -123,7 +122,7 @@ export function* listVotedOnProposals({
             order_direction,
             status
         );
-        const proposals = data.filter(d => {
+        const proposals = data.filter((d) => {
             return d.voter == voter_id;
         });
         yield put(
@@ -143,12 +142,12 @@ export function* listVotedOnProposals({
 
 // Action creators
 export const actions = {
-    listProposals: payload => ({
+    listProposals: (payload) => ({
         type: LIST_PROPOSALS,
         payload,
     }),
 
-    listVotedOnProposals: payload => ({
+    listVotedOnProposals: (payload) => ({
         type: LIST_VOTED_ON_PROPOSALS,
         payload,
     }),
