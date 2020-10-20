@@ -7,7 +7,7 @@ import tt from 'counterpart';
 import cx from 'classnames';
 import Userpic, { SIZE_SMALL } from 'app/components/elements/Userpic';
 import { numberWithCommas } from 'app/utils/StateFunctions';
-import { APP_URL } from 'app/client_config';
+import { APP_URL, REFUND_ACCOUNTS } from 'app/client_config';
 
 import Icon from 'app/components/elements/Icon';
 
@@ -42,6 +42,7 @@ export function Proposal(props) {
         total_vesting_shares,
         total_vesting_fund_hive
     );
+    const fundingType = REFUND_ACCOUNTS.includes(receiver) ? 'refund' : 'burn';
 
     const classUp = cx('Voting__button', 'Voting__button-up', {
         'Voting__button--upvoted': isUpVoted,
@@ -81,14 +82,23 @@ export function Proposal(props) {
                     >
                         {startedOrFinished(start, end)}
                     </span>
+                    <span
+                        className={cx('status', 'funding-type', fundingType)}
+                        title={tt(`proposals.${fundingType}`)}
+                    >
+                        {tt(`proposals.${fundingType}`)}
+                    </span>
                 </div>
                 <div className="proposals__row details">
                     <Userpic account={creator} size={SIZE_SMALL} />
                     <div className="creator">
                         {tt('proposals.by')}&nbsp;{linkifyUsername(creator)}
-                        {creator != receiver
-                            ? ` ${tt('proposals.for')} `
-                            : null}
+                        {creator != receiver ? (
+                            <span>
+                                &nbsp;{tt('proposals.for')}&nbsp;
+                                {linkifyUsername(receiver)}
+                            </span>
+                        ) : null}
                     </div>
                 </div>
             </div>

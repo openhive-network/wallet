@@ -140,12 +140,22 @@
                     display: flex;
                     align-items: center;
                     padding: 0 0.2rem;
-                    margin: 0 1rem 0 0.5rem;
+                    margin: 0 0 0 0.5rem;
                     border-radius: 0.3rem;
                     font-size: 0.7rem;
                     @include themify($themes) {
                         border: 1px solid themed('colorAccent');
                         color: themed('colorAccent');
+                    }
+                    &.funding-type {
+                        &.burn {
+                            border: 1px solid $color-orange;
+                            color: $color-orange;
+                        }
+                        &.refund {
+                            border: 1px solid green;
+                            color: green;
+                        }
                     }
                 }
 
