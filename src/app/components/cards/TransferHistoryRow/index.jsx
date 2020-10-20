@@ -89,8 +89,8 @@ class TransferHistoryRow extends React.Component {
                 type === 'transfer_to_savings'
                     ? 'to_savings'
                     : type === 'transfer_from_savings'
-                        ? 'from_savings'
-                        : 'not_savings';
+                    ? 'from_savings'
+                    : 'not_savings';
 
             if (data.from === context) {
                 // Semi-bad behavior - passing `type` to translation engine -- @todo better somehow?
@@ -193,14 +193,14 @@ class TransferHistoryRow extends React.Component {
             // `${curation_reward} HIVE POWER` + tt('g.for');
         } else if (type === 'author_reward') {
             let hive_payout = '';
-            if (data.steem_payout !== '0.000 HIVE')
-                hive_payout = ', ' + data.steem_payout;
+            if (data.hive_payout !== '0.000 HIVE')
+                hive_payout = ', ' + data.hive_payout;
             message = (
                 <span>
                     {tt('transferhistoryrow_jsx.author_reward', {
                         author_reward,
                         hive_payout,
-                        hbd_payout: data.sbd_payout,
+                        hbd_payout: data.hbd_payout,
                     })}
                     {postLink(socialUrl, data.author, data.permlink)}
                 </span>
@@ -307,7 +307,7 @@ class TransferHistoryRow extends React.Component {
     }
 }
 
-const otherAccountLink = username =>
+const otherAccountLink = (username) =>
     GDPRUserList.includes(username) ? (
         <span>{username}</span>
     ) : (
