@@ -784,6 +784,8 @@
         "title": "Proposals",
         "status": "Status",
         "order": "Order by",
+        "refund": "refund",
+        "burn": "burn",
         "status_options": {
             "all": "All",
             "active": "Active",
