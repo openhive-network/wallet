@@ -50,7 +50,7 @@ export async function getStateAsync(url) {
     if (path.includes('transfers')) {
         fetch_transfers = true;
         //just convert path to be the username, hivemind won't accept the request if transfers is in the path
-        let tokens = path.split('/');
+        let tokens = url.split('/');
         for (var token of tokens) {
             if (token.contains('@')) {
                 path = token;
