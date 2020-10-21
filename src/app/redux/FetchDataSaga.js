@@ -42,7 +42,7 @@ export function* fetchState(location_change_action) {
     is_initial_state = false;
     if (ignore_fetch) {
         // If a user's transfer page is being loaded, fetch related account data.
-        yield call(getTransferUsers, pathname);
+        //yield call(getTransferUsers, pathname);
 
         return;
     }
@@ -68,7 +68,7 @@ export function* fetchState(location_change_action) {
         const state = yield call(getStateAsync, url);
         yield put(globalActions.receiveState(state));
         // If a user's transfer page is being loaded, fetch related account data.
-        yield call(getTransferUsers, pathname);
+        //yield call(getTransferUsers, pathname);
     } catch (error) {
         console.error('~~ Saga fetchState error ~~>', url, error);
         yield put(appActions.steemApiError(error.message));
