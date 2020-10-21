@@ -65,7 +65,7 @@ export async function getStateAsync(url) {
         let account_history = await api.getAccountHistoryAsync(
             account_name,
             -1,
-            1000
+            500
         );
         let account = await api.getAccountsAsync([account_name]);
         account = account[0];
