@@ -1,4 +1,4 @@
-import { api } from '@hiveio/hive-js';
+import { api } from 'app/utils/custom_api/lib';
 
 import stateCleaner from 'app/redux/stateCleaner';
 
@@ -65,7 +65,8 @@ export async function getStateAsync(url) {
         let account_history = await api.getAccountHistoryAsync(
             account_name,
             -1,
-            500
+            500,
+            582907592732
         );
         let account = await api.getAccountsAsync([account_name]);
         account = account[0];

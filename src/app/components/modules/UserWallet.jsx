@@ -31,24 +31,21 @@ import DropdownMenu from 'app/components/elements/DropdownMenu';
 const assetPrecision = 1000;
 
 const VALID_OPERATION_TYPES = [
-    "transfer",
-    "transfer_to_vesting",
-    "withdraw_vesting",
-    "interest",
-    "liquidity_reward",
-    "author_reward",
-    "curation_reward",
-    "comment_benefactor_reward",
-    "transfer_to_savings",
-    "transfer_from_savings",
-    "escrow_transfer",
-    "cancel_transfer_from_savings",
-    "escrow_approve",
-    "escrow_dispute",
-    "escrow_release",
-    "fill_convert_request",
-    "fill_order",
-    "claim_reward_balance"
+    'transfer',
+    'transfer_to_vesting',
+    'withdraw_vesting',
+    'interest',
+    'liquidity_reward',
+    'transfer_to_savings',
+    'transfer_from_savings',
+    'escrow_transfer',
+    'cancel_transfer_from_savings',
+    'escrow_approve',
+    'escrow_dispute',
+    'escrow_release',
+    'fill_convert_request',
+    'fill_order',
+    'claim_reward_balance',
 ];
 
 class UserWallet extends React.Component {
@@ -339,8 +336,7 @@ class UserWallet extends React.Component {
                 const data = item.getIn([1, 'op', 1]);
                 const type = item.getIn([1, 'op', 0]);
 
-                if (!VALID_OPERATION_TYPES.includes(type))
-                    return null;
+                if (!VALID_OPERATION_TYPES.includes(type)) return null;
 
                 // Filter out rewards
                 if (
