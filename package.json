@@ -41,7 +41,7 @@
         "testURL": "http://localhost/"
     },
     "dependencies": {
-        "@hiveio/hive-js": "0.8.5",
+        "@hiveio/hive-js": "0.8.6",
         "@steem/crypto-session": "git+https://github.com/steemit/crypto-session.git#83a90b319ce5bc6a70362d52a15a815de7e729bb",
         "assert": "1.4.1",
         "autoprefixer-loader": "3.2.0",
