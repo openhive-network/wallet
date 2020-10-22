@@ -132,10 +132,10 @@
     lodash "^4.17.13"
     to-fast-properties "^2.0.0"
 
-"@hiveio/hive-js@0.8.5":
-  version "0.8.5"
-  resolved "https://registry.yarnpkg.com/@hiveio/hive-js/-/hive-js-0.8.5.tgz#271fa801e5489c8519ac0c3011ad059cdd928b13"
-  integrity sha512-rBBZ5njd2XAXkOgCFu5kVFQIZ5QTvNLuEdbCXgVV2LU8yv+AbbdpCpKp8+V1ygMpzq5ZyqLnn2sbSzSKXu6AgA==
+"@hiveio/hive-js@0.8.6":
+  version "0.8.6"
+  resolved "https://registry.yarnpkg.com/@hiveio/hive-js/-/hive-js-0.8.6.tgz#27e6b5ebb0b1dd708a6c165e4e3b49993e80740f"
+  integrity sha512-nHEcOYubKlmZzJV1c6wLwlbL4mEgkoV0G3xSmS4J48e1tzfxlZV60Hk6e9ngCeGC9j5pA71namWTJIt8N0wzCQ==
   dependencies:
     "@steemit/rpc-auth" "^1.1.1"
     bigi "^1.4.2"
@@ -151,6 +151,7 @@
     debug "^2.6.8"
     detect-node "^2.0.3"
     ecurve "^1.0.5"
+    jsbi "^3.1.4"
     lodash "^4.16.4"
     retry "^0.12.0"
     secure-random "^1.1.2"
@@ -5972,6 +5973,11 @@ js-yaml@^3.13.1, js-yaml@^3.7.0, js-yaml@^3.9.0:
   dependencies:
     argparse "^1.0.7"
     esprima "^4.0.0"
+
+jsbi@^3.1.4:
+  version "3.1.4"
+  resolved "https://registry.yarnpkg.com/jsbi/-/jsbi-3.1.4.tgz#9654dd02207a66a4911b4e4bb74265bc2cbc9dd0"
+  integrity sha512-52QRRFSsi9impURE8ZUbzAMCLjPm4THO7H2fcuIvaaeFTbSysvkodbQQXIVsNgq/ypDbq6dJiuGKL0vZ/i9hUg==
 
 jsbn@~0.1.0:
   version "0.1.1"
