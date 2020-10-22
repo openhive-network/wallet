@@ -1,6 +1,29 @@
-import { api } from 'app/utils/custom_api/lib';
+import { api } from '@hiveio/hive-js';
+import {
+    ChainTypes,
+    makeBitMaskFilter,
+} from '@hiveio/hive-js/lib/auth/serializer';
 
 import stateCleaner from 'app/redux/stateCleaner';
+
+const op = ChainTypes.operations;
+let wallet_operations_bitmask = makeBitMaskFilter([
+    op.transfer,
+    op.transfer_to_vesting,
+    op.withdraw_vesting,
+    op.interest,
+    op.liquidity_reward,
+    op.transfer_to_savings,
+    op.transfer_from_savings,
+    op.escrow_transfer,
+    op.cancel_transfer_from_savings,
+    op.escrow_approve,
+    op.escrow_dispute,
+    op.escrow_release,
+    op.fill_convert_request,
+    op.fill_order,
+    op.claim_reward_balance,
+]);
 
 async function getStateForTrending() {
     let result = {};
@@ -66,7 +89,7 @@ export async function getStateAsync(url) {
             account_name,
             -1,
             500,
-            582907592732
+            ...wallet_operations_bitmask
         );
         let account = await api.getAccountsAsync([account_name]);
         account = account[0];
