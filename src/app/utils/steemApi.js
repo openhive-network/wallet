@@ -32,6 +32,29 @@ async function getStateForWitnesses() {
     return result;
 }
 
+async function getGenericState(user) {
+    let result = {};
+    result.accounts = {};
+    result.content = {};
+    result.props = await api.getDynamicGlobalPropertiesAsync();
+
+    let user_to_check = user;
+    //user should be an account
+    if (user.startsWith('/')) {
+        user_to_check = user.split('/')[1];
+    }
+
+    if (user_to_check.startsWith('@'))
+        user_to_check = user_to_check.split('@')[1];
+    let account_details = await api.getAccountsAsync([user_to_check]);
+    result.accounts[user_to_check] = account_details[0];
+
+    result.feed_price = {};
+    let feed_data = await api.getFeedHistoryAsync();
+    result.feed_price = feed_data.current_median_history;
+    return result;
+}
+
 export async function getStateAsync(url) {
     // strip off query string
     if (url === 'trending') {
@@ -58,7 +81,7 @@ export async function getStateAsync(url) {
             }
         }
     }
-    let raw = await api.getStateAsync(path);
+    let raw = await getGenericState(path);
 
     if (fetch_transfers) {
         let account_name = path.split('@')[1];
