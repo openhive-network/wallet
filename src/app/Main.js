@@ -12,6 +12,7 @@ import { serverApiRecordEvent } from 'app/utils/ServerApiClient';
 import * as hive from '@hiveio/hive-js';
 import { determineViewMode } from 'app/utils/Links';
 import frontendLogger from 'app/utils/FrontendLogger';
+import Cookies from 'universal-cookie';
 
 window.addEventListener('error', frontendLogger);
 
@@ -32,11 +33,13 @@ function runApp(initial_state) {
     console.log('Initial state', initial_state);
 
     const config = initial_state.offchain.config;
+    let cookies = new Cookies();
     const alternativeApiEndpoints = config.alternative_api_endpoints;
+    const cookie_endpoint = cookies.get('user_preferred_api_endpoint');
     const currentApiEndpoint =
-        localStorage.getItem('user_preferred_api_endpoint') === null
+        cookie_endpoint === null || cookie_endpoint === undefined
             ? config.hived_connection_client
-            : localStorage.getItem('user_preferred_api_endpoint');
+            : cookie_endpoint;
 
     hive.api.setOptions({
         url: currentApiEndpoint,
@@ -44,7 +47,7 @@ function runApp(initial_state) {
         useAppbaseApi: !!config.hived_use_appbase,
         alternative_api_endpoints: alternativeApiEndpoints,
         failover_threshold: config.failover_threshold,
-        rebranded_api: true
+        rebranded_api: true,
     });
     hive.config.set('address_prefix', config.address_prefix);
     hive.config.set('rebranded_api', true);
@@ -75,9 +78,7 @@ function runApp(initial_state) {
         };
     }
 
-    const location = `${window.location.pathname}${window.location.search}${
-        window.location.hash
-    }`;
+    const location = `${window.location.pathname}${window.location.search}${window.location.hash}`;
 
     try {
         clientRender(initial_state);
@@ -90,7 +91,7 @@ function runApp(initial_state) {
 if (!window.Intl) {
     require.ensure(
         ['intl/dist/Intl'],
-        require => {
+        (require) => {
             window.IntlPolyfill = window.Intl = require('intl/dist/Intl');
             require('intl/locale-data/jsonp/en-US.js');
             require('intl/locale-data/jsonp/es.js');

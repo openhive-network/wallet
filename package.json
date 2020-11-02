@@ -147,6 +147,7 @@
         "twilio": "3.17.0",
         "uncontrollable": "3.3.1",
         "underscore.string": "3.3.5",
+        "universal-cookie": "^4.0.4",
         "url-loader": "0.6.2",
         "web-push": "3.2.3",
         "webpack-isomorphic-tools": "3.0.5",
