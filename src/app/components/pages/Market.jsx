@@ -87,7 +87,7 @@ class Market extends React.Component {
         let tc =
             typeof this.props.ticker == 'undefined' ||
             this.props.ticker.latest !== nextProps.ticker.latest ||
-            this.props.ticker.sbd_volume !== nextProps.ticker.sbd_volume;
+            this.props.ticker.hbd_volume !== nextProps.ticker.hbd_volume;
 
         let bc =
             typeof this.props.orderbook == 'undefined' ||
@@ -242,7 +242,7 @@ class Market extends React.Component {
             lowest_ask: 0,
             highest_bid: 0,
             percent_change: 0,
-            sbd_volume: 0,
+            hbd_volume: 0,
             feed_price: 0,
         };
 
@@ -252,7 +252,7 @@ class Market extends React.Component {
                 lowest_ask,
                 highest_bid,
                 percent_change,
-                sbd_volume,
+                hbd_volume,
             } = this.props.ticker;
             const base = this.props.feed.get('base');
             const quote = this.props.feed.get('quote');
@@ -261,7 +261,7 @@ class Market extends React.Component {
                 lowest_ask: roundUp(parseFloat(lowest_ask), 6),
                 highest_bid: roundDown(parseFloat(highest_bid), 6),
                 percent_change: parseFloat(percent_change),
-                sbd_volume: parseFloat(sbd_volume),
+                hbd_volume: parseFloat(hbd_volume),
                 feed_price:
                     parseFloat(base.split(' ')[0]) /
                     parseFloat(quote.split(' ')[0]),
@@ -450,7 +450,7 @@ class Market extends React.Component {
                             <li>
                                 <b>{tt('market_jsx.24h_volume')}</b>{' '}
                                 {CURRENCY_SIGN}
-                                {ticker.sbd_volume.toFixed(2)}
+                                {ticker.hbd_volume.toFixed(2)}
                             </li>
                             <li>
                                 <b>{tt('g.bid')}</b> {CURRENCY_SIGN}
@@ -630,7 +630,7 @@ class Market extends React.Component {
                                                                 .buyHive_price
                                                                 .value
                                                         );
-                                                        const total = account.sbd_balance.split(
+                                                        const total = account.hbd_balance.split(
                                                             ' '
                                                         )[0];
                                                         this.refs.buyHive_total.value = total;

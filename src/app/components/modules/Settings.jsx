@@ -4,6 +4,7 @@ import tt from 'counterpart';
 import * as appActions from 'app/redux/AppReducer';
 import o2j from 'shared/clash/object2json';
 import * as hive from '@hiveio/hive-js';
+import Cookies from 'universal-cookie';
 
 class Settings extends React.Component {
     handleLanguageChange = (event) => {
@@ -15,16 +16,11 @@ class Settings extends React.Component {
     getPreferredApiEndpoint = () => {
         let preferred_api_endpoint = $STM_Config.hived_connection_client;
 
-        if (
-            typeof window !== 'undefined' &&
-            localStorage.getItem('user_preferred_api_endpoint')
-        ) {
-            preferred_api_endpoint = localStorage.getItem(
-                'user_preferred_api_endpoint'
-            );
-        }
-
-        return preferred_api_endpoint;
+        let cookies = new Cookies();
+        let cookie_endpoint = cookies.get('user_preferred_api_endpoint');
+        return cookie_endpoint === null || cookie_endpoint === undefined
+            ? 'https://api.hive.blog'
+            : cookie_endpoint;
     };
 
     generateAPIEndpointOptions = () => {
@@ -53,13 +49,9 @@ class Settings extends React.Component {
     };
 
     handlePreferredAPIEndpointChange = (event) => {
-        if (typeof window !== 'undefined') {
-            localStorage.setItem(
-                'user_preferred_api_endpoint',
-                event.target.value
-            );
-            hive.api.setOptions({ url: event.target.value });
-        }
+        let cookies = new Cookies();
+        cookies.set('user_preferred_api_endpoint', event.target.value);
+        hive.api.setOptions({ url: event.target.value });
     };
 
     render() {
