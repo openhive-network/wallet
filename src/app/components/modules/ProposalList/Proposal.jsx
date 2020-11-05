@@ -7,11 +7,19 @@ import tt from 'counterpart';
 import cx from 'classnames';
 import Userpic, { SIZE_SMALL } from 'app/components/elements/Userpic';
 import { numberWithCommas } from 'app/utils/StateFunctions';
-import { APP_URL, REFUND_ACCOUNTS } from 'app/client_config';
+import { APP_URL, REFUND_ACCOUNTS, BURN_ACCOUNTS } from 'app/client_config';
 
 import Icon from 'app/components/elements/Icon';
 
 const numAbbr = new NumAbbr();
+
+function getFundingType(account) {
+    if (REFUND_ACCOUNTS.includes(account)) return 'refund';
+
+    if (BURN_ACCOUNTS.includes(account)) return 'burn';
+
+    return null;
+}
 
 export function Proposal(props) {
     const {
@@ -42,7 +50,8 @@ export function Proposal(props) {
         total_vesting_shares,
         total_vesting_fund_hive
     );
-    const fundingType = REFUND_ACCOUNTS.includes(receiver) ? 'refund' : 'burn';
+
+    const fundingType = getFundingType(receiver);
 
     const classUp = cx('Voting__button', 'Voting__button-up', {
         'Voting__button--upvoted': isUpVoted,
@@ -82,12 +91,18 @@ export function Proposal(props) {
                     >
                         {startedOrFinished(start, end)}
                     </span>
-                    <span
-                        className={cx('status', 'funding-type', fundingType)}
-                        title={tt(`proposals.${fundingType}`)}
-                    >
-                        {tt(`proposals.${fundingType}`)}
-                    </span>
+                    {fundingType && (
+                        <span
+                            className={cx(
+                                'status',
+                                'funding-type',
+                                fundingType
+                            )}
+                            title={tt(`proposals.${fundingType}`)}
+                        >
+                            {tt(`proposals.${fundingType}`)}
+                        </span>
+                    )}
                 </div>
                 <div className="proposals__row details">
                     <Userpic account={creator} size={SIZE_SMALL} />
