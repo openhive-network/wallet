@@ -37,6 +37,7 @@ const scss_loaders = [
         loader: 'css-loader',
         options: {
             importLoaders: 1,
+            url: false,
         },
     },
     postcss_loader,
@@ -70,7 +71,6 @@ module.exports = {
     module: {
         rules: [
             {test: /\.(jpe?g|png)/, use: 'url-loader?limit=4096'},
-            {test: /\.json$/, use: 'json-loader'},
             {test: /\.js$|\.jsx$/, exclude: /node_modules/, use: 'babel-loader'},
             {test: /\.svg$/, use: 'svg-inline-loader'},
             {
