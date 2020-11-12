@@ -70,8 +70,18 @@ module.exports = {
     },
     module: {
         rules: [
-            {test: /\.(jpe?g|png)/, use: 'url-loader?limit=4096'},
-            {test: /\.js$|\.jsx$/, exclude: /node_modules/, use: 'babel-loader'},
+            {
+                test: /\.(jpe?g|png)/, use: [
+                    {
+                        loader: 'url-loader',
+                        options: {
+                            limit: 4096,
+                            esModule: false,
+                        },
+                    },
+                ],
+            },
+            {test: /\.js$|\.jsx$/, exclude: [/node_modules/, /\*\/app\/assets\/static\/\*\.js/], use: 'babel-loader'},
             {test: /\.svg$/, use: 'svg-inline-loader'},
             {
                 test: require.resolve("blueimp-file-upload"),
@@ -87,7 +97,14 @@ module.exports = {
             },
             {
                 test: /\.md/,
-                use: 'raw-loader'
+                use: [
+                    {
+                        loader: 'raw-loader',
+                        options: {
+                            esModule: false,
+                        },
+                    },
+                ],
             }
         ]
     },
