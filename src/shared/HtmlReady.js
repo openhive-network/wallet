@@ -79,7 +79,7 @@ const XMLSerializer = new xmldom.XMLSerializer();
     If hideImages and mutate is set to true all images will be replaced
     by <pre> elements containing just the image url.
 */
-export default function(html, { mutate = true, hideImages = false } = {}) {
+export default function (html, { mutate = true, hideImages = false } = {}) {
     const state = { mutate };
     state.hashtags = new Set();
     state.usertags = new Set();
@@ -123,7 +123,7 @@ export default function(html, { mutate = true, hideImages = false } = {}) {
 
 function traverse(node, state, depth = 0) {
     if (!node || !node.childNodes) return;
-    Array(...node.childNodes).forEach(child => {
+    Array.from(node.childNodes).forEach((child) => {
         // console.log(depth, 'child.tag,data', child.tagName, child.data)
         const tag = child.tagName ? child.tagName.toLowerCase() : null;
         if (tag) state.htmltags.add(tag);
@@ -150,10 +150,8 @@ function link(state, child) {
             // Unlink potential phishing attempts
             if (
                 (url.indexOf('#') !== 0 && // Allow in-page links
-                    (child.textContent.match(/(www\.)?hive\.blog/i) &&
-                        !url.match(
-                            /https?:\/\/(.*@)?(www\.)?hive\.blog/i
-                        ))) ||
+                    child.textContent.match(/(www\.)?hive\.blog/i) &&
+                    !url.match(/https?:\/\/(.*@)?(www\.)?hive\.blog/i)) ||
                 Phishing.looksPhishy(url)
             ) {
                 const phishyDiv = child.ownerDocument.createElement('div');
@@ -216,7 +214,7 @@ function img(state, child) {
 // For all img elements with non-local URLs, prepend the proxy URL
 function proxifyImages(doc) {
     if (!doc) return;
-    [...doc.getElementsByTagName('img')].forEach(node => {
+    Array.from(doc.getElementsByTagName('img')).forEach((node) => {
         const url = node.getAttribute('src');
         if (!linksRe.local.test(url))
             node.setAttribute('src', proxifyImageUrl(url, true));
@@ -260,7 +258,7 @@ function linkifyNode(child, state) {
 
 function linkify(content, mutate, hashtags, usertags, images, links) {
     // hashtag
-    content = content.replace(/(^|\s)(#[-a-z\d]+)/gi, tag => {
+    content = content.replace(/(^|\s)(#[-a-z\d]+)/gi, (tag) => {
         if (/#[\d]+$/.test(tag)) return tag; // Don't allow numbers to be tags
         const space = /^\s/.test(tag) ? tag[0] : '';
         const tag2 = tag.trim().substring(1);
@@ -290,7 +288,7 @@ function linkify(content, mutate, hashtags, usertags, images, links) {
         }
     );
 
-    content = content.replace(linksAny('gi'), ln => {
+    content = content.replace(linksAny('gi'), (ln) => {
         if (linksRe.image.test(ln)) {
             if (images) images.add(ln);
             return `<img src="${ipfsPrefix(ln)}" />`;
@@ -301,9 +299,7 @@ function linkify(content, mutate, hashtags, usertags, images, links) {
 
         // do not linkify phishy links
         if (Phishing.looksPhishy(ln))
-            return `<div title='${getPhishingWarningMessage()}' class='phishy'>${
-                ln
-            }</div>`;
+            return `<div title='${getPhishingWarningMessage()}' class='phishy'>${ln}</div>`;
 
         if (links) links.add(ln);
         return `<a href="${ipfsPrefix(ln)}">${ln}</a>`;

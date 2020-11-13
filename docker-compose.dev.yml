@@ -26,3 +26,4 @@ services:
             - ./src:/var/app/src:delegated
             - ./webpack:/var/app/webpack:delegated
             - ./config:/var/app/config:delegated
+            - ./node_modules:/var/app/node_modules:delegated
