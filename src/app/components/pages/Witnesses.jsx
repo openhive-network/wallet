@@ -208,15 +208,30 @@ class Witnesses extends React.Component {
         const now = Moment();
 
         const witnesses = sorted_witnesses.map((item) => {
-            const owner = item.get('owner');
-            if (owner === witnessToHighlight) {
+            const witnessName = item.get('owner');
+            if (witnessName === witnessToHighlight) {
                 foundWitnessToHighlight = true;
             }
             const witnessDescription = _.get(
-                witnessAccounts[owner],
+                witnessAccounts[witnessName],
                 'profile.witness_description',
                 null
             );
+            const witnessOwnerName = _.get(
+                witnessAccounts[witnessName],
+                'profile.witness_owner',
+                null
+            );
+            let witnessOwnerNames;
+            if (witnessOwnerName) {
+                witnessOwnerNames = [witnessOwnerName];
+                if (witnessOwnerName && witnessOwnerName.indexOf(',')) {
+                    witnessOwnerNames = witnessOwnerName
+                        .replace(/ /g, '')
+                        .split(',');
+                }
+            }
+
             const totalVotesVests = item.get('votes');
             const totalVotesHpf = vestsToHpf(
                 this.props.state,
@@ -240,7 +255,9 @@ class Witnesses extends React.Component {
             previousTotalVoteHpf = totalVotesHpf;
 
             const thread = item.get('url').replace('steemit.com', 'hive.blog');
-            const myVote = witness_votes ? witness_votes.has(owner) : null;
+            const myVote = witness_votes
+                ? witness_votes.has(witnessName)
+                : null;
             const signingKey = item.get('signing_key');
             let witnessCreated = item.get('created');
             if (witnessCreated === '1970-01-01T00:00:00')
@@ -269,7 +286,7 @@ class Witnesses extends React.Component {
             const hbdExchangeUpdateDate = item.get('last_hbd_exchange_update');
             const noBlock7days = (head_block - lastBlock) * 3 > 604800;
             const isDisabled = signingKey == DISABLED_SIGNING_KEY;
-            const votingActive = witnessVotesInProgress.has(owner);
+            const votingActive = witnessVotesInProgress.has(witnessName);
             const classUp =
                 'Voting__button Voting__button-up' +
                 (myVote === true ? ' Voting__button--upvoted' : '') +
@@ -287,17 +304,27 @@ class Witnesses extends React.Component {
                     witness_link = '(No URL provided)';
                 } else if (links.remote.test(thread)) {
                     witness_link = (
-                        <a href={thread} target="_blank">
-                            {tt('witnesses_jsx.external_site')}&nbsp;
+                        <Link
+                            to={thread}
+                            target="_blank"
+                            rel="noreferrer noopener"
+                        >
+                            {tt('witnesses_jsx.external_site')}
+                            &nbsp;
                             <Icon name="extlink" />
-                        </a>
+                        </Link>
                     );
                 } else {
                     witness_link = (
-                        <a href={thread} target="_blank">
-                            {tt('witnesses_jsx.witness_thread')}&nbsp;
+                        <Link
+                            to={thread}
+                            target="_blank"
+                            rel="noreferrer noopener"
+                        >
+                            {tt('witnesses_jsx.witness_thread')}
+                            &nbsp;
                             <Icon name="extlink" />
-                        </a>
+                        </Link>
                     );
                 }
             }
@@ -308,9 +335,10 @@ class Witnesses extends React.Component {
 
             return (
                 <tr
-                    key={owner}
+                    key={witnessName}
                     className={classnames({
-                        Witnesses__highlight: witnessToHighlight === owner,
+                        Witnesses__highlight:
+                            witnessToHighlight === witnessName,
                     })}
                 >
                     <td className="Witnesses__rank">
@@ -325,7 +353,7 @@ class Witnesses extends React.Component {
                                     href="#"
                                     onClick={accountWitnessVote.bind(
                                         this,
-                                        owner,
+                                        witnessName,
                                         !myVote
                                     )}
                                     title={
@@ -340,9 +368,15 @@ class Witnesses extends React.Component {
                         </span>
                     </td>
                     <td className="Witnesses__info">
-                        <Link to={'/@' + owner} style={ownerStyle}>
+                        <Link
+                            to={`${$STM_Config.social_url}/@${witnessName}`}
+                            style={ownerStyle}
+                            title={tt(
+                                'witnesses_jsx.navigate_to_witness_profile'
+                            )}
+                        >
                             <Userpic
-                                account={owner}
+                                account={witnessName}
                                 size="small"
                                 className={classnames({
                                     disabled: isDisabled,
@@ -351,17 +385,81 @@ class Witnesses extends React.Component {
                         </Link>
                         <div className="Witnesses__info">
                             <div>
-                                <Link to={'/@' + owner} style={ownerStyle}>
-                                    {owner}
-                                </Link>
                                 <Link
-                                    to={`/~witnesses?highlight=${owner}`}
+                                    to={`${$STM_Config.social_url}/@${witnessName}`}
+                                    style={ownerStyle}
+                                    title={tt(
+                                        'witnesses_jsx.navigate_to_witness_profile'
+                                    )}
+                                    target="_blank"
+                                    rel="noreferrer noopener"
+                                >
+                                    {witnessName}
+                                </Link>
+                                {witnessOwnerNames && (
+                                    <span>
+                                        {' '}
+                                        by{' '}
+                                        {witnessOwnerNames.map(
+                                            (ownerName, index) => {
+                                                if (
+                                                    witnessOwnerNames.length >
+                                                        1 &&
+                                                    index ===
+                                                        witnessOwnerNames.length -
+                                                            1
+                                                ) {
+                                                    return (
+                                                        <span>
+                                                            {' '}
+                                                            &{' '}
+                                                            <Link
+                                                                to={`${$STM_Config.social_url}/@${ownerName}`}
+                                                                style={
+                                                                    ownerStyle
+                                                                }
+                                                                title={tt(
+                                                                    'witnesses_jsx.navigate_to_witness_profile'
+                                                                )}
+                                                                target="_blank"
+                                                                rel="noreferrer noopener"
+                                                            >
+                                                                {ownerName}
+                                                            </Link>
+                                                        </span>
+                                                    );
+                                                }
+                                                return (
+                                                    <span>
+                                                        {index > 0 && ', '}
+                                                        <Link
+                                                            to={`${$STM_Config.social_url}/@${ownerName}`}
+                                                            style={ownerStyle}
+                                                            title={tt(
+                                                                'witnesses_jsx.navigate_to_witness_profile'
+                                                            )}
+                                                            target="_blank"
+                                                            rel="noreferrer noopener"
+                                                        >
+                                                            {ownerName}
+                                                        </Link>
+                                                    </span>
+                                                );
+                                            }
+                                        )}
+                                    </span>
+                                )}
+                                <Link
+                                    to={`/~witnesses?highlight=${witnessName}`}
                                     onClick={(event) => {
                                         event.preventDefault();
                                         updateWitnessToHighlight.apply(this, [
-                                            owner,
+                                            witnessName,
                                         ]);
                                     }}
+                                    title={tt(
+                                        'witnesses_jsx.link_to_highlight_witness'
+                                    )}
                                 >
                                     <Icon
                                         name="chain"

@@ -443,7 +443,9 @@
         "hp_required_to_rank_up": "Needs %(votehp)s to level up",
         "witness_age": "Witness age",
         "not_produced_over_a_week": "Has not produced any blocks for over a week.",
-        "last_block": "Last block"
+        "last_block": "Last block",
+        "navigate_to_witness_profile": "Navigate to this user's profile",
+        "link_to_highlight_witness": "Use this for linking to this page and highlight the selected witness"
     },
     "votesandcomments_jsx": {
         "no_responses_yet_click_to_respond": "No responses yet. Click to respond.",
