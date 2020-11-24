@@ -407,7 +407,7 @@ class Witnesses extends React.Component {
                 >
                     <td className="Witnesses__rank">
                         {rank < 10 && '0'}
-                        {(rank += 1)}
+                        {rank++}
                         &nbsp;&nbsp;
                         <span className={classUp}>
                             {votingActive ? (
