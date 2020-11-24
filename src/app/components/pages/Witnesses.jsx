@@ -20,22 +20,34 @@ import _ from 'lodash';
 
 const Long = ByteBuffer.Long;
 const { string, func, object } = PropTypes;
-
+const witnessFilterLastBlockAgeThresholdInDays = 30;
 const DISABLED_SIGNING_KEY = 'STM1111111111111111111111111111111114T1Anm';
 
-function _blockGap(head_block, last_block) {
-    if (!last_block || last_block < 1) return 'forever';
+function _blockGap(head_block, last_block, format = 'auto') {
     const secs = (head_block - last_block) * 3;
-    if (secs < 60) return 'just now';
-    if (secs < 120) return 'recently';
     const mins = Math.floor(secs / 60);
-    if (mins < 120) return mins + ' mins ago';
     const hrs = Math.floor(mins / 60);
-    if (hrs < 48) return hrs + ' hrs ago';
     const days = Math.floor(hrs / 24);
-    if (days < 14) return days + ' days ago';
     const weeks = Math.floor(days / 7);
-    if (weeks < 104) return weeks + ' weeks ago';
+    const months = Math.floor(days / 30);
+    const years = Math.floor(days / 365);
+
+    switch (format) {
+        case 'days':
+            return days;
+
+        case 'auto':
+        default:
+            if (!last_block || last_block < 1) return 'forever';
+            if (secs < 60) return 'just now';
+            if (secs < 120) return 'recently';
+            if (mins < 120) return mins + ' mins ago';
+            if (hrs < 48) return hrs + ' hrs ago';
+            if (days < 14) return days + ' days ago';
+            if (weeks < 4) return weeks + ' weeks ago';
+            if (months < 24) return months + ' months ago';
+            return years + ' years ago';
+    }
 }
 
 class Witnesses extends React.Component {
@@ -104,17 +116,32 @@ class Witnesses extends React.Component {
     }
 
     async loadWitnessAccounts() {
-        const witnessAccounts = this.state.witnessAccounts;
+        const { head_block } = this.props;
+        const { witnessAccounts } = this.state;
         const { witnesses } = this.props;
         const witnessOwners = [[]];
         let chunksCount = 0;
 
         witnesses.map((item) => {
-            if (witnessOwners[chunksCount].length >= 20) {
-                chunksCount += 1;
-                witnessOwners[chunksCount] = [];
+            const lastBlock = item.get('last_confirmed_block_num');
+            const witnessLastBlockAgeInDays = _blockGap(
+                head_block,
+                lastBlock,
+                'days'
+            );
+
+            // Lets not fetch extra account details for witnesses who have not produced blocks in a while
+            if (
+                witnessLastBlockAgeInDays <=
+                witnessFilterLastBlockAgeThresholdInDays
+            ) {
+                if (witnessOwners[chunksCount].length >= 20) {
+                    chunksCount += 1;
+                    witnessOwners[chunksCount] = [];
+                }
+                witnessOwners[chunksCount].push(item.get('owner'));
             }
-            witnessOwners[chunksCount].push(item.get('owner'));
+
             return true;
         });
 
@@ -196,7 +223,7 @@ class Witnesses extends React.Component {
             onWitnessChange,
             updateWitnessToHighlight,
         } = this;
-        const sorted_witnesses = this.props.witnesses.sort((a, b) =>
+        const sortedWitnesses = this.props.witnesses.sort((a, b) =>
             Long.fromString(String(b.get('votes'))).subtract(
                 Long.fromString(String(a.get('votes'))).toString()
             )
@@ -207,7 +234,7 @@ class Witnesses extends React.Component {
         let previousTotalVoteHpf = 0;
         const now = Moment();
 
-        const witnesses = sorted_witnesses.map((item) => {
+        const witnesses = sortedWitnesses.map((item) => {
             const witnessName = item.get('owner');
             if (witnessName === witnessToHighlight) {
                 foundWitnessToHighlight = true;
@@ -230,6 +257,9 @@ class Witnesses extends React.Component {
                         .replace(/ /g, '')
                         .split(',');
                 }
+                witnessOwnerNames = witnessOwnerNames.filter((ownerName) => {
+                    return ownerName !== item.get('owner');
+                });
             }
 
             const totalVotesVests = item.get('votes');
@@ -333,6 +363,40 @@ class Witnesses extends React.Component {
                 ? { textDecoration: 'line-through', color: '#AAA' }
                 : {};
 
+            const witnessLastBlockAgeInDays = _blockGap(
+                head_block,
+                lastBlock,
+                'days'
+            );
+
+            const witnessSocialLink = (witnessName) => {
+                return (
+                    <Link
+                        to={`${$STM_Config.social_url}/@${witnessName}`}
+                        style={ownerStyle}
+                        title={tt('witnesses_jsx.navigate_to_witness_profile')}
+                        target="_blank"
+                        rel="noreferrer noopener"
+                    >
+                        {witnessName}
+                    </Link>
+                );
+            };
+
+            // Don't display the witness
+            if (
+                // If rank over 100
+                rank > 100 &&
+                // And no blocked produced for over 30 days
+                witnessLastBlockAgeInDays >
+                    witnessFilterLastBlockAgeThresholdInDays &&
+                // And not voted by current user
+                !myVote
+            ) {
+                rank += 1;
+                return null;
+            }
+
             return (
                 <tr
                     key={witnessName}
@@ -343,7 +407,7 @@ class Witnesses extends React.Component {
                 >
                     <td className="Witnesses__rank">
                         {rank < 10 && '0'}
-                        {rank++}
+                        {(rank += 1)}
                         &nbsp;&nbsp;
                         <span className={classUp}>
                             {votingActive ? (
@@ -385,70 +449,43 @@ class Witnesses extends React.Component {
                         </Link>
                         <div className="Witnesses__info">
                             <div>
-                                <Link
-                                    to={`${$STM_Config.social_url}/@${witnessName}`}
-                                    style={ownerStyle}
-                                    title={tt(
-                                        'witnesses_jsx.navigate_to_witness_profile'
-                                    )}
-                                    target="_blank"
-                                    rel="noreferrer noopener"
-                                >
-                                    {witnessName}
-                                </Link>
-                                {witnessOwnerNames && (
-                                    <span>
-                                        {' '}
-                                        by{' '}
-                                        {witnessOwnerNames.map(
-                                            (ownerName, index) => {
-                                                if (
-                                                    witnessOwnerNames.length >
-                                                        1 &&
-                                                    index ===
-                                                        witnessOwnerNames.length -
-                                                            1
-                                                ) {
+                                {witnessSocialLink(witnessName)}
+                                {witnessOwnerNames &&
+                                    witnessOwnerNames.length > 0 && (
+                                        <span>
+                                            {' '}
+                                            {tt('witnesses_jsx.by')}{' '}
+                                            {witnessOwnerNames.map(
+                                                (ownerName, index) => {
+                                                    if (
+                                                        witnessOwnerNames.length >
+                                                            1 &&
+                                                        index ===
+                                                            witnessOwnerNames.length -
+                                                                1
+                                                    ) {
+                                                        return (
+                                                            <span>
+                                                                {' '}
+                                                                &{' '}
+                                                                {witnessSocialLink(
+                                                                    ownerName
+                                                                )}
+                                                            </span>
+                                                        );
+                                                    }
                                                     return (
                                                         <span>
-                                                            {' '}
-                                                            &{' '}
-                                                            <Link
-                                                                to={`${$STM_Config.social_url}/@${ownerName}`}
-                                                                style={
-                                                                    ownerStyle
-                                                                }
-                                                                title={tt(
-                                                                    'witnesses_jsx.navigate_to_witness_profile'
-                                                                )}
-                                                                target="_blank"
-                                                                rel="noreferrer noopener"
-                                                            >
-                                                                {ownerName}
-                                                            </Link>
+                                                            {index > 0 && ', '}
+                                                            {witnessSocialLink(
+                                                                ownerName
+                                                            )}
                                                         </span>
                                                     );
                                                 }
-                                                return (
-                                                    <span>
-                                                        {index > 0 && ', '}
-                                                        <Link
-                                                            to={`${$STM_Config.social_url}/@${ownerName}`}
-                                                            style={ownerStyle}
-                                                            title={tt(
-                                                                'witnesses_jsx.navigate_to_witness_profile'
-                                                            )}
-                                                            target="_blank"
-                                                            rel="noreferrer noopener"
-                                                        >
-                                                            {ownerName}
-                                                        </Link>
-                                                    </span>
-                                                );
-                                            }
-                                        )}
-                                    </span>
-                                )}
+                                            )}
+                                        </span>
+                                    )}
                                 <Link
                                     to={`/~witnesses?highlight=${witnessName}`}
                                     onClick={(event) => {
@@ -544,13 +581,17 @@ class Witnesses extends React.Component {
             );
         });
 
-        let addl_witnesses = false;
+        let additionalWitnesses = false;
+        const sortedWitnessNames = sortedWitnesses.map((witness) => {
+            return witness.get('owner');
+        });
+
         if (witness_votes) {
             witness_vote_count -= witness_votes.size;
-            addl_witnesses = witness_votes
+            additionalWitnesses = witness_votes
                 .union(witnessVotesInProgress)
                 .filter((item) => {
-                    return !sorted_witnesses.has(item);
+                    return sortedWitnessNames.indexOf(item) === -1;
                 })
                 .map((item) => {
                     const votingActive = witnessVotesInProgress.has(item);
@@ -617,6 +658,7 @@ class Witnesses extends React.Component {
                                     )}
                                     .
                                 </p>
+                                <p>{tt('witnesses_jsx.witness_list_notes')}</p>
                             </div>
                         )}
                     </div>
@@ -693,7 +735,7 @@ class Witnesses extends React.Component {
                                 </div>
                             </form>
                             <br />
-                            {addl_witnesses}
+                            {additionalWitnesses}
                             <br />
                             <br />
                         </div>
