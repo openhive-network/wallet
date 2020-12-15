@@ -34,7 +34,7 @@ class Proposals extends React.Component {
             loading: true,
             limit: 50,
             last_proposal: false,
-            status: 'all',
+            status: 'votable',
             order_by: 'by_total_votes',
             order_direction: 'descending',
         };
