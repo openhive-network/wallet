@@ -423,15 +423,17 @@
         "external_site": "Open external site",
         "disabled": "Disabled",
         "top_witnesses": "Witness Voting",
+        "by": "by",
         "you_have_votes_remaining": {
             "zero": "You have no votes remaining",
             "one": "You have 1 vote remaining",
             "other": "You have %(count)s votes remaining"
         },
         "you_can_vote_for_maximum_of_witnesses": "You can vote for a maximum of 30 witnesses",
+        "witness_list_notes": "Notes: in the list below, the first 100 witnesses are unfiltered, this includes active and inactive witnesses. Past the rank of 100, witnesses will be filtered out of the list if they have not produced any block for the last 30 days.",
         "witness": "Witness",
         "information": "More Information",
-        "if_you_want_to_vote_outside_of_top_enter_account_name": "If you would like to vote for a witness outside of the top 100, enter the account name below to cast a vote",
+        "if_you_want_to_vote_outside_of_top_enter_account_name": "If you would like to vote for a witness outside of the top 200, enter the account name below to cast a vote",
         "set_witness_proxy": "You can also choose a proxy that will vote for witnesses for you. This will reset your current witness selection.",
         "witness_set": "You have set a voting proxy. If you would like to re-enable manual voting, please clear your proxy.",
         "witness_proxy_current": "Your current proxy is",
@@ -443,7 +445,9 @@
         "hp_required_to_rank_up": "Needs %(votehp)s to level up",
         "witness_age": "Witness age",
         "not_produced_over_a_week": "Has not produced any blocks for over a week.",
-        "last_block": "Last block"
+        "last_block": "Last block",
+        "navigate_to_witness_profile": "Navigate to this user's profile",
+        "link_to_highlight_witness": "Use this for linking to this page and highlight the selected witness"
     },
     "votesandcomments_jsx": {
         "no_responses_yet_click_to_respond": "No responses yet. Click to respond.",

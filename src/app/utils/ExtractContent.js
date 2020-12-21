@@ -7,7 +7,7 @@ import Remarkable from 'remarkable';
 
 const remarkable = new Remarkable({ html: true, linkify: false });
 
-const getValidImage = array => {
+const getValidImage = (array) => {
     return array &&
         Array.isArray(array) &&
         array.length >= 1 &&
@@ -77,7 +77,9 @@ export default function extractContent(get, content) {
             rtags = HtmlReady(htmlText, { mutate: false });
         }
 
-        [image_link] = Array.from(rtags.images);
+        if (rtags.images) {
+            [image_link] = Array.from(rtags.images);
+        }
     }
 
     // Was causing broken thumnails.  IPFS was not finding images uploaded to another server until a restart.

@@ -32,9 +32,9 @@ class Proposals extends React.Component {
         this.state = {
             proposals: [],
             loading: true,
-            limit: 10,
+            limit: 50,
             last_proposal: false,
-            status: 'all',
+            status: 'votable',
             order_by: 'by_total_votes',
             order_direction: 'descending',
         };
