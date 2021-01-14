@@ -112,12 +112,13 @@ async function getTransferHistory(account) {
                     account,
                     err
                 );
+                transfer_history = [];
             }
         }
     }
 
     if (transfer_history === null || transfer_history === undefined)
-        transfer_history = [[]];
+        transfer_history = [];
     return transfer_history;
 }
 
