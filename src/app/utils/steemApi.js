@@ -22,7 +22,7 @@ let wallet_operations_bitmask = makeBitMaskFilter([
     op.escrow_release,
     op.fill_convert_request,
     op.fill_order,
-    //op.claim_reward_balance,
+    op.claim_reward_balance,
 ]);
 
 async function getStateForTrending() {
@@ -78,34 +78,40 @@ async function getGenericState(user) {
     return result;
 }
 
-async function getTransferHistory(account)
-{
+async function getTransferHistory(account) {
     let transfer_history = null;
     let start_sequence = -1;
-    let all_transfers = [];
 
-    try
-    {
-        transfer_history = await api.getAccountHistoryAsync(account, start_sequence, 500, ...wallet_operations_bitmask);
-        console.log("got transfer history: ", transfer_history);
-        console.log("transfer history length: ", transfer_history.length);
-    }
-    catch (err)
-    {
+    try {
+        transfer_history = await api.getAccountHistoryAsync(
+            account,
+            start_sequence,
+            500,
+            ...wallet_operations_bitmask
+        );
+    } catch (err) {
         let error_string = err.toString();
-        if (error_string.includes("start="))
-        {
-            let index = error_string.indexOf("=");
-            start_sequence = error_string.substr(index+1);
-            if (start_sequence.indexOf(".") > 0)
-                start_sequence = start_sequence.substr(0, start_sequence.length - 1);
-            try
-            {
-                transfer_history = await api.getAccountHistoryAsync(account, start_sequence, 500, ...wallet_operations_bitmask);
-            }
-            catch (err)
-            {
-                console.log("Unable to fetch account history for account: ", account, err);
+        if (error_string.includes('start=')) {
+            let index = error_string.indexOf('=');
+            start_sequence = error_string.substr(index + 1);
+            if (start_sequence.indexOf('.') > 0)
+                start_sequence = start_sequence.substr(
+                    0,
+                    start_sequence.length - 1
+                );
+            try {
+                transfer_history = await api.getAccountHistoryAsync(
+                    account,
+                    start_sequence,
+                    500,
+                    ...wallet_operations_bitmask
+                );
+            } catch (err) {
+                console.log(
+                    'Unable to fetch account history for account: ',
+                    account,
+                    err
+                );
             }
         }
     }
