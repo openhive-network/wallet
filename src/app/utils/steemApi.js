@@ -22,7 +22,7 @@ let wallet_operations_bitmask = makeBitMaskFilter([
     op.escrow_release,
     op.fill_convert_request,
     op.fill_order,
-    op.claim_reward_balance,
+    //op.claim_reward_balance,
 ]);
 
 async function getStateForTrending() {
@@ -82,10 +82,13 @@ async function getTransferHistory(account)
 {
     let transfer_history = null;
     let start_sequence = -1;
+    let all_transfers = [];
 
     try
     {
         transfer_history = await api.getAccountHistoryAsync(account, start_sequence, 500, ...wallet_operations_bitmask);
+        console.log("got transfer history: ", transfer_history);
+        console.log("transfer history length: ", transfer_history.length);
     }
     catch (err)
     {
@@ -107,6 +110,8 @@ async function getTransferHistory(account)
         }
     }
 
+    if (transfer_history === null || transfer_history === undefined)
+        transfer_history = [[]];
     return transfer_history;
 }
 
