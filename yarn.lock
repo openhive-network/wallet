@@ -1166,8 +1166,8 @@
     lodash "^4.17.19"
     to-fast-properties "^2.0.0"
 
-"@hiveio/hive-js@0.8.8":
-  version "0.8.8"
+"@hiveio/hive-js@0.8.13":
+  version "0.8.13"
   resolved "https://registry.yarnpkg.com/@hiveio/hive-js/-/hive-js-0.8.8.tgz#4880ceabb9e1d7580d8f48a4ed2825076f79cda9"
   integrity sha512-xFgSfrAhlrm/K9QMpQ47bOfSg21/tWJQzEVSZl8eWfgqnWtTsQolyMvBNZNzrbRa6118Ewsm2APDbwTfs6Q34g==
   dependencies:
