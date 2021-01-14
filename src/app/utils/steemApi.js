@@ -78,6 +78,49 @@ async function getGenericState(user) {
     return result;
 }
 
+async function getTransferHistory(account) {
+    let transfer_history = null;
+    let start_sequence = -1;
+
+    try {
+        transfer_history = await api.getAccountHistoryAsync(
+            account,
+            start_sequence,
+            500,
+            ...wallet_operations_bitmask
+        );
+    } catch (err) {
+        let error_string = err.toString();
+        if (error_string.includes('start=')) {
+            let index = error_string.indexOf('=');
+            start_sequence = error_string.substr(index + 1);
+            if (start_sequence.indexOf('.') > 0)
+                start_sequence = start_sequence.substr(
+                    0,
+                    start_sequence.length - 1
+                );
+            try {
+                transfer_history = await api.getAccountHistoryAsync(
+                    account,
+                    start_sequence,
+                    500,
+                    ...wallet_operations_bitmask
+                );
+            } catch (err) {
+                console.log(
+                    'Unable to fetch account history for account: ',
+                    account,
+                    err
+                );
+            }
+        }
+    }
+
+    if (transfer_history === null || transfer_history === undefined)
+        transfer_history = [[]];
+    return transfer_history;
+}
+
 export async function getStateAsync(url) {
     // strip off query string
     if (url === 'trending') {
@@ -108,12 +151,9 @@ export async function getStateAsync(url) {
 
     if (fetch_transfers) {
         let account_name = path.split('@')[1];
-        let account_history = await api.getAccountHistoryAsync(
-            account_name,
-            -1,
-            500,
-            ...wallet_operations_bitmask
-        );
+        let account_history = null;
+
+        account_history = await getTransferHistory(account_name);
         let account = await api.getAccountsAsync([account_name]);
         account = account[0];
         account['transfer_history'] = account_history;
