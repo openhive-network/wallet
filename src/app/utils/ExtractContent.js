@@ -34,7 +34,7 @@ export default function extractContent(get, content) {
         'permlink',
         'parent_author',
         'parent_permlink',
-        'json_metadata',
+        'posting_json_metadata',
         'category',
         'title',
         'created',

@@ -59,7 +59,7 @@ export default connect((state, ownProps) => {
         json_metadata: state.global.getIn([
             'accounts',
             account,
-            'json_metadata',
+            'posting_json_metadata',
         ]),
         hideIfDefault,
     };
