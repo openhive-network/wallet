@@ -18,9 +18,9 @@ export default function normalizeProfile(account) {
 
     // Parse
     let profile = {};
-    if (account.json_metadata) {
+    if (account.posting_json_metadata) {
         try {
-            const md = JSON.parse(account.json_metadata);
+            const md = JSON.parse(account.posting_json_metadata);
             if (md.profile) {
                 profile = md.profile;
             }
