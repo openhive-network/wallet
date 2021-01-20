@@ -58,6 +58,7 @@ const scss_loaders = [
         options: {
             importLoaders: 1,
             url: false,
+            esModule: false
         },
     },
     postcss_loader,
