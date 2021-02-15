@@ -53,15 +53,16 @@ class Delegations extends React.Component {
         if (!account.has('vesting_shares')) return null;
 
         const showTransferHandler = (delegatee) => {
-            const { accountProp } = this.props;
+            const accountName = account.get('name');
+
             const refetchCB = () => {
                 vestingDelegationsLoading(true);
-                getVestingDelegations(accountProp.get('name'), (err, res) => {
+                getVestingDelegations(accountName, (err, res) => {
                     setVestingDelegations(res);
                     vestingDelegationsLoading(false);
                 });
             };
-            revokeDelegation(accountProp.get('name'), delegatee, refetchCB);
+            revokeDelegation(accountName, delegatee, refetchCB);
         };
 
         /// transfer log
