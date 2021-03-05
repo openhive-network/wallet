@@ -492,7 +492,8 @@
         "non_transferable": "%(VESTING_TOKEN)s is non-transferable and requires 3 months (13 payments) to convert back to %(LIQUID_TOKEN)s.",
         "converted_VESTING_TOKEN_can_be_sent_to_yourself_but_can_not_transfer_again": "Converted %(VESTING_TOKEN)s can be sent to yourself or someone else but can not transfer again without converting back to %(LIQUID_TOKEN)s.",
         "part_of_your_hive_power_is_currently_delegated": "Part of %(user_name)s's HIVE POWER is currently delegated. Delegation is donated for influence or to help new users perform actions on Hive. Your delegation amount can fluctuate.",
-        "hive_power_apr": "HIVE POWER increases at an APR of approximately %(value)s&#37;, subject to blockchain variance. <a href=\"/faq.html#How_many_new_tokens_are_generated_by_the_blockchain\">See FAQ for details</a>."
+        "hive_power_apr": "HIVE POWER increases at an APR of approximately %(value)s&#37;, subject to blockchain variance. <a href=\"/faq.html#How_many_new_tokens_are_generated_by_the_blockchain\">See FAQ for details</a>.",
+        "hbd_interest_rate": "HBD interest rate: %(value)s&#37; APR (as voted by the <a href=\"/~witnesses\" target=\"_blank\" ref=\"noopener\">Witnesses</a>)"
     },
     "promote_post_jsx": {
         "promote_post": "Promote Post",
