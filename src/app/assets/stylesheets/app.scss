@@ -80,7 +80,7 @@ a, path, circle {
     @include themify($themes) {
       color: themed('textColorSecondary');
     }
-    :hover {
+    &:hover {
       @include themify($themes) {
         color: themed('textColorAccent');
       }
