@@ -101,7 +101,7 @@ class UserWallet extends React.Component {
         this.props.claimRewards(account);
     };
 
-    getCurrentApr = (gprops) => {
+    getCurrentHpApr = (gprops) => {
         // The inflation was set to 9.5% at block 7m
         const initialInflationRate = 9.5;
         const initialBlock = 7000000;
@@ -563,7 +563,7 @@ class UserWallet extends React.Component {
         let hpApr;
         try {
             // TODO: occasionally fails. grops not loaded yet?
-            hpApr = this.getCurrentApr(gprops);
+            hpApr = this.getCurrentHpApr(gprops);
         } catch (e) {}
 
         return (
@@ -681,6 +681,15 @@ class UserWallet extends React.Component {
                     <div className="column small-12 medium-8">
                         HIVE DOLLARS
                         <div className="secondary">{hbdMessage}</div>
+                        <FormattedHTMLMessage
+                            className="secondary"
+                            id="tips_js.hbd_interest_rate"
+                            params={{
+                                value: (gprops.hbd_interest_rate / 100).toFixed(
+                                    2
+                                ),
+                            }}
+                        />
                     </div>
                     <div className="column small-12 medium-4">
                         {isMyAccount ? (
@@ -719,6 +728,17 @@ class UserWallet extends React.Component {
                                 {tt(
                                     'transfer_jsx.balance_subject_to_3_day_withdraw_waiting_period'
                                 )}
+                            </span>
+                            <span>
+                                <FormattedHTMLMessage
+                                    className="secondary"
+                                    id="tips_js.hbd_interest_rate"
+                                    params={{
+                                        value: (
+                                            gprops.hbd_interest_rate / 100
+                                        ).toFixed(2),
+                                    }}
+                                />
                             </span>
                         </div>
                     </div>
