@@ -59,6 +59,8 @@ const SidePanel = ({ alignment, visible, hideSidePanel, username }) => {
                 label: tt('navigation.currency_market'),
                 link: `/market`,
             },
+        ],
+        wallet: [
             {
                 value: 'recover_account_step_1',
                 label: tt('navigation.stolen_account_recovery'),
@@ -111,16 +113,8 @@ const SidePanel = ({ alignment, visible, hideSidePanel, username }) => {
                 link: 'https://developers.hive.io/',
             },
             {
-                label: tt('navigation.bluepaper'),
-                link: 'https://hive.io/hive-bluepaper.pdf',
-            },
-            {
-                label: tt('navigation.smt_whitepaper'),
-                link: 'https://hive.io/hive-smt-whitepaper.pdf',
-            },
-            {
                 label: tt('navigation.whitepaper'),
-                link: 'https://hive.io/hive-whitepaper.pdf',
+                link: 'https://hive.io/whitepaper.pdf',
             },
         ],
         legal: [
@@ -143,7 +137,7 @@ const SidePanel = ({ alignment, visible, hideSidePanel, username }) => {
             },
             {
                 label: tt('g.sign_up'),
-                link: 'https://signup.hive.blog',
+                link: 'https://signup.hive.io',
             },
             {
                 value: 'post',
