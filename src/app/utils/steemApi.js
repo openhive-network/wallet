@@ -3,6 +3,7 @@ import {
     ChainTypes,
     makeBitMaskFilter,
 } from '@hiveio/hive-js/lib/auth/serializer';
+import Moment from 'moment';
 
 import stateCleaner from 'app/redux/stateCleaner';
 
@@ -76,6 +77,56 @@ async function getGenericState(user) {
     let feed_data = await api.getFeedHistoryAsync();
     result.feed_price = feed_data.current_median_history;
     return result;
+}
+
+export async function getAllTransferHistory(
+    account,
+    fetchDays = 60,
+    opTypes = ['transfer'],
+    accountHistory = [],
+    start = -1
+) {
+    if (fetchDays > 60) {
+        fetchDays = 60;
+    }
+
+    const transactions = await api.getAccountHistoryAsync(
+        account,
+        start,
+        start < 0 ? 1000 : Math.min(start, 1000)
+    );
+
+    if (transactions.length > 0) {
+        const lastTransaction = transactions[0];
+        const lastTransactionTimestamp = lastTransaction[1].timestamp;
+        const lastTransactionTime = Moment.utc(lastTransactionTimestamp);
+        const now = Moment(Date.now());
+        const daysAgo = now.diff(lastTransactionTime, 'days');
+        const filteredTransactions = transactions.filter((transaction) => {
+            const opType = transaction[1].op[0];
+            return opTypes.indexOf(opType) !== -1;
+        });
+
+        if (filteredTransactions.length > 0) {
+            accountHistory = accountHistory.concat(filteredTransactions);
+        }
+
+        if (
+            daysAgo <= fetchDays &&
+            lastTransaction[0] > 0 &&
+            lastTransaction[0] !== start
+        ) {
+            accountHistory = await getAllTransferHistory(
+                account,
+                fetchDays,
+                opTypes,
+                accountHistory,
+                lastTransaction[0]
+            );
+        }
+    }
+
+    return accountHistory;
 }
 
 async function getTransferHistory(account) {
