@@ -621,10 +621,7 @@ class UserWallet extends React.Component {
 
                 accountHistory = undefined;
 
-                let report =
-                    'data:text/csv;charset=utf-8,' +
-                    reportColumns.join(', ') +
-                    '\n';
+                let report = reportColumns.join(', ') + '\n';
 
                 for (let oi = 0; oi < operations.length; oi += 1) {
                     const operation = operations[oi];
