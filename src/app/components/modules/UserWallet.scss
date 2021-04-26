@@ -50,6 +50,21 @@
     }
 }
 
+.financial-report-cta {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+
+    .select-report-days {
+        width: 200px;
+    }
+
+    a {
+        color: white;
+    }
+}
+
+
 .WalletSubMenu {
     > li > a {
         transition: 0.2s all ease-in-out;
