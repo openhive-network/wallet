@@ -925,50 +925,55 @@ class UserWallet extends React.Component {
 
                 {isMyAccount && <SavingsWithdrawHistory />}
 
-                <div className="row">
-                    <div className="column small-12">
-                        <h4>{tt('userwallet_jsx.financialReport')}</h4>
-                        <div className="secondary">
-                            {tt('userwallet_jsx.financialReportDescription')}
+                {isMyAccount && (
+                    <div>
+                        <div className="row">
+                            <div className="column small-12">
+                                <h4>{tt('userwallet_jsx.financialReport')}</h4>
+                                <div className="secondary">
+                                    {tt(
+                                        'userwallet_jsx.financialReportDescription'
+                                    )}
+                                </div>
+                                <div className="financial-report-cta">
+                                    <select
+                                        className="select-report-days"
+                                        defaultValue={7}
+                                        name="reportDays"
+                                        id="reportDays"
+                                    >
+                                        <option value={7}>
+                                            {tt('userwallet_jsx.last7days')}
+                                        </option>
+                                        <option value={14}>
+                                            {tt('userwallet_jsx.last14days')}
+                                        </option>
+                                        <option value={30}>
+                                            {tt('userwallet_jsx.last30days')}
+                                        </option>
+                                        <option value={60}>
+                                            {tt('userwallet_jsx.last60days')}
+                                        </option>
+                                    </select>
+                                    <button
+                                        id="generate-report-btn"
+                                        type="button"
+                                        className="button"
+                                        onClick={exportHistoryToCsv}
+                                    >
+                                        {tt('userwallet_jsx.generateReport')}
+                                    </button>
+                                    <div id="report-download" />
+                                </div>
+                            </div>
                         </div>
-                        <div className="financial-report-cta">
-                            <select
-                                className="select-report-days"
-                                defaultValue={7}
-                                name="reportDays"
-                                id="reportDays"
-                            >
-                                <option value={7}>
-                                    {tt('userwallet_jsx.last7days')}
-                                </option>
-                                <option value={14}>
-                                    {tt('userwallet_jsx.last14days')}
-                                </option>
-                                <option value={30}>
-                                    {tt('userwallet_jsx.last30days')}
-                                </option>
-                                <option value={60}>
-                                    {tt('userwallet_jsx.last60days')}
-                                </option>
-                            </select>
-                            <button
-                                id="generate-report-btn"
-                                type="button"
-                                className="button"
-                                onClick={exportHistoryToCsv}
-                            >
-                                {tt('userwallet_jsx.generateReport')}
-                            </button>
-                            <div id="report-download" />
+                        <div className="row">
+                            <div className="column small-12">
+                                <hr />
+                            </div>
                         </div>
                     </div>
-                </div>
-
-                <div className="row">
-                    <div className="column small-12">
-                        <hr />
-                    </div>
-                </div>
+                )}
 
                 <div className="row">
                     <div className="column small-12">
