@@ -27,6 +27,7 @@ import {
 import * as transactionActions from 'app/redux/TransactionReducer';
 import * as globalActions from 'app/redux/GlobalReducer';
 import DropdownMenu from 'app/components/elements/DropdownMenu';
+import { getAllTransferHistory } from 'app/utils/steemApi';
 
 const assetPrecision = 1000;
 
@@ -566,6 +567,114 @@ class UserWallet extends React.Component {
             hpApr = this.getCurrentHpApr(gprops);
         } catch (e) {}
 
+        const exportHistoryToCsv = async () => {
+            const reportButton = document.getElementById('generate-report-btn');
+            const reportContainer = document.getElementById('report-download');
+            const reportDays = parseInt(
+                document.getElementById('reportDays').value
+            );
+
+            reportContainer.innerHTML = '';
+
+            if (reportDays) {
+                reportButton.innerHTML = `${tt(
+                    'userwallet_jsx.generatingReport'
+                )}...`;
+                reportButton.disabled = true;
+                let accountHistory = await getAllTransferHistory(
+                    'quochuy',
+                    reportDays,
+                    [
+                        'curation_reward',
+                        'author_reward',
+                        'producer_reward',
+                        'comment_reward',
+                        'comment_benefactor_reward',
+                        'interest',
+                        'proposal_pay',
+                        'sps_fund',
+                        'transfer',
+                    ]
+                );
+
+                const reportColumns = ['timestamp', 'opType'];
+                const operations = [];
+
+                for (let hi = 0; hi < accountHistory.length; hi += 1) {
+                    const transaction = accountHistory[hi];
+                    const transactionMetadata = transaction[1];
+                    const { op, timestamp } = transactionMetadata;
+                    const opType = op[0];
+                    const opMetadata = op[1];
+                    const opMetadataKeys = Object.keys(opMetadata);
+
+                    const operation = { timestamp, opType, ...opMetadata };
+                    operations.push(operation);
+
+                    for (let mi = 0; mi < opMetadataKeys.length; mi += 1) {
+                        const metadataKey = opMetadataKeys[mi];
+                        if (reportColumns.indexOf(metadataKey) === -1) {
+                            reportColumns.push(metadataKey);
+                        }
+                    }
+                }
+
+                accountHistory = undefined;
+
+                let report = reportColumns.join(', ') + '\n';
+
+                for (let oi = 0; oi < operations.length; oi += 1) {
+                    const operation = operations[oi];
+                    const operationKeys = Object.keys(operation);
+                    const reportEntryItems = [];
+
+                    for (let ci = 0; ci < reportColumns.length; ci += 1) {
+                        const column = reportColumns[ci];
+                        let foundValue = false;
+
+                        for (let ki = 0; ki < operationKeys.length; ki += 1) {
+                            const operationField = operationKeys[ki];
+
+                            if (column === operationField) {
+                                let fieldValue = operation[operationField];
+
+                                if (
+                                    typeof fieldValue === 'string' &&
+                                    fieldValue.indexOf(',') !== -1
+                                ) {
+                                    fieldValue = `"${fieldValue.replace(
+                                        /", ""/
+                                    )}"`;
+                                }
+
+                                reportEntryItems.push(fieldValue);
+                                foundValue = true;
+                            }
+                        }
+
+                        if (foundValue === false) {
+                            reportEntryItems.push('');
+                        }
+                    }
+
+                    report += reportEntryItems.join(', ') + '\n';
+                }
+
+                const a = document.createElement('a');
+                a.href = 'data:text/csv;charset=utf-8,' + encodeURI(report);
+                a.download = 'hive-report.csv';
+                a.target = '_blank';
+                a.classList.add('button');
+                a.innerHTML = 'Download report';
+                reportContainer.appendChild(a);
+
+                reportButton.innerHTML = tt('userwallet_jsx.generateReport');
+                reportButton.disabled = false;
+            } else {
+                console.error('Report days input field missing');
+            }
+        };
+
         return (
             <div className="UserWallet">
                 {claimbox}
@@ -812,6 +921,56 @@ class UserWallet extends React.Component {
                 </div>
 
                 {isMyAccount && <SavingsWithdrawHistory />}
+
+                {isMyAccount && (
+                    <div>
+                        <div className="row">
+                            <div className="column small-12">
+                                <h4>{tt('userwallet_jsx.financialReport')}</h4>
+                                <div className="secondary">
+                                    {tt(
+                                        'userwallet_jsx.financialReportDescription'
+                                    )}
+                                </div>
+                                <div className="financial-report-cta">
+                                    <select
+                                        className="select-report-days"
+                                        defaultValue={7}
+                                        name="reportDays"
+                                        id="reportDays"
+                                    >
+                                        <option value={7}>
+                                            {tt('userwallet_jsx.last7days')}
+                                        </option>
+                                        <option value={14}>
+                                            {tt('userwallet_jsx.last14days')}
+                                        </option>
+                                        <option value={30}>
+                                            {tt('userwallet_jsx.last30days')}
+                                        </option>
+                                        <option value={60}>
+                                            {tt('userwallet_jsx.last60days')}
+                                        </option>
+                                    </select>
+                                    <button
+                                        id="generate-report-btn"
+                                        type="button"
+                                        className="button"
+                                        onClick={exportHistoryToCsv}
+                                    >
+                                        {tt('userwallet_jsx.generateReport')}
+                                    </button>
+                                    <div id="report-download" />
+                                </div>
+                            </div>
+                        </div>
+                        <div className="row">
+                            <div className="column small-12">
+                                <hr />
+                            </div>
+                        </div>
+                    </div>
+                )}
 
                 <div className="row">
                     <div className="column small-12">
