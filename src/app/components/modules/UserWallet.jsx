@@ -582,7 +582,7 @@ class UserWallet extends React.Component {
                 )}...`;
                 reportButton.disabled = true;
                 let accountHistory = await getAllTransferHistory(
-                    'quochuy',
+                    this.props.account.get('name'),
                     reportDays,
                     [
                         'curation_reward',
