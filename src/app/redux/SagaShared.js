@@ -6,7 +6,7 @@ import * as globalActions from './GlobalReducer';
 import * as appActions from './AppReducer';
 import * as transactionActions from './TransactionReducer';
 import { setUserPreferences } from 'app/utils/ServerApiClient';
-import { getStateAsync } from 'app/utils/steemApi';
+import { getStateAsync } from 'app/utils/hiveApi';
 
 const wait = (ms) =>
     new Promise((resolve) => {
@@ -62,7 +62,7 @@ export function* getState({ payload: { url } }) {
         yield put(globalActions.receiveState(state));
     } catch (error) {
         console.error('~~ Saga getState error ~~>', url, error);
-        yield put(appActions.steemApiError(error.message));
+        yield put(appActions.hiveApiError(error.message));
     }
 }
 

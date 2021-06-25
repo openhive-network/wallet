@@ -62,16 +62,6 @@ const SidePanel = ({ alignment, visible, hideSidePanel, username }) => {
         ],
         wallet: [
             {
-                value: 'recover_account_step_1',
-                label: tt('navigation.stolen_account_recovery'),
-                link: `/recover_account_step_1`,
-            },
-            {
-                value: 'change_password',
-                label: tt('navigation.change_account_password'),
-                link: `/change_password`,
-            },
-            {
                 value: 'vote_for_witnesses',
                 label: tt('navigation.vote_for_witnesses'),
                 link: `/~witnesses`,
@@ -170,6 +160,9 @@ const SidePanel = ({ alignment, visible, hideSidePanel, username }) => {
                 </ul>
                 <ul className="vertical menu">
                     {sidePanelLinks.internal.map(makeInternalLink)}
+                </ul>
+                <ul className="vertical menu">
+                    {sidePanelLinks.wallet.map(makeInternalLink)}
                 </ul>
                 <ul className="vertical menu">
                     <li>
