@@ -30,7 +30,7 @@ import Translator from 'app/Translator';
 import { routeRegex } from 'app/ResolveRoute';
 import { contentStats } from 'app/utils/StateFunctions';
 import ScrollBehavior from 'scroll-behavior';
-import { getStateAsync } from 'app/utils/steemApi';
+import { getStateAsync } from 'app/utils/hiveApi';
 
 let get_state_perf,
     get_content_perf = false;

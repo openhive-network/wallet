@@ -12,8 +12,8 @@ export const marketWatches = [
     takeLatest(marketActions.UPDATE_MARKET, reloadMarket),
 ];
 
-export const wait = ms =>
-    new Promise(resolve => {
+export const wait = (ms) =>
+    new Promise((resolve) => {
         setTimeout(() => resolve(), ms);
     });
 
@@ -61,7 +61,7 @@ export function* fetchMarket(location_change_action) {
             yield put(marketActions.receiveTicker(state3));
         } catch (error) {
             console.error('~~ Saga fetchMarket error ~~>', error);
-            yield put(appActions.steemApiError(error.message));
+            yield put(appActions.hiveApiError(error.message));
         }
 
         yield call(wait, 3000);
@@ -77,7 +77,7 @@ export function* fetchOpenOrders(set_user_action) {
         yield call(getAccount, username);
     } catch (error) {
         console.error('~~ Saga fetchOpenOrders error ~~>', error);
-        yield put(appActions.steemApiError(error.message));
+        yield put(appActions.hiveApiError(error.message));
     }
 }
 

@@ -27,7 +27,7 @@ import {
 import * as transactionActions from 'app/redux/TransactionReducer';
 import * as globalActions from 'app/redux/GlobalReducer';
 import DropdownMenu from 'app/components/elements/DropdownMenu';
-import { getAllTransferHistory } from 'app/utils/steemApi';
+import { getAllTransferHistory } from 'app/utils/hiveApi';
 
 const assetPrecision = 1000;
 

@@ -34,13 +34,12 @@ async function getStateForTrending() {
     return result;
 }
 
-async function getStateForWitnesses() {
+async function getStateForWitnessesAndProposals() {
     let schedule = await api.getWitnessScheduleAsync();
     let witnesses = await api.getWitnessesByVoteAsync('', 200);
     let global_properties = await api.getDynamicGlobalPropertiesAsync();
 
     let result = {};
-    result.current_route = '/~witnesses';
     result.props = global_properties;
     result.tag_idx = {};
     result.tag_idx.trending = [];
@@ -174,18 +173,13 @@ async function getTransferHistory(account) {
 }
 
 export async function getStateAsync(url) {
-    // strip off query string
     if (url === 'trending') {
-        // [JES] For now, just fake a response. The front page for an unlogged in user doesn't need any of these properties to function
-        let trending_state = await getStateForTrending();
-        return stateCleaner(trending_state);
-    } else if (url.includes('witness')) {
-        let witness_state = await getStateForWitnesses();
-        return stateCleaner(witness_state);
-    } else if (url.includes('proposals')) {
-        let proposals_state = await getStateForWitnesses();
-        return stateCleaner(proposals_state);
+        return stateCleaner(await getStateForTrending());
     }
+    if (url === '/~witnesses' || url === '/proposals') {
+        return stateCleaner(await getStateForWitnessesAndProposals());
+    }
+    // strip off query string
     let path = url.split('?')[0];
     let fetch_transfers = false;
     if (path.includes('transfers')) {
@@ -199,6 +193,7 @@ export async function getStateAsync(url) {
             }
         }
     }
+
     let raw = await getGenericState(path);
 
     if (fetch_transfers) {
