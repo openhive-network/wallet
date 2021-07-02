@@ -89,7 +89,7 @@ class Modals extends React.Component {
             const new_window = window.open();
             new_window.opener = null;
             new_window.location =
-                'https://blocktrades.us/?input_coin_type=eth&output_coin_type=steem_power&receive_address=' +
+                'https://blocktrades.us/en/trade' +
                 username;
         };
 
@@ -159,7 +159,7 @@ class Modals extends React.Component {
                                 </li>
                             </ol>
                             <button className="button" onClick={buyHivePower}>
-                                {tt('g.buy_steem_power')}
+                                {tt('g.buy_hive_power')}
                             </button>
                         </div>
                     </Reveal>
