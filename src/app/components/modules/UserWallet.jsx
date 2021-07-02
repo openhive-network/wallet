@@ -27,7 +27,7 @@ import {
 import * as transactionActions from 'app/redux/TransactionReducer';
 import * as globalActions from 'app/redux/GlobalReducer';
 import DropdownMenu from 'app/components/elements/DropdownMenu';
-import { getAllTransferHistory } from 'app/utils/steemApi';
+import { getAllTransferHistory } from 'app/utils/hiveApi';
 
 const assetPrecision = 1000;
 
@@ -790,15 +790,6 @@ class UserWallet extends React.Component {
                     <div className="column small-12 medium-8">
                         HIVE DOLLARS
                         <div className="secondary">{hbdMessage}</div>
-                        <FormattedHTMLMessage
-                            className="secondary"
-                            id="tips_js.hbd_interest_rate"
-                            params={{
-                                value: (gprops.hbd_interest_rate / 100).toFixed(
-                                    2
-                                ),
-                            }}
-                        />
                     </div>
                     <div className="column small-12 medium-4">
                         {isMyAccount ? (

@@ -12,7 +12,7 @@ import * as globalActions from './GlobalReducer';
 import * as appActions from './AppReducer';
 import constants from './constants';
 import { fromJS, Map, Set } from 'immutable';
-import { getStateAsync } from 'app/utils/steemApi';
+import { getStateAsync } from 'app/utils/hiveApi';
 
 const REQUEST_DATA = 'fetchDataSaga/REQUEST_DATA';
 const GET_CONTENT = 'fetchDataSaga/GET_CONTENT';
@@ -71,7 +71,7 @@ export function* fetchState(location_change_action) {
         //yield call(getTransferUsers, pathname);
     } catch (error) {
         console.error('~~ Saga fetchState error ~~>', url, error);
-        yield put(appActions.steemApiError(error.message));
+        yield put(appActions.hiveApiError(error.message));
     }
 
     yield put(appActions.fetchDataEnd());
