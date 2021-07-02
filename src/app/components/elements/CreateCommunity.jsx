@@ -37,7 +37,10 @@ class CreateCommunity extends React.Component {
             socialUrl,
         } = this.props;
 
-        const handleAccountCreateError = error => {
+        const markdownRegex = /(?:\*[\w\s]*\*|\#[\w\s]*\#|_[\w\s]*_|~[\w\s]*~|\]\s*\(|\]\s*\[)/;
+        const htmlTagRegex = /<\/?[\w\s="/.':;#-\/\?]+>/gi;
+
+        const handleAccountCreateError = (error) => {
             // If the user cancels the account creation do not show an error.
             if (error === undefined || error === 'Canceled') {
                 communityCreationPending(false);
@@ -54,21 +57,25 @@ class CreateCommunity extends React.Component {
             this.setState({ broadcastOpsError: false });
         };
 
-        const handleCommunityTitleInput = e => {
-            if (e.target.value.length > 32) {
+        const handleCommunityTitleInput = (e) => {
+            const text = e.target.value;
+            if (text.length > 32) {
                 return;
             }
+
             updateCommunityTitle(e.target.value);
         };
 
-        const handleCommunityDescriptionInput = e => {
-            if (e.target.value.length > 120) {
+        const handleCommunityDescriptionInput = (e) => {
+            const text = e.target.value;
+            if (text.length > 120) {
                 return;
             }
+
             updateCommunityDescription(e.target.value);
         };
 
-        const handleCommunitySubmit = e => {
+        const handleCommunitySubmit = (e) => {
             e.preventDefault();
             const createCommunityPayload = {
                 accountName,
@@ -127,27 +134,40 @@ class CreateCommunity extends React.Component {
                     </code>
                 </label>
                 <label style={{ marginTop: '0px' }}>
-                    <input type="checkbox" name="box2" required />
-                    I have securely saved my owner name and password.
+                    <input type="checkbox" name="box2" required />I have
+                    securely saved my owner name and password.
                 </label>
             </div>
         );
 
-        const submitCreateCommunityFormButton = error => (
-            <input
-                className="button"
-                type="submit"
-                value="Create Community"
-                disabled={!!error}
-            />
-        );
+        const submitCreateCommunityFormButton = (error) => {
+            return (
+                <input
+                    className="button"
+                    type="submit"
+                    value="Create Community"
+                    disabled={!!error}
+                />
+            );
+        };
 
         const hasPass = communityOwnerWifPassword.length > 0;
 
         let formError = null;
         const rx = new RegExp('^[' + Unicode.L + ']');
-        if (!rx.test(communityTitle) && (communityTitle || hasPass))
-            formError = 'Must start with a letter.';
+        if (!rx.test(communityTitle) && (communityTitle || hasPass)) {
+            formError = 'Title must start with a letter.';
+        } else if (
+            markdownRegex.test(communityTitle) ||
+            markdownRegex.test(communityDescription)
+        ) {
+            formError = 'Title and description must not contain markdown';
+        } else if (
+            htmlTagRegex.test(communityTitle) ||
+            htmlTagRegex.test(communityDescription)
+        ) {
+            formError = 'Title and description must not contain HTML';
+        }
 
         const form = (
             <form className="community--form" onSubmit={handleCommunitySubmit}>
@@ -164,7 +184,6 @@ class CreateCommunity extends React.Component {
                         required
                     />
                 </label>
-                {formError && <span className="error">{formError}</span>}
                 <label>
                     {tt('g.community_description')}
                     <input
@@ -175,6 +194,7 @@ class CreateCommunity extends React.Component {
                         value={communityDescription}
                     />
                 </label>
+                {formError && <div className="error">{formError}</div>}
                 {!hasPass && generateCommunityCredentialsButton}
                 {hasPass && credentialsPane}
                 {hasPass && submitCreateCommunityFormButton(formError)}
@@ -194,7 +214,8 @@ class CreateCommunity extends React.Component {
             return (
                 <div className="row">
                     <div className="column large-6 small-12">
-                        Your community was created!<br />
+                        Your community was created!
+                        <br />
                         <strong>
                             <a href={url}>Get started.</a>
                         </strong>
@@ -203,7 +224,7 @@ class CreateCommunity extends React.Component {
             );
         }
 
-        const showErr = msg => <div className="community--error">{msg}</div>;
+        const showErr = (msg) => <div className="community--error">{msg}</div>;
         const adminMsg = `Account created. Setting @${accountName} as admin...`;
 
         return (
@@ -238,25 +259,25 @@ export default connect(
         };
     },
     // mapDispatchToProps
-    dispatch => {
+    (dispatch) => {
         return {
-            updateCommunityTitle: title => {
+            updateCommunityTitle: (title) => {
                 dispatch(communityActions.setCommunityTitle(title));
             },
-            updateCommunityDescription: description => {
+            updateCommunityDescription: (description) => {
                 dispatch(communityActions.setCommunityDescription(description));
             },
-            updateCommunityOwnerAccountName: accountName => {
+            updateCommunityOwnerAccountName: (accountName) => {
                 dispatch(
                     communityActions.setCommunityOwnerAccountName(accountName)
                 );
             },
-            updateCommunityOwnerWifPassword: password => {
+            updateCommunityOwnerWifPassword: (password) => {
                 dispatch(
                     communityActions.setCommunityOwnerWifPassword(password)
                 );
             },
-            createCommunity: createCommunityPayload => {
+            createCommunity: (createCommunityPayload) => {
                 const successCallback = () =>
                     dispatch(
                         communityActions.communityHivemindOperation(
@@ -269,14 +290,14 @@ export default connect(
                 };
                 dispatch(communityActions.createCommunity(payload));
             },
-            broadcastOps: createCommunityPayload => {
+            broadcastOps: (createCommunityPayload) => {
                 dispatch(
                     communityActions.communityHivemindOperation(
                         createCommunityPayload
                     )
                 );
             },
-            communityCreationPending: createCommunityAccountPending => {
+            communityCreationPending: (createCommunityAccountPending) => {
                 dispatch(
                     communityActions.createCommunityAccountPending(
                         createCommunityAccountPending
