@@ -1,5 +1,5 @@
 import { fromJS, Set, List } from 'immutable';
-import { call, put, select, fork, takeLatest } from 'redux-saga/effects';
+import { call, put, select, fork, take, takeLatest } from 'redux-saga/effects';
 import { api } from '@hiveio/hive-js';
 import { PrivateKey, Signature, hash } from '@hiveio/hive-js/lib/auth/ecc';
 
@@ -30,7 +30,13 @@ export const userWatches = [
         'user/lookupPreviousOwnerAuthority',
         lookupPreviousOwnerAuthority
     ),
-    takeLatest(userActions.USERNAME_PASSWORD_LOGIN, usernamePasswordLogin),
+    // takeLeading https://redux-saga.js.org/docs/api/#notes-5
+    fork(function* () {
+        while (true) {
+            const action = yield take(userActions.USERNAME_PASSWORD_LOGIN);
+            yield call(usernamePasswordLogin, action);
+        }
+    }),
     takeLatest(userActions.SAVE_LOGIN, saveLogin_localStorage),
     takeLatest(userActions.LOGOUT, logout),
     takeLatest(userActions.GET_VESTING_DELEGATIONS, getVestingDelegationsSaga),
