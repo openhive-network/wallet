@@ -40,7 +40,10 @@ export class Memo extends React.Component {
     // eslint-disable-next-line class-methods-use-this
     decodeMemo(memo_private, text) {
         try {
-            return memo.decode(memo_private, text);
+            const decodedText = memo.decode(memo_private, text);
+            console.log('memo_private', memo_private);
+            console.log('decodedText', decodedText);
+            return decodedText;
         } catch (e) {
             console.error('memo decryption error', text, e);
             return 'Invalid memo';
@@ -61,17 +64,16 @@ export class Memo extends React.Component {
             fromAccount,
             fromNegativeRepUser,
         } = this.props;
+
         const isEncoded = /^#/.test(text);
 
         const isFromBadActor = BadActorList.indexOf(fromAccount) > -1;
 
         if (!text || text.length < 1) return <span />;
 
-        let renderText = '';
+        let renderText = text;
 
-        if (!isEncoded) {
-            renderText = text;
-        } else if (memo_private && myAccount) {
+        if (isEncoded && memo_private && myAccount) {
             renderText = decodeMemo(memo_private, text);
         }
 
