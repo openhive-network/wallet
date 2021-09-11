@@ -11,17 +11,24 @@ import { isLoggedInWithHiveSigner } from 'app/utils/HiveSigner';
 
 const MINIMUM_REPUTATION = 15;
 
-export class Memo extends React.Component {
-    static propTypes = {
-        text: PropTypes.string,
-        username: PropTypes.string,
-        fromAccount: PropTypes.string,
-        // redux props
-        myAccount: PropTypes.bool,
-        memo_private: PropTypes.object,
-        fromNegativeRepUser: PropTypes.bool.isRequired,
-    };
+const propTypes = {
+    text: PropTypes.string,
+    fromAccount: PropTypes.string,
+    // redux props
+    myAccount: PropTypes.bool,
+    // eslint-disable-next-line react/forbid-prop-types
+    memo_private: PropTypes.object,
+    fromNegativeRepUser: PropTypes.bool.isRequired,
+};
 
+const defaultProps = {
+    text: '',
+    fromAccount: '',
+    myAccount: false,
+    memo_private: null,
+};
+
+export class Memo extends React.Component {
     constructor() {
         super();
         this.shouldComponentUpdate = shouldComponentUpdate(this, 'Memo');
@@ -30,6 +37,7 @@ export class Memo extends React.Component {
         };
     }
 
+    // eslint-disable-next-line class-methods-use-this
     decodeMemo(memo_private, text) {
         try {
             return memo.decode(memo_private, text);
@@ -82,7 +90,9 @@ export class Memo extends React.Component {
             }
         }
 
-        if (isFromBadActor && !this.state.revealMemo) {
+        const { revealMemo } = this.state;
+
+        if (isFromBadActor && !revealMemo) {
             renderText = (
                 <div className="bad-actor-warning">
                     <div className="bad-actor-caution">
@@ -91,7 +101,9 @@ export class Memo extends React.Component {
                     <div className="bad-actor-explained">
                         {tt('transferhistoryrow_jsx.bad_actor_explained')}
                     </div>
+                    {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events */}
                     <div
+                        tabIndex={0}
                         className="ptc bad-actor-reveal-memo"
                         role="button"
                         onClick={this.onRevealMemo}
@@ -100,7 +112,7 @@ export class Memo extends React.Component {
                     </div>
                 </div>
             );
-        } else if (fromNegativeRepUser && !this.state.revealMemo) {
+        } else if (fromNegativeRepUser && !revealMemo) {
             renderText = (
                 <div className="from-negative-rep-user-warning">
                     <div className="from-negative-rep-user-caution">
@@ -113,7 +125,9 @@ export class Memo extends React.Component {
                             'transferhistoryrow_jsx.from_negative_rep_user_explained'
                         )}
                     </div>
+                    {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events */}
                     <div
+                        tabIndex={0}
                         className="ptc from-negative-rep-user-reveal-memo"
                         role="button"
                         onClick={this.onRevealMemo}
@@ -138,6 +152,9 @@ export class Memo extends React.Component {
     }
 }
 
+Memo.propTypes = propTypes;
+Memo.defaultProps = defaultProps;
+
 export default connect((state, ownProps) => {
     const currentUser = state.user.get('current');
     const myAccount =
@@ -150,5 +167,10 @@ export default connect((state, ownProps) => {
         repLog10(
             state.global.getIn(['accounts', ownProps.fromAccount, 'reputation'])
         ) < MINIMUM_REPUTATION;
-    return { ...ownProps, memo_private, myAccount, fromNegativeRepUser };
+    return {
+        ...ownProps,
+        memo_private,
+        myAccount,
+        fromNegativeRepUser,
+    };
 })(Memo);
