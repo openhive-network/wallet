@@ -13,6 +13,15 @@ export function hasCompatibleKeychain() {
     );
 }
 
+export function decodeMemo(encodedText, account, successCallback) {
+    window.hive_keychain.requestVerifyKey(
+        account,
+        encodedText,
+        'Memo',
+        successCallback
+    );
+}
+
 /**
  *
  * @returns {boolean}

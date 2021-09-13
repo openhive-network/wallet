@@ -8,6 +8,7 @@ import { memo } from '@hiveio/hive-js';
 import BadActorList from 'app/utils/BadActorList';
 import { repLog10 } from 'app/utils/ParsersAndFormatters';
 import { isLoggedInWithHiveSigner } from 'app/utils/HiveSigner';
+import * as userActions from 'app/redux/UserReducer';
 
 const MINIMUM_REPUTATION = 15;
 
@@ -40,13 +41,24 @@ export class Memo extends React.Component {
     // eslint-disable-next-line class-methods-use-this
     decodeMemo(memo_private, text) {
         try {
-            const decodedText = memo.decode(memo_private, text);
-            console.log('memo_private', memo_private);
-            console.log('decodedText', decodedText);
-            return decodedText;
+            return memo.decode(memo_private, text);
         } catch (e) {
             console.error('memo decryption error', text, e);
             return 'Invalid memo';
+        }
+    }
+
+    // eslint-disable-next-line class-methods-use-this
+    decodeMemoElement(e) {
+        const { showDecodeMemo, setMemoMessage } = this.props;
+        const { target } = e;
+        const memoTextElement = target.previousSibling;
+        const memoText = memoTextElement.innerHTML;
+
+        // Verify that the MEMO text starts with '#'
+        if (memoText.indexOf('#') === 0) {
+            setMemoMessage(memoText);
+            showDecodeMemo();
         }
     }
 
@@ -77,7 +89,7 @@ export class Memo extends React.Component {
             renderText = decodeMemo(memo_private, text);
         }
 
-        // show warning if not permissino to view the memo
+        // show warning if not permission to view the memo
         let noPermission = false;
         if (isEncoded) {
             let msg = null;
@@ -150,29 +162,56 @@ export class Memo extends React.Component {
             'Memo--noPermission': noPermission,
         });
 
-        return <span className={classes}>{renderText}</span>;
+        return (
+            <div className={classes}>
+                <div className="Memo__text">{renderText}</div>
+                {isEncoded && !memo_private && myAccount && (
+                    <button
+                        type="button"
+                        className="button hollow tiny"
+                        onClick={this.decodeMemoElement.bind(this)}
+                    >
+                        Decode MEMO
+                    </button>
+                )}
+            </div>
+        );
     }
 }
 
 Memo.propTypes = propTypes;
 Memo.defaultProps = defaultProps;
 
-export default connect((state, ownProps) => {
-    const currentUser = state.user.get('current');
-    const myAccount =
-        currentUser && ownProps.username === currentUser.get('username');
-    const memo_private =
-        myAccount && currentUser
-            ? currentUser.getIn(['private_keys', 'memo_private'])
-            : null;
-    const fromNegativeRepUser =
-        repLog10(
-            state.global.getIn(['accounts', ownProps.fromAccount, 'reputation'])
-        ) < MINIMUM_REPUTATION;
-    return {
-        ...ownProps,
-        memo_private,
-        myAccount,
-        fromNegativeRepUser,
-    };
-})(Memo);
+export default connect(
+    (state, ownProps) => {
+        const currentUser = state.user.get('current');
+        const myAccount =
+            currentUser && ownProps.username === currentUser.get('username');
+        const memo_private =
+            myAccount && currentUser
+                ? currentUser.getIn(['private_keys', 'memo_private'])
+                : null;
+        const fromNegativeRepUser =
+            repLog10(
+                state.global.getIn([
+                    'accounts',
+                    ownProps.fromAccount,
+                    'reputation',
+                ])
+            ) < MINIMUM_REPUTATION;
+        return {
+            ...ownProps,
+            memo_private,
+            myAccount,
+            fromNegativeRepUser,
+        };
+    },
+    (dispatch) => ({
+        showDecodeMemo: () => {
+            dispatch(userActions.showDecodeMemo());
+        },
+        setMemoMessage: (encodedText) => {
+            dispatch(userActions.setMemoMessage(encodedText));
+        },
+    })
+)(Memo);

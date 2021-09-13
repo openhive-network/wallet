@@ -4,7 +4,6 @@ import { connect } from 'react-redux';
 import CloseButton from 'app/components/elements/CloseButton';
 import Reveal from 'app/components/elements/Reveal';
 import { NotificationStack } from 'react-notification';
-import { OrderedSet } from 'immutable';
 import tt from 'counterpart';
 import * as userActions from 'app/redux/UserReducer';
 import * as appActions from 'app/redux/AppReducer';
@@ -12,6 +11,7 @@ import * as transactionActions from 'app/redux/TransactionReducer';
 import LoginForm from 'app/components/modules/LoginForm';
 import ConfirmTransactionForm from 'app/components/modules/ConfirmTransactionForm';
 import Transfer from 'app/components/modules/Transfer';
+import DecodeMemo from 'app/components/modules/DecodeMemo';
 import SignUp from 'app/components/modules/SignUp';
 import Powerdown from 'app/components/modules/Powerdown';
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
@@ -27,14 +27,17 @@ class Modals extends React.Component {
         show_bandwidth_error_modal: false,
         show_powerdown_modal: false,
         show_transfer_modal: false,
+        show_decode_memo_modal: false,
         show_confirm_modal: false,
         show_login_modal: false,
         show_post_advanced_settings_modal: '',
+        memo_message: '',
     };
     static propTypes = {
         show_login_modal: PropTypes.bool,
         show_confirm_modal: PropTypes.bool,
         show_transfer_modal: PropTypes.bool,
+        show_decode_memo_modal: PropTypes.bool,
         show_powerdown_modal: PropTypes.bool,
         show_bandwidth_error_modal: PropTypes.bool,
         show_signup_modal: PropTypes.bool,
@@ -49,6 +52,7 @@ class Modals extends React.Component {
         notifications: PropTypes.object,
         show_terms_modal: PropTypes.bool,
         removeNotification: PropTypes.func,
+        memo_message: PropTypes.string,
     };
 
     constructor() {
@@ -61,12 +65,14 @@ class Modals extends React.Component {
             show_login_modal,
             show_confirm_modal,
             show_transfer_modal,
+            show_decode_memo_modal,
             show_powerdown_modal,
             show_signup_modal,
             show_bandwidth_error_modal,
             show_post_advanced_settings_modal,
             hideLogin,
             hideTransfer,
+            hideDecodeMemo,
             hidePowerdown,
             hideConfirm,
             hideSignUp,
@@ -75,6 +81,7 @@ class Modals extends React.Component {
             removeNotification,
             hideBandwidthError,
             username,
+            memo_message,
         } = this.props;
 
         const notifications_array = notifications
@@ -88,9 +95,7 @@ class Modals extends React.Component {
             if (e && e.preventDefault) e.preventDefault();
             const new_window = window.open();
             new_window.opener = null;
-            new_window.location =
-                'https://blocktrades.us/en/trade' +
-                username;
+            new_window.location = 'https://blocktrades.us/en/trade' + username;
         };
 
         return (
@@ -110,6 +115,15 @@ class Modals extends React.Component {
                     <Reveal onHide={hideTransfer} show={show_transfer_modal}>
                         <CloseButton onClick={hideTransfer} />
                         <Transfer />
+                    </Reveal>
+                )}
+                {show_decode_memo_modal && (
+                    <Reveal
+                        onHide={hideDecodeMemo}
+                        show={show_decode_memo_modal}
+                    >
+                        <CloseButton onClick={hideDecodeMemo} />
+                        <DecodeMemo message={memo_message} />
                     </Reveal>
                 )}
                 {show_powerdown_modal && (
@@ -181,8 +195,10 @@ export default connect(
             show_login_modal: state.user.get('show_login_modal'),
             show_confirm_modal: state.transaction.get('show_confirm_modal'),
             show_transfer_modal: state.user.get('show_transfer_modal'),
+            show_decode_memo_modal: state.user.get('show_decode_memo_modal'),
             show_powerdown_modal: state.user.get('show_powerdown_modal'),
             show_signup_modal: state.user.get('show_signup_modal'),
+            memo_message: state.user.get('memo_message'),
             notifications: state.app.get('notifications'),
             show_terms_modal:
                 state.user.get('show_terms_modal') &&
@@ -211,6 +227,10 @@ export default connect(
         hideTransfer: (e) => {
             if (e) e.preventDefault();
             dispatch(userActions.hideTransfer());
+        },
+        hideDecodeMemo: (e) => {
+            if (e) e.preventDefault();
+            dispatch(userActions.hideDecodeMemo());
         },
         hidePowerdown: (e) => {
             if (e) e.preventDefault();
