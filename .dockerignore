@@ -9,3 +9,5 @@ doc
 blackboxtest
 api_mockdata
 package-lock.json
+**/.DS_Store
+**//._.DS_Store
