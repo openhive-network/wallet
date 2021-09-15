@@ -24,26 +24,29 @@ class KeyEdit extends Component {
         submitting: PropTypes.bool.isRequired,
         error: PropTypes.string,
     };
+
     constructor() {
         super();
         this.state = {};
-        this.onCancel = e => {
+        this.onCancel = (e) => {
             e.preventDefault();
             if (this.props.onCancel) this.props.onCancel();
         };
         this.onCancel = this.onCancel.bind(this);
 
-        this.onKeyChanged = data => {
+        this.onKeyChanged = (data) => {
             const { onKeyChanged, oldAuth } = this.props;
             return onKeyChanged({ ...data, oldAuth });
         };
         this.onKeyChanged = this.onKeyChanged.bind(this);
     }
+
     componentDidMount() {
         setTimeout(() => {
             this.refs.key.focus();
         }, 300);
     }
+
     componentWillReceiveProps(nextProps) {
         const {
             fields: { password, confirm },
@@ -60,6 +63,7 @@ class KeyEdit extends Component {
         }
         this.setState({ isWif });
     }
+
     render() {
         const {
             onCancel,
@@ -75,7 +79,7 @@ class KeyEdit extends Component {
             state: { isWif },
         } = this;
         return (
-            <form onSubmit={handleSubmit(data => onKeyChanged(data))}>
+            <form onSubmit={handleSubmit((data) => onKeyChanged(data))}>
                 <div className="row">
                     <div
                         className={
@@ -94,7 +98,8 @@ class KeyEdit extends Component {
                         <span className="error">
                             {password.touched &&
                                 password.error &&
-                                password.error}&nbsp;
+                                password.error}
+                            &nbsp;
                         </span>
                     </div>
                     <div
@@ -113,7 +118,8 @@ class KeyEdit extends Component {
                             autoComplete="off"
                         />
                         <div className="error">
-                            {confirm.touched && confirm.error && confirm.error}&nbsp;
+                            {confirm.touched && confirm.error && confirm.error}
+                            &nbsp;
                         </div>
                     </div>
                     <div className="column small-12">
@@ -160,14 +166,14 @@ class KeyEdit extends Component {
     }
 }
 
-const keyValidate = values => ({
+const keyValidate = (values) => ({
     password: !values.password
         ? tt('g.required')
         : values.password.length < 32
-            ? tt('g.password_must_be_characters_or_more', { amount: 32 })
-            : PublicKey.fromString(values.password)
-                ? tt('g.need_password_or_key')
-                : null,
+        ? tt('g.password_must_be_characters_or_more', { amount: 32 })
+        : PublicKey.fromString(values.password)
+        ? tt('g.need_password_or_key')
+        : null,
     confirm:
         values.confirm !== values.password
             ? tt('g.passwords_do_not_match')
@@ -182,7 +188,7 @@ export default reduxForm(
         const private_keys = state.user.getIn(['current', 'private_keys']);
         const privateKey =
             private_keys &&
-            private_keys.find(d => d.toPublicKey().toString() === oldAuth);
+            private_keys.find((d) => d.toPublicKey().toString() === oldAuth);
         return { ...ownProps, privateKey, oldAuth };
     }
 )(KeyEdit);

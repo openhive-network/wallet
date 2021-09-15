@@ -49,7 +49,7 @@ describe('makeCanonicalLink', () => {
             'https://hive.blog/testing/@test/test-post',
         ],
     ];
-    test_cases.forEach(v => {
+    test_cases.forEach((v) => {
         it(v[0], () => {
             expect(makeCanonicalLink(v[1])).toBe(v[2]);
         });

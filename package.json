@@ -12,7 +12,7 @@
     "scripts": {
         "build": "NODE_ENV=production webpack --config ./webpack/prod.config.js && rm -rf ./lib && babel src --out-dir lib -D",
         "checktranslations": "node scripts/check_translations.js",
-        "ci:eslint": "eslint src/ ",
+        "ci:eslint": "eslint src/ --fix",
         "ci:test": "jest --coverage",
         "debug": "NODE_ENV=development webpack --config ./webpack/debug.config.js && rm -rf ./lib && babel src --source-maps --out-dir lib -D && node --inspect-brk lib/server/index.js",
         "eslint": "LIST=`git diff-index --name-only HEAD | grep .*\\.js | grep -v json`; if [ \"$LIST\" ]; then eslint $LIST; fi",

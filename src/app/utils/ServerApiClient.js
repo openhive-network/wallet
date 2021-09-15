@@ -12,17 +12,19 @@ const request_base = {
 
 export function serverApiLogin(account, signatures) {
     if (!process.env.BROWSER || window.$STM_ServerBusy) return;
-    const request = Object.assign({}, request_base, {
+    const request = {
+        ...request_base,
         body: JSON.stringify({ account, signatures, csrf: $STM_csrf }),
-    });
+    };
     return fetch('/api/v1/login_account', request);
 }
 
 export function serverApiLogout() {
     if (!process.env.BROWSER || window.$STM_ServerBusy) return;
-    const request = Object.assign({}, request_base, {
+    const request = {
+        ...request_base,
         body: JSON.stringify({ csrf: $STM_csrf }),
-    });
+    };
     return fetch('/api/v1/logout_account', request);
 }
 
@@ -63,33 +65,37 @@ export function recordPageView(page, referer, account) {
 }
 
 export function saveCords(x, y) {
-    const request = Object.assign({}, request_base, {
+    const request = {
+        ...request_base,
         body: JSON.stringify({ csrf: $STM_csrf, x, y }),
-    });
+    };
     fetch('/api/v1/save_cords', request);
 }
 
 export function setUserPreferences(payload) {
     if (!process.env.BROWSER || window.$STM_ServerBusy)
         return Promise.resolve();
-    const request = Object.assign({}, request_base, {
+    const request = {
+        ...request_base,
         body: JSON.stringify({ csrf: window.$STM_csrf, payload }),
-    });
+    };
     return fetch('/api/v1/setUserPreferences', request);
 }
 
 export function isTosAccepted() {
     // TODO: endpoint down. re-enable
     return true;
-    const request = Object.assign({}, request_base, {
+    const request = {
+        ...request_base,
         body: JSON.stringify({ csrf: window.$STM_csrf }),
-    });
+    };
     return fetch('/api/v1/isTosAccepted', request).then((res) => res.json());
 }
 
 export function acceptTos() {
-    const request = Object.assign({}, request_base, {
+    const request = {
+        ...request_base,
         body: JSON.stringify({ csrf: window.$STM_csrf }),
-    });
+    };
     return fetch('/api/v1/acceptTos', request);
 }

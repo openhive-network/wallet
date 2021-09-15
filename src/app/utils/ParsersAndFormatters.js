@@ -53,7 +53,7 @@ function log10(str) {
     return n + (log - parseInt(log));
 }
 
-export const repLog10 = rep2 => {
+export const repLog10 = (rep2) => {
     if (rep2 == null) return rep2;
     let rep = String(rep2);
     const neg = rep.charAt(0) === '-';
@@ -78,8 +78,8 @@ export function countDecimals(amount) {
     return parts.length > 2
         ? undefined
         : parts.length === 1
-            ? 0
-            : parts[1].length;
+        ? 0
+        : parts[1].length;
 }
 
 export function formatLargeNumber(number, decimals) {

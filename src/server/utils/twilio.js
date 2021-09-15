@@ -44,7 +44,7 @@ function checkEligibility(phone) {
 
 export default function verify(phone) {
     if (!client) client = new twilio.LookupsClient(accountSid, authToken);
-    return new Promise(resolve => {
+    return new Promise((resolve) => {
         if (!checkEligibility(phone)) {
             resolve('na');
             return;
@@ -66,37 +66,35 @@ export default function verify(phone) {
                         );
                         resolve('error');
                     }
+                } else if (
+                    result.addOns &&
+                    result.addOns.results &&
+                    result.addOns.results.whitepages_pro_phone_rep &&
+                    result.addOns.results.whitepages_pro_phone_rep.result &&
+                    result.addOns.results.whitepages_pro_phone_rep.result
+                        .results &&
+                    result.addOns.results.whitepages_pro_phone_rep.result
+                        .results[0] &&
+                    result.addOns.results.whitepages_pro_phone_rep.result
+                        .results[0].reputation &&
+                    result.addOns.results.whitepages_pro_phone_rep.result
+                        .results[0].reputation.level
+                ) {
+                    const reputation_level =
+                        result.addOns.results.whitepages_pro_phone_rep.result
+                            .results[0].reputation.level;
+                    console.log(
+                        'Twilio reputation level ',
+                        phone,
+                        reputation_level
+                    );
+                    resolve(reputation_level < 3 ? 'pass' : 'block');
                 } else {
-                    if (
-                        result.addOns &&
-                        result.addOns.results &&
-                        result.addOns.results.whitepages_pro_phone_rep &&
-                        result.addOns.results.whitepages_pro_phone_rep.result &&
-                        result.addOns.results.whitepages_pro_phone_rep.result
-                            .results &&
-                        result.addOns.results.whitepages_pro_phone_rep.result
-                            .results[0] &&
-                        result.addOns.results.whitepages_pro_phone_rep.result
-                            .results[0].reputation &&
-                        result.addOns.results.whitepages_pro_phone_rep.result
-                            .results[0].reputation.level
-                    ) {
-                        const reputation_level =
-                            result.addOns.results.whitepages_pro_phone_rep
-                                .result.results[0].reputation.level;
-                        console.log(
-                            'Twilio reputation level ',
-                            phone,
-                            reputation_level
-                        );
-                        resolve(reputation_level < 3 ? 'pass' : 'block');
-                    } else {
-                        console.error(
-                            'Twilio result does not contain reputation level:',
-                            JSON.stringify(result, null, 2)
-                        );
-                        resolve('error');
-                    }
+                    console.error(
+                        'Twilio result does not contain reputation level:',
+                        JSON.stringify(result, null, 2)
+                    );
+                    resolve('error');
                 }
             }
         );

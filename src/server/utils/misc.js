@@ -13,7 +13,7 @@ function getRemoteIp(req) {
     return ip_match ? ip_match[1] : esc(remote_address);
 }
 
-var ip_last_hit = new Map();
+const ip_last_hit = new Map();
 function rateLimitReq(ctx, req) {
     const ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
     const now = Date.now();

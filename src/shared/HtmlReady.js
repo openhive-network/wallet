@@ -309,7 +309,7 @@ function linkify(content, mutate, hashtags, usertags, images, links) {
 
 function embedYouTubeNode(child, links, images) {
     try {
-        const data = child.data;
+        const { data } = child;
         const yt = youTubeId(data);
         if (!yt) return child;
 
@@ -344,7 +344,7 @@ function youTubeId(data) {
 
 function embedVimeoNode(child, links /*images*/) {
     try {
-        const data = child.data;
+        const { data } = child;
         const vimeo = vimeoId(data);
         if (!vimeo) return child;
 
@@ -373,7 +373,7 @@ function vimeoId(data) {
 
 function embedTwitchNode(child, links /*images*/) {
     try {
-        const data = child.data;
+        const { data } = child;
         const twitch = twitchId(data);
         if (!twitch) return child;
 

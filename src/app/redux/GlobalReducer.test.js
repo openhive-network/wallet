@@ -47,7 +47,7 @@ describe('Global reducer', () => {
             }),
         };
 
-         // Two accounts both with transfer history
+        // Two accounts both with transfer history
         const initial = reducer()
             .setIn(
                 ['accounts', 'fooman', 'transfer_history'],
@@ -58,7 +58,7 @@ describe('Global reducer', () => {
                 List([Map({ c: 3 })])
             );
 
-         // Act
+        // Act
         const actual = reducer(initial, globalActions.receiveState(payload));
         // Assert
         expect(
@@ -173,7 +173,7 @@ describe('Global reducer', () => {
 
     it('should return correct state for a UPDATE_ACCOUNT_WITNESS_VOTE action', () => {
         // Arrange
-        let payload = {
+        const payload = {
             account: 'Smee',
             witness: 'Greech',
             approve: true,
@@ -201,7 +201,7 @@ describe('Global reducer', () => {
 
     it('should return correct state for a UPDATE_ACCOUNT_WITNESS_PROXY action', () => {
         // Arrange
-        let payload = {
+        const payload = {
             account: 'Alice',
             proxy: 'Jane',
         };
@@ -251,7 +251,7 @@ describe('Global reducer', () => {
                 two: { percent: 70 },
             },
         };
-        let payload = {
+        const payload = {
             data: [postData],
             order: 'by_author',
             category: 'blog',
@@ -350,7 +350,7 @@ describe('Global reducer', () => {
 
     it('should handle fetch status for a RECEIVE_DATA action', () => {
         //Arrange
-        let payload = {
+        const payload = {
             data: [],
             order: 'by_author',
             category: 'blog',

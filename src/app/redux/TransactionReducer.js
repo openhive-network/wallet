@@ -21,13 +21,13 @@ const defaultState = fromJS({
 });
 
 export default function reducer(state = defaultState, action) {
-    const payload = action.payload;
+    const { payload } = action;
 
     switch (action.type) {
         case CONFIRM_OPERATION: {
             const operation = fromJS(payload.operation);
-            const confirm = payload.confirm;
-            const warning = payload.warning;
+            const { confirm } = payload;
+            const { warning } = payload;
             return state.merge({
                 show_confirm_modal: true,
                 confirmBroadcastOperation: operation,
@@ -111,9 +111,7 @@ export default function reducer(state = defaultState, action) {
                             ) {
                                 errorKey = errorStr = txt[txt.length - 1];
                             } else
-                                errorStr = `Transaction failed: ${
-                                    err_lines[1]
-                                }`;
+                                errorStr = `Transaction failed: ${err_lines[1]}`;
                         }
                     }
                     // TODO: This would perhaps be better expressed as a Case, Switch statement.
@@ -133,7 +131,7 @@ export default function reducer(state = defaultState, action) {
                             'Transaction failed: Not your valid active key.';
                     }
                     // TODO: refactor this so that the keys are consistent and sane, i.e. do not include user name in error key.
-                    state = state.update('errors', errors => {
+                    state = state.update('errors', (errors) => {
                         return errors
                             ? errors.set(errorKey, errorStr)
                             : Map({ [errorKey]: errorStr });
@@ -183,52 +181,52 @@ export default function reducer(state = defaultState, action) {
 }
 
 // Action creators
-export const confirmOperation = payload => ({
+export const confirmOperation = (payload) => ({
     type: CONFIRM_OPERATION,
     payload,
 });
 
-export const hideConfirm = payload => ({
+export const hideConfirm = (payload) => ({
     type: HIDE_CONFIRM,
     payload,
 });
 
-export const broadcastOperation = payload => ({
+export const broadcastOperation = (payload) => ({
     type: BROADCAST_OPERATION,
     payload,
 });
 
-export const updateAuthorities = payload => ({
+export const updateAuthorities = (payload) => ({
     type: UPDATE_AUTHORITIES,
     payload,
 });
 
-export const error = payload => ({
+export const error = (payload) => ({
     type: ERROR,
     payload,
 });
 
-export const deleteError = payload => ({
+export const deleteError = (payload) => ({
     type: DELETE_ERROR,
     payload,
 });
 
-export const dismissError = payload => ({
+export const dismissError = (payload) => ({
     type: DISMISS_ERROR,
     payload,
 });
 
-export const set = payload => ({
+export const set = (payload) => ({
     type: SET,
     payload,
 });
 
-export const remove = payload => ({
+export const remove = (payload) => ({
     type: REMOVE,
     payload,
 });
 
-export const recoverAccount = payload => ({
+export const recoverAccount = (payload) => ({
     type: RECOVER_ACCOUNT,
     payload,
 });
