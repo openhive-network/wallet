@@ -13,6 +13,15 @@ export function hasCompatibleKeychain() {
     );
 }
 
+export function decodeMemo(encodedText, account, successCallback) {
+    window.hive_keychain.requestVerifyKey(
+        account,
+        encodedText,
+        'Memo',
+        successCallback
+    );
+}
+
 /**
  *
  * @returns {boolean}
@@ -26,12 +35,6 @@ export function isLoggedInWithKeychain() {
         return false;
     }
     const data = localStorage.getItem('autopost2');
-    const [
-        username,
-        password,
-        memoWif,
-        login_owner_pubkey,
-        login_with_keychain,
-    ] = extractLoginData(data);
+    const [login_with_keychain] = extractLoginData(data);
     return !!login_with_keychain;
 }
