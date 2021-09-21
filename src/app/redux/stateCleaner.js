@@ -47,7 +47,7 @@ const gdprFilterContent = (stateContent) => {
 };
 
 export default function stateCleaner(state) {
-    let result = {
+    const result = {
         ...state,
         accounts: gdprFilterAccounts(state.accounts),
         content: gdprFilterContent(state.content),

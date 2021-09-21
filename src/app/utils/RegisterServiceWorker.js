@@ -2,25 +2,25 @@ export default function registerServiceWorker() {
     if (!navigator.serviceWorker) return Promise.resolve(false);
     return navigator.serviceWorker
         .register('/service-worker.js', { scope: '/' })
-        .then(function(registration) {
-            navigator.serviceWorker.ready.catch(e =>
+        .then((registration) => {
+            navigator.serviceWorker.ready.catch((e) =>
                 console.error('-- registerServiceWorker error -->', e)
             );
-            return navigator.serviceWorker.ready.then(function(
-                serviceWorkerRegistration
-            ) {
-                let subscription = serviceWorkerRegistration.pushManager.getSubscription();
-                return subscription.then(function(subscription) {
-                    if (subscription) {
-                        return subscription;
-                    }
-                    return serviceWorkerRegistration.pushManager.subscribe({
-                        userVisibleOnly: true,
+            return navigator.serviceWorker.ready.then(
+                (serviceWorkerRegistration) => {
+                    const subscription = serviceWorkerRegistration.pushManager.getSubscription();
+                    return subscription.then((subscription) => {
+                        if (subscription) {
+                            return subscription;
+                        }
+                        return serviceWorkerRegistration.pushManager.subscribe({
+                            userVisibleOnly: true,
+                        });
                     });
-                });
-            });
+                }
+            );
         })
-        .then(function(subscription) {
+        .then((subscription) => {
             const rawKey = subscription.getKey
                 ? subscription.getKey('p256dh')
                 : '';

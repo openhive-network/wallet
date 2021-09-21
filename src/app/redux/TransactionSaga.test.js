@@ -4,6 +4,10 @@ import { call, select, all, takeEvery } from 'redux-saga/effects';
 import steem, { api, broadcast } from '@hiveio/hive-js';
 import { cloneableGenerator } from 'redux-saga/utils';
 import * as transactionActions from 'app/redux/TransactionReducer';
+import { DEBT_TICKER } from 'app/client_config';
+
+import { configure, shallow } from 'enzyme';
+import Adapter from 'enzyme-adapter-react-15';
 import {
     preBroadcast_comment,
     createPatch,
@@ -13,10 +17,6 @@ import {
     broadcastOperation,
     updateAuthorities,
 } from './TransactionSaga';
-import { DEBT_TICKER } from 'app/client_config';
-
-import { configure, shallow } from 'enzyme';
-import Adapter from 'enzyme-adapter-react-15';
 
 configure({ adapter: new Adapter() });
 
@@ -136,7 +136,7 @@ describe('TransactionSaga', () => {
                 ['one', 'outgoing']
             );
             expect(actual).toEqual(mockCall);
-            const done = noAutoVests.next().done;
+            const { done } = noAutoVests.next();
             expect(done).toBe(true);
         });
         it('should call getWithdrawRoutes with account name and outgoing as parameters, and be done if none are found', () => {
@@ -147,7 +147,7 @@ describe('TransactionSaga', () => {
                 ['one', 'outgoing']
             );
             expect(actual).toEqual(mockCall);
-            const done = noAutoVests.next().done;
+            const { done } = noAutoVests.next();
             expect(done).toBe(true);
         });
         it('should call getWithdrawRoutes with account name and outgoing as parameters, and reset all outgoing auto vesting routes to 0.', () => {
@@ -197,13 +197,13 @@ describe('TransactionSaga', () => {
         it('should return select object if it has a memo attribute with string value starting with #', () => {
             const genR = preBroadcast_transfer({ operation });
             const actual = genR.next().value;
-            const expected = select(state =>
+            const expected = select((state) =>
                 state.user.getIn(['current', 'private_keys', 'memo_private'])
             );
             expect(Object.keys(actual)).toEqual(['@@redux-saga/IO', 'SELECT']);
         });
         it('should return the operation unchanged if it has no memo attribute', () => {
-            let gen = preBroadcast_transfer(arg);
+            const gen = preBroadcast_transfer(arg);
             const actual = gen.next().value;
             expect(actual).toEqual(operationSansMemo);
         });

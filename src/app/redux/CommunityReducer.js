@@ -37,7 +37,7 @@ const defaultState = fromJS({
 });
 
 export default function reducer(state = defaultState, action) {
-    const payload = action.payload;
+    const { payload } = action;
     switch (action.type) {
         case SET_COMMUNITY_TITLE: {
             const title = fromJS(payload);
@@ -92,57 +92,57 @@ export default function reducer(state = defaultState, action) {
 }
 
 // Action creators
-export const setCommunityTitle = payload => ({
+export const setCommunityTitle = (payload) => ({
     type: SET_COMMUNITY_TITLE,
     payload,
 });
 
-export const setCommunityDescription = payload => ({
+export const setCommunityDescription = (payload) => ({
     type: SET_COMMUNITY_DESCRIPTION,
     payload,
 });
 
-export const setCommunityOwnerAccountName = payload => ({
+export const setCommunityOwnerAccountName = (payload) => ({
     type: SET_COMMUNITY_OWNER_ACCOUNT_NAME,
     payload,
 });
-export const setCommunityOwnerWifPassword = payload => ({
+export const setCommunityOwnerWifPassword = (payload) => ({
     type: SET_COMMUNITY_OWNER_WIF_PASSWORD,
     payload,
 });
 // Has a saga.
-export const createCommunity = payload => {
+export const createCommunity = (payload) => {
     return {
         type: CREATE_COMMUNITY_ACCOUNT,
         payload,
     };
 };
 
-export const createCommunityAccountPending = payload => ({
+export const createCommunityAccountPending = (payload) => ({
     type: CREATE_COMMUNITY_ACCOUNT_PENDING,
     payload,
 });
-export const createCommunityAccountError = payload => ({
+export const createCommunityAccountError = (payload) => ({
     type: CREATE_COMMUNITY_ACCOUNT_ERROR,
     payload,
 });
-export const createCommunitySuccess = payload => ({
+export const createCommunitySuccess = (payload) => ({
     type: CREATE_COMMUNITY_SUCCESS,
     payload,
 });
 
 // Has a saga watcher
-export const communityHivemindOperation = payload => {
+export const communityHivemindOperation = (payload) => {
     return {
         type: COMMUNITY_HIVEMIND_OPERATION,
         payload,
     };
 };
-export const communityHivemindOperationPending = payload => ({
+export const communityHivemindOperationPending = (payload) => ({
     type: COMMUNITY_HIVEMIND_OPERATION_PENDING,
     payload,
 });
-export const communityHivemindOperationError = payload => ({
+export const communityHivemindOperationError = (payload) => ({
     type: COMMUNITY_HIVEMIND_OPERATION_ERROR,
     payload,
 });

@@ -307,7 +307,7 @@ function* usernamePasswordLogin({
                 login_owner_pubkey,
             },
         });
-        let authority = yield select((state) =>
+        const authority = yield select((state) =>
             state.user.getIn(['authority', username])
         );
 
@@ -399,7 +399,7 @@ function* usernamePasswordLogin({
                     );
                 });
                 if (response.success) {
-                    signatures['posting'] = response.result;
+                    signatures.posting = response.result;
                 } else {
                     yield put(
                         userActions.loginError({ error: response.message })

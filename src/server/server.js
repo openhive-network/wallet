@@ -3,19 +3,10 @@ import Koa from 'koa';
 import mount from 'koa-mount';
 import helmet from 'koa-helmet';
 import koa_logger from 'koa-logger';
-import requestTime from './requesttimings';
-import StatsLoggerClient from './utils/StatsLoggerClient';
-import hardwareStats from './hardwarestats';
 import cluster from 'cluster';
 import os from 'os';
-import prod_logger from './prod_logger';
 import favicon from 'koa-favicon';
 import staticCache from 'koa-static-cache';
-import useRedirects from './redirects';
-import useGeneralApi from './api/general';
-import useAccountRecoveryApi from './api/account_recovery';
-import useEnterAndConfirmEmailPages from './sign_up_pages/enter_confirm_email';
-import useEnterAndConfirmMobilePages from './sign_up_pages/enter_confirm_mobile';
 import isBot from 'koa-isbot';
 import session from '@steem/crypto-session';
 import csrf from 'koa-csrf';
@@ -25,6 +16,15 @@ import { routeRegex } from 'app/ResolveRoute';
 import secureRandom from 'secure-random';
 import userIllegalContent from 'app/utils/userIllegalContent';
 import koaLocale from 'koa-locale';
+import useEnterAndConfirmMobilePages from './sign_up_pages/enter_confirm_mobile';
+import useEnterAndConfirmEmailPages from './sign_up_pages/enter_confirm_email';
+import useAccountRecoveryApi from './api/account_recovery';
+import useGeneralApi from './api/general';
+import useRedirects from './redirects';
+import prod_logger from './prod_logger';
+import hardwareStats from './hardwarestats';
+import StatsLoggerClient from './utils/StatsLoggerClient';
+import requestTime from './requesttimings';
 import { getSupportedLocales } from './utils/misc';
 
 if (cluster.isMaster) console.log('application server starting, please wait.');
@@ -74,7 +74,7 @@ if (env === 'development') {
     console.log('proxying to webpack dev server at ' + proxyhost);
     const proxy = require('koa-proxy')({
         host: proxyhost,
-        map: filePath => 'assets/' + filePath,
+        map: (filePath) => 'assets/' + filePath,
     });
     app.use(mount('/assets', proxy));
 } else {
@@ -128,7 +128,7 @@ function convertEntriesToArrays(obj) {
 }
 
 // some redirects and health status
-app.use(function*(next) {
+app.use(function* (next) {
     if (this.method === 'GET' && this.url === '/.well-known/healthcheck.json') {
         this.status = 200;
         this.body = {
@@ -165,7 +165,7 @@ app.use(function*(next) {
     }
     // remember ch, cn, r url params in the session and remove them from url
     if (this.method === 'GET' && /\?[^\w]*(ch=|cn=|r=)/.test(this.url)) {
-        let redir = this.url.replace(/((ch|cn|r)=[^&]+)/gi, r => {
+        let redir = this.url.replace(/((ch|cn|r)=[^&]+)/gi, (r) => {
             const p = r.split('=');
             if (p.length === 2) this.session[p[0]] = p[1];
             return '';
@@ -208,7 +208,7 @@ app.use(
 );
 
 app.use(
-    mount('/robots.txt', function*() {
+    mount('/robots.txt', function* () {
         this.set('Cache-Control', 'public, max-age=86400000');
         this.type = 'text/plain';
         this.body = 'User-agent: *\nAllow: /';
@@ -217,8 +217,8 @@ app.use(
 
 // set user's uid - used to identify users in logs and some other places
 // FIXME SECURITY PRIVACY cycle this uid after a period of time
-app.use(function*(next) {
-    const last_visit = this.session.last_visit;
+app.use(function* (next) {
+    const { last_visit } = this.session;
     this.session.last_visit = (new Date().getTime() / 1000) | 0;
     const from_link = this.request.headers.referer;
     if (!this.session.uid) {
@@ -260,15 +260,13 @@ if (env === 'production') {
 if (env !== 'test') {
     const appRender = require('./app_render');
 
-    app.use(function*() {
+    app.use(function* () {
         yield appRender(this, supportedLocales, resolvedAssets);
         // if (app_router.dbStatus.ok) recordWebEvent(this, 'page_load');
         const bot = this.state.isBot;
         if (bot) {
             console.log(
-                `  --> ${this.method} ${this.originalUrl} ${
-                    this.status
-                } (BOT '${bot}')`
+                `  --> ${this.method} ${this.originalUrl} ${this.status} (BOT '${bot}')`
             );
         }
     });
@@ -279,11 +277,11 @@ if (env !== 'test') {
 
     if (env === 'production') {
         if (cluster.isMaster) {
-            for (var i = 0; i < numProcesses; i++) {
+            for (let i = 0; i < numProcesses; i++) {
                 cluster.fork();
             }
             // if a worker dies replace it so application keeps running
-            cluster.on('exit', function(worker) {
+            cluster.on('exit', (worker) => {
                 console.log(
                     'error: worker %d died, starting a new one',
                     worker.id

@@ -1,5 +1,6 @@
-import { roundDown, roundUp } from './MarketUtils';
 import { LIQUID_TICKER, DEBT_TICKER } from 'app/client_config';
+import { roundDown, roundUp } from './MarketUtils';
+
 const precision = 1000;
 
 class Order {
@@ -64,8 +65,8 @@ class Order {
 class TradeHistory {
     constructor(fill) {
         // Norm date (FF bug)
-        var zdate = fill.date;
-        if (!/Z$/.test(zdate)) zdate = zdate + 'Z';
+        let zdate = fill.date;
+        if (!/Z$/.test(zdate)) zdate += 'Z';
 
         this.date = new Date(zdate);
         this.type =

@@ -8,11 +8,11 @@ import {
 } from 'redux-saga/effects';
 import { api } from '@hiveio/hive-js';
 import { loadFollows } from 'app/redux/FollowSaga';
+import { fromJS, Map, Set } from 'immutable';
+import { getStateAsync } from 'app/utils/hiveApi';
 import * as globalActions from './GlobalReducer';
 import * as appActions from './AppReducer';
 import constants from './constants';
-import { fromJS, Map, Set } from 'immutable';
-import { getStateAsync } from 'app/utils/hiveApi';
 
 const REQUEST_DATA = 'fetchDataSaga/REQUEST_DATA';
 const GET_CONTENT = 'fetchDataSaga/GET_CONTENT';

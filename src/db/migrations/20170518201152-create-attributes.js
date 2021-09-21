@@ -1,7 +1,5 @@
-'use strict';
-
 module.exports = {
-    up: function(queryInterface, Sequelize) {
+    up(queryInterface, Sequelize) {
         return queryInterface
             .createTable('user_attributes', {
                 id: {
@@ -28,13 +26,13 @@ module.exports = {
                     type: Sequelize.DATE,
                 },
             })
-            .then(function() {
+            .then(() => {
                 queryInterface.addIndex('user_attributes', ['user_id']);
                 queryInterface.addIndex('user_attributes', ['type_of']);
             });
     },
 
-    down: function(queryInterface, Sequelize) {
+    down(queryInterface, Sequelize) {
         /*
       Add reverting commands here.
       Return a promise to correctly handle asynchronicity.

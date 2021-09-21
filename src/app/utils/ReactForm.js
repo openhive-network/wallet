@@ -25,7 +25,7 @@ export default function reactForm({
     const formState = (instance.state = instance.state || {});
     formState[name] = {
         // validate: () => setFormState(instance, fields, validation),
-        handleSubmit: submitCallback => event => {
+        handleSubmit: (submitCallback) => (event) => {
             event.preventDefault();
             const { valid } = setFormState(name, instance, fields, validation);
             if (!valid) return;
@@ -103,7 +103,7 @@ export default function reactForm({
             }
         }
 
-        fs.props.onChange = e => {
+        fs.props.onChange = (e) => {
             const value = e && e.target ? e.target.value : e; // API may pass value directly
             const v = { ...(instance.state[fieldName] || {}) };
             const initialValue = initialValues[fieldName];
@@ -194,9 +194,11 @@ function n(field) {
     return name;
 }
 
-const hasValue = v =>
+const hasValue = (v) =>
     v == null
         ? false
-        : (typeof v === 'string' ? v.trim() : v) === '' ? false : true;
-const toString = v => (hasValue(v) ? v : '');
-const toBoolean = v => (hasValue(v) ? JSON.parse(v) : '');
+        : (typeof v === 'string' ? v.trim() : v) === ''
+        ? false
+        : true;
+const toString = (v) => (hasValue(v) ? v : '');
+const toBoolean = (v) => (hasValue(v) ? JSON.parse(v) : '');

@@ -38,10 +38,10 @@ export default function reducer(state = defaultState, action = {}) {
             const { dir, column, dataType } = state
                 .get('open_orders_sort')
                 .toJS();
-            const getValue = dataType === 'string' ? v => v : parseFloat;
+            const getValue = dataType === 'string' ? (v) => v : parseFloat;
 
             const open_orders = action.payload
-                .map(o => {
+                .map((o) => {
                     const type =
                         o.sell_price.base.indexOf(LIQUID_TICKER) > 0
                             ? 'ask'
@@ -52,7 +52,7 @@ export default function reducer(state = defaultState, action = {}) {
                         type == 'ask' ? o.sell_price.base : o.sell_price.quote;
                     return {
                         ...o,
-                        type: type,
+                        type,
                         price: parseFloat(hbd) / parseFloat(hive),
                         hive,
                         hbd,
@@ -75,7 +75,7 @@ export default function reducer(state = defaultState, action = {}) {
             const toggledDir = -state.get('open_orders_sort').get('dir');
 
             const toggledGetValue =
-                toggledDataType === 'string' ? v => v : parseFloat;
+                toggledDataType === 'string' ? (v) => v : parseFloat;
 
             const sortedState = state.set(
                 'open_orders',
@@ -105,37 +105,37 @@ export default function reducer(state = defaultState, action = {}) {
 }
 
 // Action creators
-export const receiveOrderbook = payload => ({
+export const receiveOrderbook = (payload) => ({
     type: RECEIVE_ORDERBOOK,
     payload,
 });
 
-export const receiveTicker = payload => ({
+export const receiveTicker = (payload) => ({
     type: RECEIVE_TICKER,
     payload,
 });
 
-export const receiveOpenOrders = payload => ({
+export const receiveOpenOrders = (payload) => ({
     type: RECEIVE_OPEN_ORDERS,
     payload,
 });
 
-export const receiveTradeHistory = payload => ({
+export const receiveTradeHistory = (payload) => ({
     type: RECEIVE_TRADE_HISTORY,
     payload,
 });
 
-export const appendTradeHistory = payload => ({
+export const appendTradeHistory = (payload) => ({
     type: APPEND_TRADE_HISTORY,
     payload,
 });
 
-export const updateMarket = payload => ({
+export const updateMarket = (payload) => ({
     type: UPDATE_MARKET,
     payload,
 });
 
-export const toggleOpenOrdersSort = payload => ({
+export const toggleOpenOrdersSort = (payload) => ({
     type: TOGGLE_OPEN_ORDERS_SORT,
     payload,
 });

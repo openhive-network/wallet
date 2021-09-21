@@ -2,11 +2,11 @@ import { fromJS } from 'immutable';
 import { call, put, select, takeEvery, takeLatest } from 'redux-saga/effects';
 import tt from 'counterpart';
 import { api } from '@hiveio/hive-js';
+import { setUserPreferences } from 'app/utils/ServerApiClient';
+import { getStateAsync } from 'app/utils/hiveApi';
 import * as globalActions from './GlobalReducer';
 import * as appActions from './AppReducer';
 import * as transactionActions from './TransactionReducer';
-import { setUserPreferences } from 'app/utils/ServerApiClient';
-import { getStateAsync } from 'app/utils/hiveApi';
 
 const wait = (ms) =>
     new Promise((resolve) => {
@@ -25,7 +25,7 @@ export const sharedWatches = [
 export function* getAccount(username, force = false) {
     let account = yield select((state) => {
         console.log('in getAccount, state is: ', state);
-        let state_accounts = state.global.get('accounts');
+        const state_accounts = state.global.get('accounts');
         if (state_accounts === null || state_accounts === undefined) {
             undefined;
         } else {
@@ -34,7 +34,7 @@ export function* getAccount(username, force = false) {
     });
 
     // hive never serves `owner` prop (among others)
-    let isLite = !!account && !account.get('owner');
+    const isLite = !!account && !account.get('owner');
 
     if (!account || force || isLite) {
         console.log(

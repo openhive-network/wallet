@@ -5,7 +5,7 @@ import * as communityActions from './CommunityReducer';
 import * as transactionActions from './TransactionReducer';
 import { wait } from './MarketSaga';
 
-const activeKeySelector = state => {
+const activeKeySelector = (state) => {
     return state.user.getIn(['pub_keys_used']).active;
 };
 
@@ -115,10 +115,10 @@ export function* customOps(action) {
             transactionActions.broadcastOperation({
                 type: subscribeToCommunityOperation[0],
                 operation: subscribeToCommunityOperation[1],
-                successCallback: res => {
+                successCallback: (res) => {
                     console.log('subscribed');
                 },
-                errorCallback: res => {
+                errorCallback: (res) => {
                     console.log('subscribe error', res);
                 },
             })
@@ -201,11 +201,11 @@ export function* createCommunityAccount(createCommunityAction) {
                 confirm:
                     'This operation will cost 3 HIVE. Would you like to proceed?',
                 operation: op,
-                successCallback: res => {
+                successCallback: (res) => {
                     createAccountSuccessCB();
                     broadcastOpsCb();
                 },
-                errorCallback: res => {
+                errorCallback: (res) => {
                     console.log('error', res);
                     createAccountErrorCB(res);
                 },

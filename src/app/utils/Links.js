@@ -58,7 +58,7 @@ export default {
  * @returns {*}
  */
 export const addToParams = (outputParams, inputParams, key, allowedValues) => {
-    const respParams = Object.assign({}, outputParams);
+    const respParams = { ...outputParams };
     if (inputParams[key] && allowedValues.indexOf(inputParams[key]) > -1) {
         respParams[key] = inputParams[key];
     }
@@ -119,7 +119,7 @@ export const getQueryStringParams = (query) => {
         ? (/^[?#]/.test(query) ? query.slice(1) : query)
               .split('&')
               .reduce((params, param) => {
-                  let [key, value] = param.split('=');
+                  const [key, value] = param.split('=');
                   params[key] = value
                       ? decodeURIComponent(value.replace(/\+/g, ' '))
                       : '';
