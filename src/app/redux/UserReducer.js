@@ -11,7 +11,10 @@ export const SAVE_LOGIN = 'user/SAVE_LOGIN';
 const REMOVE_HIGH_SECURITY_KEYS = 'user/REMOVE_HIGH_SECURITY_KEYS';
 const CHANGE_LANGUAGE = 'user/CHANGE_LANGUAGE';
 const SHOW_TRANSFER = 'user/SHOW_TRANSFER';
+const SHOW_DECODE_MEMO = 'user/SHOW_DECODE_MEMO';
 const HIDE_TRANSFER = 'user/HIDE_TRANSFER';
+const HIDE_DECODE_MEMO = 'user/HIDE_DECODE_MEMO';
+const SET_MEMO_MESSAGE = 'user/SET_MEMO_MESSAGE';
 const SHOW_POWERDOWN = 'user/SHOW_POWERDOWN';
 const HIDE_POWERDOWN = 'user/HIDE_POWERDOWN';
 const SET_TRANSFER_DEFAULTS = 'user/SET_TRANSFER_DEFAULTS';
@@ -45,6 +48,7 @@ const defaultState = fromJS({
     current: null,
     show_login_modal: false,
     show_transfer_modal: false,
+    show_decode_memo_modal: false,
     show_signup_modal: false,
     show_post_advanced_settings_modal: '', // formId
     pub_keys_used: null,
@@ -146,8 +150,17 @@ export default function reducer(state = defaultState, action) {
         case SHOW_TRANSFER:
             return state.set('show_transfer_modal', true);
 
+        case SHOW_DECODE_MEMO:
+            return state.set('show_decode_memo_modal', true);
+
+        case SET_MEMO_MESSAGE:
+            return state.set('memo_message', payload);
+
         case HIDE_TRANSFER:
             return state.set('show_transfer_modal', false);
+
+        case HIDE_DECODE_MEMO:
+            return state.set('show_decode_memo_modal', false);
 
         case SHOW_POWERDOWN:
             return state.set('show_powerdown_modal', true);
@@ -304,8 +317,23 @@ export const showTransfer = (payload) => ({
     payload,
 });
 
+export const showDecodeMemo = (payload) => ({
+    type: SHOW_DECODE_MEMO,
+    payload,
+});
+
 export const hideTransfer = (payload) => ({
     type: HIDE_TRANSFER,
+    payload,
+});
+
+export const hideDecodeMemo = (payload) => ({
+    type: HIDE_DECODE_MEMO,
+    payload,
+});
+
+export const setMemoMessage = (payload) => ({
+    type: SET_MEMO_MESSAGE,
     payload,
 });
 

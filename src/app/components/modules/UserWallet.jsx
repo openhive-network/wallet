@@ -677,7 +677,6 @@ class UserWallet extends React.Component {
 
         return (
             <div className="UserWallet">
-                {claimbox}
                 <div className="row">
                     <div className="columns small-10 medium-12 medium-expand">
                         <WalletSubMenu
@@ -685,20 +684,19 @@ class UserWallet extends React.Component {
                             isMyAccount={isMyAccount}
                         />
                     </div>
-                    {
-                        <div className="columns shrink">
-                            {isMyAccount && (
-                                <button
-                                    className="UserWallet__buyhp button hollow"
-                                    onClick={onShowDepositHive}
-                                >
-                                    {tt(
-                                        'userwallet_jsx.buy_hive_or_hive_power'
-                                    )}
-                                </button>
-                            )}
-                        </div>
-                    }
+                </div>
+                {claimbox}
+                <div className="row">
+                    <div className="columns shrink">
+                        {isMyAccount && (
+                            <button
+                                className="UserWallet__buyhp button hollow"
+                                onClick={onShowDepositHive}
+                            >
+                                {tt('userwallet_jsx.buy_hive_or_hive_power')}
+                            </button>
+                        )}
+                    </div>
                 </div>
                 <div className="UserWallet__balance row">
                     <div className="column small-12 medium-8">
