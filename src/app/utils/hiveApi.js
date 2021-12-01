@@ -36,7 +36,7 @@ async function getStateForTrending() {
 
 async function getStateForWitnessesAndProposals() {
     const schedule = await api.getWitnessScheduleAsync();
-    const witnesses = await api.getWitnessesByVoteAsync('', 200);
+    const witnesses = await api.getWitnessesByVoteAsync('', 250);
     const global_properties = await api.getDynamicGlobalPropertiesAsync();
 
     const result = {};
