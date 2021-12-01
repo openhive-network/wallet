@@ -8,7 +8,7 @@ variables:
     APP_REVIEW_SUBDOMAIN: .wallet.engrave.dev
     STAGING_DOMAIN: staging-wallet.hive.io
     PRODUCTION_DOMAIN: wallet.hive.blog
-    BASE_IMAGE: node:12.16.2
+    BASE_IMAGE: node:12.22.6
     CERTS: ~/.docker
 
 ################################# COMMON TEMPLATES #################################
