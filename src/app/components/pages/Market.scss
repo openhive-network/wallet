@@ -1,4 +1,4 @@
-$buy-color: $color-hive-red-dark;
+$buy-color: $color-green;
 .buy-color {
   color: $buy-color !important;
 }
@@ -102,9 +102,9 @@ input.sell-color:hover {
       margin-right: 0.5rem;
       display: inline-block;
       @include themify($themes) {
-        background-color: themed('backgroundColorOpaque');  
-        border-right: themed('borderDark');  
-      }   
+        background-color: themed('backgroundColorOpaque');
+        border-right: themed('borderDark');
+      }
     }
   }
 
@@ -201,15 +201,15 @@ ul.pager {
     transition: 0.2s all ease-in-out;
     background-color: transparent;
     @include themify($themes) {
-      border: themed('borderAccent');  
-      color: themed('textColorAccent');  
-    } 
+      border: themed('borderAccent');
+      color: themed('textColorAccent');
+    }
     &:hover {
       @include themify($themes) {
-        border: themed('borderDark');  
-        color: themed('textColorPrimary');  
-      }       
-    }     
+        border: themed('borderDark');
+        color: themed('textColorPrimary');
+      }
+    }
   }
 }
 
@@ -222,7 +222,7 @@ ul.pager {
 .DepthChart {
   rect.highcharts-background {
     fill-opacity: 0;
-  } 
+  }
   .highcharts-grid path {
     stroke: #999;
   }
