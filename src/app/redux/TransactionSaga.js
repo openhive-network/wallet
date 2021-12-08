@@ -23,6 +23,8 @@ import {
     sendOperationsWithHiveSigner,
 } from 'app/utils/HiveSigner';
 
+import diff_match_patch from 'diff-match-patch';
+
 export const transactionWatches = [
     takeEvery(transactionActions.BROADCAST_OPERATION, broadcastOperation),
     takeEvery(transactionActions.UPDATE_AUTHORITIES, updateAuthorities),
@@ -164,22 +166,20 @@ export function* broadcastOperation({
                     password,
                 });
                 if (signingKey) payload.keys.push(signingKey);
-                else {
-                    if (!password) {
-                        yield put(
-                            userActions.showLogin({
-                                operation: {
-                                    type,
-                                    operation,
-                                    username,
-                                    successCallback,
-                                    errorCallback,
-                                    saveLogin: true,
-                                },
-                            })
-                        );
-                        return;
-                    }
+                else if (!password) {
+                    yield put(
+                        userActions.showLogin({
+                            operation: {
+                                type,
+                                operation,
+                                username,
+                                successCallback,
+                                errorCallback,
+                                saveLogin: true,
+                            },
+                        })
+                    );
+                    return;
                 }
             }
         }
@@ -273,7 +273,7 @@ function* broadcastPayload({
         yield new Promise((resolve, reject) => {
             // Bump transaction (for live UI testing).. Put 0 in now (no effect),
             // to enable browser's autocomplete and help prevent typos.
-            const env = process.env;
+            const { env } = process;
             const bump = env.BROWSER
                 ? parseInt(localStorage.getItem('bump') || 0)
                 : 0;
@@ -296,57 +296,38 @@ function* broadcastPayload({
                     resolve();
                     broadcastedEvent();
                 }, 2000);
-            } else {
-                if (isLoggedInWithKeychain()) {
-                    const authType = needsActiveAuth ? 'active' : 'posting';
-                    window.hive_keychain.requestBroadcast(
-                        username,
-                        operations,
-                        authType,
-                        (response) => {
-                            if (!response.success) {
-                                reject(response.message);
-                            } else {
-                                broadcastedEvent();
-                                resolve();
-                            }
+            } else if (isLoggedInWithKeychain()) {
+                const authType = needsActiveAuth ? 'active' : 'posting';
+                window.hive_keychain.requestBroadcast(
+                    username,
+                    operations,
+                    authType,
+                    (response) => {
+                        if (!response.success) {
+                            reject(response.message);
+                        } else {
+                            broadcastedEvent();
+                            resolve();
                         }
-                    );
-                } else if (isLoggedInWithHiveSigner()) {
-                    if (!needsActiveAuth) {
-                        hiveSignerClient.broadcast(
-                            operations,
-                            (err, result) => {
-                                if (err) {
-                                    reject(err.error_description);
-                                } else {
-                                    broadcastedEvent();
-                                    resolve();
-                                }
-                            }
-                        );
-                    } else {
-                        sendOperationsWithHiveSigner(
-                            operations,
-                            {},
-                            (err, result) => {
-                                if (err) {
-                                    reject(err.error_description);
-                                } else {
-                                    broadcastedEvent();
-                                    resolve();
-                                }
-                            }
-                        );
                     }
+                );
+            } else if (isLoggedInWithHiveSigner()) {
+                if (!needsActiveAuth) {
+                    hiveSignerClient.broadcast(operations, (err, result) => {
+                        if (err) {
+                            reject(err.error_description);
+                        } else {
+                            broadcastedEvent();
+                            resolve();
+                        }
+                    });
                 } else {
-                    broadcast.send(
-                        { extensions: [], operations },
-                        keys,
-                        (err) => {
+                    sendOperationsWithHiveSigner(
+                        operations,
+                        {},
+                        (err, result) => {
                             if (err) {
-                                console.error(err);
-                                reject(err);
+                                reject(err.error_description);
                             } else {
                                 broadcastedEvent();
                                 resolve();
@@ -354,6 +335,16 @@ function* broadcastPayload({
                         }
                     );
                 }
+            } else {
+                broadcast.send({ extensions: [], operations }, keys, (err) => {
+                    if (err) {
+                        console.error(err);
+                        reject(err);
+                    } else {
+                        broadcastedEvent();
+                        resolve();
+                    }
+                });
             }
         });
         // status: accepted
@@ -432,8 +423,6 @@ function* accepted_account_update({ operation }) {
     account = fromJS(account);
     yield put(globalActions.receiveAccount({ account }));
 }
-
-import diff_match_patch from 'diff-match-patch';
 
 const dmp = new diff_match_patch();
 
@@ -664,7 +653,7 @@ export function* updateAuthorities({
                 );
                 const pubkey = priv.toPublicKey().toString();
                 const authority = account[authType];
-                const key_auths = authority.key_auths;
+                const { key_auths } = authority;
                 for (let i = 0; i < key_auths.length; i++) {
                     if (key_auths[i][0] === pubkey) {
                         return priv;

@@ -3,6 +3,7 @@ import config from 'config';
 import * as hive from '@hiveio/hive-js';
 
 const path = require('path');
+
 const ROOT = path.join(__dirname, '../..');
 
 // Tell `require` calls to look into `/app` also

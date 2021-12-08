@@ -27,10 +27,6 @@ class TransferHistoryRow extends React.Component {
         /* All transfers involve up to 2 accounts, context and 1 other. */
         let message = '';
 
-        let description_start = '';
-        let other_account = null;
-        let description_end = '';
-
         if (type === 'transfer_to_vesting') {
             const amount = data.amount.split(' ')[0];
 
@@ -241,6 +237,12 @@ class TransferHistoryRow extends React.Component {
                     );
                     // `${rewards[0]}`;
                     break;
+
+                default:
+                    console.error(
+                        `Not sure how to handle rewards length of ${rewards.length}`
+                    );
+                    break;
             }
         } else if (type === 'interest') {
             message = tt('transferhistoryrow_jsx.interest', {
@@ -307,15 +309,20 @@ class TransferHistoryRow extends React.Component {
     }
 }
 
-const otherAccountLink = (username) =>
-    GDPRUserList.includes(username) ? (
+const otherAccountLink = (username) => {
+    return GDPRUserList.includes(username) ? (
         <span>{username}</span>
     ) : (
         <Link to={`/@${username}`}>{username}</Link>
     );
+};
 
 const postLink = (socialUrl, author, permlink) => (
-    <a href={`${socialUrl}/@${author}/${permlink}`} target="_blank">
+    <a
+        href={`${socialUrl}/@${author}/${permlink}`}
+        target="_blank"
+        rel="noopener noreferrer"
+    >
         {author}/{permlink}
     </a>
 );
@@ -323,9 +330,8 @@ const postLink = (socialUrl, author, permlink) => (
 export default connect(
     // mapStateToProps
     (state, ownProps) => {
-        const op = ownProps.op;
-        const type = op[1].op[0];
-        const data = op[1].op[1];
+        const { op } = ownProps;
+        const [type, data] = op[1].op;
         const powerdown_vests =
             type === 'withdraw_vesting'
                 ? numberWithCommas(vestsToHp(state, data.vesting_shares))

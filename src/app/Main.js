@@ -8,12 +8,12 @@ import './assets/stylesheets/app.scss';
 import plugins from 'app/utils/JsPlugins';
 import Iso from 'iso';
 import { clientRender } from 'shared/UniversalRender';
-import ConsoleExports from './utils/ConsoleExports';
 import { serverApiRecordEvent } from 'app/utils/ServerApiClient';
 import * as hive from '@hiveio/hive-js';
 import { determineViewMode } from 'app/utils/Links';
 import frontendLogger from 'app/utils/FrontendLogger';
 import Cookies from 'universal-cookie';
+import ConsoleExports from './utils/ConsoleExports';
 
 window.addEventListener('error', frontendLogger);
 
@@ -33,8 +33,8 @@ try {
 function runApp(initial_state) {
     console.log('Initial state', initial_state);
 
-    const config = initial_state.offchain.config;
-    let cookies = new Cookies();
+    const { config } = initial_state.offchain;
+    const cookies = new Cookies();
     const alternativeApiEndpoints = config.alternative_api_endpoints;
     const cookie_endpoint = cookies.get('user_preferred_api_endpoint');
     const currentApiEndpoint =

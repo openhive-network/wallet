@@ -2,6 +2,7 @@
 
 //TODO!
 import { LIQUID_TICKER, DEBT_TICKER } from 'app/client_config';
+
 export const emptyContent = {
     fetched: new Date(), /// the date at which this data was requested from the server
     id: '2.8.0',

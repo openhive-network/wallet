@@ -96,9 +96,7 @@ export default function extractMeta(chain_data, rp) {
             profile_image = 'https://hive.blog/images/hive-blog-twshare.png';
         // Set profile tags
         const title = `@${account.name}`;
-        const desc = `The latest posts from ${name}. Follow me at @${
-            account.name
-        }. ${about}`;
+        const desc = `The latest posts from ${name}. Follow me at @${account.name}. ${about}`;
         const image = profile_image;
 
         // Standard meta

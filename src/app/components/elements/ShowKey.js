@@ -42,9 +42,11 @@ class ShowKey extends Component {
         this.setWif(this.props, this.state);
         this.setOnKey(this.props, this.state);
     }
+
     componentWillReceiveProps(nextProps) {
         this.setWif(nextProps);
     }
+
     componentWillUpdate(nextProps, nextState) {
         this.setOnKey(nextProps, nextState);
     }
@@ -67,6 +69,7 @@ class ShowKey extends Component {
         const { onKey, pubkey } = nextProps;
         if (onKey) onKey(wif, pubkey);
     }
+
     showQr = () => {
         const { wif } = this.state;
         this.props.showQRKey({
@@ -105,7 +108,10 @@ class ShowKey extends Component {
                 <div className="row key__public">
                     <div className="column">
                         <br />
-                        <h5>Public {this.props.authTypeName} Key</h5>
+                        <h5>
+                            Public
+                            {this.props.authTypeName} Key
+                        </h5>
                         {qrIcon}
                         <span>{pubkey}</span>
                     </div>
@@ -113,7 +119,10 @@ class ShowKey extends Component {
                 <br />
                 <div className="row key__private">
                     <div className="key__private-title">
-                        <h5>Your Private {this.props.authTypeName} Key</h5>
+                        <h5>
+                            Your Private
+                            {this.props.authTypeName} Key
+                        </h5>
                     </div>
 
                     <div className="key__private-container">

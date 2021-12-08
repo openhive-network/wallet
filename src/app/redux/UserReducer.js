@@ -11,7 +11,10 @@ export const SAVE_LOGIN = 'user/SAVE_LOGIN';
 const REMOVE_HIGH_SECURITY_KEYS = 'user/REMOVE_HIGH_SECURITY_KEYS';
 const CHANGE_LANGUAGE = 'user/CHANGE_LANGUAGE';
 const SHOW_TRANSFER = 'user/SHOW_TRANSFER';
+const SHOW_DECODE_MEMO = 'user/SHOW_DECODE_MEMO';
 const HIDE_TRANSFER = 'user/HIDE_TRANSFER';
+const HIDE_DECODE_MEMO = 'user/HIDE_DECODE_MEMO';
+const SET_MEMO_MESSAGE = 'user/SET_MEMO_MESSAGE';
 const SHOW_POWERDOWN = 'user/SHOW_POWERDOWN';
 const HIDE_POWERDOWN = 'user/HIDE_POWERDOWN';
 const SET_TRANSFER_DEFAULTS = 'user/SET_TRANSFER_DEFAULTS';
@@ -45,6 +48,7 @@ const defaultState = fromJS({
     current: null,
     show_login_modal: false,
     show_transfer_modal: false,
+    show_decode_memo_modal: false,
     show_signup_modal: false,
     show_post_advanced_settings_modal: '', // formId
     pub_keys_used: null,
@@ -55,7 +59,7 @@ const defaultState = fromJS({
 });
 
 export default function reducer(state = defaultState, action) {
-    const payload = action.payload;
+    const { payload } = action;
 
     switch (action.type) {
         case SHOW_LOGIN: {
@@ -117,7 +121,7 @@ export default function reducer(state = defaultState, action) {
             let empty = false;
             state = state.updateIn(
                 ['current', 'private_keys'],
-                private_keys => {
+                (private_keys) => {
                     if (!private_keys) return null;
                     if (
                         private_keys.has('active_private') ||
@@ -146,8 +150,17 @@ export default function reducer(state = defaultState, action) {
         case SHOW_TRANSFER:
             return state.set('show_transfer_modal', true);
 
+        case SHOW_DECODE_MEMO:
+            return state.set('show_decode_memo_modal', true);
+
+        case SET_MEMO_MESSAGE:
+            return state.set('memo_message', payload);
+
         case HIDE_TRANSFER:
             return state.set('show_transfer_modal', false);
+
+        case HIDE_DECODE_MEMO:
+            return state.set('show_decode_memo_modal', false);
 
         case SHOW_POWERDOWN:
             return state.set('show_powerdown_modal', true);
@@ -262,154 +275,169 @@ export default function reducer(state = defaultState, action) {
 }
 
 // Action creators
-export const showLogin = payload => ({
+export const showLogin = (payload) => ({
     type: SHOW_LOGIN,
     payload,
 });
 
-export const hideLogin = payload => ({
+export const hideLogin = (payload) => ({
     type: HIDE_LOGIN,
     payload,
 });
 
-export const showTerms = payload => ({
+export const showTerms = (payload) => ({
     type: SHOW_TERMS,
     payload,
 });
 
 export const acceptTerms = () => ({ type: ACCEPT_TERMS });
 
-export const saveLoginConfirm = payload => ({
+export const saveLoginConfirm = (payload) => ({
     type: SAVE_LOGIN_CONFIRM,
     payload,
 });
 
-export const saveLogin = payload => ({
+export const saveLogin = (payload) => ({
     type: SAVE_LOGIN,
     payload,
 });
 
-export const removeHighSecurityKeys = payload => ({
+export const removeHighSecurityKeys = (payload) => ({
     type: REMOVE_HIGH_SECURITY_KEYS,
     payload,
 });
 
-export const changeLanguage = payload => ({
+export const changeLanguage = (payload) => ({
     type: CHANGE_LANGUAGE,
     payload,
 });
 
-export const showTransfer = payload => ({
+export const showTransfer = (payload) => ({
     type: SHOW_TRANSFER,
     payload,
 });
 
-export const hideTransfer = payload => ({
+export const showDecodeMemo = (payload) => ({
+    type: SHOW_DECODE_MEMO,
+    payload,
+});
+
+export const hideTransfer = (payload) => ({
     type: HIDE_TRANSFER,
     payload,
 });
 
-export const showPowerdown = payload => ({
+export const hideDecodeMemo = (payload) => ({
+    type: HIDE_DECODE_MEMO,
+    payload,
+});
+
+export const setMemoMessage = (payload) => ({
+    type: SET_MEMO_MESSAGE,
+    payload,
+});
+
+export const showPowerdown = (payload) => ({
     type: SHOW_POWERDOWN,
     payload,
 });
 
-export const hidePowerdown = payload => ({
+export const hidePowerdown = (payload) => ({
     type: HIDE_POWERDOWN,
     payload,
 });
 
-export const setTransferDefaults = payload => ({
+export const setTransferDefaults = (payload) => ({
     type: SET_TRANSFER_DEFAULTS,
     payload,
 });
 
-export const clearTransferDefaults = payload => ({
+export const clearTransferDefaults = (payload) => ({
     type: CLEAR_TRANSFER_DEFAULTS,
     payload,
 });
 
-export const setPowerdownDefaults = payload => ({
+export const setPowerdownDefaults = (payload) => ({
     type: SET_POWERDOWN_DEFAULTS,
     payload,
 });
 
-export const clearPowerdownDefaults = payload => ({
+export const clearPowerdownDefaults = (payload) => ({
     type: CLEAR_POWERDOWN_DEFAULTS,
     payload,
 });
 
-export const usernamePasswordLogin = payload => ({
+export const usernamePasswordLogin = (payload) => ({
     type: USERNAME_PASSWORD_LOGIN,
     payload,
 });
 
-export const setUsername = payload => ({
+export const setUsername = (payload) => ({
     type: SET_USERNAME,
     payload,
 });
 
-export const setUser = payload => ({
+export const setUser = (payload) => ({
     type: SET_USER,
     payload,
 });
 
-export const closeLogin = payload => ({
+export const closeLogin = (payload) => ({
     type: CLOSE_LOGIN,
     payload,
 });
 
-export const loginError = payload => ({
+export const loginError = (payload) => ({
     type: LOGIN_ERROR,
     payload,
 });
 
-export const logout = payload => ({
+export const logout = (payload) => ({
     type: LOGOUT,
     payload,
 });
 
-export const showSignUp = payload => ({
+export const showSignUp = (payload) => ({
     type: SHOW_SIGN_UP,
     payload,
 });
 
-export const hideSignUp = payload => ({
+export const hideSignUp = (payload) => ({
     type: HIDE_SIGN_UP,
     payload,
 });
 
-export const keysError = payload => ({
+export const keysError = (payload) => ({
     type: KEYS_ERROR,
     payload,
 });
 
-export const accountAuthLookup = payload => ({
+export const accountAuthLookup = (payload) => ({
     type: ACCOUNT_AUTH_LOOKUP,
     payload,
 });
 
-export const setAuthority = payload => ({
+export const setAuthority = (payload) => ({
     type: SET_AUTHORITY,
     payload,
 });
 
-export const setLatestFeedPrice = payload => ({
+export const setLatestFeedPrice = (payload) => ({
     type: SET_LATEST_FEED_PRICE,
     payload,
 });
 
-export const hideConnectionErrorModal = payload => ({
+export const hideConnectionErrorModal = (payload) => ({
     type: HIDE_CONNECTION_ERROR_MODAL,
     payload,
 });
 
-export const set = payload => ({
+export const set = (payload) => ({
     type: SET,
     payload,
 });
 
-export const loadSavingsWithdraw = payload => ({
+export const loadSavingsWithdraw = (payload) => ({
     type: LOAD_SAVINGS_WITHDRAW,
     payload,
 });
@@ -424,18 +452,18 @@ export const hideSidePanel = () => {
     };
 };
 
-export const getVestingDelegations = payload => {
+export const getVestingDelegations = (payload) => {
     return {
         type: GET_VESTING_DELEGATIONS,
         payload,
     };
 };
 
-export const setVestingDelegations = payload => ({
+export const setVestingDelegations = (payload) => ({
     type: SET_VESTING_DELEGATIONS,
     payload,
 });
-export const vestingDelegationsLoading = payload => ({
+export const vestingDelegationsLoading = (payload) => ({
     type: VESTING_DELEGATIONS_LOADING,
     payload,
 });

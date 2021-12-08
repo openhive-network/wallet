@@ -14,7 +14,7 @@ beforeEach(() => {
 describe('Header', () => {
     it('contains class .header', () => {
         global.$STM_Config = { read_only_mode: false };
-        expect(shallow(<_Header_ pathname={'whatever'} />).is('.Header')).toBe(
+        expect(shallow(<_Header_ pathname="whatever" />).is('.Header')).toBe(
             true
         );
     });

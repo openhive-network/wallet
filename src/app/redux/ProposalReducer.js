@@ -7,7 +7,7 @@ const RECEIVE_LIST_PROPOSAL_VOTES = 'global/RECEIVE_LIST_PROPOSAL_VOTES';
 export const defaultState = Map();
 
 export default function reducer(state = defaultState, action = {}) {
-    const payload = action.payload;
+    const { payload } = action;
 
     switch (action.type) {
         case RECEIVE_LIST_PROPOSALS: {
@@ -30,12 +30,12 @@ export default function reducer(state = defaultState, action = {}) {
     }
 }
 
-export const receiveListProposals = payload => ({
+export const receiveListProposals = (payload) => ({
     type: RECEIVE_LIST_PROPOSALS,
     payload,
 });
 
-export const receiveListProposalVotes = payload => ({
+export const receiveListProposalVotes = (payload) => ({
     type: RECEIVE_LIST_PROPOSAL_VOTES,
     payload,
 });

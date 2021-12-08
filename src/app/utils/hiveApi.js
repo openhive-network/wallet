@@ -8,7 +8,7 @@ import Moment from 'moment';
 import stateCleaner from 'app/redux/stateCleaner';
 
 const op = ChainTypes.operations;
-let wallet_operations_bitmask = makeBitMaskFilter([
+const wallet_operations_bitmask = makeBitMaskFilter([
     op.transfer,
     op.transfer_to_vesting,
     op.withdraw_vesting,
@@ -27,7 +27,7 @@ let wallet_operations_bitmask = makeBitMaskFilter([
 ]);
 
 async function getStateForTrending() {
-    let result = {};
+    const result = {};
     result.content = {};
     result.accounts = {};
     result.props = await api.getDynamicGlobalPropertiesAsync();
@@ -35,11 +35,11 @@ async function getStateForTrending() {
 }
 
 async function getStateForWitnessesAndProposals() {
-    let schedule = await api.getWitnessScheduleAsync();
-    let witnesses = await api.getWitnessesByVoteAsync('', 200);
-    let global_properties = await api.getDynamicGlobalPropertiesAsync();
+    const schedule = await api.getWitnessScheduleAsync();
+    const witnesses = await api.getWitnessesByVoteAsync('', 250);
+    const global_properties = await api.getDynamicGlobalPropertiesAsync();
 
-    let result = {};
+    const result = {};
     result.props = global_properties;
     result.tag_idx = {};
     result.tag_idx.trending = [];
@@ -56,7 +56,7 @@ async function getStateForWitnessesAndProposals() {
 }
 
 async function getGenericState(user) {
-    let result = {};
+    const result = {};
     result.accounts = {};
     result.content = {};
     result.props = await api.getDynamicGlobalPropertiesAsync();
@@ -69,11 +69,11 @@ async function getGenericState(user) {
 
     if (user_to_check.startsWith('@'))
         user_to_check = user_to_check.split('@')[1];
-    let account_details = await api.getAccountsAsync([user_to_check]);
+    const account_details = await api.getAccountsAsync([user_to_check]);
     result.accounts[user_to_check] = account_details[0];
 
     result.feed_price = {};
-    let feed_data = await api.getFeedHistoryAsync();
+    const feed_data = await api.getFeedHistoryAsync();
     result.feed_price = feed_data.current_median_history;
     return result;
 }
@@ -140,9 +140,9 @@ async function getTransferHistory(account) {
             ...wallet_operations_bitmask
         );
     } catch (err) {
-        let error_string = err.toString();
+        const error_string = err.toString();
         if (error_string.includes('start=')) {
-            let index = error_string.indexOf('=');
+            const index = error_string.indexOf('=');
             start_sequence = error_string.substr(index + 1);
             if (start_sequence.indexOf('.') > 0)
                 start_sequence = start_sequence.substr(
@@ -185,8 +185,8 @@ export async function getStateAsync(url) {
     if (path.includes('transfers')) {
         fetch_transfers = true;
         //just convert path to be the username, hivemind won't accept the request if transfers is in the path
-        let tokens = url.split('/');
-        for (var token of tokens) {
+        const tokens = url.split('/');
+        for (const token of tokens) {
             if (token.includes('@')) {
                 path = token;
                 break;
@@ -194,17 +194,17 @@ export async function getStateAsync(url) {
         }
     }
 
-    let raw = await getGenericState(path);
+    const raw = await getGenericState(path);
 
     if (fetch_transfers) {
-        let account_name = path.split('@')[1];
+        const account_name = path.split('@')[1];
         let account_history = null;
 
         account_history = await getTransferHistory(account_name);
         let account = await api.getAccountsAsync([account_name]);
         account = account[0];
-        account['transfer_history'] = account_history;
-        raw['accounts'][account_name] = account;
+        account.transfer_history = account_history;
+        raw.accounts[account_name] = account;
     }
 
     const cleansed = stateCleaner(raw);

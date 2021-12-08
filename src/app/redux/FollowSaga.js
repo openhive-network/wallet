@@ -11,7 +11,7 @@ import * as globalActions from 'app/redux/GlobalReducer';
 // Test limit with 2 (not 1, infinate looping)
 export function* loadFollows(account, type, force = false) {
     if (
-        yield select(state =>
+        yield select((state) =>
             state.global.getIn([
                 'follow',
                 'getFollowingAsync',
@@ -24,7 +24,7 @@ export function* loadFollows(account, type, force = false) {
     }
 
     if (!force) {
-        const hasResult = yield select(state =>
+        const hasResult = yield select((state) =>
             state.global.hasIn([
                 'follow',
                 'getFollowingAsync',
@@ -41,7 +41,7 @@ export function* loadFollows(account, type, force = false) {
         globalActions.update({
             key: ['follow', 'getFollowingAsync', account],
             notSet: Map(),
-            updater: m => m.set(type + '_loading', true),
+            updater: (m) => m.set(type + '_loading', true),
         })
     );
 
@@ -59,9 +59,9 @@ function* loadFollowsLoop(account, type, start = '', limit = 1000) {
         globalActions.update({
             key: ['follow_inprogress', 'getFollowingAsync', account],
             notSet: Map(),
-            updater: m => {
+            updater: (m) => {
                 m = m.asMutable();
-                res.forEach(value => {
+                res.forEach((value) => {
                     cnt += 1;
 
                     const whatList = value.get('what');
@@ -69,9 +69,9 @@ function* loadFollowsLoop(account, type, start = '', limit = 1000) {
                     const accountName = (lastAccountName = value.get(
                         'following'
                     ));
-                    whatList.forEach(what => {
+                    whatList.forEach((what) => {
                         //currently this is always true: what === type
-                        m.update(what, OrderedSet(), s => s.add(accountName));
+                        m.update(what, OrderedSet(), (s) => s.add(accountName));
                     });
                 });
                 return m.asImmutable();
@@ -88,7 +88,7 @@ function* loadFollowsLoop(account, type, start = '', limit = 1000) {
         yield put(
             globalActions.update({
                 key: [],
-                updater: m => {
+                updater: (m) => {
                     m = m.asMutable();
 
                     const result = m.getIn(
@@ -109,7 +109,7 @@ function* loadFollowsLoop(account, type, start = '', limit = 1000) {
                     m.updateIn(
                         ['follow', 'getFollowingAsync', account],
                         Map(),
-                        mm =>
+                        (mm) =>
                             mm.merge({
                                 // Count may be set separately without loading the full xxx_result set
                                 [type + '_count']: result.size,

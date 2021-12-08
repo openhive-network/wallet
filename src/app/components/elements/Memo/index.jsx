@@ -8,20 +8,28 @@ import { memo } from '@hiveio/hive-js';
 import BadActorList from 'app/utils/BadActorList';
 import { repLog10 } from 'app/utils/ParsersAndFormatters';
 import { isLoggedInWithHiveSigner } from 'app/utils/HiveSigner';
+import * as userActions from 'app/redux/UserReducer';
 
 const MINIMUM_REPUTATION = 15;
 
-export class Memo extends React.Component {
-    static propTypes = {
-        text: PropTypes.string,
-        username: PropTypes.string,
-        fromAccount: PropTypes.string,
-        // redux props
-        myAccount: PropTypes.bool,
-        memo_private: PropTypes.object,
-        fromNegativeRepUser: PropTypes.bool.isRequired,
-    };
+const propTypes = {
+    text: PropTypes.string,
+    fromAccount: PropTypes.string,
+    // redux props
+    myAccount: PropTypes.bool,
+    // eslint-disable-next-line react/forbid-prop-types
+    memo_private: PropTypes.object,
+    fromNegativeRepUser: PropTypes.bool.isRequired,
+};
 
+const defaultProps = {
+    text: '',
+    fromAccount: '',
+    myAccount: false,
+    memo_private: null,
+};
+
+export class Memo extends React.Component {
     constructor() {
         super();
         this.shouldComponentUpdate = shouldComponentUpdate(this, 'Memo');
@@ -30,12 +38,27 @@ export class Memo extends React.Component {
         };
     }
 
+    // eslint-disable-next-line class-methods-use-this
     decodeMemo(memo_private, text) {
         try {
             return memo.decode(memo_private, text);
         } catch (e) {
             console.error('memo decryption error', text, e);
             return 'Invalid memo';
+        }
+    }
+
+    // eslint-disable-next-line class-methods-use-this
+    decodeMemoElement(e) {
+        const { showDecodeMemo, setMemoMessage } = this.props;
+        const { target } = e;
+        const memoTextElement = target.previousSibling;
+        const memoText = memoTextElement.innerHTML;
+
+        // Verify that the MEMO text starts with '#'
+        if (memoText.indexOf('#') === 0) {
+            setMemoMessage(memoText);
+            showDecodeMemo();
         }
     }
 
@@ -53,21 +76,20 @@ export class Memo extends React.Component {
             fromAccount,
             fromNegativeRepUser,
         } = this.props;
+
         const isEncoded = /^#/.test(text);
 
         const isFromBadActor = BadActorList.indexOf(fromAccount) > -1;
 
         if (!text || text.length < 1) return <span />;
 
-        let renderText = '';
+        let renderText = text;
 
-        if (!isEncoded) {
-            renderText = text;
-        } else if (memo_private && myAccount) {
+        if (isEncoded && memo_private && myAccount) {
             renderText = decodeMemo(memo_private, text);
         }
 
-        // show warning if not permissino to view the memo
+        // show warning if not permission to view the memo
         let noPermission = false;
         if (isEncoded) {
             let msg = null;
@@ -82,7 +104,9 @@ export class Memo extends React.Component {
             }
         }
 
-        if (isFromBadActor && !this.state.revealMemo) {
+        const { revealMemo } = this.state;
+
+        if (isFromBadActor && !revealMemo) {
             renderText = (
                 <div className="bad-actor-warning">
                     <div className="bad-actor-caution">
@@ -91,7 +115,9 @@ export class Memo extends React.Component {
                     <div className="bad-actor-explained">
                         {tt('transferhistoryrow_jsx.bad_actor_explained')}
                     </div>
+                    {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events */}
                     <div
+                        tabIndex={0}
                         className="ptc bad-actor-reveal-memo"
                         role="button"
                         onClick={this.onRevealMemo}
@@ -100,7 +126,7 @@ export class Memo extends React.Component {
                     </div>
                 </div>
             );
-        } else if (fromNegativeRepUser && !this.state.revealMemo) {
+        } else if (fromNegativeRepUser && !revealMemo) {
             renderText = (
                 <div className="from-negative-rep-user-warning">
                     <div className="from-negative-rep-user-caution">
@@ -113,7 +139,9 @@ export class Memo extends React.Component {
                             'transferhistoryrow_jsx.from_negative_rep_user_explained'
                         )}
                     </div>
+                    {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events */}
                     <div
+                        tabIndex={0}
                         className="ptc from-negative-rep-user-reveal-memo"
                         role="button"
                         onClick={this.onRevealMemo}
@@ -134,21 +162,56 @@ export class Memo extends React.Component {
             'Memo--noPermission': noPermission,
         });
 
-        return <span className={classes}>{renderText}</span>;
+        return (
+            <div className={classes}>
+                <div className="Memo__text">{renderText}</div>
+                {isEncoded && !memo_private && myAccount && (
+                    <button
+                        type="button"
+                        className="button hollow tiny"
+                        onClick={this.decodeMemoElement.bind(this)}
+                    >
+                        Decode MEMO
+                    </button>
+                )}
+            </div>
+        );
     }
 }
 
-export default connect((state, ownProps) => {
-    const currentUser = state.user.get('current');
-    const myAccount =
-        currentUser && ownProps.username === currentUser.get('username');
-    const memo_private =
-        myAccount && currentUser
-            ? currentUser.getIn(['private_keys', 'memo_private'])
-            : null;
-    const fromNegativeRepUser =
-        repLog10(
-            state.global.getIn(['accounts', ownProps.fromAccount, 'reputation'])
-        ) < MINIMUM_REPUTATION;
-    return { ...ownProps, memo_private, myAccount, fromNegativeRepUser };
-})(Memo);
+Memo.propTypes = propTypes;
+Memo.defaultProps = defaultProps;
+
+export default connect(
+    (state, ownProps) => {
+        const currentUser = state.user.get('current');
+        const myAccount =
+            currentUser && ownProps.username === currentUser.get('username');
+        const memo_private =
+            myAccount && currentUser
+                ? currentUser.getIn(['private_keys', 'memo_private'])
+                : null;
+        const fromNegativeRepUser =
+            repLog10(
+                state.global.getIn([
+                    'accounts',
+                    ownProps.fromAccount,
+                    'reputation',
+                ])
+            ) < MINIMUM_REPUTATION;
+        return {
+            ...ownProps,
+            memo_private,
+            myAccount,
+            fromNegativeRepUser,
+        };
+    },
+    (dispatch) => ({
+        showDecodeMemo: () => {
+            dispatch(userActions.showDecodeMemo());
+        },
+        setMemoMessage: (encodedText) => {
+            dispatch(userActions.setMemoMessage(encodedText));
+        },
+    })
+)(Memo);

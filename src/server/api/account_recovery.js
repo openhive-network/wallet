@@ -1,8 +1,8 @@
 import koa_router from 'koa-router';
 import koa_body from 'koa-body';
-import models from 'db/models';
+import models, { esc, escAttrs } from 'db/models';
 import config from 'config';
-import { esc, escAttrs } from 'db/models';
+
 import { getRemoteIp, rateLimitReq, checkCSRF } from 'server/utils/misc';
 import { broadcast } from '@hiveio/hive-js';
 
@@ -11,7 +11,7 @@ export default function useAccountRecoveryApi(app) {
     app.use(router.routes());
     const koaBody = koa_body();
 
-    router.post('/initiate_account_recovery', koaBody, function*() {
+    router.post('/initiate_account_recovery', koaBody, function* () {
         if (rateLimitReq(this, this.req)) return;
         let params = this.request.body;
         params = typeof params === 'string' ? JSON.parse(params) : params;
@@ -41,9 +41,9 @@ export default function useAccountRecoveryApi(app) {
         this.redirect('/connect/' + params.provider);
     });
 
-    router.get('/account_recovery_confirmation/:code', function*() {
+    router.get('/account_recovery_confirmation/:code', function* () {
         if (rateLimitReq(this, this.req)) return;
-        const code = this.params.code;
+        const { code } = this.params;
         if (!code) return this.throw('no confirmation code', 404);
         const arec = yield models.AccountRecoveryRequest.findOne({
             attributes: ['id', 'account_name', 'owner_key'],
@@ -72,7 +72,7 @@ export default function useAccountRecoveryApi(app) {
         this.body = code;
     });
 
-    router.post('/api/v1/request_account_recovery', koaBody, function*() {
+    router.post('/api/v1/request_account_recovery', koaBody, function* () {
         if (rateLimitReq(this, this.req)) return;
         let params = this.request.body;
         params = typeof params === 'string' ? JSON.parse(params) : params;
@@ -171,7 +171,7 @@ export default function useAccountRecoveryApi(app) {
     router.post(
         '/api/v1/initiate_account_recovery_with_email',
         koaBody,
-        function*() {
+        function* () {
             const params = this.request.body;
             const { csrf, contact_email, account_name, owner_key } =
                 typeof params === 'string' ? JSON.parse(params) : params;

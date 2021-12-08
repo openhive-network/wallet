@@ -6,7 +6,7 @@ import {
 const iframeWhitelist = [
     {
         re: /^(https?:)?\/\/player.vimeo.com\/video\/.*/i,
-        fn: src => {
+        fn: (src) => {
             // <iframe src="https://player.vimeo.com/video/179213493" width="640" height="360" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
             if (!src) return null;
             const m = src.match(
@@ -18,13 +18,13 @@ const iframeWhitelist = [
     },
     {
         re: /^(https?:)?\/\/www.youtube.com\/embed\/.*/i,
-        fn: src => {
+        fn: (src) => {
             return src.replace(/\?.+$/, ''); // strip query string (yt: autoplay=1,controls=0,showinfo=0, etc)
         },
     },
     {
         re: /^https:\/\/w.soundcloud.com\/player\/.*/i,
-        fn: src => {
+        fn: (src) => {
             if (!src) return null;
             // <iframe width="100%" height="450" scrolling="no" frameborder="no" src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/257659076&amp;auto_play=false&amp;hide_related=false&amp;show_comments=true&amp;show_user=true&amp;show_reposts=false&amp;visual=true"></iframe>
             const m = src.match(/url=(.+?)&/);
@@ -39,7 +39,7 @@ const iframeWhitelist = [
     },
     {
         re: /^(https?:)?\/\/player.twitch.tv\/.*/i,
-        fn: src => {
+        fn: (src) => {
             //<iframe src="https://player.twitch.tv/?channel=ninja" frameborder="0" allowfullscreen="true" scrolling="no" height="378" width="620">
             return src;
         },
@@ -139,7 +139,7 @@ export default ({
 
             // replace http:// with // to force https when needed
             src = src.replace(/^http:\/\//i, '//');
-            let atts = { src };
+            const atts = { src };
             if (alt && alt !== '') atts.alt = alt;
             return { tagName, attribs: atts };
         },
@@ -155,7 +155,7 @@ export default ({
                 'videoWrapper',
                 'phishy',
             ];
-            const validClass = classWhitelist.find(e => attribs.class == e);
+            const validClass = classWhitelist.find((e) => attribs.class == e);
             if (validClass) attys.class = validClass;
             if (
                 validClass === 'phishy' &&

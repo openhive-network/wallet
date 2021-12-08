@@ -1,5 +1,6 @@
-jest.mock('./utils/GDPRUserList');
 import resolveRoute, { routeRegex } from './ResolveRoute';
+
+jest.mock('./utils/GDPRUserList');
 
 describe('routeRegex', () => {
     it('should produce the desired regex patterns', () => {
@@ -11,7 +12,7 @@ describe('routeRegex', () => {
             ],
         ];
 
-        test_cases.forEach(r => {
+        test_cases.forEach((r) => {
             expect(routeRegex[r[0]]).toEqual(r[1]);
         });
     });
@@ -37,7 +38,7 @@ describe('resolveRoute', () => {
         ['/@gdpr/nice345', { page: 'NotFound' }],
         ['/taggy/@gdpr/nice345', { page: 'NotFound' }],
     ];
-    test_cases.forEach(r => {
+    test_cases.forEach((r) => {
         it(`should resolve the route for the ${r[1].page} page`, () => {
             expect(resolveRoute(r[0])).toEqual(r[1]);
         });
