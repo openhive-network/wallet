@@ -322,6 +322,18 @@ class Market extends React.Component {
                         <td>{o.hive}</td>
                         <td>{o.hbd.replace('HBD', DEBT_TOKEN_SHORT)}</td>
                         <td>
+                            {(
+                                (1 -
+                                    o.for_sale /
+                                        1000 /
+                                        parseFloat(
+                                            o.sell_price.base.split(' ')[0]
+                                        )) *
+                                100
+                            ).toFixed(2)}
+                            %
+                        </td>
+                        <td>
                             <a
                                 href="#"
                                 onClick={(e) => cancelOrderClick(e, o.orderid)}
@@ -403,6 +415,17 @@ class Market extends React.Component {
                                 }
                             >
                                 {`${DEBT_TOKEN_SHORT} (${CURRENCY_SIGN})`}
+                            </th>
+                            <th
+                                className={classNames(
+                                    activeClass('filled'),
+                                    'sortable'
+                                )}
+                                onClick={(e) =>
+                                    handleToggleOpenOrdersSort('filled')
+                                }
+                            >
+                                Filled
                             </th>
                             <th>{tt('market_jsx.action')}</th>
                         </tr>
