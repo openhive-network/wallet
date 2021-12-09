@@ -273,7 +273,7 @@ function* broadcastPayload({
         yield new Promise((resolve, reject) => {
             // Bump transaction (for live UI testing).. Put 0 in now (no effect),
             // to enable browser's autocomplete and help prevent typos.
-            const { env } = process;
+            const env = process.env;
             const bump = env.BROWSER
                 ? parseInt(localStorage.getItem('bump') || 0)
                 : 0;
