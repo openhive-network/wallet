@@ -1,14 +1,12 @@
 import React from 'react';
+import _ from 'lodash';
 import PropTypes from 'prop-types';
-import { browserHistory } from 'react-router';
-import { Link } from 'react-router';
+import { browserHistory, Link } from 'react-router';
 import { connect } from 'react-redux';
-import Icon from 'app/components/elements/Icon';
-import resolveRoute from 'app/ResolveRoute';
 import tt from 'counterpart';
+
+import resolveRoute from 'app/ResolveRoute';
 import { APP_NAME } from 'app/client_config';
-import SearchInput from 'app/components/elements/SearchInput';
-import IconButton from 'app/components/elements/IconButton';
 import DropdownMenu from 'app/components/elements/DropdownMenu';
 import * as userActions from 'app/redux/UserReducer';
 import * as appActions from 'app/redux/AppReducer';
@@ -16,20 +14,20 @@ import Userpic from 'app/components/elements/Userpic';
 import { SIGNUP_URL } from 'shared/constants';
 import HiveLogo from 'app/components/elements/HiveLogo';
 import normalizeProfile from 'app/utils/NormalizeProfile';
+import UserpicInfoWrapper from 'app/components/elements/UserpicInfoWrapper';
+
+const propTypes = {
+    // eslint-disable-next-line react/forbid-prop-types
+    account_meta: PropTypes.object,
+    pathname: PropTypes.string,
+};
+
+const defaultProps = {
+    account_meta: {},
+    pathname: '',
+};
 
 class Header extends React.Component {
-    static propTypes = {
-        current_account_name: PropTypes.string,
-        account_meta: PropTypes.object,
-        category: PropTypes.string,
-        order: PropTypes.string,
-        pathname: PropTypes.string,
-    };
-
-    constructor() {
-        super();
-    }
-
     componentDidUpdate(prevProps) {
         const { loggedIn } = this.props;
         if (prevProps.loggedIn && !loggedIn) {
@@ -41,53 +39,44 @@ class Header extends React.Component {
 
     render() {
         const {
-            category,
-            order,
             pathname,
-            current_account_name,
             username,
             showLogin,
             logout,
             loggedIn,
-            vertical,
             nightmodeEnabled,
             toggleNightmode,
-            userPath,
             showSidePanel,
-            navigate,
             account_meta,
         } = this.props;
 
         /*Set the document.title on each header render.*/
         const route = resolveRoute(pathname);
-        const home_account = false;
         let page_title = route.page;
 
-        const topic = '';
-        let page_name = null;
-        if (route.page === 'WalletIndex') {
-        } else if (route.page == 'Privacy') {
+        if (route.page === 'Privacy') {
             page_title = tt('navigation.privacy_policy');
         } else if (route.page == 'Tos') {
             page_title = tt('navigation.terms_of_service');
-        } else if (route.page == 'ChangePassword') {
+        } else if (route.page === 'ChangePassword') {
             page_title = tt('header_jsx.change_account_password');
-        } else if (route.page == 'CreateAccount') {
+        } else if (route.page === 'CreateAccount') {
             page_title = tt('header_jsx.create_account');
-        } else if (route.page == 'Approval') {
+        } else if (route.page === 'Approval') {
             page_title = `Account Confirmation`;
         } else if (
-            route.page == 'RecoverAccountStep1' ||
-            route.page == 'RecoverAccountStep2'
+            route.page === 'RecoverAccountStep1' ||
+            route.page === 'RecoverAccountStep2'
         ) {
             page_title = tt('header_jsx.stolen_account_recovery');
         } else if (route.page === 'Proposals') {
             page_title = tt('header_jsx.steem_proposals');
         } else if (route.page === 'UserProfile') {
             const user_name = route.params[0].slice(1);
-            const name = account_meta
-                ? normalizeProfile(account_meta.toJS()).name
-                : null;
+            const name =
+                account_meta && !_.isEmpty(account_meta)
+                    ? normalizeProfile(account_meta.toJS()).name
+                    : null;
             const user_title = name ? `${name} (@${user_name})` : user_name;
             page_title = user_title;
             if (route.params[1] === 'curation-rewards') {
@@ -101,7 +90,7 @@ class Header extends React.Component {
                 });
             }
         } else {
-            page_name = ''; //page_title = route.page.replace( /([a-z])([A-Z])/g, '$1 $2' ).toLowerCase();
+            page_title = ''; //page_title = route.page.replace( /([a-z])([A-Z])/g, '$1 $2' ).toLowerCase();
         }
 
         // Format first letter of all titles and lowercase user name
@@ -110,10 +99,16 @@ class Header extends React.Component {
                 page_title.charAt(0).toUpperCase() + page_title.slice(1);
         }
 
+        if (
+            process.env.BROWSER &&
+            route.page !== 'Post' &&
+            route.page !== 'PostNoCategory'
+        )
+            document.title = page_title + ' — ' + APP_NAME;
+
         const wallet_link = `/@${username}/transfers`;
         const reset_password_link = `/@${username}/password`;
         const settings_link = `/@${username}/settings`;
-        const pathCheck = userPath === '/submit.html' ? true : null;
 
         const user_menu = [
             {
@@ -175,22 +170,27 @@ class Header extends React.Component {
                         {/*USER AVATAR */}
                         {loggedIn && (
                             <DropdownMenu
-                                className={'Header__usermenu'}
+                                className="Header__usermenu"
                                 items={user_menu}
                                 title={username}
                                 el="span"
                                 selected={tt('g.rewards')}
                                 position="left"
                             >
-                                <li className={'Header__userpic '}>
+                                <li className="Header__userpic ">
                                     <span title={username}>
-                                        <Userpic account={username} />
+                                        <UserpicInfoWrapper account={username}>
+                                            <Userpic account={username} />
+                                        </UserpicInfoWrapper>
                                     </span>
                                 </li>
                             </DropdownMenu>
                         )}
-                        {/*HAMBURGER*/}
+
+                        {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events */}
                         <span
+                            role="button"
+                            tabIndex={0}
                             onClick={showSidePanel}
                             className="toggle-menu Header__hamburger"
                         >
@@ -202,6 +202,9 @@ class Header extends React.Component {
         );
     }
 }
+
+Header.propTypes = propTypes;
+Header.defaultProps = defaultProps;
 
 export { Header as _Header_ };
 
@@ -227,9 +230,8 @@ const mapStateToProps = (state, ownProps) => {
     const userPath = state.routing.locationBeforeTransitions.pathname;
     const username = state.user.getIn(['current', 'username']);
     const loggedIn = !!username;
-    const current_account_name = username
-        ? username
-        : state.offchain.get('account');
+
+    console.log('loggedIn', loggedIn, username);
 
     return {
         username,
@@ -237,21 +239,20 @@ const mapStateToProps = (state, ownProps) => {
         userPath,
         nightmodeEnabled: state.app.getIn(['user_preferences', 'nightmode']),
         account_meta: user_profile,
-        current_account_name,
         ...ownProps,
     };
 };
 
-const mapDispatchToProps = dispatch => ({
-    showLogin: e => {
+const mapDispatchToProps = (dispatch) => ({
+    showLogin: (e) => {
         if (e) e.preventDefault();
         dispatch(userActions.showLogin({ type: 'basic' }));
     },
-    logout: e => {
+    logout: (e) => {
         if (e) e.preventDefault();
         dispatch(userActions.logout({ type: 'default' }));
     },
-    toggleNightmode: e => {
+    toggleNightmode: (e) => {
         if (e) e.preventDefault();
         dispatch(appActions.toggleNightmode());
     },
@@ -263,9 +264,6 @@ const mapDispatchToProps = dispatch => ({
     },
 });
 
-const connectedHeader = connect(
-    mapStateToProps,
-    mapDispatchToProps
-)(Header);
+const connectedHeader = connect(mapStateToProps, mapDispatchToProps)(Header);
 
 export default connectedHeader;
