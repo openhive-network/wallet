@@ -1,5 +1,5 @@
 .UserProfile {
-    margin-top: -1.5rem;
+    margin-top: 0;
 
     .articles {
       @include MQ(M) {
@@ -82,7 +82,7 @@
 .UserProfile__banner {
     text-align: center;
     color: $white;
-    margin-top: 5.58rem;
+    margin-top: 0;
     a {
         color: $white;
     }

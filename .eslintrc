@@ -26,6 +26,9 @@ find node_modules/eslint-config-airbnb -name '*.js'|xargs sed -i "s/': 2/': 1/"
         ],
         "eqeqeq": 0,
         "no-cond-assign": 0,
+        "react/no-string-refs": [
+            0
+        ],
         "react/wrap-multilines": [
             0
         ],
