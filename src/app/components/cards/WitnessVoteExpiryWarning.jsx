@@ -10,7 +10,7 @@ class WitnessVoteExpiryWarning extends React.Component {
         const expiryDate = Moment(`${governance_vote_expiration_ts}Z`);
         const expiryDiff = expiryDate.diff(now, 'months');
 
-        if (expiryDiff > 3) {
+        if (expiryDiff > 3 || !expiryDiff || !expiryDate) {
             return null;
         }
 
