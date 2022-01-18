@@ -28,7 +28,7 @@ mkdir tmp
 
 #### Install dependencies
 
-Install at least Node v8.7 if you don't already have it. We recommend using
+Install at least Node v12.22.1 if you don't already have it. We recommend using
 `nvm` to do this as it's both the simplest way to install and manage
 installed version(s) of node. If you need `nvm`, you can get it at
 [https://github.com/creationix/nvm](https://github.com/creationix/nvm).
