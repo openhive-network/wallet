@@ -234,7 +234,10 @@
         "months": "months",
         "years": "years",
         "cannot_decrypt_memo": "cannot decrypt memo with current login method",
-        "cannot_encrypt_memo": "cannot encrypt memo with current login method"
+        "cannot_encrypt_memo": "cannot encrypt memo with current login method",
+        "rcLevel": "Resource Credits (RC) level: %(rc_percent)s%%.",
+        "rcFullIn": "Full in %(duration)s",
+        "governanceExpiryWarning": "Witness votes auto-expire %(duration)s after your last governance transaction. Your present votes will expire on %(date)s. Please <a href=\"/~witnesses\">update your Witness votes</a> to reset."
     },
     "navigation": {
         "about": "About Hive",

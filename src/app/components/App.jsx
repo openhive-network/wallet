@@ -1,3 +1,4 @@
+/* global $STM_Config */
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
@@ -16,8 +17,9 @@ import { serverApiRecordEvent } from 'app/utils/ServerApiClient';
 import { key_utils } from '@hiveio/hive-js/lib/auth/ecc';
 import resolveRoute from 'app/ResolveRoute';
 import { VIEW_MODE_WHISTLE } from 'shared/constants';
+import WitnessVoteExpiryWarning from 'app/components/cards/WitnessVoteExpiryWarning';
 
-const pageRequiresEntropy = path => {
+const pageRequiresEntropy = (path) => {
     const { page } = resolveRoute(path);
 
     const entropyPages = [
@@ -42,30 +44,36 @@ class App extends React.Component {
     }
 
     componentWillMount() {
+        const { loginUser } = this.props;
         if (process.env.BROWSER) localStorage.removeItem('autopost'); // July 14 '16 compromise, renamed to autopost2
-        this.props.loginUser();
+        loginUser();
     }
 
     componentDidMount() {
-        if (pageRequiresEntropy(this.props.pathname)) {
-            this._addEntropyCollector();
+        const { pathname } = this.props;
+
+        if (pageRequiresEntropy(pathname)) {
+            this.addEntropyCollector();
         }
     }
 
     componentWillReceiveProps(np) {
+        const { pathname } = this.props;
+
         // Add listener if the next page requires entropy and the current page didn't
         if (
             pageRequiresEntropy(np.pathname) &&
-            !pageRequiresEntropy(this.props.pathname)
+            !pageRequiresEntropy(pathname)
         ) {
-            this._addEntropyCollector();
+            this.addEntropyCollector();
         } else if (!pageRequiresEntropy(np.pathname)) {
             // Remove if next page does not require entropy
-            this._removeEntropyCollector();
+            this.removeEntropyCollector();
         }
     }
 
-    _addEntropyCollector() {
+    addEntropyCollector() {
+        // eslint-disable-next-line react/no-string-refs
         if (!this.listenerActive && this.refs.App_root) {
             this.refs.App_root.addEventListener(
                 'mousemove',
@@ -76,7 +84,7 @@ class App extends React.Component {
         }
     }
 
-    _removeEntropyCollector() {
+    removeEntropyCollector() {
         if (this.listenerActive && this.refs.App_root) {
             this.refs.App_root.removeEventListener(
                 'mousemove',
@@ -88,16 +96,17 @@ class App extends React.Component {
 
     shouldComponentUpdate(nextProps, nextState) {
         const { pathname, new_visitor, nightmodeEnabled } = this.props;
+        const { showCallout } = this.state;
         const n = nextProps;
         return (
             pathname !== n.pathname ||
             new_visitor !== n.new_visitor ||
-            this.state.showCallout !== nextState.showCallout ||
+            showCallout !== nextState.showCallout ||
             nightmodeEnabled !== n.nightmodeEnabled
         );
     }
 
-    onEntropyEvent = e => {
+    onEntropyEvent = (e) => {
         if (e.type === 'mousemove')
             key_utils.addEntropy(e.pageX, e.pageY, e.screenX, e.screenY);
         else console.log('onEntropyEvent Unknown', e.type, e);
@@ -115,13 +124,15 @@ class App extends React.Component {
         const {
             params,
             children,
-            new_visitor,
             nightmodeEnabled,
             viewMode,
             pathname,
             category,
             order,
+            username,
+            error: { alert },
         } = this.props;
+        const { showCallout } = this.state;
 
         const miniHeader = false;
         const whistleView = viewMode === VIEW_MODE_WHISTLE;
@@ -132,9 +143,8 @@ class App extends React.Component {
             (params_keys.length === 2 &&
                 params_keys[0] === 'order' &&
                 params_keys[1] === 'category');
-        const alert = this.props.error;
         let callout = null;
-        if (this.state.showCallout && alert) {
+        if (showCallout && alert) {
             callout = (
                 <div className="App__announcement row">
                     <div className="column">
@@ -149,46 +159,14 @@ class App extends React.Component {
                     </div>
                 </div>
             );
-        } else if (false && ip && this.state.showCallout) {
-            callout = (
-                <div className="App__announcement row">
-                    <div className="column">
-                        <div
-                            className={classNames(
-                                'callout success',
-                                { alert },
-                                { warning },
-                                { success }
-                            )}
-                        >
-                            <CloseButton
-                                onClick={() =>
-                                    this.setState({ showCallout: false })
-                                }
-                            />
-                            <ul>
-                                <li>
-                                    /*<a href="https://steemit.com/steemit/@steemitblog/steemit-com-is-now-open-source">
-                                        ...STORY TEXT...
-                                    </a>*/
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            );
         }
-        if ($STM_Config.read_only_mode && this.state.showCallout) {
+
+        if ($STM_Config.read_only_mode && showCallout) {
             callout = (
                 <div className="App__announcement row">
                     <div className="column">
                         <div
-                            className={classNames(
-                                'callout warning',
-                                { alert },
-                                { warning },
-                                { success }
-                            )}
+                            className={classNames('callout warning', { alert })}
                         >
                             <CloseButton
                                 onClick={() =>
@@ -227,6 +205,7 @@ class App extends React.Component {
 
                 <div className="App__content">
                     {callout}
+                    <WitnessVoteExpiryWarning account={username} />
                     {children}
                 </div>
                 <Dialogs />
@@ -244,6 +223,14 @@ App.propTypes = {
     category: PropTypes.string,
     order: PropTypes.string,
     loginUser: PropTypes.func.isRequired,
+};
+
+App.defaultProps = {
+    error: '',
+    children: null,
+    pathname: '',
+    category: '',
+    order: '',
 };
 
 export default connect(
@@ -269,9 +256,10 @@ export default connect(
             pathname: ownProps.location.pathname,
             order: ownProps.params.order,
             category: ownProps.params.category,
+            username: current_account_name,
         };
     },
-    dispatch => ({
+    (dispatch) => ({
         loginUser: () => dispatch(userActions.usernamePasswordLogin({})),
     })
 )(App);
