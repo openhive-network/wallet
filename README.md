@@ -15,39 +15,6 @@ applications.
 
 ## Installation
 
-#### Docker (outdated and untested)
-
-We highly recommend using docker to run condenser in production. This is how we run the
-live hive.blog site and it is the most supported (and fastest) method of
-both building and running condenser. We will always have the latest version
-of condenser (master branch) available on Docker Hub. Configuration settings
-can be set using environment variables (see configuration section below for
-more information). If you need to install docker, you can get it at
-https://get.docker.com
-
-To bring up a running container it's as simple as this:
-
-```bash
-docker run -it -p 8080:8080 steemit/condenser
-```
-
-Environment variables can be added like this:
-
-```bash
-docker run -it --env SDC_DATABASE_URL="mysql://user:pass@hostname/databasename" -p 8080:8080 steemit/condenser
-```
-
-If you would like to modify, build, and run condenser using docker, it's as
-simple as pulling in the github repo and issuing one command to build it,
-like this:
-
-```bash
-git clone https://github.com/steemit/condenser
-cd condenser
-docker build -t="myname/condenser:mybranch" .
-docker run -it -p 8080:8080 myname/condenser:mybranch
-```
-
 ## Building from source without docker (the 'traditional' way):
 (better if you're planning to do wallet development)
 
