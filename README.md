@@ -15,47 +15,14 @@ applications.
 
 ## Installation
 
-#### Docker
-
-We highly recommend using docker to run condenser in production. This is how we run the
-live hive.blog site and it is the most supported (and fastest) method of
-both building and running condenser. We will always have the latest version
-of condenser (master branch) available on Docker Hub. Configuration settings
-can be set using environment variables (see configuration section below for
-more information). If you need to install docker, you can get it at
-https://get.docker.com
-
-To bring up a running container it's as simple as this:
-
-```bash
-docker run -it -p 8080:8080 steemit/condenser
-```
-
-Environment variables can be added like this:
-
-```bash
-docker run -it --env SDC_DATABASE_URL="mysql://user:pass@hostname/databasename" -p 8080:8080 steemit/condenser
-```
-
-If you would like to modify, build, and run condenser using docker, it's as
-simple as pulling in the github repo and issuing one command to build it,
-like this:
-
-```bash
-git clone https://github.com/steemit/condenser
-cd condenser
-docker build -t="myname/condenser:mybranch" .
-docker run -it -p 8080:8080 myname/condenser:mybranch
-```
-
 ## Building from source without docker (the 'traditional' way):
-(better if you're planning to do condenser development)
+(better if you're planning to do wallet development)
 
 #### Clone the repository and make a tmp folder
 
 ```bash
-git clone https://github.com/steemit/condenser
-cd condenser
+git clone https://gitlab.syncad.com/hive/wallet.git
+cd wallet
 mkdir tmp
 ```
 
@@ -66,17 +33,17 @@ Install at least Node v8.7 if you don't already have it. We recommend using
 installed version(s) of node. If you need `nvm`, you can get it at
 [https://github.com/creationix/nvm](https://github.com/creationix/nvm).
 
-Condenser is known to successfully build using node 8.7, npm 5.4.2, and
-yarn 1.3.2.
+Wallet is known to successfully build using node 12.22.1, npm 7.19.1, and
+yarn 1.22.17 (more recent versions will probably work, but node needs to be at least version 12.22.1).
 
 Using nvm, you would install like this:
 
 ```bash
-nvm install v8.7
+nvm install v12.22.1
 ```
 
 We use the yarn package manager instead of the default `npm`. There are
-multiple reasons for this, one being that we have `steem-js` built from
+multiple reasons for this, one being that we have `hive-js` built from
 source pulling the github repo as part of the build process and yarn
 supports this. This way the library that handles keys can be loaded by
 commit hash instead of a version name and cryptographically verified to be
@@ -86,16 +53,16 @@ afterwards you will not need to use `npm` further.
 ```bash
 npm install -g yarn
 yarn global add babel-cli
-yarn install --frozen-lockfile
+yarn install --frozen-lockfile --ignore-optional
 yarn run build
 ```
-To run condenser in production mode, run:
+To run wallet in production mode, run:
 
 ```bash
 yarn run production
 ```
 
-When launching condenser in production mode it will automatically use 1
+When launching wallet in production mode it will automatically use 1
 process per available core. You will be able to access the front-end at
 http://localhost:8080 by default.
 
@@ -159,10 +126,10 @@ node
 > .exit
 ```
 
-## Install mysql server
+## Install mysql server (optional for development, wallet will function without it)
 
 If you've followed the instructions up until this point you will already
-have a running condenser installation which is entirely acceptable for
+have a running wallet installation which is entirely acceptable for
 development purposes. It is *not required to run a SQL server for
 development*. If you're running a full-fledged site however, you will want
 to set one up.
