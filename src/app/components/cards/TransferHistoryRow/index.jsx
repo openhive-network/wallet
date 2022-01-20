@@ -18,6 +18,8 @@ class TransferHistoryRow extends React.Component {
             powerdown_vests,
             reward_vests,
             socialUrl,
+            incoming,
+            outgoing,
         } = this.props;
         // context -> account perspective
 
@@ -287,8 +289,23 @@ class TransferHistoryRow extends React.Component {
         } else {
             message = JSON.stringify({ type, ...data }, null, 2);
         }
+
+        function setFilters() {
+            if (incoming === outgoing) {
+                return ' Trans';
+            }
+            if (data.to !== context && incoming) {
+                return 'hidden';
+            }
+            if (data.from !== context && outgoing === true) {
+                return 'hidden';
+            } else {
+                return 'Trans';
+            }
+        }
+
         return (
-            <tr key={op[0]} className="Trans">
+            <tr key={op[0]} className={setFilters()}>
                 <td>
                     <TimeAgoWrapper date={op[1].timestamp} />
                 </td>

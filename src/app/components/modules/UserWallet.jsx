@@ -28,7 +28,7 @@ import * as transactionActions from 'app/redux/TransactionReducer';
 import * as globalActions from 'app/redux/GlobalReducer';
 import DropdownMenu from 'app/components/elements/DropdownMenu';
 import { getAllTransferHistory } from 'app/utils/hiveApi';
-
+import Filters from '../elements/Filters';
 const assetPrecision = 1000;
 
 const VALID_OPERATION_TYPES = [
@@ -54,6 +54,8 @@ class UserWallet extends React.Component {
         super();
         this.state = {
             claimInProgress: false,
+            incoming: false,
+            outgoing: false,
         };
         this.onShowDepositHive = (e) => {
             if (e && e.preventDefault) e.preventDefault();
@@ -355,6 +357,8 @@ class UserWallet extends React.Component {
                     return null;
                 return (
                     <TransferHistoryRow
+                        incoming={this.state.incoming}
+                        outgoing={this.state.outgoing}
                         key={idx++}
                         op={item.toJS()}
                         context={account.get('name')}
@@ -674,6 +678,14 @@ class UserWallet extends React.Component {
                 console.error('Report days input field missing');
             }
         };
+        ///// Filters
+
+        const handleIncoming = () => {
+            this.setState({ incoming: !this.state.incoming });
+        };
+        const handleOutgoing = () => {
+            this.setState({ outgoing: !this.state.outgoing });
+        };
 
         return (
             <div className="UserWallet">
@@ -960,7 +972,14 @@ class UserWallet extends React.Component {
                         </div>
                     </div>
                 )}
-
+                <div className="row">
+                    <div className="column small-12">
+                        <Filters
+                            handleIncoming={handleIncoming}
+                            handleOutgoing={handleOutgoing}
+                        />
+                    </div>
+                </div>
                 <div className="row">
                     <div className="column small-12">
                         {/** history */}
