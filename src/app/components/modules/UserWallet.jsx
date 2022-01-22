@@ -29,6 +29,7 @@ import * as globalActions from 'app/redux/GlobalReducer';
 import DropdownMenu from 'app/components/elements/DropdownMenu';
 import { getAllTransferHistory } from 'app/utils/hiveApi';
 import Filters from '../elements/Filters';
+
 const assetPrecision = 1000;
 
 const VALID_OPERATION_TYPES = [
@@ -56,6 +57,9 @@ class UserWallet extends React.Component {
             claimInProgress: false,
             incoming: false,
             outgoing: false,
+            formValue: '',
+            fromUser: false,
+            toUser: false,
         };
         this.onShowDepositHive = (e) => {
             if (e && e.preventDefault) e.preventDefault();
@@ -163,6 +167,28 @@ class UserWallet extends React.Component {
 
         // do not render if state appears to contain only lite account info
         if (!account.has('vesting_shares')) return null;
+
+        const receivedNamesArray = account
+            .get('transfer_history')
+            .toJS()
+            .map((acc) => acc[1].op[1].from)
+            .filter((el) => !!el)
+            .reverse();
+
+        const transferNamesArray = account
+            .get('transfer_history')
+            .toJS()
+            .map((acc) => acc[1].op[1].to)
+            .filter((el) => !!el)
+            .reverse();
+
+        //remove current account name from array
+        const receivedFromNames = receivedNamesArray.filter(
+            (name) => name !== account.get('name')
+        );
+        const transferToNames = transferNamesArray.filter(
+            (name) => name !== account.get('name')
+        );
 
         const vesting_hive = vestingHive(account.toJS(), gprops);
         const delegated_hive = delegatedHive(account.toJS(), gprops);
@@ -330,7 +356,6 @@ class UserWallet extends React.Component {
         if (isMyAccount) {
             estimate_output = <p>{total_value}&nbsp; &nbsp; &nbsp;</p>;
         }
-
         /// transfer log
         let idx = 0;
         const transfer_log = account
@@ -355,10 +380,16 @@ class UserWallet extends React.Component {
                     data.vesting_payout === '0.000000 VESTS'
                 )
                     return null;
+
                 return (
                     <TransferHistoryRow
+                        formValue={this.state.formValue}
                         incoming={this.state.incoming}
                         outgoing={this.state.outgoing}
+                        fromUser={this.state.fromUser}
+                        toUser={this.state.toUser}
+                        receivedFromNames={receivedFromNames}
+                        transferToNames={transferToNames}
                         key={idx++}
                         op={item.toJS()}
                         context={account.get('name')}
@@ -687,6 +718,20 @@ class UserWallet extends React.Component {
             this.setState({ outgoing: !this.state.outgoing });
         };
 
+        const handleFromUser = () => {
+            this.setState({ fromUser: !this.state.fromUser });
+        };
+        const handleToUser = () => {
+            this.setState({ toUser: !this.state.toUser });
+        };
+
+        const submitSearchUserForm = (e) => {
+            this.setState({ formValue: e.target.value });
+        };
+
+        // const fromUsername = this.state.fromUser;
+        // const toUsername = this.state.toUser;
+
         return (
             <div className="UserWallet">
                 <div className="row">
@@ -977,6 +1022,10 @@ class UserWallet extends React.Component {
                         <Filters
                             handleIncoming={handleIncoming}
                             handleOutgoing={handleOutgoing}
+                            handleFromUser={handleFromUser}
+                            handleToUser={handleToUser}
+                            submitSearchUserForm={submitSearchUserForm}
+                            formValue={this.state.formValue}
                         />
                     </div>
                 </div>

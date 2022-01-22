@@ -20,6 +20,11 @@ class TransferHistoryRow extends React.Component {
             socialUrl,
             incoming,
             outgoing,
+            formValue,
+            fromUser,
+            toUser,
+            receivedFromNames,
+            transferToNames,
         } = this.props;
         // context -> account perspective
 
@@ -290,7 +295,37 @@ class TransferHistoryRow extends React.Component {
             message = JSON.stringify({ type, ...data }, null, 2);
         }
 
-        function setFilters() {
+        function autocompleteMatch(input) {
+            if (input == '') {
+                return [];
+            }
+            if (fromUser === true) {
+                return receivedFromNames.filter(function (name) {
+                    if (name.match(input)) {
+                        return name;
+                    }
+                });
+            }
+            if (toUser === true) {
+                return transferToNames.filter(function (name) {
+                    if (name.match(input)) {
+                        return name;
+                    }
+                });
+            }
+        }
+
+        const autocomplete = autocompleteMatch(formValue);
+        const isFromNamesEqual = autocomplete.filter(
+            (name) => name === data.from
+        );
+        const isFromNamesEqualToString =
+            String(isFromNamesEqual) !== '' && String(isFromNamesEqual);
+        const isToNamesEqual = autocomplete.filter((name) => name === data.to);
+        const isToNamesEqualToString =
+            String(isToNamesEqual) !== '' && String(isToNamesEqual);
+
+        function handleIncomingOutgoingFilters() {
             if (incoming === outgoing) {
                 return ' Trans';
             }
@@ -304,8 +339,45 @@ class TransferHistoryRow extends React.Component {
             }
         }
 
+        function handleFromFilterSearch() {
+            if (formValue !== '') {
+                if (isFromNamesEqualToString) {
+                    return 'Trans';
+                } else {
+                    return 'hidden';
+                }
+            } else return 'Trans';
+        }
+
+        function handleToFilterSearch() {
+            if (formValue !== '') {
+                if (isToNamesEqualToString) {
+                    return 'Trans';
+                } else {
+                    return 'hidden';
+                }
+            } else return 'Trans';
+        }
+
+        function useFilters() {
+            if (incoming || outgoing || (incoming && outgoing)) {
+                return handleIncomingOutgoingFilters();
+            }
+            if (fromUser === true) {
+                return handleFromFilterSearch();
+            }
+            if (toUser === true) {
+                return handleToFilterSearch();
+            }
+        }
+
+        // const receiver = data.from === context && data.to;
+        // const sender = data.to === context && data.from;
+
+        // let receiversArray = [];
+        // receiversArray.push(receiver);
         return (
-            <tr key={op[0]} className={setFilters()}>
+            <tr key={op[0]} className={useFilters()}>
                 <td>
                     <TimeAgoWrapper date={op[1].timestamp} />
                 </td>
