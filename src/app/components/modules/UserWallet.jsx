@@ -60,6 +60,7 @@ class UserWallet extends React.Component {
             formValue: '',
             fromUser: false,
             toUser: false,
+            excludeLessThan1: false,
         };
         this.onShowDepositHive = (e) => {
             if (e && e.preventDefault) e.preventDefault();
@@ -388,6 +389,7 @@ class UserWallet extends React.Component {
                         outgoing={this.state.outgoing}
                         fromUser={this.state.fromUser}
                         toUser={this.state.toUser}
+                        excludeLessThan1={this.state.excludeLessThan1}
                         receivedFromNames={receivedFromNames}
                         transferToNames={transferToNames}
                         key={idx++}
@@ -729,6 +731,10 @@ class UserWallet extends React.Component {
             this.setState({ formValue: e.target.value });
         };
 
+        const handleExcludeLessThan1 = () => {
+            this.setState({ excludeLessThan1: !this.state.excludeLessThan1 });
+        };
+
         // const fromUsername = this.state.fromUser;
         // const toUsername = this.state.toUser;
 
@@ -1020,6 +1026,7 @@ class UserWallet extends React.Component {
                 <div className="row">
                     <div className="column small-12">
                         <Filters
+                            handleExcludeLessThan1={handleExcludeLessThan1}
                             handleIncoming={handleIncoming}
                             handleOutgoing={handleOutgoing}
                             handleFromUser={handleFromUser}

@@ -14,6 +14,7 @@ class Filters extends React.Component {
             handleOutgoing,
             handleFromUser,
             handleToUser,
+            handleExcludeLessThan1,
             submitSearchUserForm,
             formValue,
         } = this.props;
@@ -33,7 +34,7 @@ class Filters extends React.Component {
                                 : 'filter__button'
                         }
                     >
-                        Filters
+                        <p>Filters</p>
                     </button>
                     <section
                         className="filters__section"
@@ -42,7 +43,7 @@ class Filters extends React.Component {
                         {/* for hidden by default use : !this.state.handleShowFilters  */}
                         <div className="row">
                             <div className="column small-4">
-                                <p>Show incoming/outgoing transactions</p>
+                                <p>Transactions</p>
                                 <div>
                                     <input
                                         onChange={handleIncoming}
@@ -61,9 +62,20 @@ class Filters extends React.Component {
                                     />
                                     <label for="outgoing">Outgoing</label>
                                 </div>
+                                <div>
+                                    <input
+                                        onChange={handleExcludeLessThan1}
+                                        type="checkbox"
+                                        id="lessThan1"
+                                        name="lessThan1"
+                                    />
+                                    <label for="lessThan1">
+                                        Exclude less than 1 HBD/HIVE
+                                    </label>
+                                </div>
                             </div>
                             <div className="column small-4">
-                                <p>Show transactions from/to specific user</p>
+                                <p>Filter By User</p>
                                 <div>
                                     <input
                                         onChange={handleFromUser}

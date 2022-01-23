@@ -23,6 +23,7 @@ class TransferHistoryRow extends React.Component {
             formValue,
             fromUser,
             toUser,
+            excludeLessThan1,
             receivedFromNames,
             transferToNames,
         } = this.props;
@@ -325,6 +326,8 @@ class TransferHistoryRow extends React.Component {
         const isToNamesEqualToString =
             String(isToNamesEqual) !== '' && String(isToNamesEqual);
 
+        const firstAmountChar = String(data.amount)[0];
+
         function handleIncomingOutgoingFilters() {
             if (incoming === outgoing) {
                 return ' Trans';
@@ -337,6 +340,12 @@ class TransferHistoryRow extends React.Component {
             } else {
                 return 'Trans';
             }
+        }
+
+        function handleExcludeLessThan1Filter() {
+            if (firstAmountChar === '0' && excludeLessThan1 === true) {
+                return 'hidden';
+            } else return 'Trans';
         }
 
         function handleFromFilterSearch() {
@@ -368,6 +377,9 @@ class TransferHistoryRow extends React.Component {
             }
             if (toUser === true) {
                 return handleToFilterSearch();
+            }
+            if (excludeLessThan1 === true) {
+                return handleExcludeLessThan1Filter();
             }
         }
 
