@@ -296,6 +296,9 @@ class TransferHistoryRow extends React.Component {
             message = JSON.stringify({ type, ...data }, null, 2);
         }
 
+        ///Filters
+
+        //search user input autocomplete
         function autocompleteMatch(input) {
             if (input == '') {
                 return [];
@@ -332,10 +335,20 @@ class TransferHistoryRow extends React.Component {
             if (incoming === outgoing) {
                 return ' Trans';
             }
-            if (data.to !== context && incoming) {
+            if (
+                (data.to !== context && incoming) ||
+                (incoming === true &&
+                    excludeLessThan1 === true &&
+                    firstAmountChar === '0')
+            ) {
                 return 'hidden';
             }
-            if (data.from !== context && outgoing === true) {
+            if (
+                (data.from !== context && outgoing === true) ||
+                (outgoing === true &&
+                    excludeLessThan1 === true &&
+                    firstAmountChar === '0')
+            ) {
                 return 'hidden';
             } else {
                 return 'Trans';
@@ -373,9 +386,15 @@ class TransferHistoryRow extends React.Component {
                 return handleIncomingOutgoingFilters();
             }
             if (fromUser === true) {
+                if (firstAmountChar === '0' && excludeLessThan1 === true) {
+                    return 'hidden';
+                }
                 return handleFromFilterSearch();
             }
             if (toUser === true) {
+                if (firstAmountChar === '0' && excludeLessThan1 === true) {
+                    return 'hidden';
+                }
                 return handleToFilterSearch();
             }
             if (excludeLessThan1 === true) {
@@ -383,11 +402,6 @@ class TransferHistoryRow extends React.Component {
             }
         }
 
-        // const receiver = data.from === context && data.to;
-        // const sender = data.to === context && data.from;
-
-        // let receiversArray = [];
-        // receiversArray.push(receiver);
         return (
             <tr key={op[0]} className={useFilters()}>
                 <td>

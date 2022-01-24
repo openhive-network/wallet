@@ -727,7 +727,7 @@ class UserWallet extends React.Component {
             this.setState({ toUser: !this.state.toUser });
         };
 
-        const submitSearchUserForm = (e) => {
+        const handleSearchUserInput = (e) => {
             this.setState({ formValue: e.target.value });
         };
 
@@ -1031,7 +1031,7 @@ class UserWallet extends React.Component {
                             handleOutgoing={handleOutgoing}
                             handleFromUser={handleFromUser}
                             handleToUser={handleToUser}
-                            submitSearchUserForm={submitSearchUserForm}
+                            handleSearchUserInput={handleSearchUserInput}
                             formValue={this.state.formValue}
                         />
                     </div>

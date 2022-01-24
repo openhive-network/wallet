@@ -15,7 +15,7 @@ class Filters extends React.Component {
             handleFromUser,
             handleToUser,
             handleExcludeLessThan1,
-            submitSearchUserForm,
+            handleSearchUserInput,
             formValue,
         } = this.props;
 
@@ -40,7 +40,6 @@ class Filters extends React.Component {
                         className="filters__section"
                         hidden={!this.state.showFilters}
                     >
-                        {/* for hidden by default use : !this.state.handleShowFilters  */}
                         <div className="row">
                             <div className="column small-4">
                                 <p>Transactions</p>
@@ -99,7 +98,7 @@ class Filters extends React.Component {
                                 <input
                                     className="user-search__input"
                                     value={formValue}
-                                    onChange={submitSearchUserForm}
+                                    onChange={handleSearchUserInput}
                                     type="text"
                                     name="user-search"
                                     placeholder="username"
@@ -109,9 +108,6 @@ class Filters extends React.Component {
 
                         <hr />
                     </section>
-
-                    {/* <button onClick={handleIncoming}>Incoming</button>
-                <button onClick={handleOutgoing}>Outgoing</button> */}
                 </div>
             </div>
         );
