@@ -38,7 +38,7 @@ class Filters extends React.Component {
                     </button>
                     <section
                         className="filters__section"
-                        hidden={!this.state.showFilters}
+                        hidden={this.state.showFilters}
                     >
                         <div className="row">
                             <div className="column small-4">
@@ -82,7 +82,7 @@ class Filters extends React.Component {
                                         id="outgoing"
                                         name="outgoing"
                                     />
-                                    <label for="outgoing">From</label>
+                                    <label for="outgoing">Received from</label>
                                 </div>
                                 <div>
                                     <input
@@ -91,18 +91,20 @@ class Filters extends React.Component {
                                         id="outgoing"
                                         name="outgoing"
                                     />
-                                    <label for="outgoing">To</label>
+                                    <label for="outgoing">Transfer to</label>
                                 </div>
-
-                                <label for="user-search">Search by user</label>
-                                <input
-                                    className="user-search__input"
-                                    value={formValue}
-                                    onChange={handleSearchUserInput}
-                                    type="text"
-                                    name="user-search"
-                                    placeholder="username"
-                                />
+                                <div className="user-search__input">
+                                    <label for="user-search">
+                                        Search by user
+                                    </label>
+                                    <input
+                                        value={formValue}
+                                        onChange={handleSearchUserInput}
+                                        type="text"
+                                        name="user-search"
+                                        placeholder="username"
+                                    />
+                                </div>
                             </div>
                         </div>
 

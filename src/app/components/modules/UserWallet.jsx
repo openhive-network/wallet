@@ -191,6 +191,12 @@ class UserWallet extends React.Component {
             (name) => name !== account.get('name')
         );
 
+        const autocomplete = autocompleteMatch(
+            this.state.formValue,
+            this.state.fromUser,
+            this.state.toUser
+        );
+
         const vesting_hive = vestingHive(account.toJS(), gprops);
         const delegated_hive = delegatedHive(account.toJS(), gprops);
         const powerdown_hive = powerdownHive(account.toJS(), gprops);
@@ -384,6 +390,7 @@ class UserWallet extends React.Component {
 
                 return (
                     <TransferHistoryRow
+                        autocomplete={autocomplete}
                         formValue={this.state.formValue}
                         incoming={this.state.incoming}
                         outgoing={this.state.outgoing}
@@ -713,6 +720,35 @@ class UserWallet extends React.Component {
         };
         ///// Filters
 
+        //search user input autocomplete
+
+        function autocompleteMatch(input, from, to) {
+            if (input == '') {
+                return [];
+            }
+            if (to === from) {
+                const collapseNames = receivedFromNames.concat(transferToNames);
+                return collapseNames.filter(function (name) {
+                    if (name.match(input)) {
+                        return name;
+                    }
+                });
+            }
+            if (from === true) {
+                return receivedFromNames.filter(function (name) {
+                    if (name.match(input)) {
+                        return name;
+                    }
+                });
+            }
+            if (to === true) {
+                return transferToNames.filter(function (name) {
+                    if (name.match(input)) {
+                        return name;
+                    }
+                });
+            }
+        }
         const handleIncoming = () => {
             this.setState({ incoming: !this.state.incoming });
         };
@@ -1053,9 +1089,16 @@ class UserWallet extends React.Component {
                                 )}
                             </span>
                         </div>
-                        <table>
-                            <tbody>{transfer_log}</tbody>
-                        </table>
+                        {autocomplete.length === 0 &&
+                        this.state.formValue !== '' ? (
+                            <div className="error-message">
+                                No transacions found
+                            </div>
+                        ) : (
+                            <table>
+                                <tbody>{transfer_log}</tbody>
+                            </table>
+                        )}
                     </div>
                 </div>
             </div>

@@ -24,8 +24,7 @@ class TransferHistoryRow extends React.Component {
             fromUser,
             toUser,
             excludeLessThan1,
-            receivedFromNames,
-            transferToNames,
+            autocomplete,
         } = this.props;
         // context -> account perspective
 
@@ -298,37 +297,26 @@ class TransferHistoryRow extends React.Component {
 
         ///Filters
 
-        //search user input autocomplete
-        function autocompleteMatch(input) {
-            if (input == '') {
-                return [];
-            }
-            if (fromUser === true) {
-                return receivedFromNames.filter(function (name) {
-                    if (name.match(input)) {
-                        return name;
-                    }
-                });
-            }
-            if (toUser === true) {
-                return transferToNames.filter(function (name) {
-                    if (name.match(input)) {
-                        return name;
-                    }
-                });
-            }
-        }
-
-        const autocomplete = autocompleteMatch(formValue);
+        //received from usernames
         const isFromNamesEqual = autocomplete.filter(
             (name) => name === data.from
         );
         const isFromNamesEqualToString =
             String(isFromNamesEqual) !== '' && String(isFromNamesEqual);
+        //transfer to usernames
         const isToNamesEqual = autocomplete.filter((name) => name === data.to);
         const isToNamesEqualToString =
             String(isToNamesEqual) !== '' && String(isToNamesEqual);
 
+        // received and transfer usernames
+        const isNamesEqual = autocomplete.filter(
+            (name) => name === data.from || name === data.to
+        );
+
+        const isNamesEqualToString =
+            String(isNamesEqual) !== '' && String(isNamesEqual);
+
+        //filter less than 1 hive/hbd
         const firstAmountChar = String(data.amount)[0];
 
         function handleIncomingOutgoingFilters() {
@@ -381,6 +369,16 @@ class TransferHistoryRow extends React.Component {
             } else return 'Trans';
         }
 
+        function handleFilterSearch() {
+            if (formValue !== '') {
+                if (isNamesEqualToString) {
+                    return 'Trans';
+                } else {
+                    return 'hidden';
+                }
+            } else return 'Trans';
+        }
+
         function useFilters() {
             if (incoming || outgoing || (incoming && outgoing)) {
                 return handleIncomingOutgoingFilters();
@@ -400,6 +398,9 @@ class TransferHistoryRow extends React.Component {
             if (excludeLessThan1 === true) {
                 return handleExcludeLessThan1Filter();
             }
+            if (toUser === fromUser) {
+                return handleFilterSearch();
+            }
         }
 
         return (
@@ -415,7 +416,10 @@ class TransferHistoryRow extends React.Component {
                 </td>
                 <td
                     className="show-for-medium"
-                    style={{ maxWidth: '40rem', wordWrap: 'break-word' }}
+                    style={{
+                        maxWidth: '40rem',
+                        wordWrap: 'break-word',
+                    }}
                 >
                     <Memo text={data.memo} username={context} />
                 </td>
