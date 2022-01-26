@@ -18,6 +18,13 @@ class TransferHistoryRow extends React.Component {
             powerdown_vests,
             reward_vests,
             socialUrl,
+            incoming,
+            outgoing,
+            formValue,
+            fromUser,
+            toUser,
+            excludeLessThan1,
+            autocomplete,
         } = this.props;
         // context -> account perspective
 
@@ -287,8 +294,117 @@ class TransferHistoryRow extends React.Component {
         } else {
             message = JSON.stringify({ type, ...data }, null, 2);
         }
+
+        ///Filters
+
+        //received from usernames
+        const isFromNamesEqual = autocomplete.filter(
+            (name) => name === data.from
+        );
+        const isFromNamesEqualToString =
+            String(isFromNamesEqual) !== '' && String(isFromNamesEqual);
+        //transfer to usernames
+        const isToNamesEqual = autocomplete.filter((name) => name === data.to);
+        const isToNamesEqualToString =
+            String(isToNamesEqual) !== '' && String(isToNamesEqual);
+
+        // received and transfer usernames
+        const isNamesEqual = autocomplete.filter(
+            (name) => name === data.from || name === data.to
+        );
+
+        const isNamesEqualToString =
+            String(isNamesEqual) !== '' && String(isNamesEqual);
+
+        //filter less than 1 hive/hbd
+        const firstAmountChar = String(data.amount)[0];
+
+        function handleIncomingOutgoingFilters() {
+            if (incoming === outgoing) {
+                return ' Trans';
+            }
+            if (
+                (data.to !== context && incoming) ||
+                (incoming === true &&
+                    excludeLessThan1 === true &&
+                    firstAmountChar === '0')
+            ) {
+                return 'hidden';
+            }
+            if (
+                (data.from !== context && outgoing === true) ||
+                (outgoing === true &&
+                    excludeLessThan1 === true &&
+                    firstAmountChar === '0')
+            ) {
+                return 'hidden';
+            } else {
+                return 'Trans';
+            }
+        }
+
+        function handleExcludeLessThan1Filter() {
+            if (firstAmountChar === '0' && excludeLessThan1 === true) {
+                return 'hidden';
+            } else return 'Trans';
+        }
+
+        function handleFromFilterSearch() {
+            if (formValue !== '') {
+                if (isFromNamesEqualToString) {
+                    return 'Trans';
+                } else {
+                    return 'hidden';
+                }
+            } else return 'Trans';
+        }
+
+        function handleToFilterSearch() {
+            if (formValue !== '') {
+                if (isToNamesEqualToString) {
+                    return 'Trans';
+                } else {
+                    return 'hidden';
+                }
+            } else return 'Trans';
+        }
+
+        function handleFilterSearch() {
+            if (formValue !== '') {
+                if (isNamesEqualToString) {
+                    return 'Trans';
+                } else {
+                    return 'hidden';
+                }
+            } else return 'Trans';
+        }
+
+        function useFilters() {
+            if (incoming || outgoing || (incoming && outgoing)) {
+                return handleIncomingOutgoingFilters();
+            }
+            if (fromUser === true) {
+                if (firstAmountChar === '0' && excludeLessThan1 === true) {
+                    return 'hidden';
+                }
+                return handleFromFilterSearch();
+            }
+            if (toUser === true) {
+                if (firstAmountChar === '0' && excludeLessThan1 === true) {
+                    return 'hidden';
+                }
+                return handleToFilterSearch();
+            }
+            if (excludeLessThan1 === true) {
+                return handleExcludeLessThan1Filter();
+            }
+            if (toUser === fromUser) {
+                return handleFilterSearch();
+            }
+        }
+
         return (
-            <tr key={op[0]} className="Trans">
+            <tr key={op[0]} className={useFilters()}>
                 <td>
                     <TimeAgoWrapper date={op[1].timestamp} />
                 </td>
@@ -300,7 +416,10 @@ class TransferHistoryRow extends React.Component {
                 </td>
                 <td
                     className="show-for-medium"
-                    style={{ maxWidth: '40rem', wordWrap: 'break-word' }}
+                    style={{
+                        maxWidth: '40rem',
+                        wordWrap: 'break-word',
+                    }}
                 >
                     <Memo text={data.memo} username={context} />
                 </td>

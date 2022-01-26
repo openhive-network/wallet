@@ -28,6 +28,7 @@ import * as transactionActions from 'app/redux/TransactionReducer';
 import * as globalActions from 'app/redux/GlobalReducer';
 import DropdownMenu from 'app/components/elements/DropdownMenu';
 import { getAllTransferHistory } from 'app/utils/hiveApi';
+import Filters from '../elements/Filters';
 
 const assetPrecision = 1000;
 
@@ -54,6 +55,12 @@ class UserWallet extends React.Component {
         super();
         this.state = {
             claimInProgress: false,
+            incoming: false,
+            outgoing: false,
+            formValue: '',
+            fromUser: false,
+            toUser: false,
+            excludeLessThan1: false,
         };
         this.onShowDepositHive = (e) => {
             if (e && e.preventDefault) e.preventDefault();
@@ -161,6 +168,34 @@ class UserWallet extends React.Component {
 
         // do not render if state appears to contain only lite account info
         if (!account.has('vesting_shares')) return null;
+
+        const receivedNamesArray = account
+            .get('transfer_history')
+            .toJS()
+            .map((acc) => acc[1].op[1].from)
+            .filter((el) => !!el)
+            .reverse();
+
+        const transferNamesArray = account
+            .get('transfer_history')
+            .toJS()
+            .map((acc) => acc[1].op[1].to)
+            .filter((el) => !!el)
+            .reverse();
+
+        //remove current account name from array
+        const receivedFromNames = receivedNamesArray.filter(
+            (name) => name !== account.get('name')
+        );
+        const transferToNames = transferNamesArray.filter(
+            (name) => name !== account.get('name')
+        );
+
+        const autocomplete = autocompleteMatch(
+            this.state.formValue,
+            this.state.fromUser,
+            this.state.toUser
+        );
 
         const vesting_hive = vestingHive(account.toJS(), gprops);
         const delegated_hive = delegatedHive(account.toJS(), gprops);
@@ -328,7 +363,6 @@ class UserWallet extends React.Component {
         if (isMyAccount) {
             estimate_output = <p>{total_value}&nbsp; &nbsp; &nbsp;</p>;
         }
-
         /// transfer log
         let idx = 0;
         const transfer_log = account
@@ -353,8 +387,18 @@ class UserWallet extends React.Component {
                     data.vesting_payout === '0.000000 VESTS'
                 )
                     return null;
+
                 return (
                     <TransferHistoryRow
+                        autocomplete={autocomplete}
+                        formValue={this.state.formValue}
+                        incoming={this.state.incoming}
+                        outgoing={this.state.outgoing}
+                        fromUser={this.state.fromUser}
+                        toUser={this.state.toUser}
+                        excludeLessThan1={this.state.excludeLessThan1}
+                        receivedFromNames={receivedFromNames}
+                        transferToNames={transferToNames}
                         key={idx++}
                         op={item.toJS()}
                         context={account.get('name')}
@@ -674,6 +718,61 @@ class UserWallet extends React.Component {
                 console.error('Report days input field missing');
             }
         };
+        ///// Filters
+
+        //search user input autocomplete
+
+        function autocompleteMatch(input, from, to) {
+            if (input == '') {
+                return [];
+            }
+            if (to === from) {
+                const collapseNames = receivedFromNames.concat(transferToNames);
+                return collapseNames.filter(function (name) {
+                    if (name.match(input)) {
+                        return name;
+                    }
+                });
+            }
+            if (from === true) {
+                return receivedFromNames.filter(function (name) {
+                    if (name.match(input)) {
+                        return name;
+                    }
+                });
+            }
+            if (to === true) {
+                return transferToNames.filter(function (name) {
+                    if (name.match(input)) {
+                        return name;
+                    }
+                });
+            }
+        }
+        const handleIncoming = () => {
+            this.setState({ incoming: !this.state.incoming });
+        };
+        const handleOutgoing = () => {
+            this.setState({ outgoing: !this.state.outgoing });
+        };
+
+        const handleFromUser = () => {
+            this.setState({ fromUser: !this.state.fromUser });
+        };
+        const handleToUser = () => {
+            this.setState({ toUser: !this.state.toUser });
+        };
+
+        const handleSearchUserInput = (e) => {
+            this.setState({ formValue: e.target.value });
+        };
+
+        const handleExcludeLessThan1 = () => {
+            this.setState({ excludeLessThan1: !this.state.excludeLessThan1 });
+        };
+
+        // const fromUsername = this.state.fromUser;
+        // const toUsername = this.state.toUser;
 
         return (
             <div className="UserWallet">
@@ -960,7 +1059,19 @@ class UserWallet extends React.Component {
                         </div>
                     </div>
                 )}
-
+                <div className="row">
+                    <div className="column small-12">
+                        <Filters
+                            handleExcludeLessThan1={handleExcludeLessThan1}
+                            handleIncoming={handleIncoming}
+                            handleOutgoing={handleOutgoing}
+                            handleFromUser={handleFromUser}
+                            handleToUser={handleToUser}
+                            handleSearchUserInput={handleSearchUserInput}
+                            formValue={this.state.formValue}
+                        />
+                    </div>
+                </div>
                 <div className="row">
                     <div className="column small-12">
                         {/** history */}
@@ -978,9 +1089,16 @@ class UserWallet extends React.Component {
                                 )}
                             </span>
                         </div>
-                        <table>
-                            <tbody>{transfer_log}</tbody>
-                        </table>
+                        {autocomplete.length === 0 &&
+                        this.state.formValue !== '' ? (
+                            <div className="error-message">
+                                No transacions found
+                            </div>
+                        ) : (
+                            <table>
+                                <tbody>{transfer_log}</tbody>
+                            </table>
+                        )}
                     </div>
                 </div>
             </div>
