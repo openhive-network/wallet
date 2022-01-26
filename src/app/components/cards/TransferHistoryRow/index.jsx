@@ -30,7 +30,7 @@ class TransferHistoryRow extends React.Component {
 
         const type = op[1].op[0];
         const data = op[1].op[1];
-
+        let getRewards = [];
         /* All transfers involve up to 2 accounts, context and 1 other. */
         let message = '';
 
@@ -211,13 +211,13 @@ class TransferHistoryRow extends React.Component {
             // `${data.sbd_payout}${hive_payout}, ${tt( 'g.and' )} ${author_reward} HIVE POWER ${tt('g.for')}`;
         } else if (type === 'claim_reward_balance') {
             const rewards = [];
+            getRewards.push(rewards);
             if (parseFloat(data.reward_hive.split(' ')[0]) > 0)
                 rewards.push(data.reward_hive);
             if (parseFloat(data.reward_hbd.split(' ')[0]) > 0)
                 rewards.push(data.reward_hbd);
             if (parseFloat(data.reward_vests.split(' ')[0]) > 0)
                 rewards.push(`${reward_vests} HIVE POWER`);
-
             switch (rewards.length) {
                 case 3:
                     message = tt(
@@ -318,6 +318,8 @@ class TransferHistoryRow extends React.Component {
 
         //filter less than 1 hive/hbd
         const firstAmountChar = String(data.amount)[0];
+        //filter less than 1 rewards
+        const firstRewardsChar = String(getRewards[0])[0];
 
         function handleIncomingOutgoingFilters() {
             if (incoming === outgoing) {
@@ -344,8 +346,10 @@ class TransferHistoryRow extends React.Component {
         }
 
         function handleExcludeLessThan1Filter() {
-            if (firstAmountChar === '0' && excludeLessThan1 === true) {
-                return 'hidden';
+            if (excludeLessThan1 === true) {
+                if (firstAmountChar === '0' || firstRewardsChar === '0') {
+                    return 'hidden';
+                }
             } else return 'Trans';
         }
 
