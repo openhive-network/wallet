@@ -4,8 +4,9 @@ import { actions as proposalActions } from 'app/redux/ProposalSaga';
 import * as transactionActions from 'app/redux/TransactionReducer'; // TODO: Only import what we need.
 import { List } from 'immutable';
 import PropTypes from 'prop-types';
-
 import ProposalListContainer from 'app/components/modules/ProposalList/ProposalListContainer';
+import { api } from '@hiveio/hive-js';
+import VotersModal from '../elements/VotersModal';
 
 class Proposals extends React.Component {
     startValueByOrderType = {
@@ -37,6 +38,7 @@ class Proposals extends React.Component {
             status: 'votable',
             order_by: 'by_total_votes',
             order_direction: 'descending',
+            openModal: false,
         };
     }
     async componentWillMount() {
@@ -141,6 +143,11 @@ class Proposals extends React.Component {
         this.load();
     };
 
+    toggleModal = () => {
+        this.setState({
+            openModal: !this.state.openModal,
+        });
+    };
     render() {
         const {
             proposals,
@@ -153,9 +160,29 @@ class Proposals extends React.Component {
         if (loading && proposals && proposals.length > 0) {
             showBottomLoading = true;
         }
+
+        api.callAsync('condenser_api.get_accounts', [['blocktrades']])
+            .then((res) => console.log(res))
+            .catch((err) => console.log(err));
+
+        api.callAsync('database_api.list_proposal_votes', {
+            start: [174],
+            limit: 1000,
+            order: 'by_proposal_voter',
+            order_direction: 'ascending',
+            status: 'active',
+        })
+            .then((res) => console.log(res))
+            .catch((err) => console.log(err));
+
         return (
             <div>
+                <VotersModal
+                    openModal={this.state.openModal}
+                    closeModal={this.toggleModal}
+                />
                 <ProposalListContainer
+                    triggerModal={this.toggleModal}
                     voteOnProposal={this.voteOnProposal}
                     proposals={proposals}
                     loading={loading}

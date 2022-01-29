@@ -39,6 +39,7 @@ export function Proposal(props) {
         isUpVoted,
         total_vesting_shares,
         total_vesting_fund_hive,
+        triggerModal,
     } = props;
 
     const start = new Date(start_date);
@@ -118,7 +119,7 @@ export function Proposal(props) {
                 </div>
             </div>
             <div className="proposals__votes">
-                <div title={`${votesToHP} HP`}>
+                <div onClick={triggerModal} title={`${votesToHP} HP`}>
                     {abbreviateNumber(votesToHP)}
                 </div>
                 <a onClick={onVote}>

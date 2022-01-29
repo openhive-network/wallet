@@ -10050,6 +10050,11 @@ react-medium-editor@1.8.1:
     medium-editor "^5.10.0"
     object-assign "^4.0.1"
 
+react-modal-overlay@1.0.2:
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/react-modal-overlay/-/react-modal-overlay-1.0.2.tgz#d08a81460161c878c4a7c67b8590df7832db921f"
+  integrity sha512-VzitL6d5+e/mSnpdvg8TjWUis2YLWCBYKQjUMzWAb9WIaS5c+Scqf7Xp7IOWN2BTwm61gwIDKc11F3q2Z5CkaQ==
+
 react-notification@5.0.7:
   version "5.0.7"
   resolved "https://registry.yarnpkg.com/react-notification/-/react-notification-5.0.7.tgz#6923b299056b99b0a4cb2afcfe7595542b0bd8d8"

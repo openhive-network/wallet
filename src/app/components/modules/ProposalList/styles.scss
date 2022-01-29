@@ -204,13 +204,17 @@
                 top: 50%;
                 transform: translateY(-50%);
             }
+            &:hover {
+                cursor: pointer;
+            }
 
             div {
                 font-size: 1.5em;
             }
 
             a {
-                span, svg {
+                span,
+                svg {
                     height: 1.5rem !important;
                     width: 1.5rem !important;
                 }
