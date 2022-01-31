@@ -43,6 +43,8 @@ export class Proposal extends React.Component {
             total_vesting_fund_hive,
             triggerModal,
             getVoters,
+            getAccouns,
+            getGlobalProps,
         } = this.props;
 
         const start = new Date(start_date);
@@ -73,7 +75,8 @@ export class Proposal extends React.Component {
             })
                 .then((res) => getVoters(res.proposal_votes))
                 .catch((err) => console.log(err));
-
+            getGlobalProps();
+            getAccouns();
             triggerModal();
         };
 

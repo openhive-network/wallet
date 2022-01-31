@@ -6,6 +6,7 @@ import { List } from 'immutable';
 import PropTypes from 'prop-types';
 import ProposalListContainer from 'app/components/modules/ProposalList/ProposalListContainer';
 import VotersModal from '../elements/VotersModal';
+import { api } from '@hiveio/hive-js';
 
 class Proposals extends React.Component {
     startValueByOrderType = {
@@ -39,6 +40,9 @@ class Proposals extends React.Component {
             order_direction: 'descending',
             openModal: false,
             voters: [],
+            total_vesting_shares: '',
+            total_vesting_fund_hive: '',
+            voterAccountName: '',
         };
     }
     async componentWillMount() {
@@ -153,6 +157,23 @@ class Proposals extends React.Component {
         this.setState({ voters });
     };
 
+    // getVoterAccountName = (voterAccountName) => {
+    //     this.setState({ voterAccountName });
+    // };
+
+    getAccouns = () => {
+        api.callAsync('condenser_api.get_accounts', [
+            ['blocktrades'],
+        ]).then((res) => console.log(res));
+    };
+
+    getGlobalProps = () => {
+        api.callAsync(
+            'condenser_api.get_dynamic_global_properties',
+            []
+        ).then((res) => console.log(res));
+    };
+
     render() {
         // const names = this.state.voters;
 
@@ -184,15 +205,27 @@ class Proposals extends React.Component {
         //     .then((res) => console.log(res))
         //     .catch((err) => console.log(err));
 
-        // console.log(this.state.proposalVotersList);
+        const {
+            total_vesting_fund_hive,
+            total_vesting_shares,
+            // voterAccountName,
+            voters,
+        } = this.state;
+
         return (
             <div>
                 <VotersModal
-                    voters={this.state.voters}
+                    // getVoterAccountName={this.getVoterAccountName}
+
+                    total_vesting_shares={total_vesting_shares}
+                    total_vesting_fund_hive={total_vesting_fund_hive}
+                    voters={voters}
                     openModal={this.state.openModal}
                     closeModal={this.toggleModal}
                 />
                 <ProposalListContainer
+                    getGlobalProps={this.getGlobalProps}
+                    getAccouns={this.getAccouns}
                     getVoters={this.getVoters}
                     triggerModal={this.toggleModal}
                     voteOnProposal={this.voteOnProposal}
