@@ -8,6 +8,7 @@ import cx from 'classnames';
 import Userpic, { SIZE_SMALL } from 'app/components/elements/Userpic';
 import { numberWithCommas } from 'app/utils/StateFunctions';
 import { APP_URL, REFUND_ACCOUNTS, BURN_ACCOUNTS } from 'app/client_config';
+import { api } from '@hiveio/hive-js';
 
 import Icon from 'app/components/elements/Icon';
 
@@ -21,118 +22,139 @@ function getFundingType(account) {
     return null;
 }
 
-export function Proposal(props) {
-    const {
-        id,
-        start_date,
-        end_date,
-        creator,
-        receiver,
-        daily_pay,
-        subject,
-        total_votes,
-        permlink,
-        onVote,
-        isVoting,
-        voteFailed,
-        // voteSucceeded,
-        isUpVoted,
-        total_vesting_shares,
-        total_vesting_fund_hive,
-        triggerModal,
-    } = props;
+export class Proposal extends React.Component {
+    render() {
+        const {
+            id,
+            start_date,
+            end_date,
+            creator,
+            receiver,
+            daily_pay,
+            subject,
+            total_votes,
+            permlink,
+            onVote,
+            isVoting,
+            voteFailed,
+            // voteSucceeded,
+            isUpVoted,
+            total_vesting_shares,
+            total_vesting_fund_hive,
+            triggerModal,
+            getVoters,
+        } = this.props;
 
-    const start = new Date(start_date);
-    const end = new Date(end_date);
-    const durationInDays = Moment(end).diff(Moment(start), 'days');
-    const totalPayout = durationInDays * daily_pay.split(' ')[0]; // ¯\_(ツ)_/¯
-    const votesToHP = simpleVotesToHp(
-        total_votes,
-        total_vesting_shares,
-        total_vesting_fund_hive
-    );
+        const start = new Date(start_date);
+        const end = new Date(end_date);
+        const durationInDays = Moment(end).diff(Moment(start), 'days');
+        const totalPayout = durationInDays * daily_pay.split(' ')[0]; // ¯\_(ツ)_/¯
+        const votesToHP = simpleVotesToHp(
+            total_votes,
+            total_vesting_shares,
+            total_vesting_fund_hive
+        );
 
-    const fundingType = getFundingType(receiver);
+        const fundingType = getFundingType(receiver);
 
-    const classUp = cx('Voting__button', 'Voting__button-up', {
-        'Voting__button--upvoted': isUpVoted,
-        'Voting__button--downvoted': voteFailed,
-        votingUp: isVoting,
-    });
+        const classUp = cx('Voting__button', 'Voting__button-up', {
+            'Voting__button--upvoted': isUpVoted,
+            'Voting__button--downvoted': voteFailed,
+            votingUp: isVoting,
+        });
 
-    return (
-        <div className="proposals__item">
-            <div className="proposals__content">
-                <a
-                    className="proposals__row title"
-                    href={urlifyPermlink(creator, permlink)}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    alt={startedOrFinishedInWordsLongVersion(start, end)}
-                    title={startedOrFinishedInWordsLongVersion(start, end)}
-                >
-                    {subject}&nbsp;<span className="id">#{id}</span>
-                </a>
-                <div className="proposals__row description">
-                    <div className="date">
-                        {formatDate(start)}&nbsp;-&nbsp;{formatDate(end)}&nbsp;(
-                        {durationInDays} {tt('proposals.days')})
-                    </div>
-                    <div className="amount">
-                        <span title={formatCurrency(totalPayout)}>
-                            {abbreviateNumber(totalPayout)} HBD
-                        </span>
-                        &nbsp;(
-                        {tt('proposals.daily')}&nbsp;
-                        {abbreviateNumber(daily_pay.split(' ')[0])} HBD)
-                    </div>
-                    <span
-                        className="status"
+        const handleVoteClick = () => {
+            api.callAsync('database_api.list_proposal_votes', {
+                start: [id],
+                limit: 1000,
+                order: 'by_proposal_voter',
+                order_direction: 'ascending',
+                status: 'active',
+            })
+                .then((res) => getVoters(res.proposal_votes))
+                .catch((err) => console.log(err));
+
+            triggerModal();
+        };
+
+        return (
+            <div className="proposals__item">
+                <div className="proposals__content">
+                    <a
+                        className="proposals__row title"
+                        href={urlifyPermlink(creator, permlink)}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        alt={startedOrFinishedInWordsLongVersion(start, end)}
                         title={startedOrFinishedInWordsLongVersion(start, end)}
                     >
-                        {startedOrFinished(start, end)}
-                    </span>
-                    {fundingType && (
-                        <span
-                            className={cx(
-                                'status',
-                                'funding-type',
-                                fundingType
-                            )}
-                            title={tt(`proposals.${fundingType}`)}
-                        >
-                            {tt(`proposals.${fundingType}`)}
-                        </span>
-                    )}
-                </div>
-                <div className="proposals__row details">
-                    <Userpic account={creator} size={SIZE_SMALL} />
-                    <div className="creator">
-                        {tt('proposals.by')}&nbsp;{linkifyUsername(creator)}
-                        {creator != receiver ? (
-                            <span>
-                                &nbsp;{tt('proposals.for')}&nbsp;
-                                {linkifyUsername(receiver)}
+                        {subject}&nbsp;<span className="id">#{id}</span>
+                    </a>
+                    <div className="proposals__row description">
+                        <div className="date">
+                            {formatDate(start)}&nbsp;-&nbsp;{formatDate(end)}
+                            &nbsp;(
+                            {durationInDays} {tt('proposals.days')})
+                        </div>
+                        <div className="amount">
+                            <span title={formatCurrency(totalPayout)}>
+                                {abbreviateNumber(totalPayout)} HBD
                             </span>
-                        ) : null}
+                            &nbsp;(
+                            {tt('proposals.daily')}&nbsp;
+                            {abbreviateNumber(daily_pay.split(' ')[0])} HBD)
+                        </div>
+                        <span
+                            className="status"
+                            title={startedOrFinishedInWordsLongVersion(
+                                start,
+                                end
+                            )}
+                        >
+                            {startedOrFinished(start, end)}
+                        </span>
+                        {fundingType && (
+                            <span
+                                className={cx(
+                                    'status',
+                                    'funding-type',
+                                    fundingType
+                                )}
+                                title={tt(`proposals.${fundingType}`)}
+                            >
+                                {tt(`proposals.${fundingType}`)}
+                            </span>
+                        )}
+                    </div>
+                    <div className="proposals__row details">
+                        <Userpic account={creator} size={SIZE_SMALL} />
+                        <div className="creator">
+                            {tt('proposals.by')}&nbsp;{linkifyUsername(creator)}
+                            {creator != receiver ? (
+                                <span>
+                                    &nbsp;{tt('proposals.for')}&nbsp;
+                                    {linkifyUsername(receiver)}
+                                </span>
+                            ) : null}
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div className="proposals__votes">
-                <div onClick={triggerModal} title={`${votesToHP} HP`}>
-                    {abbreviateNumber(votesToHP)}
+                <div className="proposals__votes">
+                    <div onClick={handleVoteClick} title={`${votesToHP} HP`}>
+                        {abbreviateNumber(votesToHP)}
+                    </div>
+                    <a onClick={onVote}>
+                        <span className={classUp}>
+                            <Icon
+                                name={isVoting ? 'empty' : 'chevron-up-circle'}
+                                className="upvote"
+                            />
+                        </span>
+                    </a>
                 </div>
-                <a onClick={onVote}>
-                    <span className={classUp}>
-                        <Icon
-                            name={isVoting ? 'empty' : 'chevron-up-circle'}
-                            className="upvote"
-                        />
-                    </span>
-                </a>
             </div>
-        </div>
-    );
+        );
+    }
 }
 //TODO: Move Proposal type to a proptypes file and use where we need it.
 Proposal.propTypes = {

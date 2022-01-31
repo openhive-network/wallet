@@ -5,7 +5,6 @@ import * as transactionActions from 'app/redux/TransactionReducer'; // TODO: Onl
 import { List } from 'immutable';
 import PropTypes from 'prop-types';
 import ProposalListContainer from 'app/components/modules/ProposalList/ProposalListContainer';
-import { api } from '@hiveio/hive-js';
 import VotersModal from '../elements/VotersModal';
 
 class Proposals extends React.Component {
@@ -39,6 +38,7 @@ class Proposals extends React.Component {
             order_by: 'by_total_votes',
             order_direction: 'descending',
             openModal: false,
+            voters: [],
         };
     }
     async componentWillMount() {
@@ -148,7 +148,16 @@ class Proposals extends React.Component {
             openModal: !this.state.openModal,
         });
     };
+
+    getVoters = (voters) => {
+        this.setState({ voters });
+    };
+
     render() {
+        // const names = this.state.voters;
+
+        // const namesMap = names?.map((name) => name.voter);
+
         const {
             proposals,
             loading,
@@ -161,27 +170,30 @@ class Proposals extends React.Component {
             showBottomLoading = true;
         }
 
-        api.callAsync('condenser_api.get_accounts', [['blocktrades']])
-            .then((res) => console.log(res))
-            .catch((err) => console.log(err));
+        // api.callAsync('condenser_api.get_accounts', [['blocktrades']])
+        //     .then((res) => console.log(res))
+        //     .catch((err) => console.log(err));
 
-        api.callAsync('database_api.list_proposal_votes', {
-            start: [174],
-            limit: 1000,
-            order: 'by_proposal_voter',
-            order_direction: 'ascending',
-            status: 'active',
-        })
-            .then((res) => console.log(res))
-            .catch((err) => console.log(err));
+        // api.callAsync('database_api.list_proposal_votes', {
+        //     start: [174],
+        //     limit: 1000,
+        //     order: 'by_proposal_voter',
+        //     order_direction: 'ascending',
+        //     status: 'active',
+        // })
+        //     .then((res) => console.log(res))
+        //     .catch((err) => console.log(err));
 
+        // console.log(this.state.proposalVotersList);
         return (
             <div>
                 <VotersModal
+                    voters={this.state.voters}
                     openModal={this.state.openModal}
                     closeModal={this.toggleModal}
                 />
                 <ProposalListContainer
+                    getVoters={this.getVoters}
                     triggerModal={this.toggleModal}
                     voteOnProposal={this.voteOnProposal}
                     proposals={proposals}

@@ -18,6 +18,7 @@ export default function ProposalList(props) {
         orderBy,
         orderDirection,
         triggerModal,
+        getVoters,
     } = props;
 
     return (
@@ -122,6 +123,7 @@ export default function ProposalList(props) {
             ) : null}
             {proposals.map((proposal) => (
                 <ProposalContainer
+                    getVoters={getVoters}
                     triggerModal={triggerModal}
                     key={proposal.id}
                     voteOnProposal={voteOnProposal}

@@ -62,15 +62,19 @@ class ProposalContainer extends React.Component {
     };
 
     render() {
+        setInterval(() => {
+            this.setState({ testing: 'pooooo' });
+        }, 5000);
         const {
             proposal,
             total_vesting_shares,
             total_vesting_fund_hive,
+            getVoters,
         } = this.props;
         // console.log('ProposalContainer.jsx::render()', this.props);
-
         return (
             <Proposal
+                getVoters={getVoters}
                 triggerModal={this.state.triggerModal}
                 {...proposal}
                 onVote={this.onVote}
