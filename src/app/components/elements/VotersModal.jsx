@@ -3,14 +3,25 @@ import { Modal } from 'react-modal-overlay';
 import 'react-modal-overlay/dist/index.css';
 import { APP_URL } from '../../../app/client_config';
 // import { vestingHive } from '../../../app/utils/StateFunctions';
-// import { api } from '@hiveio/hive-js';
+import { api } from '@hiveio/hive-js';
 
-export default function VotersModal({ openModal, closeModal, voters }) {
+export default function VotersModal({
+    openModal,
+    closeModal,
+    voters,
+    getVotersAccounts,
+    message,
+}) {
     const votersUsernames = voters.map((name) => name.voter);
     const proposal = voters.map((proposal) => proposal.proposal);
     const proposalId = proposal.map((propId) => propId.id);
 
-    // const gprops = props.gprops.toJS();
+    if (openModal === true) {
+        api.callAsync('condenser_api.get_accounts', [
+            votersUsernames,
+            false,
+        ]).then((res) => getVotersAccounts(res));
+    }
 
     return (
         <div>
@@ -28,11 +39,11 @@ export default function VotersModal({ openModal, closeModal, voters }) {
                     className="content"
                 >
                     <div className="row">
-                        {votersUsernames.map((each, index) => (
+                        {message.map((each, index) => (
                             <div
                                 key={index}
                                 style={{ height: '50px' }}
-                                className="column small-4"
+                                className="column small-6"
                             >
                                 <a href={`${APP_URL}/@${each}`} target="_blank">
                                     {each}

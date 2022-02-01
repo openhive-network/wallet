@@ -44,7 +44,7 @@ export class Proposal extends React.Component {
             triggerModal,
             getVoters,
             getAccouns,
-            getGlobalProps,
+            // getGlobalProps,
         } = this.props;
 
         const start = new Date(start_date);
@@ -68,15 +68,15 @@ export class Proposal extends React.Component {
         const handleVoteClick = () => {
             api.callAsync('database_api.list_proposal_votes', {
                 start: [id],
-                limit: 1000,
+                limit: 10,
                 order: 'by_proposal_voter',
                 order_direction: 'ascending',
                 status: 'active',
             })
                 .then((res) => getVoters(res.proposal_votes))
                 .catch((err) => console.log(err));
-            getGlobalProps();
-            getAccouns();
+            // await getAccouns();
+            // getGlobalProps();
             triggerModal();
         };
 

@@ -71,12 +71,12 @@ class ProposalContainer extends React.Component {
             total_vesting_fund_hive,
             getVoters,
             getAccouns,
-            getGlobalProps,
+            // getGlobalProps,
         } = this.props;
         // console.log('ProposalContainer.jsx::render()', this.props);
         return (
             <Proposal
-                getGlobalProps={getGlobalProps}
+                // getGlobalProps={getGlobalProps}
                 getAccouns={getAccouns}
                 getVoters={getVoters}
                 triggerModal={this.state.triggerModal}
