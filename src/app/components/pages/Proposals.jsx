@@ -7,7 +7,6 @@ import PropTypes from 'prop-types';
 import ProposalListContainer from 'app/components/modules/ProposalList/ProposalListContainer';
 import VotersModal from '../elements/VotersModal';
 import { api } from '@hiveio/hive-js';
-import { numberWithCommas } from '../../../app/utils/StateFunctions';
 
 class Proposals extends React.Component {
     startValueByOrderType = {
@@ -44,10 +43,30 @@ class Proposals extends React.Component {
             votersAccounts: [],
             total_vests: '',
             total_vest_hive: '',
+            newId: '',
+            // hive_power: [],
         };
+        this.fetchVoters = this.fetchVoters.bind(this);
+        this.getGlobalProps = this.getGlobalProps.bind(this);
+        this.fetchDataForVests = this.fetchDataForVests.bind(this);
+        // this.calculateHivePower = this.calculateHivePower.bind(this);
     }
     async componentWillMount() {
         await this.load();
+    }
+
+    componentDidMount() {
+        this.getGlobalProps();
+    }
+
+    componentDidUpdate(prevProps, prevState) {
+        if (prevState.newId !== this.state.newId) {
+            this.fetchVoters();
+        }
+        if (prevState.voters !== this.state.voters) {
+            this.fetchDataForVests();
+            // this.calculateHivePower();
+        }
     }
 
     async load(quiet = false, options = {}) {
@@ -161,21 +180,11 @@ class Proposals extends React.Component {
         this.setState({ votersAccounts });
     };
 
-    // getAccouns = () => {
-    //     api.callAsync('condenser_api.get_accounts', [
-    //         this.state.voters,
-    //         false,
-    //     ]).then((res) => console.log(res));
-    // };
+    getNewId = (newId) => {
+        this.setState({ newId });
+    };
 
-    // getGlobalProps = () => {
-    //     api.callAsync(
-    //         'condenser_api.get_dynamic_global_properties',
-    //         []
-    //     ).then((res) => console.log(res));
-    // };
-
-    componentDidMount() {
+    getGlobalProps() {
         api.callAsync('condenser_api.get_dynamic_global_properties', [])
             .then((res) =>
                 this.setState({
@@ -186,10 +195,47 @@ class Proposals extends React.Component {
             .catch((err) => console.log(err));
     }
 
-    render() {
-        // const names = this.state.voters;
+    fetchVoters() {
+        api.callAsync('database_api.list_proposal_votes', {
+            start: [this.state.newId],
+            limit: 1000,
+            order: 'by_proposal_voter',
+            order_direction: 'ascending',
+            status: 'active',
+        })
+            .then((res) => this.getVoters(res.proposal_votes))
+            .catch((err) => console.log(err));
+    }
+    fetchDataForVests() {
+        const voters = this.state.voters;
+        const votersMap = voters.map((name) => name.voter);
+        api.callAsync('condenser_api.get_accounts', [
+            votersMap,
+            false,
+        ]).then((res) => this.getVotersAccounts(res));
+    }
 
-        // const namesMap = names?.map((name) => name.voter);
+    ////////////////// fix this
+
+    // calculateHivePower() {
+    //     const votersAccounts = this.state.votersAccounts;
+    //     const accountsMap = votersAccounts.map((acc) => acc.vesting_shares);
+    //     const total_vests = this.state.total_vests;
+    //     const total_vest_hive = this.state.total_vest_hive;
+
+    //     //loop through each account vesting shares to calculate hive power
+    //     for (let i = 0; i < accountsMap.length; i++) {
+    //         const vests = parseFloat(accountsMap[i].split(' ')[0]);
+    //         const total_vestsNew = parseFloat(total_vests.split(' ')[0]);
+    //         const total_vest_hiveNew = parseFloat(
+    //             total_vest_hive.split(' ')[0]
+    //         );
+    //         const vesting_hivef = total_vest_hiveNew * (vests / total_vestsNew);
+    //         this.setState({ hive_power: vesting_hivef });
+    //     }
+    // }
+
+    render() {
         const {
             proposals,
             loading,
@@ -201,21 +247,6 @@ class Proposals extends React.Component {
         if (loading && proposals && proposals.length > 0) {
             showBottomLoading = true;
         }
-
-        // api.callAsync('condenser_api.get_accounts', [['blocktrades']])
-        //     .then((res) => console.log(res))
-        //     .catch((err) => console.log(err));
-
-        // api.callAsync('database_api.list_proposal_votes', {
-        //     start: [174],
-        //     limit: 1000,
-        //     order: 'by_proposal_voter',
-        //     order_direction: 'ascending',
-        //     status: 'active',
-        // })
-        //     .then((res) => console.log(res))
-        //     .catch((err) => console.log(err));
-
         const {
             voters,
             votersAccounts,
@@ -223,34 +254,31 @@ class Proposals extends React.Component {
             openModal,
             total_vests,
             total_vest_hive,
+            // hive_power,
         } = this.state;
-
-        //////////// Remove
-        const getAccouns = () => {
-            api.callAsync('condenser_api.get_accounts', [
-                ['blocktrades'],
-                false,
-            ]).then((res) => console.log(res));
-        };
-
-        // const getGlobalProps = () => {
-        //     api.callAsync(
-        //         'condenser_api.get_dynamic_global_properties',
-        //         []
-        //     ).then((res) =>
-        //         this.setState({
-        //             total_vests: res.total_vesting_shares,
-        //             total_vest_hive: res.total_vesting_fund_hive,
-        //         })
-        //     );
-        // };
 
         const accountsMap = votersAccounts.map((acc) => acc.vesting_shares);
         const votersMap = voters.map((name) => name.voter);
-        // console.log(accounts_vesting_shares);
+
         let hivePower = [];
 
-        function calculateHivePower() {
+        // function sortArray(arr) {
+        //     let temp = 0;
+        //     for (let i = 0; i < arr.length; i++) {
+        //         for (let j = i; j < arr.length; j++) {
+        //             if (arr[j] > arr[i]) {
+        //                 temp = arr[j];
+        //                 arr[j] = arr[i];
+        //                 arr[i] = temp;
+        //             }
+        //         }
+        //     }
+        //     return arr;
+        // }
+        // const sortAccounts = accountsMap.sort((a, b) => b - a);
+        // console.log(sortAccounts);
+
+        const calculateHivePower = () => {
             //loop through each account vesting shares to calculate hive power
             for (let i = 0; i < accountsMap.length; i++) {
                 const vests = parseFloat(accountsMap[i].split(' ')[0]);
@@ -260,30 +288,22 @@ class Proposals extends React.Component {
                 );
                 const vesting_hivef =
                     total_vest_hiveNew * (vests / total_vestsNew);
+
                 hivePower.push(vesting_hivef);
             }
-
-            //loop through voters names to set hive power for current name
-            // for (let i = 0; i < votersMap.length; i++) {
-            //     console.log(
-            //         `${votersMap[i]} has hive power of : ${hivePower[i]}`
-            //     );
-            // }
-        }
-
+        };
         calculateHivePower();
 
         const message = votersMap.map(
             (acc, index) => `${acc} HAS HIVE OF : ${hivePower[index]}`
         );
 
-        // const hive_power = calculateHivePower();
-        // console.log(hive_power);
-
         return (
             <div>
                 <VotersModal
                     // getVoterAccountName={this.getVoterAccountName}
+                    votersMap={votersMap}
+                    votersAccounts={votersAccounts}
                     message={message}
                     getVotersAccounts={this.getVotersAccounts}
                     voters={voters}
@@ -291,8 +311,9 @@ class Proposals extends React.Component {
                     closeModal={this.toggleModal}
                 />
                 <ProposalListContainer
+                    getNewId={this.getNewId}
                     // getGlobalProps={getGlobalProps}
-                    getAccouns={getAccouns}
+                    // getAccouns={getAccouns}
                     getVoters={this.getVoters}
                     triggerModal={this.toggleModal}
                     voteOnProposal={this.voteOnProposal}

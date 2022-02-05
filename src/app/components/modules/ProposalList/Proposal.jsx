@@ -8,7 +8,6 @@ import cx from 'classnames';
 import Userpic, { SIZE_SMALL } from 'app/components/elements/Userpic';
 import { numberWithCommas } from 'app/utils/StateFunctions';
 import { APP_URL, REFUND_ACCOUNTS, BURN_ACCOUNTS } from 'app/client_config';
-import { api } from '@hiveio/hive-js';
 
 import Icon from 'app/components/elements/Icon';
 
@@ -37,14 +36,11 @@ export class Proposal extends React.Component {
             onVote,
             isVoting,
             voteFailed,
-            // voteSucceeded,
             isUpVoted,
             total_vesting_shares,
             total_vesting_fund_hive,
             triggerModal,
-            getVoters,
-            getAccouns,
-            // getGlobalProps,
+            getNewId,
         } = this.props;
 
         const start = new Date(start_date);
@@ -66,17 +62,7 @@ export class Proposal extends React.Component {
         });
 
         const handleVoteClick = () => {
-            api.callAsync('database_api.list_proposal_votes', {
-                start: [id],
-                limit: 10,
-                order: 'by_proposal_voter',
-                order_direction: 'ascending',
-                status: 'active',
-            })
-                .then((res) => getVoters(res.proposal_votes))
-                .catch((err) => console.log(err));
-            // await getAccouns();
-            // getGlobalProps();
+            getNewId(id);
             triggerModal();
         };
 

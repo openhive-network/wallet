@@ -62,22 +62,27 @@ class ProposalContainer extends React.Component {
     };
 
     render() {
-        setInterval(() => {
-            this.setState({ testing: 'pooooo' });
-        }, 5000);
         const {
             proposal,
             total_vesting_shares,
             total_vesting_fund_hive,
             getVoters,
-            getAccouns,
+            // getAccouns,
+            getVotersAccounts,
             // getGlobalProps,
+            // calculateHivePower,
+            voters,
+            getNewId,
         } = this.props;
         // console.log('ProposalContainer.jsx::render()', this.props);
         return (
             <Proposal
+                // calculateHivePower={calculateHivePower}
                 // getGlobalProps={getGlobalProps}
-                getAccouns={getAccouns}
+                getNewId={getNewId}
+                voters={voters}
+                getVotersAccounts={getVotersAccounts}
+                // getAccouns={getAccouns}
                 getVoters={getVoters}
                 triggerModal={this.state.triggerModal}
                 {...proposal}

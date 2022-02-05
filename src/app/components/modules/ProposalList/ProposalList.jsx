@@ -19,8 +19,12 @@ export default function ProposalList(props) {
         orderDirection,
         triggerModal,
         getVoters,
-        getAccouns,
+        // getAccouns,
+        // calculateHivePower,
         // getGlobalProps,
+        getVotersAccounts,
+        voters,
+        getNewId,
     } = props;
 
     return (
@@ -125,8 +129,12 @@ export default function ProposalList(props) {
             ) : null}
             {proposals.map((proposal) => (
                 <ProposalContainer
+                    getNewId={getNewId}
+                    // calculateHivePower={calculateHivePower}
                     // getGlobalProps={getGlobalProps}
-                    getAccouns={getAccouns}
+                    voters={voters}
+                    getVotersAccounts={getVotersAccounts}
+                    // getAccouns={getAccouns}
                     getVoters={getVoters}
                     triggerModal={triggerModal}
                     key={proposal.id}

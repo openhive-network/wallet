@@ -47,6 +47,7 @@
         "@steem/crypto-session": "git+https://github.com/steemit/crypto-session.git#83a90b319ce5bc6a70362d52a15a815de7e729bb",
         "assert": "1.4.1",
         "autoprefixer": "^9.6.1",
+        "axios": "^0.25.0",
         "bigi": "1.4.2",
         "blocked": "1.2.1",
         "blueimp-file-upload": "9.22.1",

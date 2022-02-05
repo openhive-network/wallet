@@ -5,6 +5,7 @@ import { Long } from 'bytebuffer';
 import { VEST_TICKER, LIQUID_TICKER } from 'app/client_config';
 import { fromJS } from 'immutable';
 import { formatter } from '@hiveio/hive-js';
+import { api } from '@hiveio/hive-js';
 
 export const numberWithCommas = (x) => x.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 
@@ -226,3 +227,9 @@ export function pricePerHive(state) {
     }
     return undefined;
 }
+
+// export function getVoterVestingShares(votersArray) {
+//     return api
+//         .callAsync('condenser_api.get_accounts', [votersArray, false])
+//         .then((res) => res);
+// }
