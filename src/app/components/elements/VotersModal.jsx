@@ -5,15 +5,7 @@ import { APP_URL } from '../../../app/client_config';
 
 class VotersModal extends React.Component {
     render() {
-        const {
-            openModal,
-            closeModal,
-            voters,
-            // getVotersAccounts,
-            message,
-            // votersAccounts,
-        } = this.props;
-        // const votersUsernames = voters.map((name) => name.voter);
+        const { openModal, closeModal, voters, sortMergedResult } = this.props;
         const proposal = voters.map((proposal) => proposal.proposal);
         const proposalId = proposal.map((propId) => propId.id);
 
@@ -33,18 +25,21 @@ class VotersModal extends React.Component {
                         className="content"
                     >
                         <div className="row">
-                            {message.map((each, index) => (
+                            {sortMergedResult.map((each, index) => (
                                 <div
                                     key={index}
-                                    style={{ height: '50px' }}
+                                    // style={{ height: '50px' }}
                                     className="column small-6"
                                 >
+                                    <p>Name</p>
                                     <a
-                                        href={`${APP_URL}/@${each}`}
+                                        href={`${APP_URL}/@${each[0]}`}
                                         target="_blank"
                                     >
-                                        {each}
+                                        {each[0]}
                                     </a>
+                                    <p>Hive Power</p>
+                                    <p>{each[1]}</p>
                                 </div>
                             ))}
                         </div>

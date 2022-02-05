@@ -227,9 +227,3 @@ export function pricePerHive(state) {
     }
     return undefined;
 }
-
-// export function getVoterVestingShares(votersArray) {
-//     return api
-//         .callAsync('condenser_api.get_accounts', [votersArray, false])
-//         .then((res) => res);
-// }

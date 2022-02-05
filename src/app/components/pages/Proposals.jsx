@@ -198,7 +198,7 @@ class Proposals extends React.Component {
     fetchVoters() {
         api.callAsync('database_api.list_proposal_votes', {
             start: [this.state.newId],
-            limit: 1000,
+            limit: 250,
             order: 'by_proposal_voter',
             order_direction: 'ascending',
             status: 'active',
@@ -214,26 +214,6 @@ class Proposals extends React.Component {
             false,
         ]).then((res) => this.getVotersAccounts(res));
     }
-
-    ////////////////// fix this
-
-    // calculateHivePower() {
-    //     const votersAccounts = this.state.votersAccounts;
-    //     const accountsMap = votersAccounts.map((acc) => acc.vesting_shares);
-    //     const total_vests = this.state.total_vests;
-    //     const total_vest_hive = this.state.total_vest_hive;
-
-    //     //loop through each account vesting shares to calculate hive power
-    //     for (let i = 0; i < accountsMap.length; i++) {
-    //         const vests = parseFloat(accountsMap[i].split(' ')[0]);
-    //         const total_vestsNew = parseFloat(total_vests.split(' ')[0]);
-    //         const total_vest_hiveNew = parseFloat(
-    //             total_vest_hive.split(' ')[0]
-    //         );
-    //         const vesting_hivef = total_vest_hiveNew * (vests / total_vestsNew);
-    //         this.setState({ hive_power: vesting_hivef });
-    //     }
-    // }
 
     render() {
         const {
@@ -262,22 +242,6 @@ class Proposals extends React.Component {
 
         let hivePower = [];
 
-        // function sortArray(arr) {
-        //     let temp = 0;
-        //     for (let i = 0; i < arr.length; i++) {
-        //         for (let j = i; j < arr.length; j++) {
-        //             if (arr[j] > arr[i]) {
-        //                 temp = arr[j];
-        //                 arr[j] = arr[i];
-        //                 arr[i] = temp;
-        //             }
-        //         }
-        //     }
-        //     return arr;
-        // }
-        // const sortAccounts = accountsMap.sort((a, b) => b - a);
-        // console.log(sortAccounts);
-
         const calculateHivePower = () => {
             //loop through each account vesting shares to calculate hive power
             for (let i = 0; i < accountsMap.length; i++) {
@@ -294,17 +258,35 @@ class Proposals extends React.Component {
         };
         calculateHivePower();
 
-        const message = votersMap.map(
-            (acc, index) => `${acc} HAS HIVE OF : ${hivePower[index]}`
-        );
+        /// create object of two arrays (voters names and hive power)
+        let mergeValues = {};
+
+        votersMap.forEach((voter, i) => (mergeValues[voter] = hivePower[i]));
+        //push obj to array
+        let sortMerged = [];
+
+        for (let value in mergeValues) {
+            sortMerged.push([value, mergeValues[value]]);
+        }
+        //sort by hp in descending order
+        const sortMergedResult = sortMerged.sort((a, b) => b[1] - a[1]);
+        // const votersNames = sortMergedResult.map((acc) => acc[0]);
+        // const votersHp = sortMergedResult.map((acc) => acc[1]);
+
+        ///push names and hp to object
+
+        // const voters_sorted_by_hp = {};
+
+        // votersNames.forEach(
+        //     (name, i) => (voters_sorted_by_hp[name] = votersHp[i])
+        // );
 
         return (
             <div>
                 <VotersModal
-                    // getVoterAccountName={this.getVoterAccountName}
+                    sortMergedResult={sortMergedResult}
                     votersMap={votersMap}
                     votersAccounts={votersAccounts}
-                    message={message}
                     getVotersAccounts={this.getVotersAccounts}
                     voters={voters}
                     openModal={this.state.openModal}
@@ -312,8 +294,6 @@ class Proposals extends React.Component {
                 />
                 <ProposalListContainer
                     getNewId={this.getNewId}
-                    // getGlobalProps={getGlobalProps}
-                    // getAccouns={getAccouns}
                     getVoters={this.getVoters}
                     triggerModal={this.toggleModal}
                     voteOnProposal={this.voteOnProposal}
