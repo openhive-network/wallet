@@ -206,7 +206,8 @@ export default class UserProfile extends React.Component {
                 printLink = (
                     <div>
                         <a className="float-right noPrint" onClick={onPrint}>
-                            <Icon name="printer" />&nbsp;{tt('g.print')}&nbsp;&nbsp;
+                            <Icon name="printer" />
+                            &nbsp;{tt('g.print')}&nbsp;&nbsp;
                         </a>
                     </div>
                 );
@@ -253,7 +254,7 @@ export default class UserProfile extends React.Component {
                             <a
                                 href={`/@${accountname}/transfers`}
                                 className={walletClass}
-                                onClick={e => {
+                                onClick={(e) => {
                                     e.preventDefault();
                                     browserHistory.push(e.target.pathname);
                                     return false;
@@ -295,7 +296,7 @@ export default class UserProfile extends React.Component {
                     'url(' + proxifyImageUrl(cover_image, '2048x512') + ')',
             };
         }
-
+        console.log(account.name);
         return (
             <div className="UserProfile">
                 <div className="UserProfile__banner row expanded">
@@ -363,21 +364,21 @@ module.exports = {
                 socialUrl,
             };
         },
-        dispatch => ({
+        (dispatch) => ({
             login: () => {
                 dispatch(userActions.showLogin());
             },
             clearTransferDefaults: () => {
                 dispatch(userActions.clearTransferDefaults());
             },
-            showTransfer: transferDefaults => {
+            showTransfer: (transferDefaults) => {
                 dispatch(userActions.setTransferDefaults(transferDefaults));
                 dispatch(userActions.showTransfer());
             },
             clearPowerdownDefaults: () => {
                 dispatch(userActions.clearPowerdownDefaults());
             },
-            showPowerdown: powerdownDefaults => {
+            showPowerdown: (powerdownDefaults) => {
                 console.log('power down defaults:', powerdownDefaults);
                 dispatch(userActions.setPowerdownDefaults(powerdownDefaults));
                 dispatch(userActions.showPowerdown());
@@ -403,7 +404,7 @@ module.exports = {
                     })
                 );
             },
-            requestData: args =>
+            requestData: (args) =>
                 dispatch(fetchDataSagaActions.requestData(args)),
         })
     )(UserProfile),

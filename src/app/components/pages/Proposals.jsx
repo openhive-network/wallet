@@ -44,12 +44,14 @@ class Proposals extends React.Component {
             total_vests: '',
             total_vest_hive: '',
             newId: '',
-            // hive_power: [],
+            // prevVoters:[],
+            voterDataLoading: false,
         };
         this.fetchVoters = this.fetchVoters.bind(this);
         this.getGlobalProps = this.getGlobalProps.bind(this);
         this.fetchDataForVests = this.fetchDataForVests.bind(this);
         // this.calculateHivePower = this.calculateHivePower.bind(this);
+        this.isVotersDataLoading = this.isVotersDataLoading.bind(this);
     }
     async componentWillMount() {
         await this.load();
@@ -65,7 +67,10 @@ class Proposals extends React.Component {
         }
         if (prevState.voters !== this.state.voters) {
             this.fetchDataForVests();
-            // this.calculateHivePower();
+            // this.calculateHivePower()
+        }
+        if (prevState.votersAccounts !== this.state.votersAccounts) {
+            this.isVotersDataLoading(false);
         }
     }
 
@@ -184,6 +189,10 @@ class Proposals extends React.Component {
         this.setState({ newId });
     };
 
+    isVotersDataLoading = (voterDataLoading) => {
+        this.setState({ voterDataLoading });
+    };
+
     getGlobalProps() {
         api.callAsync('condenser_api.get_dynamic_global_properties', [])
             .then((res) =>
@@ -222,6 +231,7 @@ class Proposals extends React.Component {
             status,
             order_by,
             order_direction,
+            prevVoters,
         } = this.state;
         let showBottomLoading = false;
         if (loading && proposals && proposals.length > 0) {
@@ -235,13 +245,15 @@ class Proposals extends React.Component {
             total_vests,
             total_vest_hive,
             // hive_power,
+            voterDataLoading,
         } = this.state;
 
         const accountsMap = votersAccounts.map((acc) => acc.vesting_shares);
         const votersMap = voters.map((name) => name.voter);
 
-        let hivePower = [];
+        console.log(voterDataLoading);
 
+        let hivePower = [];
         const calculateHivePower = () => {
             //loop through each account vesting shares to calculate hive power
             for (let i = 0; i < accountsMap.length; i++) {
@@ -258,18 +270,107 @@ class Proposals extends React.Component {
         };
         calculateHivePower();
 
-        /// create object of two arrays (voters names and hive power)
-        let mergeValues = {};
+        const accProxiedVests = votersAccounts.map((acc) =>
+            acc.proxied_vsf_votes
+                .map((r) => parseInt(r, 10))
+                .reduce((a, b) => a + b, 0)
+        );
 
-        votersMap.forEach((voter, i) => (mergeValues[voter] = hivePower[i]));
+        let proxyHp = [];
+        const calculateProxyHp = () => {
+            for (let i = 0; i < accProxiedVests.length; i++) {
+                const vests = accProxiedVests[i];
+                const total_vestsNew = parseFloat(total_vests.split(' ')[0]);
+                const total_vest_hiveNew = parseFloat(
+                    total_vest_hive.split(' ')[0]
+                );
+                const vesting_hivef =
+                    total_vest_hiveNew * (vests / total_vestsNew);
+                proxyHp.push(vesting_hivef * 0.000001);
+            }
+        };
+        calculateProxyHp();
+
+        /// create object of two arrays (voters names and hive power)
+        let mergeValues = {}; //// hp
+        let mergeProxyValues = {}; ////proxy Hp
+
+        let proxyToNumber = proxyHp.map((r) => parseInt(r, 10));
+
+        votersMap.forEach((voter, i) => (mergeValues[voter] = hivePower[i])); //hp
+
+        votersMap.forEach(
+            (voter, i) => (mergeProxyValues[voter] = proxyHp[i]) //proxy
+        );
+
         //push obj to array
-        let sortMerged = [];
+        let sortMerged = []; //  hp
+        let sortMerged2 = []; //  hp
+
+        let sortMergedProxy = []; // proxy
+        let sortMergedProxy2 = []; // proxy
 
         for (let value in mergeValues) {
-            sortMerged.push([value, mergeValues[value]]);
+            sortMerged.push([value, mergeValues[value]]); // hp
+            sortMerged2.push([value, mergeValues[value]]); // hp
+        }
+
+        for (let value in mergeProxyValues) {
+            sortMergedProxy.push([value, mergeProxyValues[value]]); // proxy
+            sortMergedProxy2.push([value, mergeProxyValues[value]]); // proxy
         }
         //sort by hp in descending order
-        const sortMergedResult = sortMerged.sort((a, b) => b[1] - a[1]);
+        const sortMergedResult = sortMerged.sort((a, b) => b[1] - a[1]); // hp
+
+        const sortMergedProxyResult = sortMergedProxy.sort(
+            (a, b) => b[1] - a[1]
+        ); //proxy
+
+        const totalHp = hivePower.map((num, index) => num + proxyHp[index]);
+
+        // console.log(hivePower.sort((a, b) => b - a));
+        // console.log(proxyHp.sort((a, b) => b - a));
+        // console.log(totalHp.sort((a, b) => b - a));
+
+        const totalAccHpObj = {};
+
+        votersMap.forEach(
+            (voter, i) =>
+                (totalAccHpObj[voter] = [totalHp[i], hivePower[i], proxyHp[i]]) //total
+        );
+        let sortMergedTotalHp = [];
+        let sortMergedTotalHp2 = [];
+
+        for (let value in totalAccHpObj) {
+            sortMergedTotalHp.push([value, ...totalAccHpObj[value]]); // total
+            // sortMergedTotalHp2.push([value, totalAccHpObj[value]]); // total
+        }
+
+        const sortTotalResult = sortMergedTotalHp.sort((a, b) => b[1] - a[1]); // total
+
+        const keyOfProxy = sortTotalResult.map((r) => r[0]);
+
+        // console.log(sortMergedTotalHp2.map((r) => r[0]));
+        // console.log(sortMergedProxy2.map((r) => r[1]));
+        // console.log(sortMerged2.map((r) => r[1]));
+
+        const newObj = {};
+        votersMap.forEach(
+            (voter, i) => (newObj[voter] = [hivePower[i], proxyHp[i]]) //total
+        );
+
+        let sortMergedTotalH3 = [];
+        for (let value in newObj) {
+            sortMergedTotalH3.push([value, newObj[value]]); // total
+        }
+
+        // console.log(sortMergedTotalHp);
+
+        // console.log(Object.values(totalAccHpObj));c
+        // console.log(sortMergedTotalHp);
+
+        // console.log(proxyToNumber.sort((a, b) => b - a));
+
         // const votersNames = sortMergedResult.map((acc) => acc[0]);
         // const votersHp = sortMergedResult.map((acc) => acc[1]);
 
@@ -281,10 +382,25 @@ class Proposals extends React.Component {
         //     (name, i) => (voters_sorted_by_hp[name] = votersHp[i])
         // );
 
+        /////////// Proxy HP ????
+
+        // const vests = 12216893515079165 + 374040654240;
+
+        // const total_vestsNew = parseFloat(total_vests.split(' ')[0]);
+        // const total_vest_hiveNew = parseFloat(total_vest_hive.split(' ')[0]);
+
+        // const vesting_hivef = total_vest_hiveNew * (vests / total_vestsNew);
+
+        // console.log(proxyHp);
+        //6,623,708.494
+
+        // ////////////
+
         return (
             <div>
                 <VotersModal
-                    sortMergedResult={sortMergedResult}
+                    isVotersDataLoading={this.isVotersDataLoading}
+                    sortMergedTotalHp={sortMergedTotalHp}
                     votersMap={votersMap}
                     votersAccounts={votersAccounts}
                     getVotersAccounts={this.getVotersAccounts}
@@ -313,7 +429,7 @@ class Proposals extends React.Component {
                         </a>
                     ) : null}
 
-                    {showBottomLoading ? <a>{`Loading more...`}</a> : null}
+                    {/* {showBottomLoading ? <a>{`Loading more...`}</a> : null} */}
                 </center>
             </div>
         );
