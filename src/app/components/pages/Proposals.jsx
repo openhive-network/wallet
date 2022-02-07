@@ -44,7 +44,7 @@ class Proposals extends React.Component {
             total_vests: '',
             total_vest_hive: '',
             newId: '',
-            // prevVoters:[],
+            prevVoters: [],
             voterDataLoading: false,
         };
         this.fetchVoters = this.fetchVoters.bind(this);
@@ -67,10 +67,9 @@ class Proposals extends React.Component {
         }
         if (prevState.voters !== this.state.voters) {
             this.fetchDataForVests();
-            // this.calculateHivePower()
         }
         if (prevState.votersAccounts !== this.state.votersAccounts) {
-            this.isVotersDataLoading(false);
+            this.isVotersDataLoading(true);
         }
     }
 
@@ -175,6 +174,7 @@ class Proposals extends React.Component {
     toggleModal = () => {
         this.setState({
             openModal: !this.state.openModal,
+            voterDataLoading: false,
         });
     };
 
@@ -250,8 +250,10 @@ class Proposals extends React.Component {
 
         const accountsMap = votersAccounts.map((acc) => acc.vesting_shares);
         const votersMap = voters.map((name) => name.voter);
+        // console.log('prev voters acc');
 
-        console.log(voterDataLoading);
+        // console.log('current voters acc');
+        // console.log(votersAccounts);
 
         let hivePower = [];
         const calculateHivePower = () => {
@@ -395,11 +397,14 @@ class Proposals extends React.Component {
         //6,623,708.494
 
         // ////////////
-
+        // console.log(voterDataLoading);
+        // voterDataLoading;
+        // console.log('newfalse');
+        // console.log(newFalse);
         return (
             <div>
                 <VotersModal
-                    isVotersDataLoading={this.isVotersDataLoading}
+                    voterDataLoading={voterDataLoading}
                     sortMergedTotalHp={sortMergedTotalHp}
                     votersMap={votersMap}
                     votersAccounts={votersAccounts}
@@ -429,7 +434,7 @@ class Proposals extends React.Component {
                         </a>
                     ) : null}
 
-                    {/* {showBottomLoading ? <a>{`Loading more...`}</a> : null} */}
+                    {showBottomLoading ? <a>{`Loading more...`}</a> : null}
                 </center>
             </div>
         );
