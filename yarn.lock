@@ -10072,11 +10072,6 @@ react-medium-editor@1.8.1:
     medium-editor "^5.10.0"
     object-assign "^4.0.1"
 
-react-modal-overlay@1.0.2:
-  version "1.0.2"
-  resolved "https://registry.yarnpkg.com/react-modal-overlay/-/react-modal-overlay-1.0.2.tgz#d08a81460161c878c4a7c67b8590df7832db921f"
-  integrity sha512-VzitL6d5+e/mSnpdvg8TjWUis2YLWCBYKQjUMzWAb9WIaS5c+Scqf7Xp7IOWN2BTwm61gwIDKc11F3q2Z5CkaQ==
-
 react-modal@^3.14.4:
   version "3.14.4"
   resolved "https://registry.yarnpkg.com/react-modal/-/react-modal-3.14.4.tgz#2ca7e8e9a180955e5c9508c228b73167c1e6f6a3"

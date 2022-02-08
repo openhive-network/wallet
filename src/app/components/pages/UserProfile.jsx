@@ -296,7 +296,6 @@ export default class UserProfile extends React.Component {
                     'url(' + proxifyImageUrl(cover_image, '2048x512') + ')',
             };
         }
-        console.log(account.name);
         return (
             <div className="UserProfile">
                 <div className="UserProfile__banner row expanded">

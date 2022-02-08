@@ -1,32 +1,26 @@
 import React from 'react';
-// import { Modal } from 'react-modal-overlay';
-import Modal from 'react-modal';
-import 'react-modal-overlay/dist/index.css';
+import ReactModal from 'react-modal';
 import { APP_URL } from '../../../app/client_config';
 import './VotersModal.scss';
-// import { imageProxy } from '../../../app/utils/ProxifyUrl';
 import LoadingIndicator from './LoadingIndicator';
 import Userpic, { SIZE_SMALL } from './Userpic';
-Modal.defaultStyles.overlay.backgroundColor = ' rgba(0, 0, 0, 0.6)';
+ReactModal.defaultStyles.overlay.backgroundColor = 'rgba(0, 0, 0, 0.6)';
 
 class VotersModal extends React.Component {
     render() {
         const {
-            openModal,
-            closeModal,
-            voters,
-            // sortMergedResult,
-            // sortMergedProxyResult,
-            sortMergedTotalHp,
-            voterDataLoading,
+            open_modal,
+            close_modal,
+            sort_merged_total_hp,
+            is_voters_data_loaded,
+            new_id,
         } = this.props;
-        const proposal = voters.map((proposal) => proposal.proposal);
-        const proposalId = proposal.map((propId) => propId.id);
-        // console.log(sortMergedTotalHp);
-        const customStyles = {
+
+        const modalStyles = {
             content: {
+                minWidth: '300px',
+                minHeight: '500px',
                 width: '40vw',
-                minWidth: '400px',
                 height: '70vh',
                 top: '50%',
                 left: '50%',
@@ -35,83 +29,60 @@ class VotersModal extends React.Component {
                 marginRight: '-50%',
                 transform: 'translate(-50%, -50%)',
                 overflowY: 'auto',
-                // overlay: 'rgba(0, 0, 0, 0.4)',
             },
         };
         return (
-            <div>
-                <Modal
-                    isOpen={openModal}
-                    onAfterOpen={() => openModal}
-                    onRequestClose={closeModal}
-                    style={customStyles}
+            <div className="voters-modal__container">
+                <ReactModal
+                    isOpen={open_modal}
+                    onAfterOpen={() => open_modal}
+                    onRequestClose={close_modal}
+                    style={modalStyles}
                     ariaHideApp={false}
                 >
-                    {voterDataLoading === true ? (
-                        <div>
-                            <header style={{ textAlign: 'left' }}>
-                                <h3>
+                    {is_voters_data_loaded === false ? (
+                        <div className="voters-modal__loader">
+                            <LoadingIndicator type="dots" />
+                        </div>
+                    ) : (
+                        <div className="voters-modal__header">
+                            <header className="header">
+                                <h4>
                                     Votes on proposal&nbsp;
-                                    <span style={{ color: 'red' }}>
-                                        #{proposalId[0]}
+                                    <span className="header__id">
+                                        #{new_id}
                                     </span>
-                                </h3>
+                                </h4>
                             </header>
                             <hr />
-                            <div
-                                style={{
-                                    overflowX: 'clip',
-                                    display: 'block',
-                                }}
-                                className="content"
-                            >
-                                <div className="row">
-                                    {sortMergedTotalHp.map((each, index) => {
+                            <div className="content">
+                                <div className="content__row row">
+                                    {sort_merged_total_hp.map((each, index) => {
                                         const userInfo = {
                                             name: each[0],
                                             hivePower: each[2].toFixed(2),
                                             proxyHp: each[3].toFixed(2),
-                                            // image: `https://images.hive.blog/u/${each[0]}/avatar`,
                                         };
-                                        // const style = {
-                                        //     backgroundImage:
-                                        //         'url(' +
-                                        //         imageProxy() +
-                                        //         `u/${each[0]}/avatar)`,
-                                        // };
                                         return (
                                             <div
                                                 key={index}
-                                                style={{
-                                                    display: 'flex',
-                                                    flexDirection: 'column',
-                                                    justifyContent: 'center',
-                                                    alignItems: 'center',
-                                                }}
-                                                className="column small-12 medium-6"
+                                                className="content__column column small-12 medium-6"
                                             >
-                                                <Userpic
-                                                    account={userInfo.name}
-                                                    size={SIZE_SMALL}
-                                                />
+                                                <div className="content__column__user">
+                                                    <Userpic
+                                                        account={userInfo.name}
+                                                        size={SIZE_SMALL}
+                                                    />
 
-                                                <a
-                                                    style={{ color: 'red' }}
-                                                    href={`${APP_URL}/@${each[0]}`}
-                                                    target="_blank"
-                                                >
-                                                    {userInfo.name}
-                                                </a>
-                                                <div
-                                                    style={{
-                                                        display: 'flex',
-                                                        flexDirection: 'column',
-                                                        justifyContent:
-                                                            'center',
-                                                        alignItems: 'center',
-                                                        color: '#788187',
-                                                    }}
-                                                >
+                                                    <a
+                                                        style={{ color: 'red' }}
+                                                        href={`${APP_URL}/@${each[0]}`}
+                                                        target="_blank"
+                                                    >
+                                                        {userInfo.name}
+                                                    </a>
+                                                </div>
+                                                <div className="content__column__values">
                                                     {userInfo.hivePower}
                                                     &nbsp; HP
                                                     {userInfo.proxyHp !==
@@ -125,20 +96,8 @@ class VotersModal extends React.Component {
                                 </div>
                             </div>
                         </div>
-                    ) : (
-                        <div
-                            style={{
-                                display: 'flex',
-                                flexDirection: 'column',
-                                justifyContent: 'center',
-                                alignItems: 'center',
-                                height: '100%',
-                            }}
-                        >
-                            <LoadingIndicator type="dots" />
-                        </div>
                     )}
-                </Modal>
+                </ReactModal>
             </div>
         );
     }

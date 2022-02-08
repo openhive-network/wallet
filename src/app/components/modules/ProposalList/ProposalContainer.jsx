@@ -66,24 +66,12 @@ class ProposalContainer extends React.Component {
             proposal,
             total_vesting_shares,
             total_vesting_fund_hive,
-            getVoters,
-            // getAccouns,
-            getVotersAccounts,
-            // getGlobalProps,
-            // calculateHivePower,
-            voters,
             getNewId,
         } = this.props;
         // console.log('ProposalContainer.jsx::render()', this.props);
         return (
             <Proposal
-                // calculateHivePower={calculateHivePower}
-                // getGlobalProps={getGlobalProps}
                 getNewId={getNewId}
-                voters={voters}
-                getVotersAccounts={getVotersAccounts}
-                // getAccouns={getAccouns}
-                getVoters={getVoters}
                 triggerModal={this.state.triggerModal}
                 {...proposal}
                 onVote={this.onVote}
