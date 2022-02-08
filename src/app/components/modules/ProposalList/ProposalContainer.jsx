@@ -15,6 +15,7 @@ class ProposalContainer extends React.Component {
             // needed from global state object to calculate vests to sp
             total_vesting_shares: props.total_vesting_shares,
             total_vesting_fund_hive: props.total_vesting_fund_hive,
+            triggerModal: props.triggerModal,
         };
         this.id = this.props.proposal.id;
     }
@@ -65,11 +66,13 @@ class ProposalContainer extends React.Component {
             proposal,
             total_vesting_shares,
             total_vesting_fund_hive,
+            getNewId,
         } = this.props;
         // console.log('ProposalContainer.jsx::render()', this.props);
-
         return (
             <Proposal
+                getNewId={getNewId}
+                triggerModal={this.state.triggerModal}
                 {...proposal}
                 onVote={this.onVote}
                 {...this.state}

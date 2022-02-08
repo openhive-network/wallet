@@ -162,7 +162,6 @@ class UserWallet extends React.Component {
             open_orders,
         } = this.props;
         const gprops = this.props.gprops.toJS();
-
         // do not render if account is not loaded or available
         if (!account) return null;
 
@@ -770,9 +769,6 @@ class UserWallet extends React.Component {
         const handleExcludeLessThan1 = () => {
             this.setState({ excludeLessThan1: !this.state.excludeLessThan1 });
         };
-
-        // const fromUsername = this.state.fromUser;
-        // const toUsername = this.state.toUser;
 
         return (
             <div className="UserWallet">
