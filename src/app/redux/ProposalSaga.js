@@ -84,6 +84,7 @@ export function* listProposals({
                 return p.proposal.id;
             });
     }
+
     const mungedProposals = proposals.map((p) => {
         if (proposalVotesIds.indexOf(p.proposal_id) != -1) {
             p.upVoted = true;

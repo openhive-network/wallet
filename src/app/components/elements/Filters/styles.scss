@@ -1,0 +1,18 @@
+.filter__button {
+    &:hover {
+        cursor: pointer;
+        color: red;
+    }
+
+    font-weight: 700;
+    color: #788187;
+    text-transform: to-lower-case;
+}
+
+.active {
+    color: #333;
+}
+
+.user-search__input {
+    margin-top: 20px;
+}
