@@ -14,6 +14,7 @@ class VotersModal extends React.Component {
             sort_merged_total_hp,
             is_voters_data_loaded,
             new_id,
+            nightmodeEnabled,
         } = this.props;
 
         const modalStyles = {
@@ -31,13 +32,26 @@ class VotersModal extends React.Component {
                 overflowY: 'auto',
             },
         };
+
+        const modalStylesNight = {
+            content: {
+                ...modalStyles.content,
+                color: '#fff',
+                backgroundColor: '#2c3136',
+            },
+        };
+
         return (
             <div className="voters-modal__container">
                 <ReactModal
                     isOpen={open_modal}
                     onAfterOpen={() => open_modal}
                     onRequestClose={close_modal}
-                    style={modalStyles}
+                    style={
+                        nightmodeEnabled === false
+                            ? modalStyles
+                            : modalStylesNight
+                    }
                     ariaHideApp={false}
                 >
                     {is_voters_data_loaded === false ? (

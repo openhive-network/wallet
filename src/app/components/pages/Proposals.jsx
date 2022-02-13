@@ -7,6 +7,7 @@ import PropTypes from 'prop-types';
 import ProposalListContainer from 'app/components/modules/ProposalList/ProposalListContainer';
 import VotersModal from '../elements/VotersModal';
 import { api } from '@hiveio/hive-js';
+import * as appActions from '../../../app/redux/AppReducer';
 
 class Proposals extends React.Component {
     startValueByOrderType = {
@@ -236,6 +237,8 @@ class Proposals extends React.Component {
             is_voters_data_loaded,
             new_id,
         } = this.state;
+        const { nightmodeEnabled } = this.props;
+
         let showBottomLoading = false;
         if (loading && proposals && proposals.length > 0) {
             showBottomLoading = true;
@@ -303,7 +306,6 @@ class Proposals extends React.Component {
 
         //sort acount names by total hp count
         sort_merged_total_hp.sort((a, b) => b[1] - a[1]); // total = hp + proxy
-
         return (
             <div>
                 <VotersModal
@@ -312,6 +314,7 @@ class Proposals extends React.Component {
                     sort_merged_total_hp={sort_merged_total_hp}
                     open_modal={open_modal}
                     close_modal={this.triggerModal}
+                    nightmodeEnabled={nightmodeEnabled}
                 />
                 <ProposalListContainer
                     getNewId={this.getNewId}
@@ -365,10 +368,18 @@ module.exports = {
                 currentUser,
                 proposals: newProposals,
                 last_id,
+                nightmodeEnabled: state.app.getIn([
+                    'user_preferences',
+                    'nightmode',
+                ]),
             };
         },
         (dispatch) => {
             return {
+                toggleNightmode: (e) => {
+                    if (e) e.preventDefault();
+                    dispatch(appActions.toggleNightmode());
+                },
                 voteOnProposal: (
                     voter,
                     proposal_ids,
