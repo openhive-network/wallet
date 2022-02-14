@@ -48,9 +48,9 @@ class VotersModal extends React.Component {
                     onAfterOpen={() => open_modal}
                     onRequestClose={close_modal}
                     style={
-                        nightmodeEnabled === false
-                            ? modalStyles
-                            : modalStylesNight
+                        nightmodeEnabled === true
+                            ? modalStylesNight
+                            : modalStyles
                     }
                     ariaHideApp={false}
                 >
