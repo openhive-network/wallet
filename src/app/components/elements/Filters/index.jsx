@@ -50,7 +50,7 @@ class Filters extends React.Component {
                                         id="incoming"
                                         name="incoming"
                                     />
-                                    <label for="incoming">Incoming</label>
+                                    <label htmlFor="incoming">Incoming</label>
                                 </div>
                                 <div>
                                     <input
@@ -59,7 +59,7 @@ class Filters extends React.Component {
                                         id="outgoing"
                                         name="outgoing"
                                     />
-                                    <label for="outgoing">Outgoing</label>
+                                    <label htmlFor="outgoing">Outgoing</label>
                                 </div>
                                 <div>
                                     <input
@@ -68,7 +68,7 @@ class Filters extends React.Component {
                                         id="lessThan1"
                                         name="lessThan1"
                                     />
-                                    <label for="lessThan1">
+                                    <label htmlFor="lessThan1">
                                         Exclude less than 1 HBD/HIVE
                                     </label>
                                 </div>
@@ -82,7 +82,9 @@ class Filters extends React.Component {
                                         id="outgoing"
                                         name="outgoing"
                                     />
-                                    <label for="outgoing">Received from</label>
+                                    <label htmlFor="outgoing">
+                                        Received from
+                                    </label>
                                 </div>
                                 <div>
                                     <input
@@ -91,10 +93,12 @@ class Filters extends React.Component {
                                         id="outgoing"
                                         name="outgoing"
                                     />
-                                    <label for="outgoing">Transfer to</label>
+                                    <label htmlFor="outgoing">
+                                        Transfer to
+                                    </label>
                                 </div>
                                 <div className="user-search__input">
-                                    <label for="user-search">
+                                    <label htmlFor="user-search">
                                         Search by user
                                     </label>
                                     <input
