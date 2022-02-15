@@ -5,7 +5,12 @@ import { FormattedHTMLMessage } from 'app/Translator';
 
 class WitnessVoteExpiryWarning extends React.Component {
     render() {
-        const { governance_vote_expiration_ts } = this.props;
+        let governance_vote_expiration_ts =
+            this.props.governance_vote_expiration_ts !== undefined
+                ? this.props.governance_vote_expiration_ts
+                : new Date(new Date().setFullYear(new Date().getFullYear() + 1))
+                      .toISOString()
+                      .split('.')[0];
         const now = Moment();
         const expiryDate = Moment(`${governance_vote_expiration_ts}Z`);
         const expiryDiff = expiryDate.diff(now, 'months');

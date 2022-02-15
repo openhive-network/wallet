@@ -216,7 +216,11 @@ class Proposals extends React.Component {
     }
     fetchDataForVests() {
         const voters = this.state.voters;
-        const voters_map = voters.map((name) => name.voter);
+        const new_id = this.state.new_id;
+        const selected_proposal_voters = voters.filter(
+            (v) => v.proposal.proposal_id === new_id
+        );
+        const voters_map = selected_proposal_voters.map((name) => name.voter);
         api.callAsync('condenser_api.get_accounts', [voters_map, false])
             .then((res) => this.getVotersAccounts(res))
             .catch((err) => console.log(err));
@@ -243,9 +247,11 @@ class Proposals extends React.Component {
         if (loading && proposals && proposals.length > 0) {
             showBottomLoading = true;
         }
-
+        const selected_proposal_voters = voters.filter(
+            (v) => v.proposal.proposal_id === new_id
+        );
         const accounts_map = voters_accounts.map((acc) => acc.vesting_shares); // hive power
-        const voters_map = voters.map((name) => name.voter); // voter name
+        const voters_map = selected_proposal_voters.map((name) => name.voter); // voter name
         const acc_proxied_vests = voters_accounts.map(
             (acc) =>
                 acc.proxied_vsf_votes
@@ -268,7 +274,6 @@ class Proposals extends React.Component {
             }
         };
         calculateHivePower();
-
         let proxy_hp = [];
         const calculateProxyHp = () => {
             for (let i = 0; i < acc_proxied_vests.length; i++) {
@@ -285,7 +290,6 @@ class Proposals extends React.Component {
         calculateProxyHp();
 
         const total_hp = hive_power.map((num, index) => num + proxy_hp[index]);
-
         //create object of total, hp and proxy hp values
         let total_acc_hp_obj = {};
 
@@ -303,7 +307,6 @@ class Proposals extends React.Component {
         for (let value in total_acc_hp_obj) {
             sort_merged_total_hp.push([value, ...total_acc_hp_obj[value]]); // total = hp + proxy
         }
-
         //sort acount names by total hp count
         sort_merged_total_hp.sort((a, b) => b[1] - a[1]); // total = hp + proxy
         return (
