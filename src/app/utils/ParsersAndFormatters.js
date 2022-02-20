@@ -9,11 +9,11 @@ function fractional_part_len(value) {
 export function formatDecimal(value, decPlaces = 2, truncate0s = true) {
     let fl;
     if (
-        value === null ||
+        value === null
         // eslint-disable-next-line no-void
-        value === void 0 ||
+        || value === void 0
         // eslint-disable-next-line no-restricted-globals
-        isNaN(value)
+        || isNaN(value)
     ) {
         return ['N', 'a', 'N'];
     }
@@ -30,15 +30,12 @@ export function formatDecimal(value, decPlaces = 2, truncate0s = true) {
     let j = i.length;
     j = i.length > 3 ? j % 3 : 0;
     const decPart = decPlaces
-        ? decSeparator +
-          Math.abs(abs_value - i)
-              .toFixed(decPlaces)
-              .slice(2)
+        ? decSeparator + Math.abs(abs_value - i).toFixed(decPlaces).slice(2)
         : '';
     return [
-        sign +
-            (j ? i.substr(0, j) + thouSeparator : '') +
-            i.substr(j).replace(/(\d{3})(?=\d)/g, '$1' + thouSeparator),
+        sign
+            + (j ? i.substr(0, j) + thouSeparator : '')
+            + i.substr(j).replace(/(\d{3})(?=\d)/g, '$1' + thouSeparator),
         decPart,
     ];
 }

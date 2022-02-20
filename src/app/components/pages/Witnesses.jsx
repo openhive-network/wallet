@@ -100,11 +100,7 @@ class Witnesses extends React.Component {
     }
 
     componentDidMount() {
-        const {
-            location: {
-                query: { highlight },
-            },
-        } = this.props;
+        const { location: { query: { highlight } } } = this.props;
         this.setState({
             witnessToHighlight: highlight,
         });
@@ -115,31 +111,23 @@ class Witnesses extends React.Component {
 
     shouldComponentUpdate(np, ns) {
         const {
-            witness_votes,
-            witnessVotesInProgress,
-            witnesses,
-            current_proxy,
-            username,
+            witness_votes, witnessVotesInProgress, witnesses, current_proxy, username,
         } = this.props;
         const {
-            customUsername,
-            proxy,
-            proxyFailed,
-            witnessAccounts,
-            witnessToHighlight,
+            customUsername, proxy, proxyFailed, witnessAccounts, witnessToHighlight,
         } = this.state;
 
         return (
-            !is(np.witness_votes, witness_votes) ||
-            !is(np.witnessVotesInProgress, witnessVotesInProgress) ||
-            np.witnesses !== witnesses ||
-            np.current_proxy !== current_proxy ||
-            np.username !== username ||
-            ns.customUsername !== customUsername ||
-            ns.proxy !== proxy ||
-            ns.proxyFailed !== proxyFailed ||
-            ns.witnessAccounts !== witnessAccounts ||
-            ns.witnessToHighlight !== witnessToHighlight
+            !is(np.witness_votes, witness_votes)
+            || !is(np.witnessVotesInProgress, witnessVotesInProgress)
+            || np.witnesses !== witnesses
+            || np.current_proxy !== current_proxy
+            || np.username !== username
+            || ns.customUsername !==customUsername
+            || ns.proxy !== proxy
+            || ns.proxyFailed !== proxyFailed
+            || ns.witnessAccounts !== witnessAccounts
+            || ns.witnessToHighlight !== witnessToHighlight
         );
     }
 
@@ -159,10 +147,7 @@ class Witnesses extends React.Component {
             );
 
             // Lets not fetch extra account details for witnesses who have not produced blocks in a while
-            if (
-                witnessLastBlockAgeInDays <=
-                witnessFilterLastBlockAgeThresholdInDays
-            ) {
+            if (witnessLastBlockAgeInDays <= witnessFilterLastBlockAgeThresholdInDays) {
                 if (witnessOwners[chunksCount].length >= 20) {
                     chunksCount += 1;
                     witnessOwners[chunksCount] = [];
@@ -350,10 +335,9 @@ class Witnesses extends React.Component {
             const noBlock7days = (head_block - lastBlock) * 3 > 604800;
             const isDisabled = signingKey == DISABLED_SIGNING_KEY;
             const votingActive = witnessVotesInProgress.has(witnessName);
-            const classUp =
-                'Voting__button Voting__button-up' +
-                (myVote === true ? ' Voting__button--upvoted' : '') +
-                (votingActive ? ' votingUp' : '');
+            const classUp = 'Voting__button Voting__button-up'
+                + (myVote === true ? ' Voting__button--upvoted' : '')
+                + (votingActive ? ' votingUp' : '');
             const up = (
                 <Icon
                     name={votingActive ? 'empty' : 'chevron-up-circle'}
@@ -419,12 +403,11 @@ class Witnesses extends React.Component {
             // Don't display the witness
             if (
                 // If rank over 100
-                rank > 100 &&
+                rank > 100
                 // And no blocked produced for over 30 days
-                witnessLastBlockAgeInDays >
-                    witnessFilterLastBlockAgeThresholdInDays &&
+                && witnessLastBlockAgeInDays > witnessFilterLastBlockAgeThresholdInDays
                 // And not voted by current user
-                !myVote
+                && !myVote
             ) {
                 rank += 1;
                 return null;
@@ -440,7 +423,7 @@ class Witnesses extends React.Component {
                 >
                     <td className="Witnesses__rank">
                         {rank < 10 && '0'}
-                        {(rank += 1)}
+                        {rank += 1}
                         &nbsp;&nbsp;
                         <span className={classUp}>
                             {votingActive ? (
@@ -483,26 +466,22 @@ class Witnesses extends React.Component {
                         <div className="Witnesses__info">
                             <div>
                                 {witnessSocialLink(witnessName)}
-                                {witnessOwnerNames &&
-                                    witnessOwnerNames.length > 0 && (
+                                {witnessOwnerNames && witnessOwnerNames.length > 0 && (
                                         <span>
                                             {' '}
-                                            {tt('witnesses_jsx.by')}{' '}
+                                            {tt('witnesses_jsx.by')}
+                                            {' '}
                                             {witnessOwnerNames.map(
                                                 (ownerName, index) => {
                                                     if (
-                                                        witnessOwnerNames.length >
-                                                            1 &&
-                                                        index ===
-                                                            witnessOwnerNames.length -
-                                                                1
+                                                        witnessOwnerNames.length > 1
+                                                        && index === witnessOwnerNames.length - 1
                                                     ) {
                                                         return (
-                                                            <span
-                                                                key={ownerName}
-                                                            >
+                                                            <span key={ownerName}>
                                                                 {' '}
-                                                                &{' '}
+                                                                &
+                                                                {' '}
                                                                 {witnessSocialLink(
                                                                     ownerName
                                                                 )}
@@ -565,15 +544,19 @@ class Witnesses extends React.Component {
                                                 {witnessDescription}
                                             </div>
                                         )}
-                                        {tt('witnesses_jsx.last_block')}{' '}
+                                        {tt('witnesses_jsx.last_block')}
+                                        {' '}
                                         <Link
                                             to={`https://hiveblocks.com/b/${lastBlock}`}
                                             target="_blank"
                                         >
-                                            #{lastBlock}
-                                        </Link>{' '}
+                                            #
+                                            {lastBlock}
+                                        </Link>
+                                        {' '}
                                         {blockGap(head_block, lastBlock)}
-                                        on v{runningVersion}
+                                        on v
+                                        {runningVersion}
                                     </div>
                                     {isDisabled && (
                                         <div>
@@ -606,7 +589,8 @@ class Witnesses extends React.Component {
                         {!isDisabled && <div>{requiredHpToRankUp}</div>}
                     </td>
                     <td>
-                        ${parseFloat(hbdExchangeRate.get('base'))}
+                        $
+                        {parseFloat(hbdExchangeRate.get('base'))}
                         <br />
                         <small>
                             <TimeAgoWrapper date={hbdExchangeUpdateDate} />
@@ -630,11 +614,8 @@ class Witnesses extends React.Component {
                 })
                 .map((item) => {
                     const votingActive = witnessVotesInProgress.has(item);
-                    const classUp =
-                        'Voting__button Voting__button-up' +
-                        (votingActive
-                            ? ' votingUp'
-                            : ' Voting__button--upvoted');
+                    const classUp = 'Voting__button Voting__button-up'
+                        + (votingActive ? ' votingUp' : ' Voting__button--upvoted');
                     const up = (
                         <Icon
                             name={votingActive ? 'empty' : 'chevron-up-circle'}
@@ -687,7 +668,8 @@ class Witnesses extends React.Component {
                                             { count: witness_vote_count }
                                         )}
                                         .
-                                    </strong>{' '}
+                                    </strong>
+                                    {' '}
                                     {tt(
                                         'witnesses_jsx.you_can_vote_for_maximum_of_witnesses'
                                     )}
@@ -722,8 +704,8 @@ class Witnesses extends React.Component {
                     <div
                         className={classnames('row', {
                             Witnesses__highlight:
-                                witnessToHighlight &&
-                                foundWitnessToHighlight === false,
+                                witnessToHighlight
+                                && foundWitnessToHighlight === false,
                         })}
                     >
                         <div className="column">
@@ -788,7 +770,9 @@ class Witnesses extends React.Component {
                         {current_proxy ? (
                             <div>
                                 <div style={{ paddingBottom: 10 }}>
-                                    {tt('witnesses_jsx.witness_proxy_current')}:{' '}
+                                    {tt('witnesses_jsx.witness_proxy_current')}
+                                    :
+                                    {' '}
                                     <strong>{current_proxy}</strong>
                                 </div>
 
@@ -856,7 +840,8 @@ class Witnesses extends React.Component {
                         )}
                         {proxyFailed && (
                             <p className="error">
-                                {tt('witnesses_jsx.proxy_update_error')}.
+                                {tt('witnesses_jsx.proxy_update_error')}
+                                .
                             </p>
                         )}
                         <br />
@@ -876,12 +861,9 @@ module.exports = {
         (state) => {
             const current_user = state.user.get('current');
             const username = current_user && current_user.get('username');
-            const current_account =
-                current_user && state.global.getIn(['accounts', username]);
-            const witness_votes =
-                current_account && current_account.get('witness_votes').toSet();
-            const current_proxy =
-                current_account && current_account.get('proxy');
+            const current_account = current_user && state.global.getIn(['accounts', username]);
+            const witness_votes = current_account && current_account.get('witness_votes').toSet();
+            const current_proxy = current_account && current_account.get('proxy');
             const witnesses = state.global.get('witnesses', List());
             const witnessVotesInProgress = state.global.get(
                 `transaction_witness_vote_active_${username}`,
