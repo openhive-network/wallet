@@ -105,7 +105,9 @@ class Witnesses extends React.Component {
             witnessToHighlight: highlight,
         });
         this.loadWitnessAccounts();
+    }
 
+    componentDidUpdate() {
         this.scrollToHighlightedWitness();
     }
 
@@ -198,24 +200,21 @@ class Witnesses extends React.Component {
     // eslint-disable-next-line class-methods-use-this
     scrollToHighlightedWitness() {
         if (typeof document !== 'undefined') {
-            setTimeout(() => {
-                const highlightedWitnessElement = document.querySelector(
-                    '.Witnesses__highlight'
-                );
-                if (highlightedWitnessElement) {
-                    highlightedWitnessElement.scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'center',
-                        inline: 'center',
-                    });
-                }
-            }, 1000);
+            const highlightedWitnessElement = document.querySelector(
+                '.Witnesses__highlight'
+            );
+            if (highlightedWitnessElement) {
+                highlightedWitnessElement.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'center',
+                    inline: 'center',
+                });
+            }
         }
     }
 
     updateWitnessToHighlight(witness) {
         this.setState({ witnessToHighlight: witness });
-        this.scrollToHighlightedWitness();
         window.history.pushState('', '', `/~witnesses?highlight=${witness}`);
     }
 
@@ -555,6 +554,7 @@ class Witnesses extends React.Component {
                                         </Link>
                                         {' '}
                                         {blockGap(head_block, lastBlock)}
+                                        {' '}
                                         on v
                                         {runningVersion}
                                     </div>
