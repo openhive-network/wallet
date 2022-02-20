@@ -237,7 +237,9 @@
         "cannot_encrypt_memo": "cannot encrypt memo with current login method",
         "rcLevel": "Resource Credits (RC) level: %(rc_percent)s%%.",
         "rcFullIn": "Full in %(duration)s",
-        "governanceExpiryWarning": "Witness votes auto-expire %(duration)s after your last governance transaction. Your present votes will expire on %(date)s. Please <a href=\"/~witnesses\">update your Witness votes</a> to reset."
+        "governanceExpiryWarning": "Witness votes auto-expire %(duration)s after your last governance transaction. Your present votes will expire on %(date)s. Please <a href=\"/~witnesses\">update your Witness votes</a> to reset.",
+        "governanceExpired": "Your Witnesses votes have expired on %(date)s. Please <a href=\"/~witnesses\">update your Witness votes</a> to reset.",
+        "pleaseVoteForWitnesses": "It looks like you have not yet voted for Witnesses, you can do so on the <a href=\"/~witnesses\">Witnesses page</a>"
     },
     "navigation": {
         "about": "About Hive",
