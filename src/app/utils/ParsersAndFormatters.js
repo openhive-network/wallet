@@ -102,7 +102,7 @@ export function formatLargeNumber(number, decimals) {
     ];
 
     const regexp = /\.0+$|(\.[0-9]*[1-9])0+$/;
-    for (let i = symbols.length - 1; i > 0; i -= 1) {
+    for (let i = symbols.length - 1; i >= 0; i -= 1) {
         if (number >= symbols[i].value) {
             return (
                 (number / symbols[i].value)

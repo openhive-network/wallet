@@ -301,15 +301,14 @@ class Witnesses extends React.Component {
                 `${totalVotesVests / 1000000} VESTS`
             );
             const totalVotesHp = formatLargeNumber(totalVotesHpf, 0);
+            const deltaHpf = previousTotalVoteHpf - totalVotesHpf;
 
             let requiredHpToRankUp = '';
             if (previousTotalVoteHpf !== 0) {
                 requiredHpToRankUp = (
                     <small>
                         {tt('witnesses_jsx.hp_required_to_rank_up', {
-                            votehp: formatLargeNumber(
-                                previousTotalVoteHpf - totalVotesHpf
-                            ),
+                            votehp: formatLargeNumber(deltaHpf),
                         })}
                     </small>
                 );
