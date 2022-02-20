@@ -1,3 +1,4 @@
+/* global $STM_Config */
 import React from 'react';
 import Moment from 'moment';
 import { api } from '@hiveio/hive-js';
@@ -18,12 +19,12 @@ import { vestsToHpf } from 'app/utils/StateFunctions';
 import tt from 'counterpart';
 import _ from 'lodash';
 
-const Long = ByteBuffer.Long;
+const { Long } = ByteBuffer;
 const { string, func, object } = PropTypes;
 const witnessFilterLastBlockAgeThresholdInDays = 30;
 const DISABLED_SIGNING_KEY = 'STM1111111111111111111111111111111114T1Anm';
 
-function _blockGap(head_block, last_block, format = 'auto') {
+function blockGap(head_block, last_block, format = 'auto') {
     const secs = (head_block - last_block) * 3;
     const mins = Math.floor(secs / 60);
     const hrs = Math.floor(mins / 60);
@@ -50,17 +51,23 @@ function _blockGap(head_block, last_block, format = 'auto') {
     }
 }
 
+const propTypes = {
+    // HTML properties
+    // Redux connect properties
+    // eslint-disable-next-line react/forbid-prop-types
+    witnesses: object.isRequired,
+    accountWitnessVote: func.isRequired,
+    username: string,
+    // eslint-disable-next-line react/forbid-prop-types
+    witness_votes: object,
+};
+
+const defaultProps = {
+    username: '',
+    witness_votes: {},
+};
+
 class Witnesses extends React.Component {
-    static propTypes = {
-        // HTML properties
-
-        // Redux connect properties
-        witnesses: object.isRequired,
-        accountWitnessVote: func.isRequired,
-        username: string,
-        witness_votes: object,
-    };
-
     constructor() {
         super();
         this.state = {
@@ -84,16 +91,22 @@ class Witnesses extends React.Component {
         };
         this.accountWitnessProxy = (e) => {
             e.preventDefault();
+            const { proxy } = this.state;
             const { username, accountWitnessProxy } = this.props;
-            accountWitnessProxy(username, this.state.proxy, (state) => {
+            accountWitnessProxy(username, proxy, (state) => {
                 this.setState(state);
             });
         };
     }
 
     componentDidMount() {
+        const {
+            location: {
+                query: { highlight },
+            },
+        } = this.props;
         this.setState({
-            witnessToHighlight: this.props.location.query.highlight,
+            witnessToHighlight: highlight,
         });
         this.loadWitnessAccounts();
 
@@ -101,17 +114,32 @@ class Witnesses extends React.Component {
     }
 
     shouldComponentUpdate(np, ns) {
+        const {
+            witness_votes,
+            witnessVotesInProgress,
+            witnesses,
+            current_proxy,
+            username,
+        } = this.props;
+        const {
+            customUsername,
+            proxy,
+            proxyFailed,
+            witnessAccounts,
+            witnessToHighlight,
+        } = this.state;
+
         return (
-            !is(np.witness_votes, this.props.witness_votes) ||
-            !is(np.witnessVotesInProgress, this.props.witnessVotesInProgress) ||
-            np.witnesses !== this.props.witnesses ||
-            np.current_proxy !== this.props.current_proxy ||
-            np.username !== this.props.username ||
-            ns.customUsername !== this.state.customUsername ||
-            ns.proxy !== this.state.proxy ||
-            ns.proxyFailed !== this.state.proxyFailed ||
-            ns.witnessAccounts !== this.state.witnessAccounts ||
-            ns.witnessToHighlight !== this.state.witnessToHighlight
+            !is(np.witness_votes, witness_votes) ||
+            !is(np.witnessVotesInProgress, witnessVotesInProgress) ||
+            np.witnesses !== witnesses ||
+            np.current_proxy !== current_proxy ||
+            np.username !== username ||
+            ns.customUsername !== customUsername ||
+            ns.proxy !== proxy ||
+            ns.proxyFailed !== proxyFailed ||
+            ns.witnessAccounts !== witnessAccounts ||
+            ns.witnessToHighlight !== witnessToHighlight
         );
     }
 
@@ -124,7 +152,7 @@ class Witnesses extends React.Component {
 
         witnesses.map((item) => {
             const lastBlock = item.get('last_confirmed_block_num');
-            const witnessLastBlockAgeInDays = _blockGap(
+            const witnessLastBlockAgeInDays = blockGap(
                 head_block,
                 lastBlock,
                 'days'
@@ -147,6 +175,7 @@ class Witnesses extends React.Component {
 
         for (let oi = 0; oi < witnessOwners.length; oi += 1) {
             const owners = witnessOwners[oi];
+            // eslint-disable-next-line no-await-in-loop
             const res = await api.getAccountsAsync(owners);
             if (!(res && res.length > 0)) {
                 console.error(tt('g.account_not_found'));
@@ -181,6 +210,7 @@ class Witnesses extends React.Component {
         return true;
     }
 
+    // eslint-disable-next-line class-methods-use-this
     scrollToHighlightedWitness() {
         if (typeof document !== 'undefined') {
             setTimeout(() => {
@@ -211,30 +241,33 @@ class Witnesses extends React.Component {
                 witnessVotesInProgress,
                 current_proxy,
                 head_block,
+                witnesses,
+                state,
             },
             state: {
                 customUsername,
                 proxy,
                 witnessAccounts,
                 witnessToHighlight,
+                proxyFailed,
             },
             accountWitnessVote,
             accountWitnessProxy,
             onWitnessChange,
             updateWitnessToHighlight,
         } = this;
-        const sortedWitnesses = this.props.witnesses.sort((a, b) =>
-            Long.fromString(String(b.get('votes'))).subtract(
+        const sortedWitnesses = witnesses.sort((a, b) => {
+            return Long.fromString(String(b.get('votes'))).subtract(
                 Long.fromString(String(a.get('votes'))).toString()
-            )
-        );
+            );
+        });
         let witness_vote_count = 30;
         let rank = 1;
         let foundWitnessToHighlight = false;
         let previousTotalVoteHpf = 0;
         const now = Moment();
 
-        const witnesses = sortedWitnesses.map((item) => {
+        const processedWitnesses = sortedWitnesses.map((item) => {
             const witnessName = item.get('owner');
             if (witnessName === witnessToHighlight) {
                 foundWitnessToHighlight = true;
@@ -264,7 +297,7 @@ class Witnesses extends React.Component {
 
             const totalVotesVests = item.get('votes');
             const totalVotesHpf = vestsToHpf(
-                this.props.state,
+                state,
                 `${totalVotesVests / 1000000} VESTS`
             );
             const totalVotesHp = formatLargeNumber(totalVotesHpf, 0);
@@ -290,8 +323,9 @@ class Witnesses extends React.Component {
                 : null;
             const signingKey = item.get('signing_key');
             let witnessCreated = item.get('created');
-            if (witnessCreated === '1970-01-01T00:00:00')
+            if (witnessCreated === '1970-01-01T00:00:00') {
                 witnessCreated = '2016-06-01T00:00:00';
+            }
 
             const accountBirthday = Moment(`${witnessCreated}Z`);
             const witnessAgeDays = now.diff(accountBirthday, 'days');
@@ -363,22 +397,22 @@ class Witnesses extends React.Component {
                 ? { textDecoration: 'line-through', color: '#AAA' }
                 : {};
 
-            const witnessLastBlockAgeInDays = _blockGap(
+            const witnessLastBlockAgeInDays = blockGap(
                 head_block,
                 lastBlock,
                 'days'
             );
 
-            const witnessSocialLink = (witnessName) => {
+            const witnessSocialLink = (_witnessName) => {
                 return (
                     <Link
-                        to={`${$STM_Config.social_url}/@${witnessName}`}
+                        to={`${$STM_Config.social_url}/@${_witnessName}`}
                         style={ownerStyle}
                         title={tt('witnesses_jsx.navigate_to_witness_profile')}
                         target="_blank"
                         rel="noreferrer noopener"
                     >
-                        {witnessName}
+                        {_witnessName}
                     </Link>
                 );
             };
@@ -407,7 +441,7 @@ class Witnesses extends React.Component {
                 >
                     <td className="Witnesses__rank">
                         {rank < 10 && '0'}
-                        {rank++}
+                        {(rank += 1)}
                         &nbsp;&nbsp;
                         <span className={classUp}>
                             {votingActive ? (
@@ -465,7 +499,9 @@ class Witnesses extends React.Component {
                                                                 1
                                                     ) {
                                                         return (
-                                                            <span>
+                                                            <span
+                                                                key={ownerName}
+                                                            >
                                                                 {' '}
                                                                 &{' '}
                                                                 {witnessSocialLink(
@@ -475,7 +511,7 @@ class Witnesses extends React.Component {
                                                         );
                                                     }
                                                     return (
-                                                        <span>
+                                                        <span key={ownerName}>
                                                             {index > 0 && ', '}
                                                             {witnessSocialLink(
                                                                 ownerName
@@ -537,14 +573,14 @@ class Witnesses extends React.Component {
                                         >
                                             #{lastBlock}
                                         </Link>{' '}
-                                        {_blockGap(head_block, lastBlock)} on v
-                                        {runningVersion}
+                                        {blockGap(head_block, lastBlock)}
+                                        on v{runningVersion}
                                     </div>
                                     {isDisabled && (
                                         <div>
                                             {`${tt(
                                                 'witnesses_jsx.disabled'
-                                            )} ${_blockGap(
+                                            )} ${blockGap(
                                                 head_block,
                                                 lastBlock
                                             )}`}
@@ -677,7 +713,7 @@ class Witnesses extends React.Component {
                                         <th>Price feed</th>
                                     </tr>
                                 </thead>
-                                <tbody>{witnesses.toArray()}</tbody>
+                                <tbody>{processedWitnesses.toArray()}</tbody>
                             </table>
                         </div>
                     </div>
@@ -718,6 +754,7 @@ class Witnesses extends React.Component {
                                     />
                                     <div className="input-group-button">
                                         <button
+                                            type="button"
                                             className="button"
                                             onClick={accountWitnessVote.bind(
                                                 this,
@@ -771,6 +808,7 @@ class Witnesses extends React.Component {
                                         />
                                         <div className="input-group-button">
                                             <button
+                                                type="button"
                                                 style={{ marginBottom: 0 }}
                                                 className="button"
                                                 onClick={accountWitnessProxy}
@@ -804,6 +842,7 @@ class Witnesses extends React.Component {
                                     />
                                     <div className="input-group-button">
                                         <button
+                                            type="button"
                                             style={{ marginBottom: 0 }}
                                             className="button"
                                             onClick={accountWitnessProxy}
@@ -816,7 +855,7 @@ class Witnesses extends React.Component {
                                 </div>
                             </form>
                         )}
-                        {this.state.proxyFailed && (
+                        {proxyFailed && (
                             <p className="error">
                                 {tt('witnesses_jsx.proxy_update_error')}.
                             </p>
@@ -828,6 +867,9 @@ class Witnesses extends React.Component {
         );
     }
 }
+
+Witnesses.propTypes = propTypes;
+Witnesses.defaultProps = defaultProps;
 
 module.exports = {
     path: '/~witnesses(/:witness)',
