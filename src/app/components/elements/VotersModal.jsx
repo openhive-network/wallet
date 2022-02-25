@@ -3,7 +3,6 @@ import ReactModal from 'react-modal';
 import { APP_URL } from '../../../app/client_config';
 import './VotersModal.scss';
 import LoadingIndicator from './LoadingIndicator';
-import Userpic, { SIZE_SMALL } from './Userpic';
 ReactModal.defaultStyles.overlay.backgroundColor = 'rgba(0, 0, 0, 0.6)';
 
 class VotersModal extends React.Component {
@@ -83,11 +82,6 @@ class VotersModal extends React.Component {
                                                 className="content__column column small-12 medium-6"
                                             >
                                                 <div className="content__column__user">
-                                                    <Userpic
-                                                        account={userInfo.name}
-                                                        size={SIZE_SMALL}
-                                                    />
-
                                                     <a
                                                         style={{ color: 'red' }}
                                                         href={`${APP_URL}/@${each[0]}`}
