@@ -46,7 +46,49 @@ class Proposals extends React.Component {
             total_vest_hive: '',
             new_id: '',
             is_voters_data_loaded: false,
+            lastVoter: '',
+            lastVoterFor2000: '',
+            lastVoterFor3000: '',
+            lastVoterFor4000: '',
+            lastVoterFor5000: '',
+            lastVoterFor6000: '',
+            lastVoterFor7000: '',
+            // lastVoterFor8000: '',
+            // lastVoterFor9000: '',
+            // lastVoterFor10000: '',
+            // lastVoterFor11000: '',
+            // lastVoterFor12000: '',
+            // lastVoterFor13000: '',
+            // lastVoterFor14000: '',
+            load2000Voters: [],
+            load3000Voters: [],
+            load4000Voters: [],
+            load5000Voters: [],
+            load6000Voters: [],
+            load7000Voters: [],
+            // load8000Voters: [],
+            // load9000Voters: [],
+            // load10000Voters: [],
+            // load11000Voters: [],
+            // load12000Voters: [],
+            // load13000Voters: [],
+            // load14000Voters: [],
+            // load15000Voters: [],
         };
+        // this.fetch15000Voters = this.fetch15000Voters.bind(this);
+        // this.fetch14000Voters = this.fetch14000Voters.bind(this);
+        // this.fetch13000Voters = this.fetch13000Voters.bind(this);
+        // this.fetch12000Voters = this.fetch12000Voters.bind(this);
+        // this.fetch11000Voters = this.fetch11000Voters.bind(this);
+        // this.fetch10000Voters = this.fetch10000Voters.bind(this);
+        // this.fetch9000Voters = this.fetch9000Voters.bind(this);
+        // this.fetch8000Voters = this.fetch8000Voters.bind(this);
+        this.fetch7000Voters = this.fetch7000Voters.bind(this);
+        this.fetch6000Voters = this.fetch6000Voters.bind(this);
+        this.fetch5000Voters = this.fetch5000Voters.bind(this);
+        this.fetch4000Voters = this.fetch4000Voters.bind(this);
+        this.fetch3000Voters = this.fetch3000Voters.bind(this);
+        this.fetch2000Voters = this.fetch2000Voters.bind(this);
         this.fetchVoters = this.fetchVoters.bind(this);
         this.fetchGlobalProps = this.fetchGlobalProps.bind(this);
         this.fetchDataForVests = this.fetchDataForVests.bind(this);
@@ -64,10 +106,58 @@ class Proposals extends React.Component {
         if (prevState.new_id !== this.state.new_id) {
             this.fetchVoters();
             this.setIsVotersDataLoading(false);
+            // this.fetch2000Voters;
+            // this.fetchDataForVests();
         }
         if (prevState.voters !== this.state.voters) {
+            // this.fetchDataForVests();
+            this.fetch2000Voters();
+        }
+        if (prevState.load2000Voters !== this.state.load2000Voters) {
+            this.fetch3000Voters();
+        }
+        if (prevState.load3000Voters !== this.state.load3000Voters) {
+            this.fetch4000Voters();
+        }
+        if (prevState.load4000Voters !== this.state.load4000Voters) {
+            this.fetch5000Voters();
+        }
+        if (prevState.load5000Voters !== this.state.load5000Voters) {
+            this.fetch6000Voters();
+        }
+        if (prevState.load6000Voters !== this.state.load6000Voters) {
+            this.fetch7000Voters();
+        }
+        if (prevState.load7000Voters !== this.state.load7000Voters) {
+            // this.fetch8000Voters();
             this.fetchDataForVests();
         }
+        // if (prevState.load8000Voters !== this.state.load8000Voters) {
+        //     this.fetch9000Voters();
+
+        // }
+        // if (prevState.load9000Voters !== this.state.load9000Voters) {
+        //     this.fetch10000Voters();
+        // }
+        // if (prevState.load10000Voters !== this.state.load10000Voters) {
+        //     this.fetch11000Voters();
+        // }
+        // if (prevState.load11000Voters !== this.state.load11000Voters) {
+        //     this.fetch12000Voters();
+        // }
+        // if (prevState.load12000Voters !== this.state.load12000Voters) {
+        //     this.fetch13000Voters();
+        // }
+        // if (prevState.load13000Voters !== this.state.load13000Voters) {
+        //     this.fetch14000Voters();
+        // }
+        // if (prevState.load14000Voters !== this.state.load14000Voters) {
+        //     this.fetch15000Voters();
+        // }
+        // if (prevState.load15000Voters !== this.state.load15000Voters) {
+        //     this.fetchDataForVests();
+        // }
+
         if (prevState.voters_accounts !== this.state.voters_accounts) {
             this.setIsVotersDataLoading(!this.state.is_voters_data_loaded);
         }
@@ -177,9 +267,52 @@ class Proposals extends React.Component {
         });
     };
 
-    getVoters = (voters) => {
-        this.setState({ voters });
+    getVoters = (voters, lastVoter) => {
+        this.setState({ voters, lastVoter });
     };
+
+    laodMore = (load2000Voters, lastVoterFor2000) => {
+        this.setState({ load2000Voters, lastVoterFor2000 });
+    };
+    loadMore3000 = (load3000Voters, lastVoterFor3000) => {
+        this.setState({ load3000Voters, lastVoterFor3000 });
+    };
+    loadMore4000 = (load4000Voters, lastVoterFor4000) => {
+        this.setState({ load4000Voters, lastVoterFor4000 });
+    };
+    loadMore5000 = (load5000Voters, lastVoterFor5000) => {
+        this.setState({ load5000Voters, lastVoterFor5000 });
+    };
+    loadMore6000 = (load6000Voters, lastVoterFor6000) => {
+        this.setState({ load6000Voters, lastVoterFor6000 });
+    };
+    loadMore7000 = (load7000Voters, lastVoterFor7000) => {
+        this.setState({ load7000Voters, lastVoterFor7000 });
+    };
+    // loadMore8000 = (load8000Voters, lastVoterFor8000) => {
+    //     this.setState({ load8000Voters, lastVoterFor8000 });
+    // };
+    // loadMore9000 = (load9000Voters, lastVoterFor9000) => {
+    //     this.setState({ load9000Voters, lastVoterFor9000 });
+    // };
+    // loadMore10000 = (load10000Voters, lastVoterFor10000) => {
+    //     this.setState({ load10000Voters, lastVoterFor10000 });
+    // };
+    // loadMore11000 = (load11000Voters, lastVoterFor11000) => {
+    //     this.setState({ load11000Voters, lastVoterFor11000 });
+    // };
+    // loadMore12000 = (load12000Voters, lastVoterFor12000) => {
+    //     this.setState({ load12000Voters, lastVoterFor12000 });
+    // };
+    // loadMore13000 = (load13000Voters, lastVoterFor13000) => {
+    //     this.setState({ load13000Voters, lastVoterFor13000 });
+    // };
+    // loadMore14000 = (load14000Voters, lastVoterFor14000) => {
+    //     this.setState({ load14000Voters, lastVoterFor14000 });
+    // };
+    // loadMore15000 = (load15000Voters) => {
+    //     this.setState({ load15000Voters });
+    // };
     getVotersAccounts = (voters_accounts) => {
         this.setState({ voters_accounts });
     };
@@ -211,13 +344,273 @@ class Proposals extends React.Component {
             order_direction: 'ascending',
             status: 'active',
         })
-            .then((res) => this.getVoters(res.proposal_votes))
+            .then((res) =>
+                this.getVoters(
+                    res.proposal_votes,
+                    ...res.proposal_votes.slice(-1)
+                )
+            )
             .catch((err) => console.log(err));
     }
+
+    fetch2000Voters() {
+        api.callAsync('database_api.list_proposal_votes', {
+            start: [this.state.new_id, this.state.lastVoter.voter],
+            limit: 1000,
+            order: 'by_proposal_voter',
+            order_direction: 'ascending',
+            status: 'active',
+        })
+            .then((res) =>
+                this.laodMore(
+                    res.proposal_votes,
+                    ...res.proposal_votes.slice(-1)
+                )
+            )
+            .catch((err) => console.log(err));
+    }
+
+    fetch3000Voters() {
+        api.callAsync('database_api.list_proposal_votes', {
+            start: [this.state.new_id, this.state.lastVoterFor2000.voter],
+            limit: 1000,
+            order: 'by_proposal_voter',
+            order_direction: 'ascending',
+            status: 'active',
+        })
+            .then((res) =>
+                this.loadMore3000(
+                    res.proposal_votes,
+                    ...res.proposal_votes.slice(-1)
+                )
+            )
+            .catch((err) => console.log(err));
+    }
+    fetch4000Voters() {
+        api.callAsync('database_api.list_proposal_votes', {
+            start: [this.state.new_id, this.state.lastVoterFor3000.voter],
+            limit: 1000,
+            order: 'by_proposal_voter',
+            order_direction: 'ascending',
+            status: 'active',
+        })
+            .then((res) =>
+                this.loadMore4000(
+                    res.proposal_votes,
+                    ...res.proposal_votes.slice(-1)
+                )
+            )
+            .catch((err) => console.log(err));
+    }
+    fetch5000Voters() {
+        api.callAsync('database_api.list_proposal_votes', {
+            start: [this.state.new_id, this.state.lastVoterFor4000.voter],
+            limit: 1000,
+            order: 'by_proposal_voter',
+            order_direction: 'ascending',
+            status: 'active',
+        })
+            .then((res) =>
+                this.loadMore5000(
+                    res.proposal_votes,
+                    ...res.proposal_votes.slice(-1)
+                )
+            )
+            .catch((err) => console.log(err));
+    }
+    fetch6000Voters() {
+        api.callAsync('database_api.list_proposal_votes', {
+            start: [this.state.new_id, this.state.lastVoterFor5000.voter],
+            limit: 1000,
+            order: 'by_proposal_voter',
+            order_direction: 'ascending',
+            status: 'active',
+        })
+            .then((res) =>
+                this.loadMore6000(
+                    res.proposal_votes,
+                    ...res.proposal_votes.slice(-1)
+                )
+            )
+            .catch((err) => console.log(err));
+    }
+    fetch7000Voters() {
+        api.callAsync('database_api.list_proposal_votes', {
+            start: [this.state.new_id, this.state.lastVoterFor6000.voter],
+            limit: 1000,
+            order: 'by_proposal_voter',
+            order_direction: 'ascending',
+            status: 'active',
+        })
+            .then((res) =>
+                this.loadMore7000(
+                    res.proposal_votes,
+                    ...res.proposal_votes.slice(-1)
+                )
+            )
+            .catch((err) => console.log(err));
+    }
+    // fetch8000Voters() {
+    //     api.callAsync('database_api.list_proposal_votes', {
+    //         start: [this.state.new_id, this.state.lastVoterFor7000.voter],
+    //         limit: 1000,
+    //         order: 'by_proposal_voter',
+    //         order_direction: 'ascending',
+    //         status: 'active',
+    //     })
+    //         .then((res) =>
+    //             this.loadMore8000(
+    //                 res.proposal_votes,
+    //                 ...res.proposal_votes.slice(-1)
+    //             )
+    //         )
+    //         .catch((err) => console.log(err));
+    // }
+    // fetch9000Voters() {
+    //     api.callAsync('database_api.list_proposal_votes', {
+    //         start: [this.state.new_id, this.state.lastVoterFor8000.voter],
+    //         limit: 1000,
+    //         order: 'by_proposal_voter',
+    //         order_direction: 'ascending',
+    //         status: 'active',
+    //     })
+    //         .then((res) =>
+    //             this.loadMore9000(
+    //                 res.proposal_votes,
+    //                 ...res.proposal_votes.slice(-1)
+    //             )
+    //         )
+    //         .catch((err) => console.log(err));
+    // }
+    // fetch10000Voters() {
+    //     api.callAsync('database_api.list_proposal_votes', {
+    //         start: [this.state.new_id, this.state.lastVoterFor9000.voter],
+    //         limit: 1000,
+    //         order: 'by_proposal_voter',
+    //         order_direction: 'ascending',
+    //         status: 'active',
+    //     })
+    //         .then((res) =>
+    //             this.loadMore10000(
+    //                 res.proposal_votes,
+    //                 ...res.proposal_votes.slice(-1)
+    //             )
+    //         )
+    //         .catch((err) => console.log(err));
+    // }
+    // fetch11000Voters() {
+    //     api.callAsync('database_api.list_proposal_votes', {
+    //         start: [this.state.new_id, this.state.lastVoterFor10000.voter],
+    //         limit: 1000,
+    //         order: 'by_proposal_voter',
+    //         order_direction: 'ascending',
+    //         status: 'active',
+    //     })
+    //         .then((res) =>
+    //             this.loadMore11000(
+    //                 res.proposal_votes,
+    //                 ...res.proposal_votes.slice(-1)
+    //             )
+    //         )
+    //         .catch((err) => console.log(err));
+    // }
+    // fetch12000Voters() {
+    //     api.callAsync('database_api.list_proposal_votes', {
+    //         start: [this.state.new_id, this.state.lastVoterFor11000.voter],
+    //         limit: 1000,
+    //         order: 'by_proposal_voter',
+    //         order_direction: 'ascending',
+    //         status: 'active',
+    //     })
+    //         .then((res) =>
+    //             this.loadMore12000(
+    //                 res.proposal_votes,
+    //                 ...res.proposal_votes.slice(-1)
+    //             )
+    //         )
+    //         .catch((err) => console.log(err));
+    // }
+
+    // fetch13000Voters() {
+    //     api.callAsync('database_api.list_proposal_votes', {
+    //         start: [this.state.new_id, this.state.lastVoterFor12000.voter],
+    //         limit: 1000,
+    //         order: 'by_proposal_voter',
+    //         order_direction: 'ascending',
+    //         status: 'active',
+    //     })
+    //         .then((res) =>
+    //             this.loadMore13000(
+    //                 res.proposal_votes,
+    //                 ...res.proposal_votes.slice(-1)
+    //             )
+    //         )
+    //         .catch((err) => console.log(err));
+    // }
+    // fetch14000Voters() {
+    //     api.callAsync('database_api.list_proposal_votes', {
+    //         start: [this.state.new_id, this.state.lastVoterFor13000.voter],
+    //         limit: 1000,
+    //         order: 'by_proposal_voter',
+    //         order_direction: 'ascending',
+    //         status: 'active',
+    //     })
+    //         .then((res) =>
+    //             this.loadMore14000(
+    //                 res.proposal_votes,
+    //                 ...res.proposal_votes.slice(-1)
+    //             )
+    //         )
+    //         .catch((err) => console.log(err));
+    // }
+    // fetch15000Voters() {
+    //     api.callAsync('database_api.list_proposal_votes', {
+    //         start: [this.state.new_id, this.state.lastVoterFor14000.voter],
+    //         limit: 1000,
+    //         order: 'by_proposal_voter',
+    //         order_direction: 'ascending',
+    //         status: 'active',
+    //     })
+    //         .then((res) => this.loadMore15000(res.proposal_votes))
+    //         .catch((err) => console.log(err));
+    // }
     fetchDataForVests() {
         const voters = this.state.voters;
         const new_id = this.state.new_id;
-        const selected_proposal_voters = voters.filter(
+        const load2000Voters = this.state.load2000Voters;
+        const load3000Voters = this.state.load3000Voters;
+        const load4000Voters = this.state.load4000Voters;
+        const load5000Voters = this.state.load5000Voters;
+        const load6000Voters = this.state.load6000Voters;
+        const load7000Voters = this.state.load7000Voters;
+        // const load8000Voters = this.state.load8000Voters;
+        // const load9000Voters = this.state.load9000Voters;
+        // const load10000Voters = this.state.load10000Voters;
+        // const load11000Voters = this.state.load11000Voters;
+        // const load12000Voters = this.state.load12000Voters;
+        // const load13000Voters = this.state.load13000Voters;
+        // const load14000Voters = this.state.load14000Voters;
+        // const load15000Voters = this.state.load15000Voters;
+
+        const mergeVoters = [
+            ...voters,
+            ...load2000Voters,
+            ...load3000Voters,
+            ...load4000Voters,
+            ...load5000Voters,
+            ...load6000Voters,
+            ...load7000Voters,
+            // ...load8000Voters,
+            // ...load9000Voters,
+            // ...load10000Voters,
+            // ...load11000Voters,
+            // ...load12000Voters,
+            // ...load13000Voters,
+            // ...load14000Voters,
+            // ...load15000Voters,
+        ];
+
+        const selected_proposal_voters = mergeVoters.filter(
             (v) => v.proposal.proposal_id === new_id
         );
         const voters_map = selected_proposal_voters.map((name) => name.voter);
@@ -240,14 +633,47 @@ class Proposals extends React.Component {
             total_vest_hive,
             is_voters_data_loaded,
             new_id,
+            load2000Voters,
+            load3000Voters,
+            load4000Voters,
+            load5000Voters,
+            load6000Voters,
+            load7000Voters,
+            // load8000Voters,
+            // load9000Voters,
+            // load10000Voters,
+            // load11000Voters,
+            // load12000Voters,
+            // load13000Voters,
+            // load14000Voters,
+            // load15000Voters,
         } = this.state;
+
+        const mergeVoters = [
+            ...voters,
+            ...load2000Voters,
+            ...load3000Voters,
+            ...load4000Voters,
+            ...load5000Voters,
+            ...load6000Voters,
+            ...load7000Voters,
+            // ...load8000Voters,
+            // ...load9000Voters,
+            // ...load10000Voters,
+            // ...load11000Voters,
+            // ...load12000Voters,
+            // ...load13000Voters,
+            // ...load14000Voters,
+            // ...load15000Voters,
+        ];
+        // console.log(mergeVoters);
         const { nightmodeEnabled } = this.props;
 
         let showBottomLoading = false;
         if (loading && proposals && proposals.length > 0) {
             showBottomLoading = true;
         }
-        const selected_proposal_voters = voters.filter(
+        const selected_proposal_voters = mergeVoters.filter(
             (v) => v.proposal.proposal_id === new_id
         );
         const accounts_map = voters_accounts.map((acc) => acc.vesting_shares); // hive power
@@ -309,6 +735,7 @@ class Proposals extends React.Component {
         }
         //sort acount names by total hp count
         sort_merged_total_hp.sort((a, b) => b[1] - a[1]); // total = hp + proxy
+
         return (
             <div>
                 <VotersModal
