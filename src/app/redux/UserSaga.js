@@ -696,6 +696,7 @@ function* logout(action) {
         localStorage.removeItem('autopost2');
     }
 
+    HiveAuthUtils.logout();
     yield serverApiLogout();
 }
 

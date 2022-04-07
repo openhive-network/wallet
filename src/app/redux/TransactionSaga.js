@@ -33,9 +33,9 @@ export const transactionWatches = [
 
 const hook = {
     preBroadcast_transfer,
-    preBroadcast_account_witness_vote,
+    preBroadcast_account_witness_vote, // Do not delete
     error_account_witness_vote,
-    accepted_account_witness_vote,
+    accepted_account_witness_vote, // Do not delete
     accepted_account_update,
     accepted_withdraw_vesting,
     broadcast_done,
@@ -84,14 +84,19 @@ function* preBroadcast_account_witness_vote({ operation, username }) {
     return operation;
 }
 
-function* error_account_witness_vote({
-                                         operation: { account, witness, approve },
-                                     }) {
+function* error_account_witness_vote({ operation: { account, witness, approve } }) {
     yield put(
         globalActions.updateAccountWitnessVote({
             account,
             witness,
             approve: !approve,
+        })
+    );
+
+    yield put(
+        globalActions.removeActiveWitnessVote({
+            account,
+            witness,
         })
     );
 }
