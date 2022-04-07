@@ -1,5 +1,6 @@
 const webpack = require('webpack');
 const git = require('git-rev-sync');
+const LiveReloadPlugin = require('webpack-livereload-plugin');
 const baseConfig = require('./base.config');
 const startKoa = require('./utils/start-koa');
 
@@ -29,9 +30,12 @@ module.exports = {
         }),
         ...baseConfig.plugins,
         function () {
-            console.log("Please wait for app server startup (~60s)" +
-                " after webpack server startup...");
+            console.log("Please wait for app server startup (~60s)"
+                + " after webpack server startup...");
             this.plugin('done', startKoa);
-        }
+        },
+        new LiveReloadPlugin({
+            appendScriptTag: true,
+        }),
     ]
 };

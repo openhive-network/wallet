@@ -6,10 +6,10 @@ import { isLoggedIn, extractLoginData } from 'app/utils/UserUtil';
  */
 export function hasCompatibleKeychain() {
     return (
-        window.hive_keychain &&
-        window.hive_keychain.requestSignBuffer &&
-        window.hive_keychain.requestBroadcast &&
-        window.hive_keychain.requestSignedCall
+        'hive_keychain' in window
+        && 'requestSignBuffer' in window.hive_keychain
+        && 'requestBroadcast' in window.hive_keychain
+        && 'requestSignedCall' in window.hive_keychain
     );
 }
 
@@ -35,6 +35,6 @@ export function isLoggedInWithKeychain() {
         return false;
     }
     const data = localStorage.getItem('autopost2');
-    const [login_with_keychain] = extractLoginData(data);
+    const [,,,, login_with_keychain] = extractLoginData(data);
     return !!login_with_keychain;
 }
