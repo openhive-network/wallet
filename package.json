@@ -26,10 +26,13 @@
         "test": "jest"
     },
     "lint-staged": {
-        "src/**/*.js*": [
-            "prettier --write",
-            "git add"
-        ]
+      "src/**/*.+(js|jsx)": [
+        "eslint"
+      ],
+      "src/**/*.+(json|css|md)": [
+        "prettier --write",
+        "git add"
+      ]
     },
     "jest": {
         "moduleNameMapper": {
@@ -207,12 +210,12 @@
         "jsdom": "9.12.0",
         "koa-webpack-dev-middleware": "1.4.6",
         "koa-webpack-hot-middleware": "1.0.3",
-        "lint-staged": "6.0.0",
+        "lint-staged": "10.5.3",
         "mini-css-extract-plugin": "^1.2.1",
         "mock-local-storage": "1.0.5",
         "node-watch": "0.5.5",
         "postcss-loader": "^4.0.4",
-        "prettier": "2.0.5",
+        "prettier": "2.2.1",
         "raw-loader": "4.0.2",
         "react-addons-perf": "15.4.2",
         "react-addons-test-utils": "15.4.2",
