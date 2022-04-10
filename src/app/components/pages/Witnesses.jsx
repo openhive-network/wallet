@@ -889,6 +889,9 @@ module.exports = {
                             confirm: !approve
                                 ? 'You are about to remove your vote for this witness'
                                 : null,
+                            errorCallback: (e) => {
+                                console.error('witness vote failed:', e);
+                            }
                         })
                     );
                 },

@@ -6,12 +6,12 @@ import Icon from 'app/components/elements/Icon';
 export default class VerticalMenu extends React.Component {
     static propTypes = {
         items: PropTypes.arrayOf(PropTypes.object).isRequired,
-        title: PropTypes.string,
+        title: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
         className: PropTypes.string,
         hideValue: PropTypes.oneOfType([PropTypes.string, PropTypes.element]),
     };
 
-    closeMenu = e => {
+    closeMenu = (e) => {
         // If this was not a left click, or if CTRL or CMD were held, do not close the menu.
         if (e.button !== 0 || e.ctrlKey || e.metaKey) return;
 
@@ -20,16 +20,15 @@ export default class VerticalMenu extends React.Component {
     };
 
     render() {
-        const { items, title, className, hideValue } = this.props;
+        const {
+            items, title, className, hideValue,
+        } = this.props;
         return (
             <ul
-                className={
-                    'VerticalMenu menu vertical' +
-                    (className ? ' ' + className : '')
-                }
+                className={'VerticalMenu menu vertical' + (className ? ' ' + className : '')}
             >
                 {title && <li className="title">{title}</li>}
-                {items.map(i => {
+                {items.map((i) => {
                     if (i.value === hideValue) return null;
                     return (
                         <li key={i.value} onClick={this.closeMenu}>
@@ -40,7 +39,10 @@ export default class VerticalMenu extends React.Component {
                                     {i.addon}
                                 </Link>
                             ) : (
-                                <span onClick={i.onClick}>
+                                <span
+                                    role="link"
+                                    tabIndex={0}
+                                    onClick={i.onClick}>
                                     {i.icon && <Icon name={i.icon} />}
                                     {i.label ? i.label : i.value}
                                 </span>

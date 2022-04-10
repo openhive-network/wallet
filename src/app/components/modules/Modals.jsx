@@ -30,9 +30,11 @@ class Modals extends React.Component {
         show_decode_memo_modal: false,
         show_confirm_modal: false,
         show_login_modal: false,
-        show_post_advanced_settings_modal: '',
         memo_message: '',
+        show_hive_auth_modal: false,
+        hideHiveAuthModal: () => {},
     };
+
     static propTypes = {
         show_login_modal: PropTypes.bool,
         show_confirm_modal: PropTypes.bool,
@@ -41,7 +43,6 @@ class Modals extends React.Component {
         show_powerdown_modal: PropTypes.bool,
         show_bandwidth_error_modal: PropTypes.bool,
         show_signup_modal: PropTypes.bool,
-        show_post_advanced_settings_modal: PropTypes.string,
         hideLogin: PropTypes.func.isRequired,
         username: PropTypes.string,
         hideConfirm: PropTypes.func.isRequired,
@@ -49,10 +50,13 @@ class Modals extends React.Component {
         hideTransfer: PropTypes.func.isRequired,
         hidePowerdown: PropTypes.func.isRequired,
         hideBandwidthError: PropTypes.func.isRequired,
+        // eslint-disable-next-line react/forbid-prop-types
         notifications: PropTypes.object,
         show_terms_modal: PropTypes.bool,
         removeNotification: PropTypes.func,
         memo_message: PropTypes.string,
+        show_hive_auth_modal: PropTypes.bool,
+        hideHiveAuthModal: PropTypes.func,
     };
 
     constructor() {
@@ -69,7 +73,6 @@ class Modals extends React.Component {
             show_powerdown_modal,
             show_signup_modal,
             show_bandwidth_error_modal,
-            show_post_advanced_settings_modal,
             hideLogin,
             hideTransfer,
             hideDecodeMemo,
@@ -82,6 +85,8 @@ class Modals extends React.Component {
             hideBandwidthError,
             username,
             memo_message,
+            show_hive_auth_modal,
+            hideHiveAuthModal,
         } = this.props;
 
         const notifications_array = notifications
@@ -172,14 +177,33 @@ class Modals extends React.Component {
                                     {tt('modals_jsx.out_of_bandwidth_option_3')}
                                 </li>
                             </ol>
-                            <button className="button" onClick={buyHivePower}>
+                            <button type="button" className="button" onClick={buyHivePower}>
                                 {tt('g.buy_hive_power')}
                             </button>
                         </div>
                     </Reveal>
                 )}
+                {show_hive_auth_modal && (
+                    <Reveal onHide={hideHiveAuthModal} show={!!show_hive_auth_modal}>
+                        <CloseButton onClick={hideHiveAuthModal} />
+                        <div>
+                            <div className="hiveauth-banner">
+                                <img
+                                    src="/images/hiveauth-banner-light.png"
+                                    alt="HiveAuth"
+                                    width="100%"
+                                />
+                            </div>
+                            <div
+                                className="hiveauth-instructions"
+                                id="hive-auth-instructions"
+                            >
+                                {tt('hiveauthservices.pleaseWait')}
+                            </div>
+                        </div>
+                    </Reveal>
+                )}
                 <NotificationStack
-                    style={false}
                     notifications={notifications_array}
                     onDismiss={(n) => removeNotification(n.key)}
                 />
@@ -200,19 +224,11 @@ export default connect(
             show_signup_modal: state.user.get('show_signup_modal'),
             memo_message: state.user.get('memo_message'),
             notifications: state.app.get('notifications'),
-            show_terms_modal:
-                state.user.get('show_terms_modal') &&
-                state.routing.locationBeforeTransitions.pathname !==
-                    '/tos.html' &&
-                state.routing.locationBeforeTransitions.pathname !==
-                    '/privacy.html',
-            show_bandwidth_error_modal: state.transaction.getIn([
-                'errors',
-                'bandwidthError',
-            ]),
-            show_post_advanced_settings_modal: state.user.get(
-                'show_post_advanced_settings_modal'
-            ),
+            show_terms_modal: state.user.get('show_terms_modal')
+                && state.routing.locationBeforeTransitions.pathname !== '/tos.html'
+                && state.routing.locationBeforeTransitions.pathname !== '/privacy.html',
+            show_bandwidth_error_modal: state.transaction.getIn(['errors', 'bandwidthError']),
+            show_hive_auth_modal: state.user.get('show_hive_auth_modal'),
         };
     },
     (dispatch) => ({
@@ -246,8 +262,11 @@ export default connect(
                 transactionActions.dismissError({ key: 'bandwidthError' })
             );
         },
+        hideHiveAuthModal: (e) => {
+            if (e) e.preventDefault();
+            dispatch(userActions.hideHiveAuthModal());
+        },
         // example: addNotification: ({key, message}) => dispatch({type: 'ADD_NOTIFICATION', payload: {key, message}}),
-        removeNotification: (key) =>
-            dispatch(appActions.removeNotification({ key })),
+        removeNotification: (key) => dispatch(appActions.removeNotification({ key })),
     })
 )(Modals);

@@ -37,6 +37,8 @@ const HIDE_CONNECTION_ERROR_MODAL = 'user/HIDE_CONNECTION_ERROR_MODAL';
 const SET = 'user/SET';
 const SHOW_SIDE_PANEL = 'user/SHOW_SIDE_PANEL';
 const HIDE_SIDE_PANEL = 'user/HIDE_SIDE_PANEL';
+const SHOW_HIVE_AUTH_MODAL = 'user/SHOW_HIVE_AUTH_MODAL';
+const HIVE_AUTH_MODAL = 'user/HIVE_AUTH_MODAL';
 
 // Saga-related
 export const LOAD_SAVINGS_WITHDRAW = 'user/LOAD_SAVINGS_WITHDRAW';
@@ -56,6 +58,7 @@ const defaultState = fromJS({
     show_side_panel: false,
     maybeLoggedIn: false,
     vestingDelegations: null,
+    show_hive_auth_modal: false,
 });
 
 export default function reducer(state = defaultState, action) {
@@ -68,6 +71,7 @@ export default function reducer(state = defaultState, action) {
                 operation = fromJS(payload.operation);
                 loginDefault = fromJS(payload.loginDefault);
             }
+
             return state.merge({
                 show_login_modal: true,
                 login_type: payload.type,
@@ -124,10 +128,11 @@ export default function reducer(state = defaultState, action) {
                 (private_keys) => {
                     if (!private_keys) return null;
                     if (
-                        private_keys.has('active_private') ||
-                        private_keys.has('owner_private')
-                    )
+                        private_keys.has('active_private')
+                        || private_keys.has('owner_private')
+                    ) {
                         console.log('removeHighSecurityKeys');
+                    }
                     private_keys = private_keys.delete('active_private');
                     private_keys = private_keys.delete('owner_private');
                     empty = private_keys.size === 0;
@@ -197,16 +202,19 @@ export default function reducer(state = defaultState, action) {
             });
 
         case SET_USER:
-            if (payload.vesting_shares)
+            if (payload.vesting_shares) {
                 payload.vesting_shares = parseFloat(payload.vesting_shares);
-            if (payload.delegated_vesting_shares)
+            }
+            if (payload.delegated_vesting_shares) {
                 payload.delegated_vesting_shares = parseFloat(
                     payload.delegated_vesting_shares
                 );
-            if (payload.received_vesting_shares)
+            }
+            if (payload.received_vesting_shares) {
                 payload.received_vesting_shares = parseFloat(
                     payload.received_vesting_shares
                 );
+            }
             return state.mergeDeep({
                 current: payload,
                 show_login_modal: false,
@@ -249,8 +257,9 @@ export default function reducer(state = defaultState, action) {
             // AuthSaga
             const { accountName, auth, pub_keys_used } = payload;
             state = state.setIn(['authority', accountName], fromJS(auth));
-            if (pub_keys_used)
+            if (pub_keys_used) {
                 state = state.set('pub_keys_used', pub_keys_used);
+            }
             return state;
         }
 
@@ -268,6 +277,12 @@ export default function reducer(state = defaultState, action) {
 
         case HIDE_SIDE_PANEL:
             return state.set('show_side_panel', false);
+
+        case SHOW_HIVE_AUTH_MODAL:
+            return state.set('show_hive_auth_modal', true);
+
+        case HIVE_AUTH_MODAL:
+            return state.set('show_hive_auth_modal', false);
 
         default:
             return state;
@@ -451,6 +466,16 @@ export const hideSidePanel = () => {
         type: HIDE_SIDE_PANEL,
     };
 };
+
+export const showHiveAuthModal = (payload) => ({
+    type: SHOW_HIVE_AUTH_MODAL,
+    payload,
+});
+
+export const hideHiveAuthModal = (payload) => ({
+    type: HIVE_AUTH_MODAL,
+    payload,
+});
 
 export const getVestingDelegations = (payload) => {
     return {

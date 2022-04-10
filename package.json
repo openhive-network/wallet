@@ -15,8 +15,8 @@
         "ci:eslint": "eslint src/",
         "ci:test": "jest --coverage",
         "debug": "NODE_ENV=development webpack --config ./webpack/debug.config.js && rm -rf ./lib && babel src --source-maps --out-dir lib -D && node --inspect-brk lib/server/index.js",
-        "eslint": "LIST=`git diff-index --name-only HEAD | grep .*\\.js | grep -v json`; if [ \"$LIST\" ]; then eslint $LIST; fi",
-        "eslint:fix": "LIST=`git diff-index --name-only HEAD | grep .*\\.js | grep -v json`; if [ \"$LIST\" ]; then eslint --fix $LIST; fi",
+        "eslint": "LIST=`git diff-index --diff-filter=ACMR --name-only HEAD | grep .*\\.js | grep -v json`; if [ \"$LIST\" ]; then eslint $LIST; fi",
+        "eslint:fix": "LIST=`git diff-index --diff-filter=ACMR --name-only HEAD | grep .*\\.js | grep -v json`; if [ \"$LIST\" ]; then eslint --fix $LIST; fi",
         "fmt": "prettier --config .prettierrc --write 'src/**/*.js*'",
         "precommit": "lint-staged",
         "production": "NODE_ENV=production node lib/server/index.js",
@@ -26,13 +26,13 @@
         "test": "jest"
     },
     "lint-staged": {
-      "src/**/*.+(js|jsx)": [
-        "eslint"
-      ],
-      "src/**/*.+(json|css|md)": [
-        "prettier --write",
-        "git add"
-      ]
+        "src/**/*.+(js|jsx)": [
+            "eslint"
+        ],
+        "src/**/*.+(json|css|md)": [
+            "prettier --write",
+            "git add"
+        ]
     },
     "jest": {
         "moduleNameMapper": {
@@ -47,6 +47,7 @@
     "dependencies": {
         "@babel/runtime": "^7.12.5",
         "@hiveio/hive-js": "2.0.4",
+        "@hiveio/hivescript": "^1.2.0",
         "@steem/crypto-session": "git+https://github.com/steemit/crypto-session.git#83a90b319ce5bc6a70362d52a15a815de7e729bb",
         "assert": "1.4.1",
         "autoprefixer": "^9.6.1",
@@ -71,6 +72,7 @@
         "estraverse-fb": "1.3.2",
         "foundation-sites": "git+https://gitlab.syncad.com/hive/foundation-sites.git#544fb8a26efcf45e9ba9ccaa77b04d0ae35b9722",
         "highcharts": "6.1.0",
+        "hive-auth-client": "^0.1.5",
         "hive-uri": "^0.2.3",
         "hivesigner": "^3.2.7",
         "humanize-duration": "^3.27.1",
@@ -106,6 +108,7 @@
         "os": "0.1.1",
         "picturefill": "3.0.2",
         "postcss": "^8.1.6",
+        "qrious": "^4.0.2",
         "react": "15.6.2",
         "react-ab-test": "1.7.0",
         "react-addons-pure-render-mixin": "15.4.2",
@@ -143,9 +146,7 @@
         "sequelize-cli": "3.2.0",
         "shelljs": "0.8.4",
         "speakingurl": "9.0.0",
-        "sqlite3": "4.0.9",
         "statsd-client": "0.4.2",
-        "steemscript": "1.1.0",
         "store": "1.3.20",
         "svg-inline-loader": "0.8.0",
         "svg-inline-react": "1.0.3",
@@ -189,6 +190,7 @@
         "babel-jest": "^23.4.2",
         "babel-loader": "^8.2.0",
         "babel-plugin-react-intl": "2.3.1",
+        "babel-plugin-transform-class-properties": "^6.24.1",
         "babel-plugin-transform-inline-environment-variables": "0.2.0",
         "co-supertest": "0.0.10",
         "css-loader": "5.0.1",
@@ -200,6 +202,7 @@
         "eslint-config-airbnb": "18.1.0",
         "eslint-plugin-babel": "5.3.0",
         "eslint-plugin-import": "2.20.2",
+        "eslint-plugin-jest": "23.8.2",
         "eslint-plugin-jsx-a11y": "6.2.3",
         "eslint-plugin-react": "7.19.0",
         "file-loader": "6.2.0",
@@ -233,7 +236,8 @@
         "webpack": "4.x.x",
         "webpack-bundle-analyzer": "^4.1.0",
         "webpack-cli": "^4.2.0",
-        "webpack-dev-middleware": "1.12.0"
+        "webpack-dev-middleware": "^4.0.4",
+        "webpack-livereload-plugin": "^3.0.2"
     },
     "engines": {
         "node": ">=8.7.0",

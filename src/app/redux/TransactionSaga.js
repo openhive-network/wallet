@@ -1,11 +1,13 @@
-import { call, put, select, all, takeEvery } from 'redux-saga/effects';
-import { fromJS, Set, Map } from 'immutable';
+/* global $STM_Config */
+import {
+    call, put, select, all, takeEvery,
+} from 'redux-saga/effects';
+import { fromJS } from 'immutable';
 import tt from 'counterpart';
-import getSlug from 'speakingurl';
-import base58 from 'bs58';
-import secureRandom from 'secure-random';
 import { PrivateKey, PublicKey } from '@hiveio/hive-js/lib/auth/ecc';
-import { api, broadcast, auth, memo } from '@hiveio/hive-js';
+import {
+    api, broadcast, auth, memo,
+} from '@hiveio/hive-js';
 
 import { getAccount } from 'app/redux/SagaShared';
 import { postingOps, findSigningKey } from 'app/redux/AuthSaga';
@@ -13,8 +15,6 @@ import * as appActions from 'app/redux/AppReducer';
 import * as globalActions from 'app/redux/GlobalReducer';
 import * as transactionActions from 'app/redux/TransactionReducer';
 import * as userActions from 'app/redux/UserReducer';
-import * as proposalActions from 'app/redux/ProposalReducer';
-import { DEBT_TICKER } from 'app/client_config';
 import { serverApiRecordEvent } from 'app/utils/ServerApiClient';
 import { isLoggedInWithKeychain } from 'app/utils/HiveKeychain';
 import {
@@ -22,7 +22,7 @@ import {
     hiveSignerClient,
     sendOperationsWithHiveSigner,
 } from 'app/utils/HiveSigner';
-
+import HiveAuthUtils from 'app/utils/HiveAuthUtils';
 import diff_match_patch from 'diff-match-patch';
 
 export const transactionWatches = [
@@ -33,12 +33,17 @@ export const transactionWatches = [
 
 const hook = {
     preBroadcast_transfer,
-    preBroadcast_account_witness_vote,
+    preBroadcast_account_witness_vote, // Do not delete
     error_account_witness_vote,
-    accepted_account_witness_vote,
+    accepted_account_witness_vote, // Do not delete
     accepted_account_update,
     accepted_withdraw_vesting,
+    broadcast_done,
 };
+
+function* broadcast_done() {
+    yield put(userActions.hideHiveAuthModal());
+}
 
 export function* preBroadcast_transfer({ operation }) {
     let memoStr = operation.memo;
@@ -46,9 +51,9 @@ export function* preBroadcast_transfer({ operation }) {
         memoStr = toStringUtf8(memoStr);
         memoStr = memoStr.trim();
         if (/^#/.test(memoStr)) {
-            const memo_private = yield select((state) =>
-                state.user.getIn(['current', 'private_keys', 'memo_private'])
-            );
+            const memo_private = yield select((state) => {
+                return state.user.getIn(['current', 'private_keys', 'memo_private']);
+            });
             if (!memo_private) {
                 const msg = isLoggedInWithHiveSigner()
                     ? tt('g.cannot_encrypt_memo')
@@ -64,12 +69,11 @@ export function* preBroadcast_transfer({ operation }) {
     }
     return operation;
 }
-const toStringUtf8 = (o) =>
-    o ? (Buffer.isBuffer(o) ? o.toString('utf-8') : o.toString()) : o;
+const toStringUtf8 = (o) => o ? (Buffer.isBuffer(o) ? o.toString('utf-8') : o.toString()) : o;
 
 function* preBroadcast_account_witness_vote({ operation, username }) {
     if (!operation.account) operation.account = username;
-    const { account, witness, approve } = operation;
+    const { account, witness } = operation;
     // give immediate feedback
     yield put(
         globalActions.addActiveWitnessVote({
@@ -80,14 +84,19 @@ function* preBroadcast_account_witness_vote({ operation, username }) {
     return operation;
 }
 
-function* error_account_witness_vote({
-    operation: { account, witness, approve },
-}) {
+function* error_account_witness_vote({ operation: { account, witness, approve } }) {
     yield put(
         globalActions.updateAccountWitnessVote({
             account,
             witness,
             approve: !approve,
+        })
+    );
+
+    yield put(
+        globalActions.removeActiveWitnessVote({
+            account,
+            witness,
         })
     );
 }
@@ -103,6 +112,7 @@ export function* broadcastOperation({
         username,
         password,
         useKeychain,
+        useHiveAuth,
         successCallback,
         errorCallback,
         allowPostUnsafe,
@@ -115,6 +125,7 @@ export function* broadcastOperation({
         username,
         password,
         useKeychain,
+        useHiveAuth,
         successCallback,
         errorCallback,
         allowPostUnsafe,
@@ -140,15 +151,12 @@ export function* broadcastOperation({
         errorCallback,
     };
     if (!allowPostUnsafe && hasPrivateKeys(payload)) {
-        const confirm = tt('g.post_key_warning.confirm');
-        const warning = tt('g.post_key_warning.warning');
-        const checkbox = tt('g.post_key_warning.checkbox');
         operationParam.allowPostUnsafe = true;
         yield put(
             transactionActions.confirmOperation({
-                confirm,
-                warning,
-                checkbox,
+                confirm: tt('g.post_key_warning.confirm'),
+                warning: tt('g.post_key_warning.warning'),
+                checkbox: tt('g.post_key_warning.checkbox'),
                 operation: operationParam,
                 errorCallback,
             })
@@ -156,7 +164,11 @@ export function* broadcastOperation({
         return;
     }
     try {
-        if (!isLoggedInWithKeychain() && !isLoggedInWithHiveSigner()) {
+        if (
+            !isLoggedInWithKeychain()
+            && !isLoggedInWithHiveSigner()
+            && !HiveAuthUtils.isLoggedInWithHiveAuth()
+        ) {
             if (!keys || keys.length === 0) {
                 payload.keys = [];
                 // user may already be logged in, or just enterend a signing passowrd or wif
@@ -187,12 +199,12 @@ export function* broadcastOperation({
         let eventType = type
             .replace(/^([a-z])/, (g) => g.toUpperCase())
             .replace(/_([a-z])/g, (g) => g[1].toUpperCase());
-        if (eventType === 'Comment' && !operation.parent_author)
+        if (eventType === 'Comment' && !operation.parent_author) {
             eventType = 'Post';
-        const page =
-            eventType === 'Vote'
-                ? `@${operation.author}/${operation.permlink}`
-                : '';
+        }
+        const page = eventType === 'Vote'
+            ? `@${operation.author}/${operation.permlink}`
+            : '';
         serverApiRecordEvent(eventType, page);
     } catch (error) {
         console.error('TransactionSage', error);
@@ -202,15 +214,18 @@ export function* broadcastOperation({
 
 function hasPrivateKeys(payload) {
     const blob = JSON.stringify(payload.operations);
-    let m,
-        re = /P?(5[123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz]{50})/g;
+    const re = /P?(5[123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz]{50})/g;
+
+    let m;
     while (true) {
         m = re.exec(blob);
         if (m) {
             try {
                 PrivateKey.fromWif(m[1]); // performs the base58check
                 return true;
-            } catch (e) {}
+            } catch (e) {
+                // Nothing
+            }
         } else {
             break;
         }
@@ -219,10 +234,11 @@ function hasPrivateKeys(payload) {
 }
 
 function* broadcastPayload({
-    payload: { operations, keys, username, successCallback, errorCallback },
+  payload: {
+    operations, keys, username, successCallback, errorCallback,
+  },
 }) {
     let needsActiveAuth = false;
-    // console.log('broadcastPayload')
     if ($STM_Config.read_only_mode) return;
     for (const [type] of operations) {
         // see also transaction/ERROR
@@ -242,13 +258,21 @@ function* broadcastPayload({
                     operation,
                     username,
                 });
-                if (Array.isArray(op)) for (const o of op) newOps.push(o);
+                if (Array.isArray(op)) {
+                    for (const o of op) {
+                        newOps.push(o);
+                    }
+                }
                 else newOps.push([type, op]);
             } else {
                 newOps.push([type, operation]);
             }
         }
         operations = newOps;
+    }
+
+    if (HiveAuthUtils.isLoggedInWithHiveAuth()) {
+        yield put(userActions.showHiveAuthModal());
     }
 
     // status: broadcasting
@@ -273,11 +297,10 @@ function* broadcastPayload({
         yield new Promise((resolve, reject) => {
             // Bump transaction (for live UI testing).. Put 0 in now (no effect),
             // to enable browser's autocomplete and help prevent typos.
-            const env = process.env;
-            const bump = env.BROWSER
+            const bump = process.env.BROWSER
                 ? parseInt(localStorage.getItem('bump') || 0)
                 : 0;
-            if (env.BROWSER && bump === 1) {
+            if (process.env.BROWSER && bump === 1) {
                 // for testing
                 console.log(
                     'TransactionSaga bump(no broadcast) and reject',
@@ -286,7 +309,7 @@ function* broadcastPayload({
                 setTimeout(() => {
                     reject(new Error('Testing, fake error'));
                 }, 2000);
-            } else if (env.BROWSER && bump === 2) {
+            } else if (process.env.BROWSER && bump === 2) {
                 // also for testing
                 console.log(
                     'TransactionSaga bump(no broadcast) and resolve',
@@ -313,7 +336,7 @@ function* broadcastPayload({
                 );
             } else if (isLoggedInWithHiveSigner()) {
                 if (!needsActiveAuth) {
-                    hiveSignerClient.broadcast(operations, (err, result) => {
+                    hiveSignerClient.broadcast(operations, (err) => {
                         if (err) {
                             reject(err.error_description);
                         } else {
@@ -325,7 +348,7 @@ function* broadcastPayload({
                     sendOperationsWithHiveSigner(
                         operations,
                         {},
-                        (err, result) => {
+                        (err) => {
                             if (err) {
                                 reject(err.error_description);
                             } else {
@@ -335,6 +358,20 @@ function* broadcastPayload({
                         }
                     );
                 }
+            } else if (HiveAuthUtils.isLoggedInWithHiveAuth()) {
+                // Nothing requires Active Key at the moment, to revisit if we ever merge wallet back.
+                HiveAuthUtils.broadcast(
+                    operations,
+                    needsActiveAuth ? 'active' : 'posting',
+                    (response) => {
+                        if (!response.success) {
+                            reject(response.error);
+                        } else {
+                            broadcastedEvent();
+                            resolve();
+                        }
+                    }
+                );
             } else {
                 broadcast.send({ extensions: [], operations }, keys, (err) => {
                     if (err) {
@@ -347,6 +384,9 @@ function* broadcastPayload({
                 });
             }
         });
+
+        yield call(hook.broadcast_done);
+
         // status: accepted
         for (const [type, operation] of operations) {
             if (hook['accepted_' + type]) {
@@ -356,6 +396,7 @@ function* broadcastPayload({
                     console.error(error);
                 }
             }
+            // eslint-disable-next-line no-underscore-dangle
             const config = operation.__config;
             if (config && config.successMessage) {
                 yield put(
@@ -367,18 +408,19 @@ function* broadcastPayload({
                 );
             }
         }
-        if (successCallback)
+        if (successCallback) {
             try {
                 successCallback();
             } catch (error) {
                 console.error(error);
             }
+        }
     } catch (error) {
         console.error('TransactionSaga\tbroadcastPayload', error);
+        yield call(hook.broadcast_done);
+
         // status: error
-        yield put(
-            transactionActions.error({ operations, error, errorCallback })
-        );
+        yield put(transactionActions.error({ operations, error, errorCallback }));
         for (const [type, operation] of operations) {
             if (hook['error_' + type]) {
                 try {
@@ -391,9 +433,7 @@ function* broadcastPayload({
     }
 }
 
-function* accepted_account_witness_vote({
-    operation: { account, witness, approve },
-}) {
+function* accepted_account_witness_vote({ operation: { account, witness, approve } }) {
     yield put(
         globalActions.updateAccountWitnessVote({ account, witness, approve })
     );
@@ -433,22 +473,19 @@ export function createPatch(text1, text2) {
     return patch;
 }
 
-function slug(text) {
-    return getSlug(text.replace(/[<>]/g, ''), { truncate: 128 });
-}
-
-const pwPubkey = (name, pw, role) =>
-    auth.wifToPublic(auth.toWif(name, pw.trim(), role));
+const pwPubkey = (name, pw, role) => {
+    return auth.wifToPublic(auth.toWif(name, pw.trim(), role));
+};
 
 export function* recoverAccount({
-    payload: {
-        account_to_recover,
-        old_password,
-        new_password,
-        onError,
-        onSuccess,
-    },
-}) {
+                                    payload: {
+                                        account_to_recover,
+                                        old_password,
+                                        new_password,
+                                        onError,
+                                        onSuccess,
+                                    },
+                                }) {
     const [account] = yield call(
         [api, api.getAccountsAsync],
         [account_to_recover]
@@ -576,8 +613,10 @@ export function* recoverAccount({
 
 /** auths must start with most powerful key: owner for example */
 export function* updateAuthorities({
-    payload: { accountName, signingKey, auths, twofa, onSuccess, onError },
-}) {
+                                       payload: {
+                                           accountName, signingKey, auths, onSuccess, onError,
+                                       },
+                                   }) {
     // Be sure this account is up-to-date (other required fields are sent in the update)
     const [account] = yield call([api, api.getAccountsAsync], [accountName]);
     if (!account) {
@@ -609,11 +648,13 @@ export function* updateAuthorities({
             );
             oldAuthPubkey = oldPrivateAuth.toPublicKey().toString();
         }
-        if (authType === 'owner' && !oldPrivate) oldPrivate = oldPrivateAuth;
-        else if (authType === 'active' && !oldPrivate)
+        if (authType === 'owner' && !oldPrivate) {
             oldPrivate = oldPrivateAuth;
-        else if (authType === 'posting' && !oldPrivate)
+        } else if (authType === 'active' && !oldPrivate) {
             oldPrivate = oldPrivateAuth;
+        } else if (authType === 'posting' && !oldPrivate) {
+            oldPrivate = oldPrivateAuth;
+        }
 
         let newPrivate, newAuthPubkey;
         try {
@@ -638,8 +679,11 @@ export function* updateAuthorities({
         ops2[authType] = authority ? authority : account[authType];
         return true;
     };
-    for (const auth of auths)
-        if (!addAuth(auth.authType, auth.oldAuth, auth.newAuth)) return;
+    for (const authObject of auths) {
+        if (!addAuth(authObject.authType, authObject.oldAuth, authObject.newAuth)) {
+            return;
+        }
+    }
 
     let key = oldPrivate;
     if (!key) {
@@ -647,22 +691,22 @@ export function* updateAuthorities({
             key = PrivateKey.fromWif(signingKey);
         } catch (e2) {
             // probably updating a memo .. see if we got an active or owner
-            const auth = (authType) => {
+            const authFn = (authType) => {
                 const priv = PrivateKey.fromSeed(
                     accountName + authType + signingKey
                 );
                 const pubkey = priv.toPublicKey().toString();
                 const authority = account[authType];
                 const { key_auths } = authority;
-                for (let i = 0; i < key_auths.length; i++) {
+                for (let i = 0; i < key_auths.length; i += 1) {
                     if (key_auths[i][0] === pubkey) {
                         return priv;
                     }
                 }
                 return null;
             };
-            key = auth('active');
-            if (!key) key = auth('owner');
+            key = authFn('active');
+            if (!key) key = authFn('owner');
         }
     }
     if (!key) {
