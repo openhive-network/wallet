@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import { browserHistory, Link } from 'react-router';
 import { connect } from 'react-redux';
 import tt from 'counterpart';
+import Tooltip from "react-tooltip-lite";
 
 import resolveRoute from 'app/ResolveRoute';
 import { APP_NAME } from 'app/client_config';
@@ -15,6 +16,7 @@ import { SIGNUP_URL } from 'shared/constants';
 import HiveLogo from 'app/components/elements/HiveLogo';
 import normalizeProfile from 'app/utils/NormalizeProfile';
 import UserpicInfoWrapper from 'app/components/elements/UserpicInfoWrapper';
+import { extractLoginData } from 'app/utils/UserUtil';
 
 const propTypes = {
     // eslint-disable-next-line react/forbid-prop-types
@@ -48,6 +50,9 @@ class Header extends React.Component {
             toggleNightmode,
             showSidePanel,
             account_meta,
+            login_with_keychain,
+            login_with_hivesigner,
+            login_with_hiveauth,
         } = this.props;
 
         /*Set the document.title on each header render.*/
@@ -64,19 +69,15 @@ class Header extends React.Component {
             page_title = tt('header_jsx.create_account');
         } else if (route.page === 'Approval') {
             page_title = `Account Confirmation`;
-        } else if (
-            route.page === 'RecoverAccountStep1' ||
-            route.page === 'RecoverAccountStep2'
-        ) {
+        } else if (route.page === 'RecoverAccountStep1' || route.page === 'RecoverAccountStep2') {
             page_title = tt('header_jsx.stolen_account_recovery');
         } else if (route.page === 'Proposals') {
             page_title = tt('header_jsx.steem_proposals');
         } else if (route.page === 'UserProfile') {
             const user_name = route.params[0].slice(1);
-            const name =
-                account_meta && !_.isEmpty(account_meta)
-                    ? normalizeProfile(account_meta.toJS()).name
-                    : null;
+            const name = account_meta && !_.isEmpty(account_meta)
+                ? normalizeProfile(account_meta.toJS()).name
+                : null;
             const user_title = name ? `${name} (@${user_name})` : user_name;
             page_title = user_title;
             if (route.params[1] === 'curation-rewards') {
@@ -95,16 +96,16 @@ class Header extends React.Component {
 
         // Format first letter of all titles and lowercase user name
         if (route.page !== 'UserProfile') {
-            page_title =
-                page_title.charAt(0).toUpperCase() + page_title.slice(1);
+            page_title = page_title.charAt(0).toUpperCase() + page_title.slice(1);
         }
 
         if (
-            process.env.BROWSER &&
-            route.page !== 'Post' &&
-            route.page !== 'PostNoCategory'
-        )
+            process.env.BROWSER
+            && route.page !== 'Post'
+            && route.page !== 'PostNoCategory'
+        ) {
             document.title = page_title + ' — ' + APP_NAME;
+        }
 
         const wallet_link = `/@${username}/transfers`;
         const reset_password_link = `/@${username}/password`;
@@ -137,6 +138,30 @@ class Header extends React.Component {
                   }
                 : { link: '#', onClick: showLogin, value: tt('g.login') },
         ];
+
+        let loginProvider;
+        let loginProviderLogo;
+        switch(true) {
+            case !!login_with_keychain:
+                loginProvider = 'Hive Keychain';
+                loginProviderLogo = '/images/hivekeychain.png';
+                break;
+
+            case !!login_with_hiveauth:
+                loginProvider = 'HiveAuth';
+                loginProviderLogo = '/images/hiveauth.png';
+                break;
+
+            case !!login_with_hivesigner:
+                loginProvider = 'Hive Signer';
+                loginProviderLogo = '/images/hivesigner.svg';
+                break;
+
+            default:
+                loginProvider = 'Hive private key';
+                loginProviderLogo = '/images/hive-blog-logo.svg';
+                break;
+        }
 
         return (
             <header className="Header">
@@ -172,7 +197,23 @@ class Header extends React.Component {
                             <DropdownMenu
                                 className="Header__usermenu"
                                 items={user_menu}
-                                title={username}
+                                title={(
+                                    <div>
+                                        {username}
+                                        {' '}
+                                        <Tooltip
+                                            content={`Logged in with ${loginProvider}`}
+                                            eventOff="onClick"
+                                            className="login-provider-tooltip"
+                                        >
+                                            <img
+                                                alt={loginProvider}
+                                                width="16"
+                                                src={loginProviderLogo}
+                                            />
+                                        </Tooltip>
+                                    </div>
+                                )}
                                 el="span"
                                 selected={tt('g.rewards')}
                                 position="left"
@@ -233,6 +274,9 @@ const mapStateToProps = (state, ownProps) => {
 
     console.log('loggedIn', loggedIn, username);
 
+    const loginData = localStorage.getItem('autopost2');
+    const [,,,, login_with_keychain, login_with_hivesigner,,, login_with_hiveauth] = extractLoginData(loginData);
+
     return {
         username,
         loggedIn,
@@ -240,6 +284,9 @@ const mapStateToProps = (state, ownProps) => {
         nightmodeEnabled: state.app.getIn(['user_preferences', 'nightmode']),
         account_meta: user_profile,
         ...ownProps,
+        login_with_keychain,
+        login_with_hivesigner,
+        login_with_hiveauth,
     };
 };
 

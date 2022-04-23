@@ -237,7 +237,9 @@
         "cannot_encrypt_memo": "cannot encrypt memo with current login method",
         "rcLevel": "Resource Credits (RC) level: %(rc_percent)s%%.",
         "rcFullIn": "Full in %(duration)s",
-        "governanceExpiryWarning": "Witness votes auto-expire %(duration)s after your last governance transaction. Your present votes will expire on %(date)s. Please <a href=\"/~witnesses\">update your Witness votes</a> to reset."
+        "governanceExpiryWarning": "Witness votes auto-expire %(duration)s after your last governance transaction. Your present votes will expire on %(date)s. Please <a href=\"/~witnesses\">update your Witness votes</a> to reset.",
+        "governanceExpired": "Your Witnesses votes have expired on %(date)s. Please <a href=\"/~witnesses\">update your Witness votes</a> to reset.",
+        "pleaseVoteForWitnesses": "It looks like you have not yet voted for Witnesses, you can do so on the <a href=\"/~witnesses\">Witnesses page</a>"
     },
     "navigation": {
         "about": "About Hive",
@@ -627,6 +629,7 @@
         "login_to_wallet": "Login to Wallet",
         "sign_transfer": "Sign to complete transfer",
         "use_keychain": "Use keychain extension",
+        "use_hiveauth": "Use HiveAuth",
         "dont_have_an_account": "Don't have a Hive account?",
         "more_login_methods": "more login methods"
     },
@@ -816,5 +819,21 @@
             "end_date": "End Date",
             "total_votes": "Total Votes"
         }
+    },
+    "hiveauthservices": {
+        "pleaseWait": "Please wait",
+        "broadcastInstructions": "Broadcasting your operation via HiveAuth, please review and approve from your compatible mobile wallet app.",
+        "unknownCommand": "unknown command",
+        "connecting": "Connecting to HiveAuth...",
+        "qrInstructions": "Please tap or scan the following QR code with your HiveAuth compatible mobile wallet app",
+        "tokenExpired": "HiveAuth token expired, please try again..",
+        "challengeValidationFailed": "failed validating challenge",
+        "userRejectedRequest": "user has rejected the HiveAuth request",
+        "requestExpired": "The HiveAuth request has expired, please try again...",
+        "verifyPostingKeyInstructions": "'Please use your HiveAuth compatible mobile wallet app to verify your posting key.'",
+        "publicKeyMatchingError": "failed matching signature to public key",
+        "failedProcessingChallenge": "failed processing challenge",
+        "failedAttaching": "Failed attaching",
+        "challengeError": "Challenge Error"
     }
 }
