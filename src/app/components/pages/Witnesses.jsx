@@ -246,7 +246,7 @@ class Witnesses extends React.Component {
             );
         });
         let witness_vote_count = 30;
-        let rank = 1;
+        let rank = 0;
         let foundWitnessToHighlight = false;
         let previousTotalVoteHpf = 0;
         const now = Moment();
@@ -375,15 +375,9 @@ class Witnesses extends React.Component {
                 }
             }
 
-            const ownerStyle = isDisabled
-                ? { textDecoration: 'line-through', color: '#AAA' }
-                : {};
+            const ownerStyle = isDisabled ? { textDecoration: 'line-through', color: '#AAA' } : {};
 
-            const witnessLastBlockAgeInDays = blockGap(
-                head_block,
-                lastBlock,
-                'days'
-            );
+            const witnessLastBlockAgeInDays = blockGap(head_block, lastBlock, 'days');
 
             const witnessSocialLink = (_witnessName) => {
                 return (
