@@ -599,7 +599,7 @@ class Witnesses extends React.Component {
             return witness.get('owner');
         });
 
-        if (witness_votes) {
+        if (witness_votes && witness_votes.size > 0) {
             witness_vote_count -= witness_votes.size;
             additionalWitnesses = witness_votes
                 .union(witnessVotesInProgress)
@@ -867,7 +867,7 @@ module.exports = {
                 head_block: state.global.getIn(['props', 'head_block_number']),
                 witnesses,
                 username,
-                witness_votes,
+                witness_votes: witness_votes ? witness_votes : List(),
                 witnessVotesInProgress,
                 current_proxy,
                 state,
