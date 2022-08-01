@@ -13,7 +13,8 @@ import TransactionError from 'app/components/elements/TransactionError';
 import DepthChart from 'app/components/elements/DepthChart';
 import Orderbook from 'app/components/elements/Orderbook';
 import OrderHistory from 'app/components/elements/OrderHistory';
-import { Order, TradeHistory } from 'app/utils/MarketClasses';
+import { Order } from 'app/utils/MarketOrder';
+import { TradeHistory } from 'app/utils/MarketTradeHistory';
 import { roundUp, roundDown } from 'app/utils/MarketUtils';
 import tt from 'counterpart';
 import {
