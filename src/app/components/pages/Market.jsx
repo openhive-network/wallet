@@ -13,7 +13,8 @@ import TransactionError from 'app/components/elements/TransactionError';
 import DepthChart from 'app/components/elements/DepthChart';
 import Orderbook from 'app/components/elements/Orderbook';
 import OrderHistory from 'app/components/elements/OrderHistory';
-import { Order, TradeHistory } from 'app/utils/MarketClasses';
+import { MarketOrder } from 'app/utils/MarketOrder';
+import { MarketTradeHistory } from 'app/utils/MarketTradeHistory';
 import { roundUp, roundDown } from 'app/utils/MarketUtils';
 import tt from 'counterpart';
 import {
@@ -50,14 +51,12 @@ class Market extends React.Component {
     componentWillReceiveProps(np) {
         if (!this.props.ticker && np.ticker) {
             const { lowest_ask, highest_bid } = np.ticker;
-            if (this.refs.buyHive_price)
-                this.refs.buyHive_price.value = parseFloat(lowest_ask).toFixed(
+            if (this.refs.buyHive_price) { this.refs.buyHive_price.value = parseFloat(lowest_ask).toFixed(
                     6
-                );
-            if (this.refs.sellHive_price)
-                this.refs.sellHive_price.value = parseFloat(
+                ); }
+            if (this.refs.sellHive_price) { this.refs.sellHive_price.value = parseFloat(
                     highest_bid
-                ).toFixed(6);
+                ).toFixed(6); }
         }
     }
 
@@ -67,15 +66,15 @@ class Market extends React.Component {
         }
 
         if (
-            nextState.buy_disabled != this.state.buy_disabled ||
-            nextState.sell_disabled != this.state.sell_disabled
+            nextState.buy_disabled != this.state.buy_disabled
+            || nextState.sell_disabled != this.state.sell_disabled
         ) {
             return true;
         }
 
         if (
-            nextState.buy_price_warning != this.state.buy_price_warning ||
-            nextState.sell_price_warning != this.state.sell_price_warning
+            nextState.buy_price_warning != this.state.buy_price_warning
+            || nextState.sell_price_warning != this.state.sell_price_warning
         ) {
             return true;
         }
@@ -84,23 +83,20 @@ class Market extends React.Component {
             return true;
         }
 
-        let tc =
-            typeof this.props.ticker == 'undefined' ||
-            this.props.ticker.latest !== nextProps.ticker.latest ||
-            this.props.ticker.hbd_volume !== nextProps.ticker.hbd_volume;
+        const tc = typeof this.props.ticker == 'undefined'
+            || this.props.ticker.latest !== nextProps.ticker.latest
+            || this.props.ticker.hbd_volume !== nextProps.ticker.hbd_volume;
 
-        let bc =
-            typeof this.props.orderbook == 'undefined' ||
-            this.props.orderbook['asks'].length !=
-                nextProps.orderbook['asks'].length ||
-            this.props.orderbook['bids'].length !=
-                nextProps.orderbook['bids'].length;
+        const bc = typeof this.props.orderbook == 'undefined'
+            || this.props.orderbook.asks.length
+            != nextProps.orderbook.asks.length
+            || this.props.orderbook.bids.length
+            != nextProps.orderbook.bids.length;
 
-        let oc =
-            typeof nextProps.open_orders !== undefined &&
-            (typeof this.props.open_orders == 'undefined' ||
-                JSON.stringify(this.props.open_orders) !=
-                    JSON.stringify(nextProps.open_orders));
+        const oc = typeof nextProps.open_orders !== 'undefined'
+            && (typeof this.props.open_orders == 'undefined'
+                || JSON.stringify(this.props.open_orders)
+                != JSON.stringify(nextProps.open_orders));
 
         // Update if ticker info changed, order book changed size, or open orders length changed.
         //if(tc || bc || oc) console.log("tc?", tc, "bc?", bc, "oc?", oc)
@@ -132,6 +128,7 @@ class Market extends React.Component {
             }
         );
     };
+
     sellHive = (e) => {
         e.preventDefault();
         const { placeOrder, user } = this.props;
@@ -157,6 +154,7 @@ class Market extends React.Component {
             }
         );
     };
+
     cancelOrderClick = (e, orderid) => {
         e.preventDefault();
         const { cancelOrder, user } = this.props;
@@ -174,12 +172,10 @@ class Market extends React.Component {
         this.refs.buyHive_price.value = p.toFixed(6);
 
         const samount = parseFloat(this.refs.sellHive_amount.value);
-        if (samount >= 0)
-            this.refs.sellHive_total.value = roundDown(p * samount, 3);
+        if (samount >= 0) this.refs.sellHive_total.value = roundDown(p * samount, 3);
 
         const bamount = parseFloat(this.refs.buyHive_amount.value);
-        if (bamount >= 0)
-            this.refs.buyHive_total.value = roundUp(p * bamount, 3);
+        if (bamount >= 0) this.refs.buyHive_total.value = roundUp(p * bamount, 3);
 
         this.validateBuyHive();
         this.validateSellHive();
@@ -263,8 +259,8 @@ class Market extends React.Component {
                 percent_change: parseFloat(percent_change),
                 hbd_volume: parseFloat(hbd_volume),
                 feed_price:
-                    parseFloat(base.split(' ')[0]) /
-                    parseFloat(quote.split(' ')[0]),
+                    parseFloat(base.split(' ')[0])
+                    / parseFloat(quote.split(' ')[0]),
             };
         }
 
@@ -273,7 +269,7 @@ class Market extends React.Component {
             if (typeof orders == 'undefined') return { bids: [], asks: [] };
             return ['bids', 'asks'].reduce((out, side) => {
                 out[side] = orders[side].map((o) => {
-                    return new Order(o, side);
+                    return new MarketOrder(o, side);
                 });
                 return out;
             }, {});
@@ -281,15 +277,16 @@ class Market extends React.Component {
 
         function aggOrders(orders) {
             return ['bids', 'asks'].reduce((out, side) => {
-                var buff = [],
-                    last = null;
+                const buff = [];
+                let last = null;
+                // eslint-disable-next-line array-callback-return
                 orders[side].map((o) => {
                     // o.price = (side == 'asks') ? roundUp(o.price, 6) : Math.max(roundDown(o.price, 6), 0.000001)
                     // the following line should be checking o.price == last.price but it appears due to inverted prices from API,
                     //   inverting again causes values to not be properly sorted.
                     if (
-                        last !== null &&
-                        o.getStringPrice() === last.getStringPrice()
+                        last !== null
+                        && o.getStringPrice() === last.getStringPrice()
                     ) {
                         buff[buff.length - 1] = buff[buff.length - 1].add(o);
                     } else {
@@ -308,10 +305,10 @@ class Market extends React.Component {
         const { open_orders, open_orders_sort } = this.props;
 
         // Logged-in user's open orders
+        // eslint-disable-next-line no-shadow
         function open_orders_table(open_orders, open_orders_sort) {
-            const rows =
-                open_orders &&
-                open_orders.map((o) => (
+            const rows = open_orders
+                && open_orders.map((o) => (
                     <tr key={o.orderid}>
                         <td>{o.created.replace('T', ' ')}</td>
                         <td>{o.type == 'ask' ? tt('g.sell') : tt('g.buy')}</td>
@@ -323,13 +320,13 @@ class Market extends React.Component {
                         <td>{o.hbd.replace('HBD', DEBT_TOKEN_SHORT)}</td>
                         <td>
                             {(
-                                (1 -
-                                    o.for_sale /
-                                        1000 /
-                                        parseFloat(
-                                            o.sell_price.base.split(' ')[0]
-                                        )) *
-                                100
+                                (1
+                                    - o.for_sale
+                                    / 1000
+                                    / parseFloat(
+                                        o.sell_price.base.split(' ')[0]
+                                    ))
+                                * 100
                             ).toFixed(2)}
                             %
                         </td>
@@ -346,8 +343,7 @@ class Market extends React.Component {
 
             const activeClass = (column) => {
                 if (column === open_orders_sort.get('column')) {
-                    const dir =
-                        open_orders_sort.get('dir') === -1 ? 'desc' : 'asc';
+                    const dir = open_orders_sort.get('dir') === -1 ? 'desc' : 'asc';
                     return ['activesort', `activesort--${dir}`];
                 }
                 return null;
@@ -359,72 +355,60 @@ class Market extends React.Component {
                         <tr>
                             <th
                                 className={classNames(
-                                    activeClass('created'),
-                                    'sortable'
+                                activeClass('created'),
+                                'sortable'
+                            )}
+                                onClick={() => handleToggleOpenOrdersSort(
+                                    'created',
+                                    'string'
                                 )}
-                                onClick={(e) =>
-                                    handleToggleOpenOrdersSort(
-                                        'created',
-                                        'string'
-                                    )
-                                }
-                            >
+                        >
                                 {tt('market_jsx.date_created')}
                             </th>
                             <th
                                 className={classNames(
-                                    activeClass('type'),
-                                    'sortable'
-                                )}
-                                onClick={(e) =>
-                                    handleToggleOpenOrdersSort('type', 'string')
-                                }
-                            >
+                                activeClass('type'),
+                                'sortable'
+                            )}
+                                onClick={() => handleToggleOpenOrdersSort('type', 'string')}
+                        >
                                 {tt('g.type')}
                             </th>
                             <th
                                 className={classNames(
-                                    activeClass('price'),
-                                    'sortable'
-                                )}
-                                onClick={(e) =>
-                                    handleToggleOpenOrdersSort('price')
-                                }
-                            >
+                                activeClass('price'),
+                                'sortable'
+                            )}
+                                onClick={() => handleToggleOpenOrdersSort('price')}
+                        >
                                 {tt('g.price')}
                             </th>
                             <th
                                 className={classNames(
-                                    activeClass('for_sale'),
-                                    'sortable',
-                                    'uppercase'
-                                )}
-                                onClick={(e) =>
-                                    handleToggleOpenOrdersSort('for_sale')
-                                }
-                            >
+                                activeClass('for_sale'),
+                                'sortable',
+                                'uppercase'
+                            )}
+                                onClick={() => handleToggleOpenOrdersSort('for_sale')}
+                        >
                                 {LIQUID_TOKEN}
                             </th>
                             <th
                                 className={classNames(
-                                    activeClass('hbd'),
-                                    'sortable'
-                                )}
-                                onClick={(e) =>
-                                    handleToggleOpenOrdersSort('hbd')
-                                }
-                            >
+                                activeClass('hbd'),
+                                'sortable'
+                            )}
+                                onClick={() => handleToggleOpenOrdersSort('hbd')}
+                        >
                                 {`${DEBT_TOKEN_SHORT} (${CURRENCY_SIGN})`}
                             </th>
                             <th
                                 className={classNames(
-                                    activeClass('filled'),
-                                    'sortable'
-                                )}
-                                onClick={(e) =>
-                                    handleToggleOpenOrdersSort('filled')
-                                }
-                            >
+                                activeClass('filled'),
+                                'sortable'
+                            )}
+                                onClick={() => handleToggleOpenOrdersSort('filled')}
+                        >
                                 Filled
                             </th>
                             <th>{tt('market_jsx.action')}</th>
@@ -439,9 +423,11 @@ class Market extends React.Component {
             if (!trades || !trades.length) {
                 return [];
             }
+
+            // eslint-disable-next-line no-shadow
             const norm = (trades) => {
                 return trades.map((t) => {
-                    return new TradeHistory(t);
+                    return new MarketTradeHistory(t);
                 });
             };
 
@@ -451,12 +437,13 @@ class Market extends React.Component {
         const pct_change = (
             <span
                 className={
-                    'Market__ticker-pct-' +
-                    (ticker.percent_change < 0 ? 'down' : 'up')
+                    'Market__ticker-pct-'
+                    + (ticker.percent_change < 0 ? 'down' : 'up')
                 }
             >
                 {ticker.percent_change < 0 ? '' : '+'}
-                {ticker.percent_change.toFixed(2)}%
+                {ticker.percent_change.toFixed(2)}
+                %
             </span>
         );
 
@@ -466,31 +453,42 @@ class Market extends React.Component {
                     <div className="column">
                         <ul className="Market__ticker">
                             <li>
-                                <b>{tt('market_jsx.last_price')}</b>{' '}
+                                <b>{tt('market_jsx.last_price')}</b>
+                                {' '}
                                 {CURRENCY_SIGN}
-                                {ticker.latest.toFixed(6)} ({pct_change})
+                                {ticker.latest.toFixed(6)}
+                                {' '}
+                                (
+                                {pct_change}
+                                )
                             </li>
                             <li>
-                                <b>{tt('market_jsx.24h_volume')}</b>{' '}
+                                <b>{tt('market_jsx.24h_volume')}</b>
+                                {' '}
                                 {CURRENCY_SIGN}
                                 {ticker.hbd_volume.toFixed(2)}
                             </li>
                             <li>
-                                <b>{tt('g.bid')}</b> {CURRENCY_SIGN}
+                                <b>{tt('g.bid')}</b>
+                                {' '}
+                                {CURRENCY_SIGN}
                                 {ticker.highest_bid.toFixed(6)}
                             </li>
                             <li>
-                                <b>{tt('g.ask')}</b> {CURRENCY_SIGN}
+                                <b>{tt('g.ask')}</b>
+                                {' '}
+                                {CURRENCY_SIGN}
                                 {ticker.lowest_ask.toFixed(6)}
                             </li>
                             {ticker.highest_bid > 0 && (
                                 <li>
-                                    <b>{tt('market_jsx.spread')}</b>{' '}
+                                    <b>{tt('market_jsx.spread')}</b>
+                                    {' '}
                                     {(
-                                        (200 *
-                                            (ticker.lowest_ask -
-                                                ticker.highest_bid)) /
-                                        (ticker.highest_bid + ticker.lowest_ask)
+                                        (200
+                                            * (ticker.lowest_ask
+                                                - ticker.highest_bid))
+                                        / (ticker.highest_bid + ticker.lowest_ask)
                                     ).toFixed(3)}
                                     %
                                 </li>
@@ -530,15 +528,15 @@ class Market extends React.Component {
                                     <div className="input-group">
                                         <input
                                             className={
-                                                'input-group-field' +
-                                                (buy_price_warning
+                                                'input-group-field'
+                                                + (buy_price_warning
                                                     ? ' price_warning'
                                                     : '')
                                             }
                                             type="text"
                                             ref="buyHive_price"
                                             placeholder="0.0"
-                                            onChange={(e) => {
+                                            onChange={() => {
                                                 const amount = parseFloat(
                                                     this.refs.buyHive_amount
                                                         .value
@@ -547,11 +545,10 @@ class Market extends React.Component {
                                                     this.refs.buyHive_price
                                                         .value
                                                 );
-                                                if (amount >= 0 && price >= 0)
-                                                    this.refs.buyHive_total.value = roundUp(
+                                                if (amount >= 0 && price >= 0) { this.refs.buyHive_total.value = roundUp(
                                                         price * amount,
                                                         3
-                                                    );
+                                                    ); }
                                                 validateBuyHive();
                                             }}
                                         />
@@ -571,7 +568,7 @@ class Market extends React.Component {
                                             type="text"
                                             ref="buyHive_amount"
                                             placeholder="0.0"
-                                            onChange={(e) => {
+                                            onChange={() => {
                                                 const price = parseFloat(
                                                     this.refs.buyHive_price
                                                         .value
@@ -580,11 +577,10 @@ class Market extends React.Component {
                                                     this.refs.buyHive_amount
                                                         .value
                                                 );
-                                                if (price >= 0 && amount >= 0)
-                                                    this.refs.buyHive_total.value = roundUp(
+                                                if (price >= 0 && amount >= 0) { this.refs.buyHive_total.value = roundUp(
                                                         price * amount,
                                                         3
-                                                    );
+                                                    ); }
                                                 validateBuyHive();
                                             }}
                                         />
@@ -607,7 +603,7 @@ class Market extends React.Component {
                                             type="text"
                                             ref="buyHive_total"
                                             placeholder="0.0"
-                                            onChange={(e) => {
+                                            onChange={() => {
                                                 const price = parseFloat(
                                                     this.refs.buyHive_price
                                                         .value
@@ -616,11 +612,10 @@ class Market extends React.Component {
                                                     this.refs.buyHive_total
                                                         .value
                                                 );
-                                                if (total >= 0 && price >= 0)
-                                                    this.refs.buyHive_amount.value = roundUp(
+                                                if (total >= 0 && price >= 0) { this.refs.buyHive_amount.value = roundUp(
                                                         total / price,
                                                         3
-                                                    );
+                                                    ); }
                                                 validateBuyHive();
                                             }}
                                         />
@@ -657,19 +652,19 @@ class Market extends React.Component {
                                                             ' '
                                                         )[0];
                                                         this.refs.buyHive_total.value = total;
-                                                        if (price >= 0)
-                                                            this.refs.buyHive_amount.value = roundDown(
+                                                        if (price >= 0) { this.refs.buyHive_amount.value = roundDown(
                                                                 parseFloat(
                                                                     total
                                                                 ) / price,
                                                                 3
-                                                            ).toFixed(3);
+                                                            ).toFixed(3); }
                                                         validateBuyHive();
                                                     }}
                                                 >
                                                     {tt('market_jsx.available')}
                                                     :
-                                                </a>{' '}
+                                                </a>
+                                                {' '}
                                                 {account.hbd_balance.replace(
                                                     'HBD',
                                                     DEBT_TOKEN_SHORT
@@ -691,18 +686,18 @@ class Market extends React.Component {
                                                     const price = parseFloat(
                                                         ticker.lowest_ask
                                                     );
-                                                    this.refs.buyHive_price.value =
-                                                        ticker.lowest_ask;
-                                                    if (amount >= 0)
-                                                        this.refs.buyHive_total.value = roundUp(
+                                                    this.refs.buyHive_price.value = ticker.lowest_ask;
+                                                    if (amount >= 0) { this.refs.buyHive_total.value = roundUp(
                                                             amount * price,
                                                             3
-                                                        ).toFixed(3);
+                                                        ).toFixed(3); }
                                                     validateBuyHive();
                                                 }}
                                             >
-                                                {tt('market_jsx.lowest_ask')}:
-                                            </a>{' '}
+                                                {tt('market_jsx.lowest_ask')}
+                                                :
+                                            </a>
+                                            {' '}
                                             {ticker.lowest_ask.toFixed(6)}
                                         </small>
                                     </div>
@@ -727,15 +722,15 @@ class Market extends React.Component {
                                     <div className="input-group">
                                         <input
                                             className={
-                                                'input-group-field' +
-                                                (sell_price_warning
+                                                'input-group-field'
+                                                + (sell_price_warning
                                                     ? ' price_warning'
                                                     : '')
                                             }
                                             type="text"
                                             ref="sellHive_price"
                                             placeholder="0.0"
-                                            onChange={(e) => {
+                                            onChange={() => {
                                                 const amount = parseFloat(
                                                     this.refs.sellHive_amount
                                                         .value
@@ -744,11 +739,10 @@ class Market extends React.Component {
                                                     this.refs.sellHive_price
                                                         .value
                                                 );
-                                                if (amount >= 0 && price >= 0)
-                                                    this.refs.sellHive_total.value = roundDown(
+                                                if (amount >= 0 && price >= 0) { this.refs.sellHive_total.value = roundDown(
                                                         price * amount,
                                                         3
-                                                    );
+                                                    ); }
                                                 validateSellHive();
                                             }}
                                         />
@@ -768,7 +762,7 @@ class Market extends React.Component {
                                             type="text"
                                             ref="sellHive_amount"
                                             placeholder="0.0"
-                                            onChange={(e) => {
+                                            onChange={() => {
                                                 const price = parseFloat(
                                                     this.refs.sellHive_price
                                                         .value
@@ -777,11 +771,10 @@ class Market extends React.Component {
                                                     this.refs.sellHive_amount
                                                         .value
                                                 );
-                                                if (price >= 0 && amount >= 0)
-                                                    this.refs.sellHive_total.value = roundDown(
+                                                if (price >= 0 && amount >= 0) { this.refs.sellHive_total.value = roundDown(
                                                         price * amount,
                                                         3
-                                                    );
+                                                    ); }
                                                 validateSellHive();
                                             }}
                                         />
@@ -803,7 +796,7 @@ class Market extends React.Component {
                                             type="text"
                                             ref="sellHive_total"
                                             placeholder="0.0"
-                                            onChange={(e) => {
+                                            onChange={() => {
                                                 const price = parseFloat(
                                                     this.refs.sellHive_price
                                                         .value
@@ -812,11 +805,10 @@ class Market extends React.Component {
                                                     this.refs.sellHive_total
                                                         .value
                                                 );
-                                                if (price >= 0 && total >= 0)
-                                                    this.refs.sellHive_amount.value = roundUp(
+                                                if (price >= 0 && total >= 0) { this.refs.sellHive_amount.value = roundUp(
                                                         total / price,
                                                         3
-                                                    );
+                                                    ); }
                                                 validateSellHive();
                                             }}
                                         />
@@ -853,20 +845,20 @@ class Market extends React.Component {
                                                             ' '
                                                         )[0];
                                                         this.refs.sellHive_amount.value = amount;
-                                                        if (price >= 0)
-                                                            this.refs.sellHive_total.value = roundDown(
-                                                                price *
-                                                                    parseFloat(
-                                                                        amount
-                                                                    ),
+                                                        if (price >= 0) { this.refs.sellHive_total.value = roundDown(
+                                                                price
+                                                                * parseFloat(
+                                                                    amount
+                                                                ),
                                                                 3
-                                                            );
+                                                            ); }
                                                         validateSellHive();
                                                     }}
                                                 >
                                                     {tt('market_jsx.available')}
                                                     :
-                                                </a>{' '}
+                                                </a>
+                                                {' '}
                                                 {account.balance.replace(
                                                     LIQUID_TICKER,
                                                     LIQUID_TOKEN_UPPERCASE
@@ -885,20 +877,20 @@ class Market extends React.Component {
                                                             .sellHive_amount
                                                             .value
                                                     );
-                                                    const price =
-                                                        ticker.highest_bid;
+                                                    const price = ticker.highest_bid;
                                                     this.refs.sellHive_price.value = price;
-                                                    if (amount >= 0)
-                                                        this.refs.sellHive_total.value = roundDown(
-                                                            parseFloat(price) *
-                                                                amount,
+                                                    if (amount >= 0) { this.refs.sellHive_total.value = roundDown(
+                                                            parseFloat(price)
+                                                            * amount,
                                                             3
-                                                        );
+                                                        ); }
                                                     validateSellHive();
                                                 }}
                                             >
-                                                {tt('market_jsx.highest_bid')}:
-                                            </a>{' '}
+                                                {tt('market_jsx.highest_bid')}
+                                                :
+                                            </a>
+                                            {' '}
                                             {ticker.highest_bid.toFixed(6)}
                                         </small>
                                     </div>
@@ -912,7 +904,7 @@ class Market extends React.Component {
                     <div className="small-12 medium-6 large-4 columns">
                         <h4>{tt('market_jsx.buy_orders')}</h4>
                         <Orderbook
-                            side={'bids'}
+                            side="bids"
                             orders={orderbook.bids}
                             onClick={(price) => {
                                 setFormPrice(price);
@@ -923,7 +915,7 @@ class Market extends React.Component {
                     <div className="small-12 medium-6 large-4 columns">
                         <h4>{tt('market_jsx.sell_orders')}</h4>
                         <Orderbook
-                            side={'asks'}
+                            side="asks"
                             orders={orderbook.asks}
                             onClick={(price) => {
                                 setFormPrice(price);
@@ -1040,15 +1032,15 @@ module.exports = {
                 const isSell = amount_to_sell.indexOf(LIQUID_TICKER) > 0;
                 const confirmStr = isSell
                     ? tt('market_jsx.sell_amount_for_atleast', {
-                          amount_to_sell,
-                          min_to_receive,
-                          effectivePrice,
-                      })
+                        amount_to_sell,
+                        min_to_receive,
+                        effectivePrice,
+                    })
                     : tt('market_jsx.buy_atleast_amount_for', {
-                          amount_to_sell,
-                          min_to_receive,
-                          effectivePrice,
-                      });
+                        amount_to_sell,
+                        min_to_receive,
+                        effectivePrice,
+                    });
                 const successMessage = tt('market_jsx.order_placed', {
                     order: confirmStr,
                 });
@@ -1057,10 +1049,10 @@ module.exports = {
                 if (priceWarning) {
                     const warning_args = {
                         marketPrice:
-                            CURRENCY_SIGN +
-                            parseFloat(marketPrice).toFixed(4) +
-                            '/' +
-                            LIQUID_TOKEN_UPPERCASE,
+                            CURRENCY_SIGN
+                            + parseFloat(marketPrice).toFixed(4)
+                            + '/'
+                            + LIQUID_TOKEN_UPPERCASE,
                     };
                     warning = isSell
                         ? tt('market_jsx.price_warning_below', warning_args)
