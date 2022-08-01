@@ -62,7 +62,7 @@ export default function reducer(state = defaultState, action = {}) {
             return state.set('history', payload);
 
         case APPEND_TRADE_HISTORY:
-            return state.set('history', [...payload, ...state.get('history')]);
+            return state.set('history', [...state.get('history'), ...payload]);
 
         case TOGGLE_OPEN_ORDERS_SORT:
             const toggledColumn = action.payload.column || 'created';

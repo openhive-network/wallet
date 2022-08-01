@@ -13,8 +13,8 @@ import TransactionError from 'app/components/elements/TransactionError';
 import DepthChart from 'app/components/elements/DepthChart';
 import Orderbook from 'app/components/elements/Orderbook';
 import OrderHistory from 'app/components/elements/OrderHistory';
-import { Order } from 'app/utils/MarketOrder';
-import { TradeHistory } from 'app/utils/MarketTradeHistory';
+import { MarketOrder } from 'app/utils/MarketOrder';
+import { MarketTradeHistory } from 'app/utils/MarketTradeHistory';
 import { roundUp, roundDown } from 'app/utils/MarketUtils';
 import tt from 'counterpart';
 import {
@@ -269,7 +269,7 @@ class Market extends React.Component {
             if (typeof orders == 'undefined') return { bids: [], asks: [] };
             return ['bids', 'asks'].reduce((out, side) => {
                 out[side] = orders[side].map((o) => {
-                    return new Order(o, side);
+                    return new MarketOrder(o, side);
                 });
                 return out;
             }, {});
@@ -423,10 +423,11 @@ class Market extends React.Component {
             if (!trades || !trades.length) {
                 return [];
             }
+
             // eslint-disable-next-line no-shadow
             const norm = (trades) => {
                 return trades.map((t) => {
-                    return new TradeHistory(t);
+                    return new MarketTradeHistory(t);
                 });
             };
 

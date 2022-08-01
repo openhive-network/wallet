@@ -2,7 +2,7 @@ import { roundDown, roundUp } from './MarketUtils';
 
 const precision = 1000;
 
-export class Order {
+export class MarketOrder {
     constructor(order, side) {
         this.side = side;
         this.price = parseFloat(order.real_price);
@@ -40,7 +40,7 @@ export class Order {
     }
 
     add(order) {
-        return new Order(
+        return new MarketOrder(
             {
                 real_price: this.price,
                 hive: this.hive + order.hive,
@@ -60,4 +60,4 @@ export class Order {
     }
 }
 
-export default Order;
+export default MarketOrder;
