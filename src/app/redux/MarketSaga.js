@@ -12,13 +12,11 @@ export const marketWatches = [
     takeLatest(marketActions.UPDATE_MARKET, reloadMarket),
 ];
 
-export const wait = (ms) =>
-    new Promise((resolve) => {
+export const wait = (ms) => new Promise((resolve) => {
         setTimeout(() => resolve(), ms);
     });
 
 let polling = false;
-const active_user = null;
 let last_trade = null;
 
 export function* fetchMarket(location_change_action) {
@@ -67,6 +65,7 @@ export function* fetchMarket(location_change_action) {
         yield call(wait, 3000);
     }
 }
+
 
 export function* fetchOpenOrders(set_user_action) {
     const { username } = set_user_action.payload;

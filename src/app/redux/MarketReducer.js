@@ -23,8 +23,7 @@ const defaultState = Map({
 });
 
 export default function reducer(state = defaultState, action = {}) {
-    const payload =
-        typeof action.payload !== 'undefined' ? action.payload : null;
+    const payload = typeof action.payload !== 'undefined' ? action.payload : null;
 
     switch (action.type) {
         case RECEIVE_ORDERBOOK:
@@ -42,14 +41,11 @@ export default function reducer(state = defaultState, action = {}) {
 
             const open_orders = action.payload
                 .map((o) => {
-                    const type =
-                        o.sell_price.base.indexOf(LIQUID_TICKER) > 0
+                    const type = o.sell_price.base.indexOf(LIQUID_TICKER) > 0
                             ? 'ask'
                             : 'bid';
-                    const hbd =
-                        type == 'bid' ? o.sell_price.base : o.sell_price.quote;
-                    const hive =
-                        type == 'ask' ? o.sell_price.base : o.sell_price.quote;
+                    const hbd = type == 'bid' ? o.sell_price.base : o.sell_price.quote;
+                    const hive = type == 'ask' ? o.sell_price.base : o.sell_price.quote;
                     return {
                         ...o,
                         type,
@@ -74,8 +70,7 @@ export default function reducer(state = defaultState, action = {}) {
 
             const toggledDir = -state.get('open_orders_sort').get('dir');
 
-            const toggledGetValue =
-                toggledDataType === 'string' ? (v) => v : parseFloat;
+            const toggledGetValue = toggledDataType === 'string' ? (v) => v : parseFloat;
 
             const sortedState = state.set(
                 'open_orders',
@@ -103,6 +98,7 @@ export default function reducer(state = defaultState, action = {}) {
             return state;
     }
 }
+
 
 // Action creators
 export const receiveOrderbook = (payload) => ({
