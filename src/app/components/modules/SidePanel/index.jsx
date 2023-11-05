@@ -5,16 +5,17 @@ import CloseButton from 'app/components/elements/CloseButton';
 import Icon from 'app/components/elements/Icon';
 import { Link } from 'react-router';
 
-const SidePanel = ({ alignment, visible, hideSidePanel, username }) => {
+const SidePanel = ({
+    alignment, visible, hideSidePanel, username,
+}) => {
     if (process.env.BROWSER) {
         visible && document.addEventListener('click', hideSidePanel);
         !visible && document.removeEventListener('click', hideSidePanel);
     }
 
-    const loggedIn =
-        username === undefined
-            ? 'show-for-small-only'
-            : 'SidePanel__hide-signup';
+    const loggedIn = username === undefined
+        ? 'show-for-small-only'
+        : 'SidePanel__hide-signup';
 
     const makeExternalLink = (i, ix, arr) => {
         if (i === null || i === undefined) return null;
@@ -26,7 +27,8 @@ const SidePanel = ({ alignment, visible, hideSidePanel, username }) => {
                     target={i.internal ? null : '_blank'}
                     rel="noopener noreferrer"
                 >
-                    {i.label}&nbsp;
+                    {i.label}
+                    &nbsp;
                     <Icon name="extlink" />
                 </a>
             </li>
@@ -71,20 +73,7 @@ const SidePanel = ({ alignment, visible, hideSidePanel, username }) => {
                 link: `/proposals`,
             },
         ],
-        exchanges: [
-            {
-                value: 'blocktrades',
-                label: 'Blocktrades',
-                link: username
-                    ? `https://blocktrades.us/?input_coin_type=eth&output_coin_type=hive&receive_address=${username}`
-                    : `https://blocktrades.us/?input_coin_type=eth&output_coin_type=hive`,
-            },
-            {
-                value: 'ionomy',
-                label: 'Ionomy',
-                link: 'https://ionomy.com/en/markets/btc-hive',
-            },
-        ],
+        exchanges: [],
         external: [
             {
                 value: 'chat',
@@ -164,14 +153,16 @@ const SidePanel = ({ alignment, visible, hideSidePanel, username }) => {
                 <ul className="vertical menu">
                     {sidePanelLinks.wallet.map(makeInternalLink)}
                 </ul>
-                <ul className="vertical menu">
-                    <li>
-                        <a className="menu-section">
-                            {tt('navigation.third_party_exchanges')}
-                        </a>
-                    </li>
-                    {sidePanelLinks.exchanges.map(makeExternalLink)}
-                </ul>
+                {sidePanelLinks.exchanges.length > 0 && (
+                    <ul className="vertical menu">
+                        <li>
+                            <a className="menu-section">
+                                {tt('navigation.third_party_exchanges')}
+                            </a>
+                        </li>
+                        {sidePanelLinks.exchanges.map(makeExternalLink)}
+                    </ul>
+                )}
                 <ul className="vertical menu">
                     {sidePanelLinks.external.map(makeExternalLink)}
                 </ul>
