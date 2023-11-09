@@ -444,7 +444,7 @@
         "witness_proxy_current": "Your current proxy is",
         "witness_proxy_set": "Set proxy",
         "witness_proxy_clear": "Clear proxy",
-        "proxy_update_error": "Your proxy was not updated",
+        "proxy_update_error": "The request to update your proxy has failed, please try again later...",
         "missed_blocks": "Missed blocks",
         "votes_received": "Votes received",
         "hp_required_to_rank_up": "Needs %(votehp)s to level up",
