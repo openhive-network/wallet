@@ -1,0 +1,31 @@
+version: "3.7"
+services:
+    hive_wallet:
+        image: registry.gitlab.syncad.com/hive/wallet:dev
+        build:
+            context: .
+            target: development
+        container_name: wallet
+        ports:
+            # - 80:8080
+            - 8080:8080
+        environment:
+            SDC_CLIENT_HIVED_URL: https://hive-5.pl.syncad.com
+            SDC_SERVER_HIVED_URL: https://hive-5.pl.syncad.com
+            SDC_DISABLE_SIGNUPS: 1
+            SDC_CHAIN_ID: "4200000000000000000000000000000000000000000000000000000000000000"
+
+            # add to your /etc/hosts
+            # 127.0.0.1     hiveblog.local
+            SDC_SITE_DOMAIN: hiveblog.local
+
+            SDC_IMAGE_PROXY_PREFIX: https://images.hive.blog/
+            SDC_UPLOAD_IMAGE_URL: https://images.hive.blog
+            SDC_HELMET_CONNECTSRC: "'self' http://hiveblog.local https://api.hive.blog  https://anyx.io https://images.hive.blog https://hive-5.pl.syncad.com"
+        # volumes:
+        #     - ./yarn.lock:/var/app/yarn.lock
+        #     - ./package.json:/var/app/package.json
+        #     - ./src:/var/app/src:delegated
+        #     - ./webpack:/var/app/webpack:delegated
+        #     - ./config:/var/app/config:delegated
+        #     - ./node_modules:/var/app/node_modules:delegated
