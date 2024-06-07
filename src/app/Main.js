@@ -49,6 +49,7 @@ function runApp(initial_state) {
         alternative_api_endpoints: alternativeApiEndpoints,
         failover_threshold: config.failover_threshold,
         rebranded_api: true,
+        chain_id: config.chain_id,
     });
     hive.config.set('address_prefix', config.address_prefix);
     hive.config.set('rebranded_api', true);
