@@ -39,6 +39,7 @@ global.$STM_Config = {
     social_url: config.get('social_url'),
     failover_threshold: config.get('failover_threshold'),
     alternative_api_endpoints: alternativeApiEndpoints,
+    chain_id: config.get('chain_id'),
 };
 
 const WebpackIsomorphicTools = require('webpack-isomorphic-tools');
