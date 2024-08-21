@@ -408,6 +408,7 @@ hitbtc-pro
 hitbtc.com
 hitbtcexchange
 hterising
+htx-9tuqx5jg
 huobbi-pro
 huobi-ppro
 huobi-pr0
