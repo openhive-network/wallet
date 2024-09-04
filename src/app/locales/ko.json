@@ -623,7 +623,7 @@
         "each_account_segment_should_end_with_a_letter_or_digit": "Each account segment should end with a letter or digit.",
         "each_account_segment_should_be_longer": "Each account segment should be longer.",
         "verified_exchange_no_memo": "You must include a memo for your exchange transfer.",
-        "badactor": "Use caution sending to this account. Please double check your spelling for possible phishing.",
+        "badactor": "Potential scam attempt, destination address on a Bad Actor List, transfer prohibited!",
         "memo_has_privatekey": "Please do not include what appears to be a private key or password.",
         "memo_is_privatekey": "Do not use private keys in memos.",
         "memo_is_password": "Do not use passwords in memos.",
