@@ -8,6 +8,7 @@ class Filters extends React.Component {
             showFilters: false,
         };
     }
+
     render() {
         const {
             handleIncoming,
@@ -20,13 +21,16 @@ class Filters extends React.Component {
         } = this.props;
 
         const handleShowFilters = () => {
-            this.setState({ showFilters: !this.state.showFilters });
+            this.setState((prevState) => ({
+                showFilters: !prevState.showFilters,
+            }));
         };
 
         return (
             <div className="row">
                 <div className="column small-12">
                     <button
+                        type="button"
                         onClick={handleShowFilters}
                         className={
                             this.state.showFilters === true
@@ -79,10 +83,10 @@ class Filters extends React.Component {
                                     <input
                                         onChange={handleFromUser}
                                         type="checkbox"
-                                        id="outgoing"
-                                        name="outgoing"
+                                        id="from-user"
+                                        name="from-user"
                                     />
-                                    <label htmlFor="outgoing">
+                                    <label htmlFor="from-user">
                                         Received from
                                     </label>
                                 </div>
@@ -90,10 +94,10 @@ class Filters extends React.Component {
                                     <input
                                         onChange={handleToUser}
                                         type="checkbox"
-                                        id="outgoing"
-                                        name="outgoing"
+                                        id="to-user"
+                                        name="to-user"
                                     />
-                                    <label htmlFor="outgoing">
+                                    <label htmlFor="to-user">
                                         Transfer to
                                     </label>
                                 </div>
