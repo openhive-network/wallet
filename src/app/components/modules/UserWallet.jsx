@@ -68,15 +68,14 @@ class UserWallet extends React.Component {
             const new_window = window.open();
             new_window.opener = null;
             new_window.location =
-                'https://blocktrades.us/?input_coin_type=eth&output_coin_type=hive&receive_address=' +
-                name;
+                'https://www.binance.com/en/trade/HIVE_USDT';
         };
         this.onShowWithdrawHive = (e) => {
             e.preventDefault();
             const new_window = window.open();
             new_window.opener = null;
             new_window.location =
-                'https://blocktrades.us/unregistered_trade/hive/eth';
+                'https://www.binance.com/en/trade/HIVE_USDT';
         };
         this.onShowDepositPower = (currentUserName, e) => {
             e.preventDefault();
@@ -91,15 +90,14 @@ class UserWallet extends React.Component {
             const new_window = window.open();
             new_window.opener = null;
             new_window.location =
-                'https://blocktrades.us/?input_coin_type=eth&output_coin_type=hbd&receive_address=' +
-                currentUserName;
+                'https://upbit.com/exchange?code=CRIX.UPBIT.BTC-HBD';
         };
         this.onShowWithdrawHBD = (e) => {
             e.preventDefault();
             const new_window = window.open();
             new_window.opener = null;
             new_window.location =
-                'https://blocktrades.us/unregistered_trade/hbd/eth';
+                'https://upbit.com/exchange?code=CRIX.UPBIT.BTC-HBD';
         };
         this.shouldComponentUpdate = shouldComponentUpdate(this, 'UserWallet');
     }
