@@ -35,6 +35,7 @@ async function appRender(ctx, locales = false, resolvedAssets = false) {
             }
         }
         if (!userPreferences.locale) {
+            let locale;
             if (ctx.session.a) {
                 // Logged-in user: use Accept-Language header as before
                 locale = ctx.getLocaleFromHeader();
