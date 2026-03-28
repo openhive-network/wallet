@@ -1,172 +1,142 @@
 import React from 'react';
-import SvgImage from 'app/components/elements/SvgImage';
-import LoadingIndicator from 'app/components/elements/LoadingIndicator';
-import PasswordInput from 'app/components/elements/PasswordInput';
-import constants from 'app/redux/constants';
 import tt from 'counterpart';
-import { FormattedHTMLMessage } from 'app/Translator';
-import { APP_DOMAIN, APP_NAME, SUPPORT_EMAIL } from 'app/client_config';
-import { PrivateKey } from '@hiveio/hive-js/lib/auth/ecc';
 import { api } from '@hiveio/hive-js';
 
-const email_regex = /^([^\x00-\x20\x22\x28\x29\x2c\x2e\x3a-\x3c\x3e\x40\x5b-\x5d\x7f-\xff]+|\x22([^\x0d\x22\x5c\x80-\xff]|\x5c[\x00-\x7f])*\x22)(\x2e([^\x00-\x20\x22\x28\x29\x2c\x2e\x3a-\x3c\x3e\x40\x5b-\x5d\x7f-\xff]+|\x22([^\x0d\x22\x5c\x80-\xff]|\x5c[\x00-\x7f])*\x22))*\x40([^\x00-\x20\x22\x28\x29\x2c\x2e\x3a-\x3c\x3e\x40\x5b-\x5d\x7f-\xff]+|\x5b([^\x0d\x5b-\x5d\x80-\xff]|\x5c[\x00-\x7f])*\x5d)(\x2e([^\x00-\x20\x22\x28\x29\x2c\x2e\x3a-\x3c\x3e\x40\x5b-\x5d\x7f-\xff]+|\x5b([^\x0d\x5b-\x5d\x80-\xff]|\x5c[\x00-\x7f])*\x5d))*$/;
-
-function passwordToOwnerPubKey(account_name, password) {
-    let pub_key;
-    try {
-        pub_key = PrivateKey.fromWif(password);
-    } catch (e) {
-        pub_key = PrivateKey.fromSeed(account_name + 'owner' + password);
-    }
-    return pub_key.toPublicKey().toString();
-}
-
 class RecoverAccountStep1 extends React.Component {
-    static propTypes = {};
-
     constructor(props) {
         super(props);
         this.state = {
             name: '',
             name_error: '',
-            email: '',
-            email_error: '',
-            error: '',
-            progress_status: '',
-            password: { value: '', valid: false },
-            show_social_login: false,
-            email_submitted: false,
+            recovery_account: null,
+            recovery_warning: '',
+            loading: false,
         };
         this.onNameChange = this.onNameChange.bind(this);
-        this.onEmailChange = this.onEmailChange.bind(this);
-        this.onPasswordsChange = this.onPasswordsChange.bind(this);
         this.onSubmit = this.onSubmit.bind(this);
-        this.onSubmitEmail = this.onSubmitEmail.bind(this);
     }
 
     onNameChange(e) {
         const name = e.target.value.trim().toLowerCase();
-        this.validateAccountName(name);
-        this.setState({ name, error: '' });
-    }
-
-    onEmailChange(e) {
-        const email = e.target.value.trim().toLowerCase();
-        let email_error = '';
-        if (!email_regex.test(email.toLowerCase()))
-            email_error = tt('recoveraccountstep1_jsx.not_valid');
-        this.setState({ email, email_error });
-    }
-
-    validateAccountName(name) {
-        if (!name) return;
-        api.getAccountsAsync([name]).then(res => {
-            this.setState({
-                name_error:
-                    !res || res.length === 0
-                        ? tt(
-                              'recoveraccountstep1_jsx.account_name_is_not_found'
-                          )
-                        : '',
-            });
-            if (res.length) {
-                const [account] = res;
-                // if your last owner key update is prior to July 14th then the old key will not be able to recover
-                const ownerUpdate = /Z$/.test(account.last_owner_update)
-                    ? account.last_owner_update
-                    : account.last_owner_update + 'Z';
-                const ownerUpdateTime = new Date(ownerUpdate).getTime();
-                const THIRTY_DAYS_AGO = new Date(
-                    Date.now() - 30 * 24 * 60 * 60 * 1000
-                ).getTime();
-                if (
-                    ownerUpdateTime <
-                    Math.max(THIRTY_DAYS_AGO, constants.JULY_14_HACK)
-                )
-                    this.setState({
-                        name_error: tt(
-                            'recoveraccountstep1_jsx.unable_to_recover_account_not_change_ownership_recently'
-                        ),
-                    });
-            }
+        this.setState({
+            name,
+            name_error: '',
+            recovery_account: null,
+            recovery_warning: '',
         });
-    }
-
-    validateAccountOwner(name) {
-        const oldOwner = passwordToOwnerPubKey(name, this.state.password.value);
-        return api.getOwnerHistoryAsync(name).then(history => {
-            const res = history.filter(a => {
-                const owner = a.previous_owner_authority.key_auths[0][0];
-                return owner === oldOwner;
-            });
-            return res.length > 0;
-        });
-    }
-
-    onPasswordsChange({ oldPassword, valid }) {
-        this.setState({ password: { value: oldPassword, valid }, error: '' });
     }
 
     onSubmit(e) {
         e.preventDefault();
-        this.validateAccountOwner(this.state.name).then(result => {
-            if (result) {
-                this.setState({ show_social_login: true });
-            } else
-                this.setState({
-                    error: tt(
-                        'recoveraccountstep1_jsx.password_not_used_in_last_days'
-                    ),
-                });
-        });
-    }
+        const { name } = this.state;
+        if (!name) return;
 
-    onSubmitEmail(e) {
-        e.preventDefault();
-        const { name, password } = this.state;
-        const owner_key = passwordToOwnerPubKey(name, password.value);
-        fetch('/api/v1/initiate_account_recovery_with_email', {
-            method: 'post',
-            mode: 'no-cors',
-            credentials: 'same-origin',
-            headers: {
-                Accept: 'application/json',
-                'Content-type': 'application/json',
-            },
-            body: JSON.stringify({
-                csrf: $STM_csrf,
-                contact_email: this.state.email,
-                account_name: name,
-                owner_key,
-            }),
-        })
-            .then(r => r.json())
+        this.setState({
+            loading: true,
+            name_error: '',
+            recovery_account: null,
+            recovery_warning: '',
+        });
+        api.getAccountsAsync([name])
             .then(res => {
-                if (res.error) {
-                    this.setState({ email_error: res.error || 'Unknown' });
-                } else {
-                    if (res.status === 'ok') {
-                        this.setState({ email_submitted: true });
-                    }
-                    if (res.status === 'duplicate') {
-                        this.setState({
-                            email_error: tt(
-                                'recoveraccountstep1_jsx.request_already_submitted_contact_support',
-                                { SUPPORT_EMAIL }
-                            ),
-                        });
-                    }
+                if (!res || res.length === 0) {
+                    this.setState({
+                        name_error: 'Account not found.',
+                        loading: false,
+                    });
+                    return;
                 }
-            })
-            .catch(error => {
-                console.error(
-                    'request_account_recovery server error (2)',
-                    error
-                );
+                const [account] = res;
+
+                let recovery_warning = '';
+                const ownerUpdate = /Z$/.test(account.last_owner_update)
+                    ? account.last_owner_update
+                    : account.last_owner_update + 'Z';
+                const ownerUpdateTime = new Date(ownerUpdate).getTime();
+                const THIRTY_DAYS_AGO =
+                    Date.now() - 30 * 24 * 60 * 60 * 1000;
+                if (ownerUpdateTime < THIRTY_DAYS_AGO) {
+                    recovery_warning =
+                        'This account has not had its owner key changed in the last 30 days. ' +
+                        'Account recovery is only possible if the owner key was changed (by an attacker) within the last 30 days.';
+                }
+
                 this.setState({
-                    email_error: error.message ? error.message : error,
+                    recovery_account: account.recovery_account,
+                    recovery_warning,
+                    loading: false,
+                });
+            })
+            .catch(() => {
+                this.setState({
+                    name_error:
+                        'Error looking up account. Please try again.',
+                    loading: false,
                 });
             });
+    }
+
+    renderRecoveryPartnerResult() {
+        const { recovery_account, recovery_warning, name } = this.state;
+        if (!recovery_account) return null;
+
+        const isSteem = recovery_account === 'steem';
+
+        return (
+            <div
+                style={{
+                    marginTop: '1rem',
+                    padding: '1rem',
+                    background: '#f6f6f6',
+                    borderRadius: '4px',
+                }}
+            >
+                <p>
+                    <strong>Recovery partner for @{name}:</strong>{' '}
+                    <a
+                        href={'https://hive.blog/@' + recovery_account}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                    >
+                        @{recovery_account}
+                    </a>
+                </p>
+
+                {recovery_warning && (
+                    <p style={{ color: '#a94442', fontWeight: 'bold' }}>
+                        {recovery_warning}
+                    </p>
+                )}
+
+                {isSteem && (
+                    <div style={{ color: '#a94442', marginTop: '0.5rem' }}>
+                        <strong>Warning:</strong> <code>@steem</code> is a
+                        legacy Steem account that does not operate on the
+                        Hive blockchain. It cannot process recovery
+                        requests. If you still have access to your account,{' '}
+                        <strong>
+                            change your recovery partner immediately
+                        </strong>{' '}
+                        using your owner key or master password. If your
+                        account is already compromised, recovery through the
+                        standard process is not possible with this recovery
+                        partner. Reach out to the Hive community for
+                        assistance (see below).
+                    </div>
+                )}
+
+                {!isSteem && (
+                    <div style={{ marginTop: '0.5rem' }}>
+                        To recover your account, you need to contact{' '}
+                        <strong>@{recovery_account}</strong> and ask them to
+                        submit a recovery request on your behalf using the
+                        account recovery tool linked below. Once they submit
+                        the request, you have 24 hours to confirm the
+                        recovery.
+                    </div>
+                )}
+            </div>
+        );
     }
 
     render() {
@@ -180,124 +150,199 @@ class RecoverAccountStep1 extends React.Component {
             );
         }
 
-        const {
-            name,
-            name_error,
-            email,
-            email_error,
-            error,
-            progress_status,
-            password,
-            show_social_login,
-            email_submitted,
-        } = this.state;
-        const owner_key = passwordToOwnerPubKey(name, password.value);
-        const valid = name && !name_error && password.valid;
-        const submit_btn_class = 'button action' + (!valid ? ' disabled' : '');
-        const show_account_and_passwords =
-            !email_submitted && !show_social_login;
-        return (
-            <div className="RestoreAccount SignUp">
-                {show_account_and_passwords && (
-                    <div className="row">
-                        <div className="column large-4">
-                            <h2>{tt('navigation.stolen_account_recovery')}</h2>
-                            <p>
-                                {tt(
-                                    'recoveraccountstep1_jsx.recover_account_intro',
-                                    { APP_URL: APP_DOMAIN, APP_NAME }
-                                )}
-                            </p>
-                            <form onSubmit={this.onSubmit} noValidate>
-                                <div className={name_error ? 'error' : ''}>
-                                    <label>
-                                        {tt('g.account_name')}
-                                        <input
-                                            type="text"
-                                            name="name"
-                                            autoComplete="off"
-                                            onChange={this.onNameChange}
-                                            value={name}
-                                        />
-                                    </label>
-                                    <p className="error">{name_error}</p>
-                                </div>
-                                <PasswordInput
-                                    passwordLabel={tt('g.recent_password')}
-                                    onChange={this.onPasswordsChange}
-                                />
-                                <br />
-                                <div className="error">{error}</div>
-                                {progress_status ? (
-                                    <span>
-                                        <LoadingIndicator
-                                            type="circle"
-                                            inline
-                                        />{' '}
-                                        {progress_status}
-                                    </span>
-                                ) : (
-                                    <input
-                                        disabled={!valid}
-                                        type="submit"
-                                        className={submit_btn_class}
-                                        value={tt(
-                                            'recoveraccountstep1_jsx.begin_recovery'
-                                        )}
-                                    />
-                                )}
-                            </form>
-                        </div>
-                    </div>
-                )}
+        const { name, name_error, loading } = this.state;
 
-                {show_social_login && (
-                    <div className="row">
-                        <div className="column large-4">
-                            {email_submitted ? (
-                                tt(
-                                    'recoveraccountstep1_jsx.thanks_for_submitting_request_for_account_recovery',
-                                    { APP_NAME }
-                                )
-                            ) : (
-                                <form onSubmit={this.onSubmitEmail} noValidate>
-                                    <p>
-                                        {tt(
-                                            'recoveraccountstep1_jsx.enter_email_toverify_identity'
-                                        )}
-                                    </p>
-                                    <div
-                                        className={
-                                            email_error
-                                                ? 'column large-4 shrink error'
-                                                : 'column large-4 shrink'
-                                        }
-                                    >
-                                        <label>
-                                            {tt('g.email')}
-                                            <input
-                                                type="text"
-                                                name="email"
-                                                autoComplete="off"
-                                                onChange={this.onEmailChange}
-                                                value={email}
-                                            />
-                                        </label>
-                                        <p className="error">{email_error}</p>
-                                        <input
-                                            type="submit"
-                                            disabled={email_error || !email}
-                                            className="button hollow"
-                                            value={tt(
-                                                'recoveraccountstep1_jsx.continue_with_email'
-                                            )}
-                                        />
-                                    </div>
-                                </form>
-                            )}
+        return (
+            <div className="RestoreAccount">
+                <div className="row">
+                    <div className="column large-8 medium-10 small-12">
+                        <h2>Stolen Account Recovery</h2>
+
+                        <div
+                            style={{
+                                padding: '1rem',
+                                marginBottom: '1.5rem',
+                                background: '#fff3cd',
+                                border: '1px solid #ffc107',
+                                borderRadius: '4px',
+                            }}
+                        >
+                            <strong>Important:</strong> This process is for
+                            accounts that have been{' '}
+                            <em>compromised</em> (someone changed your keys
+                            without your permission). If you simply lost
+                            your password and no one changed your keys, your
+                            account cannot be recovered &mdash; Hive is a
+                            blockchain with no &ldquo;forgot
+                            password&rdquo; feature.
                         </div>
+
+                        <h3>How Hive Account Recovery Works</h3>
+                        <p>
+                            Hive account recovery requires cooperation
+                            between you (the account owner) and your
+                            designated{' '}
+                            <strong>recovery partner</strong>. The process
+                            works as follows:
+                        </p>
+                        <ol>
+                            <li>
+                                <strong>You</strong> must have an owner key
+                                or master password that was valid within the
+                                last 30 days.
+                            </li>
+                            <li>
+                                <strong>Your recovery partner</strong>{' '}
+                                submits a recovery request to the blockchain
+                                on your behalf.
+                            </li>
+                            <li>
+                                <strong>You</strong> confirm the recovery
+                                within 24 hours using your old key and a new
+                                key.
+                            </li>
+                            <li>
+                                Your account keys are updated and the
+                                attacker loses access.
+                            </li>
+                        </ol>
+
+                        <h3>Step 1: Find Your Recovery Partner</h3>
+                        <p>
+                            Enter your account name to see who your recovery
+                            partner is. This determines which tools and
+                            steps are available to you.
+                        </p>
+                        <form onSubmit={this.onSubmit} noValidate>
+                            <div
+                                className={name_error ? 'error' : ''}
+                                style={{ maxWidth: '400px' }}
+                            >
+                                <label>
+                                    Account Name
+                                    <input
+                                        type="text"
+                                        name="name"
+                                        autoComplete="off"
+                                        onChange={this.onNameChange}
+                                        value={name}
+                                        placeholder="Enter your Hive username"
+                                    />
+                                </label>
+                                {name_error && (
+                                    <p className="error">{name_error}</p>
+                                )}
+                                <input
+                                    disabled={!name || loading}
+                                    type="submit"
+                                    className="button"
+                                    value={
+                                        loading
+                                            ? 'Looking up...'
+                                            : 'Look Up Recovery Partner'
+                                    }
+                                />
+                            </div>
+                        </form>
+
+                        {this.renderRecoveryPartnerResult()}
+
+                        <h3 style={{ marginTop: '2rem' }}>
+                            Step 2: Start the Recovery
+                        </h3>
+                        <p>
+                            Once you know your recovery partner, use one
+                            of these tools to proceed with the recovery
+                            process:
+                        </p>
+                        <ul>
+                            <li>
+                                <a
+                                    href="https://recovery.hive-keychain.com/account-recovery"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                >
+                                    recovery.hive-keychain.com
+                                </a>{' '}
+                                &mdash; Account recovery tool by the Hive
+                                Keychain team
+                            </li>
+                            <li>
+                                <a
+                                    href="https://recovery.hivechain.app"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                >
+                                    recovery.hivechain.app
+                                </a>{' '}
+                                &mdash; Account recovery service by
+                                @arcange
+                            </li>
+                        </ul>
+
+                        <h3>Step 3: Prevent Future Issues</h3>
+                        <ul>
+                            <li>
+                                <strong>
+                                    Change your recovery partner
+                                </strong>{' '}
+                                if it is currently set to{' '}
+                                <code>@steem</code> (a defunct legacy
+                                account that cannot process recovery on
+                                Hive). Use your owner key to set it to a
+                                trusted, active Hive account &mdash;
+                                someone who can verify your identity
+                                through other channels (e.g. a friend,
+                                community leader, or service you
+                                interact with). Your recovery partner
+                                needs to know who you are to authorize
+                                the recovery.
+                            </li>
+                            <li>
+                                Never store keys in cloud services (Google
+                                Drive, email, online notes).
+                            </li>
+                            <li>
+                                Use the{' '}
+                                <a
+                                    href="https://hive-keychain.com"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                >
+                                    Hive Keychain
+                                </a>{' '}
+                                browser extension for secure key management.
+                            </li>
+                        </ul>
+
+                        <h3>Need More Help?</h3>
+                        <p>
+                            If your recovery partner is unresponsive or you
+                            need assistance, reach out to the Hive community
+                            through the{' '}
+                            <a
+                                href="https://discord.gg/E2tFRYB42j"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                            >
+                                Hive Discord
+                            </a>{' '}
+                            server.
+                        </p>
+                        <p>
+                            For technical details about the recovery
+                            process, see the{' '}
+                            <a
+                                href="https://developers.hive.io/tutorials-python/account_recovery.html"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                            >
+                                Hive Developer Documentation
+                            </a>
+                            .
+                        </p>
                     </div>
-                )}
+                </div>
             </div>
         );
     }
