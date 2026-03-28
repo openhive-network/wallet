@@ -46,7 +46,7 @@ if (!process.env.BROWSER) {
     require.context = requireContext;
 }
 
-let req = require.context('../../help', true, /\.md/);
+let req = require.context('../../help', true, /\.md$/);
 let HelpData = {};
 
 function split_into_sections(str) {
@@ -86,6 +86,7 @@ export default class HelpContent extends React.Component {
             })
             .forEach(filename => {
                 const res = filename.match(md_file_path_regexp);
+                if (!res) return;
                 const key = res[1];
                 let help_locale = HelpData[this.locale];
                 if (!help_locale) HelpData[this.locale] = help_locale = {};
