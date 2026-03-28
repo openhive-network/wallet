@@ -170,6 +170,16 @@ class RecoverAccountStep1 extends React.Component {
     }
 
     render() {
+        if (!process.env.BROWSER) {
+            return (
+                <div className="row">
+                    <div className="column">
+                        {tt('g.loading')}...
+                    </div>
+                </div>
+            );
+        }
+
         const {
             name,
             name_error,
