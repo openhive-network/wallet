@@ -77,21 +77,19 @@ export default class HelpContent extends React.Component {
     constructor(props) {
         super(props);
         this.locale = 'en';
-    }
 
-    componentWillMount() {
-        const md_file_path_regexp = new RegExp(`\/${this.locale}\/(.+)\.md$`);
+        const md_file_path_regexp = new RegExp(`/${this.locale}/(.+).md$`);
         req
             .keys()
             .filter(a => {
                 return a.indexOf(`/${this.locale}/`) !== -1;
             })
             .forEach(filename => {
-                var res = filename.match(md_file_path_regexp);
-                let key = res[1];
+                const res = filename.match(md_file_path_regexp);
+                const key = res[1];
                 let help_locale = HelpData[this.locale];
                 if (!help_locale) HelpData[this.locale] = help_locale = {};
-                let content = req(filename);
+                const content = req(filename);
                 help_locale[key] = split_into_sections(content);
             });
     }
