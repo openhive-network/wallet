@@ -172,6 +172,15 @@ async function getTransferHistory(account) {
     return transfer_history;
 }
 
+// Routes that render client-side only (!process.env.BROWSER guard) and
+// do not need blockchain data during SSR.  Skipping API calls here
+// prevents the SSR from hanging on slow or irrelevant getAccounts /
+// getFeedHistory requests for paths that are not account names.
+const STATIC_ROUTES = new Set([
+    'recover_account_step_1',
+    'recover_account_step_2',
+]);
+
 export async function getStateAsync(url) {
     if (url === 'trending') {
         return stateCleaner(await getStateForTrending());
@@ -181,6 +190,13 @@ export async function getStateAsync(url) {
     }
     // strip off query string
     let path = url.split('?')[0];
+
+    // Static routes skip all blockchain API calls — they render
+    // a loading placeholder during SSR and hydrate client-side.
+    const cleanPath = path.replace(/^\//, '');
+    if (STATIC_ROUTES.has(cleanPath)) {
+        return stateCleaner({ accounts: {}, content: {} });
+    }
     let fetch_transfers = false;
     if (path.includes('transfers')) {
         fetch_transfers = true;
