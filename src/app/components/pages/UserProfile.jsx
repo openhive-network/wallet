@@ -291,9 +291,10 @@ export default class UserProfile extends React.Component {
 
         let cover_image_style = {};
         if (cover_image) {
+            const proxified = proxifyImageUrl(cover_image, '2048x512');
             cover_image_style = {
                 backgroundImage:
-                    'url(' + proxifyImageUrl(cover_image, '2048x512') + ')',
+                    `url(${proxified.replace(/[()'"]/g, (c) => '%' + c.charCodeAt(0).toString(16))})`,
             };
         }
         return (
