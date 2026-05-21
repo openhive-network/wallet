@@ -8,6 +8,7 @@ import * as userActions from 'app/redux/UserReducer';
 import classNames from 'classnames';
 import ConnectedSidePanel from 'app/components/modules/ConnectedSidePanel';
 import CloseButton from 'app/components/elements/CloseButton';
+import TopBanner from 'app/components/elements/TopBanner';
 import Dialogs from 'app/components/modules/Dialogs';
 import Modals from 'app/components/modules/Modals';
 import MiniHeader from 'app/components/modules/MiniHeader';
@@ -192,6 +193,7 @@ class App extends React.Component {
                 ref="App_root"
             >
                 <ConnectedSidePanel alignment="right" />
+                <TopBanner />
 
                 {headerHidden ? null : miniHeader ? (
                     <MiniHeader />
