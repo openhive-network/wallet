@@ -9,7 +9,7 @@ const TopBanner = () => {
             </span>
             <a
                 className="TopBanner__link"
-                href="https://wallet.openhive.network"
+                href="https://newwallet.hive.blog"
                 target="_blank"
                 rel="noopener noreferrer"
             >
