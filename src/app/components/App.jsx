@@ -131,6 +131,7 @@ class App extends React.Component {
             category,
             order,
             username,
+            loggedIn,
             error: { alert },
         } = this.props;
         const { showCallout } = this.state;
@@ -193,7 +194,7 @@ class App extends React.Component {
                 ref="App_root"
             >
                 <ConnectedSidePanel alignment="right" />
-                <TopBanner />
+                {loggedIn && <TopBanner />}
 
                 {headerHidden ? null : miniHeader ? (
                     <MiniHeader />
@@ -259,6 +260,7 @@ export default connect(
             order: ownProps.params.order,
             category: ownProps.params.category,
             username: current_account_name,
+            loggedIn: !!state.user.getIn(['current', 'username']),
         };
     },
     (dispatch) => ({
