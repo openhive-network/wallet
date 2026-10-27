@@ -2,19 +2,6 @@ const webpack = require('webpack');
 const git = require('git-rev-sync');
 const baseConfig = require('./base.config');
 
-// VERSION only tags client error reports, so a tree without git metadata (an
-// exported checkout, or a worktree whose gitdir is outside the build container)
-// still builds.
-function sourceVersion() {
-    try {
-        return git.long();
-    } catch (error) {
-        if (!error.message.startsWith('[git-rev-sync]')) throw error;
-        console.warn(`${error.message}; building with VERSION "unknown"`);
-        return 'unknown';
-    }
-}
-
 module.exports = {
     ...baseConfig,
     plugins: [
@@ -22,7 +9,7 @@ module.exports = {
             'process.env': {
                 BROWSER: JSON.stringify(true),
                 NODE_ENV: JSON.stringify('production'),
-                VERSION: JSON.stringify(sourceVersion())
+                VERSION: JSON.stringify(git.long())
             }
         }),
         ...baseConfig.plugins,
