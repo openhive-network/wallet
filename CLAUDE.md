@@ -137,12 +137,13 @@ yarn checktranslations
 | Stage | Jobs |
 |-------|------|
 | test | `run-unit-tests` (yarn ci:test), `run-eslint` |
-| build | `build-review-app` (MRs), `build-development` (develop), `build-production` (master) |
-| deploy | `deploy-review-app` (MRs), `deploy-staging` (develop), `deploy-production` (master) |
+| build | `build-development` (develop → `hiveio/wallet:development`), `build-production` (master → `hiveio/wallet:latest`) |
+
+All jobs carry `tags: [public-runner-docker]` (hive-builder shared runners). The pipeline deploys nothing.
 
 **Branches:**
-- `develop` - Protected, deploys to staging-wallet.hive.io
-- `master` - Protected, deploys to wallet.hive.blog
+- `develop` - Protected
+- `master` - Protected
 
 **Docker:**
 - Multi-stage Dockerfile (development -> dependencies -> production Alpine)
