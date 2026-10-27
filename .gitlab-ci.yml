@@ -55,6 +55,20 @@ run-eslint:
 
 ################################# IMAGE BUILDING #################################
 
+# Builds the production image on merge requests without pushing, so a Dockerfile
+# change is built before it lands on develop. No registry login (no HUB_* needed).
+build-image-smoke:
+    <<: *docker-job
+    before_script: []
+    stage: build
+    variables:
+        DOCKER_TAG: $DOCKER_IMAGE:$CI_COMMIT_SHORT_SHA
+        SOURCE_COMMIT: $CI_COMMIT_SHA
+    only:
+        - merge_requests
+    script:
+        - docker build -t $DOCKER_TAG --build-arg SOURCE_COMMIT --build-arg DOCKER_TAG --build-arg NODE_VERSION=$NODE_IMAGE_VERSION --build-arg NPM_CONFIG_REGISTRY .
+
 build-development:
     <<: *docker-job
     stage: build

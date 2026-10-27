@@ -76,6 +76,15 @@ npm run start
 It will take quite a bit longer to start in this mode (~60s) as it needs to
 build and start the webpack-dev-server.
 
+To run the development container instead, pass the Node version to build
+on. The Dockerfile has no default: use the `NODE_VERSION` that
+[hive/common-ci-configuration](https://gitlab.syncad.com/hive/common-ci-configuration)
+sets in its `docker-bake.hcl` (the version CI builds with), for example:
+
+```bash
+NODE_VERSION=<NODE_VERSION from common-ci-configuration> docker compose -f docker-compose.dev.yml up --build
+```
+
 By default you will be connected to hive.blog's public hive node at
 `https://api.hive.blog`. This is actually on the real blockchain and
 you would use your regular account name and credentials to login - there is
