@@ -34,7 +34,7 @@ installed version(s) of node. If you need `nvm`, you can get it at
 [https://github.com/creationix/nvm](https://github.com/creationix/nvm).
 
 Wallet builds and runs on the Node 24 release that CI takes from
-hive/common-ci-configuration, with yarn 1.22 (classic).
+hive/common-ci-configuration, with the npm that Node release ships.
 
 Using nvm, you would install like this:
 
@@ -42,24 +42,25 @@ Using nvm, you would install like this:
 nvm install 24
 ```
 
-We use the yarn package manager instead of the default `npm`. There are
-multiple reasons for this, one being that we have `hive-js` built from
-source pulling the github repo as part of the build process and yarn
-supports this. This way the library that handles keys can be loaded by
-commit hash instead of a version name and cryptographically verified to be
-exactly what we expect it to be. Yarn can be installed with `npm`, but
-afterwards you will not need to use `npm` further.
+Dependencies are installed with npm from the committed `package-lock.json`
+(`npm ci`). Git dependencies are pinned by commit hash, so the libraries that
+handle keys are exactly what we expect them to be. The repository's `.npmrc`
+sets `legacy-peer-deps`, so peer dependencies are neither installed nor
+enforced, as before.
 
 ```bash
-npm install -g yarn
-yarn global add babel-cli
-yarn install --frozen-lockfile --ignore-optional
-yarn run build
+npm ci
+npm run build
 ```
+
+`package-lock.json` resolves to the public registry. To install through
+another registry or cache (CI uses the on-site `npm-cache.syncad.com`), set
+`NPM_CONFIG_REGISTRY`; npm fetches the same tarballs from it. The Docker image
+takes it as a build argument: `docker build --build-arg NPM_CONFIG_REGISTRY=...`.
 To run wallet in production mode, run:
 
 ```bash
-yarn run production
+npm run production
 ```
 
 When launching wallet in production mode it will automatically use 1
@@ -69,7 +70,7 @@ http://localhost:8080 by default.
 To run condenser in development mode, run:
 
 ```bash
-yarn run start
+npm run start
 ```
 
 It will take quite a bit longer to start in this mode (~60s) as it needs to
@@ -85,7 +86,7 @@ copy of `hived` locally instead
 
 #### Debugging SSR code
 
-`yarn debug` will build a development version of the codebase and then start the
+`npm run debug` will build a development version of the codebase and then start the
 local server with `--inspect-brk` so that you can connect a debugging client.
 You can use Chromium to connect by finding the remote client at
 `chrome://inspect/#devices`.
@@ -196,7 +197,7 @@ Run `sequelize db:migrate` in `src/db` directory, like this:
 
 ```bash
 cd src/db
-yarn exec sequelize db:migrate
+npx sequelize db:migrate
 ```
 
 ## Style Guides For Submitting Pull Requests
@@ -211,8 +212,8 @@ yarn exec sequelize db:migrate
 #### Js & Jsx
 
 We use [prettier](https://github.com/prettier/prettier) to autofromat the
-code, with [this configuration](.prettierrc). Run `yarn run fmt` to format
-everything in `src/`, or `yarn exec -- prettier --config .prettierrc
+code, with [this configuration](.prettierrc). Run `npm run fmt` to format
+everything in `src/`, or `npx prettier --config .prettierrc
 --write src/whatever/file.js` for a specific file.
 
 #### CSS & SCSS
@@ -235,13 +236,13 @@ the Header component:
 
 ## Storybook
 
-`yarn run storybook`
+`npm run storybook`
 
 ## Testing
 
 ### Run test suite
 
-`yarn test`
+`npm test`
 
 will run `jest`
 
@@ -250,7 +251,7 @@ will run `jest`
 If you want to test a server-side rendered page without using the network, do this:
 
 ```
-yarn build
+npm run build
 OFFLINE_SSR_TEST=true SDC_DATABASE_URL="mysql://root@127.0.0.1/steemit_dev" NODE_ENV=production node --prof lib/server/index.js
 ```
 

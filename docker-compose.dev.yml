@@ -21,7 +21,7 @@ services:
             SDC_UPLOAD_IMAGE_URL: https://images.hive.blog
             SDC_HELMET_CONNECTSRC: "'self' http://hiveblog.local https://api.hive.blog  https://anyx.io https://images.hive.blog"
         volumes:
-            - ./yarn.lock:/var/app/yarn.lock
+            - ./package-lock.json:/var/app/package-lock.json
             - ./package.json:/var/app/package.json
             - ./src:/var/app/src:delegated
             - ./webpack:/var/app/webpack:delegated

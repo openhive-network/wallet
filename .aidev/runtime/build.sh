@@ -4,7 +4,7 @@
 # `environment.image`. See .aidev/README.md.
 #
 # The tag is `aidev-<hash>`, the hash of the image inputs (the Dockerfile,
-# package.json, yarn.lock, and the digest the followed base
+# package.json, package-lock.json, .npmrc, and the digest the followed base
 # tag names now); the registry cleanup policy keeps `aidev-*` tags. When
 # <repository>:aidev-<hash> is already in the registry nothing is built: the script
 # prints that image's digest.
@@ -20,13 +20,13 @@ REPOSITORY="${AIDEV_RUNTIME_REPOSITORY:-registry.gitlab.syncad.com/hive/wallet/a
 # The base .aidev/project.yaml follows (`environment.base`), the Dockerfile's default.
 BASE_IMAGE="$(sed -n 's/^ARG BASE_IMAGE=//p' .aidev/runtime/Dockerfile)"
 
-# The image's yarn cache is filled by `yarn install` from package.json and yarn.lock.
+# The image's npm cache is filled by `npm ci` from package.json, package-lock.json and .npmrc.
 input_hash() {
     local base_digest
     base_digest="$(docker buildx imagetools inspect "$BASE_IMAGE" --format '{{json .Manifest}}' \
         | grep -o '"digest": *"sha256:[0-9a-f]*"' | head -1 | grep -o 'sha256:[0-9a-f]*')"
     {
-        sha256sum .aidev/runtime/Dockerfile package.json yarn.lock
+        sha256sum .aidev/runtime/Dockerfile package.json package-lock.json .npmrc
         echo "${base_digest:?cannot resolve $BASE_IMAGE}"
     } | sha256sum | cut -c1-16
 }
@@ -55,11 +55,14 @@ echo "$REPOSITORY:$TAG is not in the registry; building it" >&2
 # Only the files the Dockerfile copies: the repository root holds node_modules.
 context="$(mktemp -d)"
 trap 'rm -rf "$context"' EXIT
-cp package.json yarn.lock "$context/"
+cp package.json package-lock.json .npmrc "$context/"
 
 # buildx so it works with any builder (CI's docker-container builder keeps no local
 # image); no provenance, so the pushed digest is a plain image manifest.
 build=(docker buildx build --pull --provenance=false -f .aidev/runtime/Dockerfile -t "$REPOSITORY:$TAG")
+# The registry only changes where the npm cache is filled from, not what is in it,
+# so it is not an input of the tag.
+[ -z "${NPM_CONFIG_REGISTRY:-}" ] || build+=(--build-arg NPM_CONFIG_REGISTRY)
 [ -z "${AIDEV_RUNTIME_BUILDER:-}" ] || build+=(--builder "$AIDEV_RUNTIME_BUILDER")
 if [ "${1:-}" != "--push" ]; then
     "${build[@]}" --load "$context" >&2

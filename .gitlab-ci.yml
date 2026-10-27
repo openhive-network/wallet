@@ -9,6 +9,9 @@ stages:
 
 variables:
     DOCKER_IMAGE: hiveio/wallet
+    # The on-site npm cache (genfiles), the same value common-ci-configuration's
+    # docker_image_jobs template sets; npm falls back to the public registry when empty.
+    NPM_CONFIG_REGISTRY: "http://npm-cache.syncad.com:8080/"
 
 ################################# COMMON TEMPLATES #################################
 
@@ -21,35 +24,34 @@ variables:
     before_script:
         - echo $HUB_TOKEN | docker login -u $HUB_USERNAME --password-stdin
 
-# Node comes from common-ci-configuration's node-test-tools, which has no yarn.
-.yarn-job: &yarn-job
+# Node and npm come from common-ci-configuration's node-test-tools.
+.npm-job: &npm-job
     image: ${NODE_TEST_TOOLS_IMAGE}
     tags:
         - public-runner-docker
     before_script:
-        - npm install -g --no-fund --no-audit yarn@1.22.22
-        - yarn install --frozen-lockfile
+        - npm ci --no-audit --no-fund
 
 ################################# TESTS #################################
 
 run-unit-tests:
-    <<: *yarn-job
+    <<: *npm-job
     stage: test
     only:
         - branches
         - merge_requests
     script:
-        - yarn run ci:test
+        - npm run ci:test
     coverage: /All files[^|]*\|[^|]*\s+([\d\.]+)/
 
 run-eslint:
-    <<: *yarn-job
+    <<: *npm-job
     stage: test
     only:
         - branches
         - merge_requests
     script:
-        - yarn ci:eslint
+        - npm run ci:eslint
 
 ################################# IMAGE BUILDING #################################
 
@@ -63,7 +65,7 @@ build-development:
     only:
         - develop
     script:
-        - docker build -t $DOCKER_TAG -t $DOCKER_TAG_MAIN --build-arg SOURCE_COMMIT --build-arg DOCKER_TAG --build-arg NODE_VERSION=$NODE_IMAGE_VERSION .
+        - docker build -t $DOCKER_TAG -t $DOCKER_TAG_MAIN --build-arg SOURCE_COMMIT --build-arg DOCKER_TAG --build-arg NODE_VERSION=$NODE_IMAGE_VERSION --build-arg NPM_CONFIG_REGISTRY .
         - docker push $DOCKER_TAG
         - docker push $DOCKER_TAG_MAIN
 
@@ -77,6 +79,6 @@ build-production:
     only:
         - master
     script:
-        - docker build -t $DOCKER_TAG -t $DOCKER_TAG_MAIN --build-arg SOURCE_COMMIT --build-arg DOCKER_TAG --build-arg NODE_VERSION=$NODE_IMAGE_VERSION .
+        - docker build -t $DOCKER_TAG -t $DOCKER_TAG_MAIN --build-arg SOURCE_COMMIT --build-arg DOCKER_TAG --build-arg NODE_VERSION=$NODE_IMAGE_VERSION --build-arg NPM_CONFIG_REGISTRY .
         - docker push $DOCKER_TAG
         - docker push $DOCKER_TAG_MAIN
