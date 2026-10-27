@@ -1,0 +1,13 @@
+diff --git a/node_modules/require-hacker/babel-transpiled-modules/tools/serialize-javascript.js b/node_modules/require-hacker/babel-transpiled-modules/tools/serialize-javascript.js
+index eb842cb..2f06ba4 100755
+--- a/node_modules/require-hacker/babel-transpiled-modules/tools/serialize-javascript.js
++++ b/node_modules/require-hacker/babel-transpiled-modules/tools/serialize-javascript.js
+@@ -43,7 +43,7 @@ function serialize(obj) {
+             return '@__FUNCTION_' + (functions.push(value) - 1) + '__@';
+         }
+ 
+-        if (util.isRegExp(value)) {
++        if (value instanceof RegExp) {
+             return '@__REGEXP_' + (regexps.push(value) - 1) + '__@';
+         }
+ 

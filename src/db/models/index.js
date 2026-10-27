@@ -13,9 +13,9 @@ const sequelize = new Sequelize(config.get('database_url'));
 fs.readdirSync(__dirname)
     .filter((file) => {
         return (
-            file.indexOf('.') !== 0 &&
-            file !== basename &&
-            file.slice(-3) === '.js'
+            file.indexOf('.') !== 0
+            && file !== basename
+            && file.slice(-3) === '.js'
         );
     })
     .forEach((file) => {
@@ -44,7 +44,7 @@ function esc(value, max_length = 256) {
     if (typeof value !== 'string') return '(object)';
     const res = value
         .substring(0, max_length - max_length * 0.2)
-        .replace(/[\0\x08\x09\x1a\n\r"'\\\%]/g, (char) => {
+        .replace(/[\0\b\t\cZ\n\r"'\\%]/g, (char) => {
             switch (char) {
                 case '\0':
                     return '\\0';
@@ -64,8 +64,9 @@ function esc(value, max_length = 256) {
                 // case '\\':
                 // case '%':
                 //     return '\\' + char; // prepends a backslash to backslash, percent, and double/single quotes
+                default:
+                    return '-';
             }
-            return '-';
         });
     return res.length < max_length ? res : '-';
 }

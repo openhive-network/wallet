@@ -1,17 +1,16 @@
 import remarkableStripper from 'app/utils/RemarkableStripper';
-import links from 'app/utils/Links';
 import sanitize from 'sanitize-html';
-import { htmlDecode } from 'app/utils/Html';
+import htmlDecode from 'app/utils/Html';
 import HtmlReady from 'shared/HtmlReady';
 import Remarkable from 'remarkable';
 
 const remarkable = new Remarkable({ html: true, linkify: false });
 
 const getValidImage = (array) => {
-    return array &&
-        Array.isArray(array) &&
-        array.length >= 1 &&
-        typeof array[0] === 'string'
+    return array
+        && Array.isArray(array)
+        && array.length >= 1
+        && typeof array[0] === 'string'
         ? array[0]
         : null;
 };
@@ -118,7 +117,7 @@ export default function extractContent(get, content) {
                 desc = desc
                     .substring(0, 120)
                     .trim()
-                    .replace(/[,!\?]?\s+[^\s]+$/, '…');
+                    .replace(/[,!?]?\s+[^\s]+$/, '…');
             }
         }
         desc_complete = body2 === desc; // is the entire body in desc?

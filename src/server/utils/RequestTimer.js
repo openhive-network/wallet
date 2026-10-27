@@ -3,16 +3,9 @@ import StatsLoggerClient from './StatsLoggerClient';
 
 /**
  * @param {array} hrtime process.hrtime() tuple
- * @returns {number} nanoseconds
- */
-const hrtimeToNanoseconds = (hrtime) => +hrtime[0] * 1e9 + +hrtime[1];
-
-/**
- * @param {array} hrtime process.hrtime() tuple
  * @returns {number} milliseconds
  */
-const hrtimeToMilliseconds = (hrtime) =>
-    +hrtime[0] * 1000 + +hrtime[1] / 1000000;
+const hrtimeToMilliseconds = (hrtime) => +hrtime[0] * 1000 + +hrtime[1] / 1000000;
 
 /**
  * Logs total request time starting at instantiation and ending when finish() is called.

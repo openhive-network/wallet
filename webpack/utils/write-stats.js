@@ -42,7 +42,9 @@ module.exports = function (stats) {
     const content = {script, style, images};
 
     const filename = process.env.NODE_ENV === 'production' ? 'webpack-stats-prod.json' : 'webpack-stats-dev.json';
-    const filepath = path.resolve(__dirname, '../../tmp/' + filename);
+    const dir = path.resolve(__dirname, '../../tmp');
+    fs.mkdirSync(dir, { recursive: true });
+    const filepath = path.join(dir, filename);
     fs.writeFileSync(filepath, JSON.stringify(content, null, 4));
     console.error('updated', filename);
 }

@@ -1,15 +1,15 @@
-/* global describe, it, before, beforeEach, after, afterEach */
+/* global describe, it */
 
-import { call, select, all, takeEvery } from 'redux-saga/effects';
-import steem, { api, broadcast } from '@hiveio/hive-js';
+import {
+    call, all, takeEvery
+} from 'redux-saga/effects';
+import { api, broadcast } from '@hiveio/hive-js';
 import { cloneableGenerator } from 'redux-saga/utils';
 import * as transactionActions from 'app/redux/TransactionReducer';
-import { DEBT_TICKER } from 'app/client_config';
 
-import { configure, shallow } from 'enzyme';
+import { configure } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-15';
 import {
-    preBroadcast_comment,
     createPatch,
     recoverAccount,
     preBroadcast_transfer,
@@ -39,8 +39,6 @@ const operation = {
     successCallback: () => '',
     memo: '#testing',
 };
-
-const username = 'Beatrice';
 
 describe('TransactionSaga', () => {
     describe('watch user actions and trigger appropriate saga', () => {
@@ -179,8 +177,7 @@ describe('TransactionSaga', () => {
             expect(actual).toEqual(undefined);
         });
         it('should return the patch that reconciles two different strings', () => {
-            const testString =
-                'there is something interesting going on here that I do not fully understand it is seemingly complex but it is actually quite simple';
+            const testString = 'there is something interesting going on here that I do not fully understand it is seemingly complex but it is actually quite simple';
             const actual = createPatch(testString, testString + 'ILU');
             expect(actual).toEqual(
                 '@@ -120,12 +120,15 @@\n quite simple\n+ILU\n'
@@ -197,9 +194,6 @@ describe('TransactionSaga', () => {
         it('should return select object if it has a memo attribute with string value starting with #', () => {
             const genR = preBroadcast_transfer({ operation });
             const actual = genR.next().value;
-            const expected = select((state) =>
-                state.user.getIn(['current', 'private_keys', 'memo_private'])
-            );
             expect(Object.keys(actual)).toEqual(['@@redux-saga/IO', 'SELECT']);
         });
         it('should return the operation unchanged if it has no memo attribute', () => {

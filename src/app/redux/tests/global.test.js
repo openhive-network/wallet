@@ -1,4 +1,4 @@
-/*global describe, it, before, beforeEach, after, afterEach */
+/*global describe, it */
 import Immutable from 'immutable';
 import reducer, * as globalActions from '../GlobalReducer';
 

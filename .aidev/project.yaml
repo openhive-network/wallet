@@ -27,8 +27,8 @@ branches:
 # node-test-tools:develop (the hive-wide Node); see .aidev/README.md.
 environment:
   kind: "container"
-  image: "registry.gitlab.syncad.com/hive/wallet/aidev-tests@sha256:cf61bf64ad15f122ace5c6684afe5ef9fd394651617e19945a890d0b67170170"
-  inputs: ["package.json", "yarn.lock"]
+  image: "registry.gitlab.syncad.com/hive/wallet/aidev-tests@sha256:1694e186d881bd6ebee00fc9d4c7a43ed3fb63dbeb624d207552e92c2b4473a0"
+  inputs: ["package.json", "package-lock.json", ".npmrc"]
 
 issues:
   intake_label: todo
@@ -44,9 +44,7 @@ issues:
 # that slot — never one selection repeated under seven names, which makes
 # seven gates report on the same evidence while claiming to check seven
 # different things. Steps (.aidev/run-checks.sh): test =
-# jest, build = yarn build, lint = eslint src/ (CI allows it to fail, so it is
-# only in static). Every slot fails at install on Node 24 at onboarding: the app
-# is still a Node 12 app (.aidev/README.md).
+# jest, build = npm run build, lint = eslint src/ (only in static).
 verification:
   quick:
     adapter: command

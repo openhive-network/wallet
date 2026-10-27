@@ -65,7 +65,7 @@ module.exports = {
                 queryInterface.addIndex('accounts', ['memo_key']);
             });
     },
-    down(queryInterface, Sequelize) {
+    down(queryInterface) {
         return queryInterface.dropTable('accounts');
     },
 };

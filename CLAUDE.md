@@ -62,39 +62,39 @@ blackboxtest/               # Selenium E2E tests
 ## Development Commands
 
 ```bash
-# Install dependencies
-yarn install --frozen-lockfile
+# Install dependencies (from package-lock.json)
+npm ci
 
 # Development (webpack-dev-server, ~60s startup)
-yarn start
+npm start
 
 # Production build
-yarn build
+npm run build
 
 # Run production server
-yarn production
+npm run production
 
 # Debug mode (Chrome DevTools)
-yarn debug
+npm run debug
 
 # Testing
-yarn test                   # Run Jest tests
-yarn ci:test               # CI test with coverage
+npm test                   # Run Jest tests
+npm run ci:test            # CI test with coverage
 
 # Linting & Formatting
-yarn eslint                # Lint modified files only
-yarn ci:eslint             # Lint all src/
-yarn eslint:fix            # Auto-fix issues
-yarn fmt                   # Format with Prettier
+npm run eslint             # Lint modified files only
+npm run ci:eslint          # Lint all src/
+npm run eslint:fix         # Auto-fix issues
+npm run fmt                # Format with Prettier
 
 # Storybook
-yarn storybook             # Component docs on port 9001
+npm run storybook          # Component docs on port 9001
 
 # Database migrations
-cd src/db && yarn exec sequelize db:migrate
+cd src/db && npx sequelize db:migrate
 
 # Validate translations
-yarn checktranslations
+npm run checktranslations
 ```
 
 ## Key Files
@@ -136,13 +136,16 @@ yarn checktranslations
 
 | Stage | Jobs |
 |-------|------|
-| test | `run-unit-tests` (yarn ci:test), `run-eslint` |
-| build | `build-review-app` (MRs), `build-development` (develop), `build-production` (master) |
-| deploy | `deploy-review-app` (MRs), `deploy-staging` (develop), `deploy-production` (master) |
+| test | `run-unit-tests` (npm run ci:test), `run-eslint` |
+| build | `build-development` (develop → `hiveio/wallet:development`), `build-production` (master → `hiveio/wallet:latest`) |
+
+All jobs carry `tags: [public-runner-docker]` (hive-builder shared runners). The pipeline deploys nothing.
+`NPM_CONFIG_REGISTRY` points every npm install (test jobs, and the image builds via
+`--build-arg NPM_CONFIG_REGISTRY`) at the on-site cache `npm-cache.syncad.com`.
 
 **Branches:**
-- `develop` - Protected, deploys to staging-wallet.hive.io
-- `master` - Protected, deploys to wallet.hive.blog
+- `develop` - Protected
+- `master` - Protected
 
 **Docker:**
 - Multi-stage Dockerfile (development -> dependencies -> production Alpine)
@@ -161,6 +164,8 @@ Key env vars (prefix `SDC_`):
 
 ## Node Version
 
-- Minimum: Node 8.7.0
-- Recommended: Node 12.22.1
-- Yarn preferred over npm
+- Node 24 (`engines.node` `>=24`); CI and the Dockerfile take the exact version from
+  hive/common-ci-configuration (`NODE_TEST_TOOLS_IMAGE`, `--build-arg NODE_VERSION=$NODE_IMAGE_VERSION`)
+- `patches/` holds patch-package fixes to unmaintained dependencies, applied on `postinstall`
+- npm with the committed `package-lock.json` (`npm ci`); it resolves to the public registry,
+  `NPM_CONFIG_REGISTRY` redirects installs to a cache. `.npmrc` sets `legacy-peer-deps`

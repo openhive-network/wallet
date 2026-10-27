@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { browserHistory } from 'react-router';
 import Icon from 'app/components/elements/Icon';
-import { findParent } from 'app/utils/DomUtils';
+import findParent from 'app/utils/DomUtils';
 import VerticalMenu from './VerticalMenu';
 
 export default class DropdownMenu extends React.Component {

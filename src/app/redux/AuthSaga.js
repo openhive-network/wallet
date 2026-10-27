@@ -1,5 +1,9 @@
-import { call, put, select, takeEvery } from 'redux-saga/effects';
-import { Set, Map, fromJS, List } from 'immutable';
+import {
+    call, put, select, takeEvery
+} from 'redux-saga/effects';
+import {
+    Set, Map, fromJS, List
+} from 'immutable';
 import { api } from '@hiveio/hive-js';
 import { PrivateKey } from '@hiveio/hive-js/lib/auth/ecc';
 
@@ -76,7 +80,9 @@ function* authorityLookup({ pubkeys, authority, authType }) {
     return yield call(authStr, { pubkeys, authority, authType });
 }
 
-function* authStr({ pubkeys, authority, authType, recurse = 1 }) {
+function* authStr({
+    pubkeys, authority, authType, recurse = 1
+}) {
     const t = yield call(threshold, {
         pubkeys,
         authority,
@@ -87,7 +93,9 @@ function* authStr({ pubkeys, authority, authType, recurse = 1 }) {
     return t >= r ? 'full' : t > 0 ? 'partial' : 'none';
 }
 
-export function* threshold({ pubkeys, authority, authType, recurse = 1 }) {
+export function* threshold({
+    pubkeys, authority, authType, recurse = 1
+}) {
     if (!pubkeys.size) return 0;
     let t = pubkeyThreshold({ pubkeys, authority });
     const account_auths = authority.get('account_auths');
@@ -95,17 +103,18 @@ export function* threshold({ pubkeys, authority, authType, recurse = 1 }) {
     if (aaNames.size) {
         const aaAccounts = yield api.getAccountsAsync(aaNames);
         const aaThreshes = account_auths.map((v) => v.get(1), List());
-        for (let i = 0; i < aaAccounts.size; i++) {
+        for (let i = 0; i < aaAccounts.size; i += 1) {
             const aaAccount = aaAccounts.get(i);
             t += pubkeyThreshold({
                 authority: aaAccount.get(authType),
                 pubkeys,
             });
             if (recurse <= 2) {
+                recurse += 1;
                 const auth = yield call(authStr, {
                     authority: aaAccount,
                     pubkeys,
-                    recurse: ++recurse,
+                    recurse,
                 });
                 if (auth === 'full') {
                     const aaThresh = aaThreshes.get(i);
@@ -145,8 +154,7 @@ export function* findSigningKey({ opType, username, password }) {
         username = username.split('/')[0];
     }
 
-    const private_keys =
-        currentUsername === username ? currentUser.get('private_keys') : Map();
+    const private_keys = currentUsername === username ? currentUser.get('private_keys') : Map();
 
     const account = yield call(getAccount, username);
     if (!account) throw new Error('Account not found');
@@ -161,8 +169,7 @@ export function* findSigningKey({ opType, username, password }) {
                     username + authType + password
                 );
             }
-        } else if (private_keys)
-            private_key = private_keys.get(authType + '_private');
+        } else if (private_keys) private_key = private_keys.get(authType + '_private');
         if (private_key) {
             const pubkey = private_key.toPublicKey().toString();
             const pubkeys = Set([pubkey]);

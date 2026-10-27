@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
-import { cleanReduxInput } from 'app/utils/ReduxForms';
+import cleanReduxInput from 'app/utils/ReduxForms';
 import tt from 'counterpart';
 
 class CategorySelector extends React.Component {

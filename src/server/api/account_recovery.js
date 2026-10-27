@@ -96,8 +96,8 @@ export default function useAccountRecoveryApi(app) {
             );
 
             if (
-                !account_recovery_record ||
-                account_recovery_record.account_name !== params.name
+                !account_recovery_record
+                || account_recovery_record.account_name !== params.name
             ) {
                 console.log(
                     '-- /request_account_recovery --> no arec found or wrong name',
@@ -173,8 +173,9 @@ export default function useAccountRecoveryApi(app) {
         koaBody,
         function* () {
             const params = this.request.body;
-            const { csrf, contact_email, account_name, owner_key } =
-                typeof params === 'string' ? JSON.parse(params) : params;
+            const {
+    csrf, contact_email, account_name, owner_key
+} = typeof params === 'string' ? JSON.parse(params) : params;
             if (!checkCSRF(this, csrf)) return;
             console.log(
                 '-- /initiate_account_recovery_with_email -->',

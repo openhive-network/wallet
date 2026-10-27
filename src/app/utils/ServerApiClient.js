@@ -1,4 +1,4 @@
-import { api } from '@hiveio/hive-js';
+/* global $STM_csrf */
 
 const request_base = {
     method: 'post',
@@ -28,41 +28,11 @@ export function serverApiLogout() {
     return fetch('/api/v1/logout_account', request);
 }
 
-let last_call;
-export function serverApiRecordEvent(type, val, rate_limit_ms = 5000) {
-    if (!process.env.BROWSER || window.$STM_ServerBusy) return;
-    if (last_call && new Date() - last_call < rate_limit_ms) return;
-    last_call = new Date();
-    const value = val && val.stack ? `${val.toString()} | ${val.stack}` : val;
-    return;
-    api.call(
-        'overseer.collect',
-        { collection: 'event', metadata: { type, value } },
-        (error) => {
-            if (error) console.warn('overseer error', error, error.data);
-        }
-    );
-}
+// Event collection through overseer is disabled until overseer is updated.
+export function serverApiRecordEvent() {}
 
-let last_page, last_views, last_page_promise;
-export function recordPageView(page, referer, account) {
-    return; // TODO: disabled until overseer update
-    if (last_page_promise && page === last_page) return last_page_promise;
-
-    if (!process.env.BROWSER) return Promise.resolve(0);
-    if (window.ga) {
-        // virtual pageview
-        window.ga('set', 'page', page);
-        window.ga('send', 'pageview');
-    }
-    last_page_promise = api.callAsync('overseer.pageview', {
-        page,
-        referer,
-        account,
-    });
-    last_page = page;
-    return last_page_promise;
-}
+// Page view recording is disabled.
+export function recordPageView() {}
 
 export function saveCords(x, y) {
     const request = {
@@ -73,8 +43,7 @@ export function saveCords(x, y) {
 }
 
 export function setUserPreferences(payload) {
-    if (!process.env.BROWSER || window.$STM_ServerBusy)
-        return Promise.resolve();
+    if (!process.env.BROWSER || window.$STM_ServerBusy) return Promise.resolve();
     const request = {
         ...request_base,
         body: JSON.stringify({ csrf: window.$STM_csrf, payload }),
@@ -82,14 +51,9 @@ export function setUserPreferences(payload) {
     return fetch('/api/v1/setUserPreferences', request);
 }
 
+// The /isTosAccepted endpoint is down, so every user counts as having accepted.
 export function isTosAccepted() {
-    // TODO: endpoint down. re-enable
     return true;
-    const request = {
-        ...request_base,
-        body: JSON.stringify({ csrf: window.$STM_csrf }),
-    };
-    return fetch('/api/v1/isTosAccepted', request).then((res) => res.json());
 }
 
 export function acceptTos() {

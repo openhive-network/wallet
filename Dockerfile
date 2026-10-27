@@ -1,24 +1,33 @@
-FROM node:12.22.6 as development
+# No default: CI passes --build-arg NODE_VERSION=$NODE_IMAGE_VERSION, the one Node
+# version of hive/common-ci-configuration; a local build passes it the same way.
+ARG NODE_VERSION
+
+FROM node:${NODE_VERSION} as development
 
 WORKDIR /var/app
 
-COPY package.json yarn.lock ./
+# Empty (no --build-arg) means npm's default, the public registry.
+ARG NPM_CONFIG_REGISTRY
+ENV NPM_CONFIG_REGISTRY=${NPM_CONFIG_REGISTRY}
 
-RUN yarn install --non-interactive --frozen-lockfile
+COPY package.json package-lock.json .npmrc ./
+COPY patches ./patches
+
+RUN npm ci --no-audit --no-fund
 
 COPY . .
 
-RUN mkdir tmp && yarn build
+RUN mkdir tmp && npm run build
 
-CMD [ "yarn", "run", "start" ]
+CMD [ "npm", "run", "start" ]
 
 ### REMOVE DEV DEPENDENCIES ##
 FROM development as dependencies
 
-RUN yarn install --non-interactive --frozen-lockfile --production
+RUN npm prune --omit=dev --no-audit --no-fund
 
 ### BUILD MINIFIED PRODUCTION ##
-FROM node:12.22.6-alpine as production
+FROM node:${NODE_VERSION}-alpine as production
 
 WORKDIR /var/app
 
@@ -40,4 +49,4 @@ COPY --from=dependencies /var/app/healthcheck.js /var/app/healthcheck.js
 
 HEALTHCHECK --interval=30s --timeout=5s --start-period=30s --retries=5 CMD node /var/app/healthcheck.js
 
-CMD [ "yarn", "run", "production" ]
+CMD [ "npm", "run", "production" ]
