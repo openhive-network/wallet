@@ -106,35 +106,35 @@ describe('makeParams', () => {
     });
     it('creates the correct string when passed an array', () => {
         assert(
-            linksRe.makeParams(['bop=boop', 'troll=bridge']) ===
-                '?bop=boop&troll=bridge',
+            linksRe.makeParams(['bop=boop', 'troll=bridge'])
+                === '?bop=boop&troll=bridge',
             'incorrect string with'
         );
         assert(
-            linksRe.makeParams(['bop=boop', 'troll=bridge'], false) ===
-                'bop=boop&troll=bridge',
+            linksRe.makeParams(['bop=boop', 'troll=bridge'], false)
+                === 'bop=boop&troll=bridge',
             'incorrect string with prefix false'
         );
         assert(
-            linksRe.makeParams(['bop=boop', 'troll=bridge'], '&') ===
-                '&bop=boop&troll=bridge',
+            linksRe.makeParams(['bop=boop', 'troll=bridge'], '&')
+                === '&bop=boop&troll=bridge',
             'incorrect string with prefix &'
         );
     });
     it('creates the correct string when passed an object', () => {
         assert(
-            linksRe.makeParams({ bop: 'boop', troll: 'bridge' }) ===
-                '?bop=boop&troll=bridge',
+            linksRe.makeParams({ bop: 'boop', troll: 'bridge' })
+                === '?bop=boop&troll=bridge',
             'incorrect string'
         );
         assert(
-            linksRe.makeParams({ bop: 'boop', troll: 'bridge' }, false) ===
-                'bop=boop&troll=bridge',
+            linksRe.makeParams({ bop: 'boop', troll: 'bridge' }, false)
+                === 'bop=boop&troll=bridge',
             'incorrect string with prefix false'
         );
         assert(
-            linksRe.makeParams({ bop: 'boop', troll: 'bridge' }, '&') ===
-                '&bop=boop&troll=bridge',
+            linksRe.makeParams({ bop: 'boop', troll: 'bridge' }, '&')
+                === '&bop=boop&troll=bridge',
             'incorrect string with prefix &'
         );
     });
@@ -206,7 +206,7 @@ describe('determineViewMode', () => {
 describe('Performance', () => {
     const largeData = secureRandom.randomBuffer(1024 * 10).toString('hex');
     it('any, ' + largeData.length + ' bytes x 10,000', () => {
-        for (let i = 0; i < 10000; i++) {
+        for (let i = 0; i < 10000; i += 1) {
             const match = (largeData + 'https://example.com').match(
                 linksRe.any()
             );
@@ -215,7 +215,7 @@ describe('Performance', () => {
         }
     });
     it('image (large), ' + largeData.length + ' bytes x 10,000', () => {
-        for (let i = 0; i < 10000; i++) {
+        for (let i = 0; i < 10000; i += 1) {
             matchNot(
                 linksRe.image(),
                 'https://lh3.googleusercontent.com/OehcduRZPcVIX_2tlOKgYHADtBvorTfL4JtjfGAPWZyiiI9p_g2ZKEUKfuv3By-aiVfirXaYvEsViJEbxts6IeVYqidnpgkkkXAe0Q79_ARXX6CU5hBK2sZaHKa20U3jBzYbMxT-OVNX8-JYf-GYa2geUQa6pVpUDY35iaiiNBObF-TMIUOqm0P61gCdukTFwLgld2BBlxoVNNt_w6VglYHJP0W4izVNkEu7ugrU-qf2Iw9hb22SGIFNpbzL_ldomDMthIuYfKSYGsqe2ClvNKRz-_vVCQr7ggRXra16uQOdUUv5IVnkK67p9yR8ioajJ4tiGdzazYVow46pbeZ76i9_NoEYnOEX2_a7niofnC5BgAjoQEeoes1cMWVM7V8ZSexBA-cxmi0EVLds4RBkInvaUZjVL7h3oJ5I19GugPTzlyVyYtkf1ej6LNttkagqHgMck87UQGvCbwDX9ECTngffwQPYZlZKnthW0DlkFGgHN8T9uqEpl-3ki50gTa6gC0Q16mEeDRKZe7_g5Sw52OjMsfWxmBBWWMSHzlQKKAIKMKKaD6Td0O_zpiXXp7Fyl7z_iESvCpOAUAIKnyJyF_Y0UYktEmw=w2066-h1377-no'
@@ -223,7 +223,7 @@ describe('Performance', () => {
         }
     });
     it('image, ' + largeData.length + ' bytes x 10,000', () => {
-        for (let i = 0; i < 10000; i++) {
+        for (let i = 0; i < 10000; i += 1) {
             const match = (largeData + 'https://example.com/img.jpeg').match(
                 linksRe.image()
             );
@@ -232,7 +232,7 @@ describe('Performance', () => {
         }
     });
     it('remote, ' + largeData.length + ' bytes x 10,000', () => {
-        for (let i = 0; i < 10000; i++) {
+        for (let i = 0; i < 10000; i += 1) {
             const match = (largeData + 'https://example.com').match(
                 linksRe.remote()
             );
@@ -277,8 +277,7 @@ const match = (...args) => compare(true, ...args);
 const matchNot = (...args) => compare(false, ...args);
 const compare = (matching, re, input, output = input, pos = 0) => {
     if (Array.isArray(input)) {
-        for (let i = 0; i < input.length; i++)
-            compare(matching, re, input[i], output[i]);
+        for (let i = 0; i < input.length; i += 1) compare(matching, re, input[i], output[i]);
         return;
     }
     // console.log('compare, input', input)

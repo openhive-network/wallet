@@ -67,21 +67,20 @@ export default function verify(phone) {
                         resolve('error');
                     }
                 } else if (
-                    result.addOns &&
-                    result.addOns.results &&
-                    result.addOns.results.whitepages_pro_phone_rep &&
-                    result.addOns.results.whitepages_pro_phone_rep.result &&
-                    result.addOns.results.whitepages_pro_phone_rep.result
-                        .results &&
-                    result.addOns.results.whitepages_pro_phone_rep.result
-                        .results[0] &&
-                    result.addOns.results.whitepages_pro_phone_rep.result
-                        .results[0].reputation &&
-                    result.addOns.results.whitepages_pro_phone_rep.result
+                    result.addOns
+                    && result.addOns.results
+                    && result.addOns.results.whitepages_pro_phone_rep
+                    && result.addOns.results.whitepages_pro_phone_rep.result
+                    && result.addOns.results.whitepages_pro_phone_rep.result
+                        .results
+                    && result.addOns.results.whitepages_pro_phone_rep.result
+                        .results[0]
+                    && result.addOns.results.whitepages_pro_phone_rep.result
+                        .results[0].reputation
+                    && result.addOns.results.whitepages_pro_phone_rep.result
                         .results[0].reputation.level
                 ) {
-                    const reputation_level =
-                        result.addOns.results.whitepages_pro_phone_rep.result
+                    const reputation_level = result.addOns.results.whitepages_pro_phone_rep.result
                             .results[0].reputation.level;
                     console.log(
                         'Twilio reputation level ',

@@ -5,10 +5,10 @@ jest.mock('./utils/GDPRUserList');
 describe('routeRegex', () => {
     it('should produce the desired regex patterns', () => {
         const test_cases = [
-            ['UserProfile1', /^\/(@[\w\.\d-]+)\/?$/],
+            ['UserProfile1', /^\/(@[\w.\d-]+)\/?$/],
             [
                 'UserProfile2',
-                /^\/(@[\w\.\d-]+)\/(transfers|curation-rewards|author-rewards|permissions|communities|password|settings|delegations)\/?$/,
+                /^\/(@[\w.\d-]+)\/(transfers|curation-rewards|author-rewards|permissions|communities|password|settings|delegations)\/?$/,
             ],
         ];
 

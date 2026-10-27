@@ -42,7 +42,7 @@ module.exports = {
                 queryInterface.addIndex('web_events', ['account_name']);
             });
     },
-    down(queryInterface, Sequelize) {
+    down(queryInterface) {
         return queryInterface.dropTable('web_events');
     },
 };

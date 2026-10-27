@@ -23,8 +23,8 @@ function initReducer(reducer, type) {
             }
             if (type === 'global') {
                 if (
-                    state.get('content') !== null &&
-                    state.get('content') !== undefined
+                    state.get('content') !== null
+                    && state.get('content') !== undefined
                 ) {
                     const content = state.get('content').withMutations((c) => {
                         c.forEach((cc, key) => {

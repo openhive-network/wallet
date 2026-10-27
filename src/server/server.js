@@ -10,7 +10,6 @@ import staticCache from 'koa-static-cache';
 import isBot from 'koa-isbot';
 import session from '@steem/crypto-session';
 import csrf from 'koa-csrf';
-import minimist from 'minimist';
 import config from 'config';
 import { routeRegex } from 'app/ResolveRoute';
 import secureRandom from 'secure-random';
@@ -208,6 +207,7 @@ app.use(
 );
 
 app.use(
+    // eslint-disable-next-line require-yield
     mount('/robots.txt', function* () {
         this.set('Cache-Control', 'public, max-age=86400000');
         this.type = 'text/plain';
@@ -219,7 +219,7 @@ app.use(
 // FIXME SECURITY PRIVACY cycle this uid after a period of time
 app.use(function* (next) {
     const { last_visit } = this.session;
-    this.session.last_visit = (new Date().getTime() / 1000) | 0;
+    this.session.last_visit = Math.floor(new Date().getTime() / 1000);
     const from_link = this.request.headers.referer;
     if (!this.session.uid) {
         this.session.uid = secureRandom.randomBuffer(13).toString('hex');
@@ -271,13 +271,11 @@ if (env !== 'test') {
         }
     });
 
-    const argv = minimist(process.argv.slice(2));
-
     const port = process.env.PORT ? parseInt(process.env.PORT) : 8080;
 
     if (env === 'production') {
         if (cluster.isMaster) {
-            for (let i = 0; i < numProcesses; i++) {
+            for (let i = 0; i < numProcesses; i += 1) {
                 cluster.fork();
             }
             // if a worker dies replace it so application keeps running
@@ -303,7 +301,6 @@ if (env !== 'test') {
 
 // set PERFORMANCE_TRACING to the number of seconds desired for
 // logging hardware stats to the console
-if (process.env.PERFORMANCE_TRACING)
-    setInterval(hardwareStats, 1000 * process.env.PERFORMANCE_TRACING);
+if (process.env.PERFORMANCE_TRACING) setInterval(hardwareStats, 1000 * process.env.PERFORMANCE_TRACING);
 
 module.exports = app;

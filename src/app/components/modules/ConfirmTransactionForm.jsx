@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import * as transactionActions from 'app/redux/TransactionReducer';
-import { findParent } from 'app/utils/DomUtils';
+import findParent from 'app/utils/DomUtils';
 import tt from 'counterpart';
 
 class ConfirmTransactionForm extends Component {

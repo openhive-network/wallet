@@ -1,5 +1,5 @@
 module.exports = function (sequelize, DataTypes) {
-    var UserAttribute = sequelize.define(
+    const UserAttribute = sequelize.define(
         'UserAttribute',
         {
             UserId: {

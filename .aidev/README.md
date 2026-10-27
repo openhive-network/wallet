@@ -36,15 +36,9 @@ which writes `test-results/<slot>/junit.xml` (one case per step):
 Every run first installs `node_modules` offline from the image's yarn cache (`install`,
 `yarn install --offline --frozen-lockfile` with lifecycle scripts). Steps: `test` is jest
 (`ci:test`, CI's `run-unit-tests`) with coverage, `lint` is `eslint src/` (`ci:eslint`, CI's
-`run-eslint`, which CI allows to fail), `build` is `yarn build` (webpack production bundle
-and babel into `lib/`, the Dockerfile's build stage). There is no browser or e2e suite in
+`run-eslint`), `build` is `yarn build` (webpack production bundle and babel into `lib/`,
+the Dockerfile's build stage). There is no browser or e2e suite in
 the slots: `blackboxtest/` needs Selenium and a running site.
-
-Left out of every slot (`JEST_ALREADY_FAILING` in `run-checks.sh`):
-
-- `src/app/utils/ProxifyUrl.test.js` — 6 of its tests fail on `develop` on Node 12
-  as well as on Node 24; they appear to predate 7d7d7270, which moved ProxifyUrl's regex
-  from steemitimages.com to images.hive.blog. Fixing them would bring the file back.
 
 ## Test runtime
 
@@ -61,8 +55,7 @@ re-pin it with `.aidev/runtime/build.sh --push` when the Dockerfile, `package.js
 The application runs on the hive-wide Node (ccc's `NODE_VERSION`): CI's test jobs use ccc's
 `${NODE_TEST_TOOLS_IMAGE}` and the `Dockerfile` takes `NODE_VERSION` as a build arg
 (`$NODE_IMAGE_VERSION` from ccc's `templates/base.gitlab-ci.yml`), with no version of
-this repository's own. `install` (with lifecycle scripts), jest (123 tests, 1 skipped,
-ProxifyUrl excluded) and `yarn build` pass; `eslint src/` reports 502 errors and 126
-warnings, as on Node 12 (CI allows it to fail). `patches/` (patch-package, run on
-`postinstall`) fixes unmaintained webpack-isomorphic-tools and require-hacker, which
-call `util.isRegExp`, removed in Node 23.
+this repository's own. `install` (with lifecycle scripts), jest and `yarn build` pass, and
+`eslint src/` reports no errors (warnings remain; CI's `run-eslint` may no longer fail).
+`patches/` (patch-package, run on `postinstall`) fixes unmaintained webpack-isomorphic-tools
+and require-hacker, which call `util.isRegExp`, removed in Node 23.

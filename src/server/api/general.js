@@ -3,7 +3,6 @@ import koa_router from 'koa-router';
 import koa_body from 'koa-body';
 import crypto from 'crypto';
 import models, { esc, escAttrs } from 'db/models';
-import findUser from 'db/utils/find_user';
 import config from 'config';
 
 import {
@@ -67,11 +66,11 @@ export default function useGeneralApi(app) {
     app.use(router.routes());
     const koaBody = koa_body();
 
+    // eslint-disable-next-line require-yield
     router.post('/accounts_wait', koaBody, function* () {
         if (rateLimitReq(this, this.req)) return;
         const params = this.request.body;
-        const account =
-            typeof params === 'string' ? JSON.parse(params) : params;
+        const account = typeof params === 'string' ? JSON.parse(params) : params;
         const remote_ip = getRemoteIp(this.req);
         if (!checkCSRF(this, account.csrf)) return;
         logRequest('accounts_wait', this, { account });
@@ -112,8 +111,7 @@ export default function useGeneralApi(app) {
     router.post('/accounts', koaBody, function* () {
         if (rateLimitReq(this, this.req)) return;
         const params = this.request.body;
-        const account =
-            typeof params === 'string' ? JSON.parse(params) : params;
+        const account = typeof params === 'string' ? JSON.parse(params) : params;
         if (!checkCSRF(this, account.csrf)) return;
         logRequest('accounts', this, { account });
         if ($STM_Config.disable_signups) {
@@ -174,8 +172,7 @@ export default function useGeneralApi(app) {
                 order: [['id', 'DESC']],
             });
             if (same_ip_account) {
-                const minutes =
-                    (Date.now() - same_ip_account.created_at) / 60000;
+                const minutes = (Date.now() - same_ip_account.created_at) / 60000;
                 if (minutes < 10) {
                     console.log(
                         `api /accounts: IP rate limit for user ${this.session.uid} #${user_id}, IP ${remote_ip}`
@@ -283,19 +280,18 @@ export default function useGeneralApi(app) {
      *   secret
      */
     router.post('/create_user', koaBody, function* () {
-        const { name, email, owner_key, secret } =
-            typeof this.request.body === 'string'
+        const {
+    name, email, owner_key, secret
+} = typeof this.request.body === 'string'
                 ? JSON.parse(this.request.body)
                 : this.request.body;
 
-        if (secret !== process.env.CREATE_USER_SECRET)
-            throw new Error('invalid secret');
+        if (secret !== process.env.CREATE_USER_SECRET) throw new Error('invalid secret');
 
         logRequest('create_user', this, { name, email, owner_key });
 
         try {
-            if (!emailRegex.test(email.toLowerCase()))
-                throw new Error('not valid email: ' + email);
+            if (!emailRegex.test(email.toLowerCase())) throw new Error('not valid email: ' + email);
             const user = yield models.User.create({
                 name: esc(name),
                 email: esc(email),
@@ -429,11 +425,11 @@ export default function useGeneralApi(app) {
         }
     });
 
+    // eslint-disable-next-line require-yield
     router.post('/logout_account', koaBody, function* () {
         // if (rateLimitReq(this, this.req)) return; - logout maybe immediately followed with login_attempt event
         const params = this.request.body;
-        const { csrf } =
-            typeof params === 'string' ? JSON.parse(params) : params;
+        const { csrf } = typeof params === 'string' ? JSON.parse(params) : params;
         if (!checkCSRF(this, csrf)) return;
         this.session.auth = false;
         logRequest('logout_account', this);
@@ -481,8 +477,7 @@ export default function useGeneralApi(app) {
 
     router.post('/save_cords', koaBody, function* () {
         const params = this.request.body;
-        const { csrf, x, y } =
-            typeof params === 'string' ? JSON.parse(params) : params;
+        const { csrf, x, y } = typeof params === 'string' ? JSON.parse(params) : params;
         if (!checkCSRF(this, csrf)) return;
         const user = yield models.User.findOne({
             where: { id: this.session.user },
@@ -509,10 +504,10 @@ export default function useGeneralApi(app) {
         this.body = JSON.stringify({ status: 'ok' });
     });
 
+    // eslint-disable-next-line require-yield
     router.post('/setUserPreferences', koaBody, function* () {
         const params = this.request.body;
-        const { csrf, payload } =
-            typeof params === 'string' ? JSON.parse(params) : params;
+        const { csrf, payload } = typeof params === 'string' ? JSON.parse(params) : params;
         if (!checkCSRF(this, csrf)) return;
         console.log(
             '-- /setUserPreferences -->',
@@ -543,8 +538,7 @@ export default function useGeneralApi(app) {
 
     router.post('/isTosAccepted', koaBody, function* () {
         const params = this.request.body;
-        const { csrf } =
-            typeof params === 'string' ? JSON.parse(params) : params;
+        const { csrf } = typeof params === 'string' ? JSON.parse(params) : params;
         if (!checkCSRF(this, csrf)) return;
 
         this.body = '{}';
@@ -578,8 +572,7 @@ export default function useGeneralApi(app) {
 
     router.post('/acceptTos', koaBody, function* () {
         const params = this.request.body;
-        const { csrf } =
-            typeof params === 'string' ? JSON.parse(params) : params;
+        const { csrf } = typeof params === 'string' ? JSON.parse(params) : params;
         if (!checkCSRF(this, csrf)) return;
 
         if (!this.session.a) {

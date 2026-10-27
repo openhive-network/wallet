@@ -1,13 +1,13 @@
+/* global $STM_Config */
 import xmldom from 'xmldom';
 import tt from 'counterpart';
 import linksRe, { any as linksAny } from 'app/utils/Links';
 import { validate_account_name } from 'app/utils/ChainValidation';
 import proxifyImageUrl from 'app/utils/ProxifyUrl';
-import * as Phishing from 'app/utils/Phishing';
+import looksPhishy from 'app/utils/Phishing';
 
 export const getPhishingWarningMessage = () => tt('g.phishy_message');
-export const getExternalLinkWarningMessage = () =>
-    tt('g.external_link_message');
+export const getExternalLinkWarningMessage = () => tt('g.external_link_message');
 
 const noop = () => {};
 const DOMParser = new xmldom.DOMParser({
@@ -149,10 +149,10 @@ function link(state, child) {
 
             // Unlink potential phishing attempts
             if (
-                (url.indexOf('#') !== 0 && // Allow in-page links
-                    child.textContent.match(/(www\.)?hive\.blog/i) &&
-                    !url.match(/https?:\/\/(.*@)?(www\.)?hive\.blog/i)) ||
-                Phishing.looksPhishy(url)
+                (url.indexOf('#') !== 0 // Allow in-page links
+                    && child.textContent.match(/(www\.)?hive\.blog/i)
+                    && !url.match(/https?:\/\/(.*@)?(www\.)?hive\.blog/i))
+                || looksPhishy(url)
             ) {
                 const phishyDiv = child.ownerDocument.createElement('div');
                 phishyDiv.textContent = `${child.textContent} / ${url}`;
@@ -183,10 +183,9 @@ function iframe(state, child) {
         ? child.parentNode.tagName.toLowerCase()
         : child.parentNode.tagName;
     if (
-        tag == 'div' &&
-        child.parentNode.getAttribute('class') == 'videoWrapper'
-    )
-        return;
+        tag == 'div'
+        && child.parentNode.getAttribute('class') == 'videoWrapper'
+    ) return;
     const html = XMLSerializer.serializeToString(child);
     child.parentNode.replaceChild(
         DOMParser.parseFromString(`<div class="videoWrapper">${html}</div>`),
@@ -216,8 +215,7 @@ function proxifyImages(doc) {
     if (!doc) return;
     Array.from(doc.getElementsByTagName('img')).forEach((node) => {
         const url = node.getAttribute('src');
-        if (!linksRe.local.test(url))
-            node.setAttribute('src', proxifyImageUrl(url, true));
+        if (!linksRe.local.test(url)) node.setAttribute('src', proxifyImageUrl(url, true));
     });
 }
 
@@ -271,7 +269,7 @@ function linkify(content, mutate, hashtags, usertags, images, links) {
     // usertag (mention)
     // Cribbed from https://github.com/twitter/twitter-text/blob/v1.14.7/js/twitter-text.js#L90
     content = content.replace(
-        /(^|[^a-zA-Z0-9_!#$%&*@＠\/]|(^|[^a-zA-Z0-9_+~.-\/#]))[@＠]([a-z][-\.a-z\d]+[a-z\d])/gi,
+        /(^|[^a-zA-Z0-9_!#$%&*@＠/]|(^|[^a-zA-Z0-9_+~.-/#]))[@＠]([a-z][-.a-z\d]+[a-z\d])/gi,
         (match, preceeding1, preceeding2, user) => {
             const userLower = user.toLowerCase();
             const valid = validate_account_name(userLower) == null;
@@ -298,8 +296,7 @@ function linkify(content, mutate, hashtags, usertags, images, links) {
         if (/\.(zip|exe)$/i.test(ln)) return ln;
 
         // do not linkify phishy links
-        if (Phishing.looksPhishy(ln))
-            return `<div title='${getPhishingWarningMessage()}' class='phishy'>${ln}</div>`;
+        if (looksPhishy(ln)) return `<div title='${getPhishingWarningMessage()}' class='phishy'>${ln}</div>`;
 
         if (links) links.add(ln);
         return `<a href="${ipfsPrefix(ln)}">${ln}</a>`;

@@ -82,9 +82,8 @@ export function powerdownHive(account, gprops) {
     const withdraw_rate_vests = parseFloat(
         account.vesting_withdraw_rate.split(' ')[0]
     );
-    const remaining_vests =
-        (parseFloat(account.to_withdraw) - parseFloat(account.withdrawn)) /
-        1000000;
+    const remaining_vests = (parseFloat(account.to_withdraw) - parseFloat(account.withdrawn))
+        / 1000000;
     const vests = Math.min(withdraw_rate_vests, remaining_vests);
     const total_vests = parseFloat(gprops.total_vesting_shares.split(' ')[0]);
     const total_vest_hive = parseFloat(
@@ -116,9 +115,8 @@ export function isFetchingOrRecentlyUpdated(global_status, order, category) {
     if (!status) return false;
     if (status.fetching) return true;
     if (status.last_fetch) {
-        const res =
-            new Date() - status.last_fetch <
-            constants.FETCH_DATA_EXPIRE_SEC * 1000;
+        const res = new Date() - status.last_fetch
+            < constants.FETCH_DATA_EXPIRE_SEC * 1000;
         return res;
     }
     return false;
@@ -170,12 +168,10 @@ export function contentStats(content) {
         String(content.get('net_rshares'))
     ).gt(Long.ZERO);
     const allowDelete = !hasPositiveRshares && content.get('children') === 0;
-    const hasPendingPayout =
-        parsePayoutAmount(content.get('pending_payout_value')) >= 0.02;
+    const hasPendingPayout = parsePayoutAmount(content.get('pending_payout_value')) >= 0.02;
     const authorRepLog10 = repLog10(content.get('author_reputation'));
 
-    const gray =
-        !hasPendingPayout && (authorRepLog10 < 1 || meetsGrayThreshold);
+    const gray = !hasPendingPayout && (authorRepLog10 < 1 || meetsGrayThreshold);
     const hide = !hasPendingPayout && authorRepLog10 < 0; // rephide
 
     // Combine tags+category to check nsfw status

@@ -1,7 +1,7 @@
 import React from 'react';
 import { browserHistory } from 'react-router';
 import Icon from 'app/components/elements/Icon';
-import { findParent } from 'app/utils/DomUtils';
+import findParent from 'app/utils/DomUtils';
 
 export default class Dropdown extends React.Component {
     static propTypes = {

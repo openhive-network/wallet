@@ -1,5 +1,5 @@
 module.exports = function (sequelize, DataTypes) {
-    var Account = sequelize.define(
+    const Account = sequelize.define(
         'Account',
         {
             UserId: {

@@ -1,17 +1,13 @@
 import { fromJS } from 'immutable';
-import { call, put, select, takeEvery, takeLatest } from 'redux-saga/effects';
-import tt from 'counterpart';
+import {
+    call, put, select, takeEvery, takeLatest
+} from 'redux-saga/effects';
 import { api } from '@hiveio/hive-js';
 import { setUserPreferences } from 'app/utils/ServerApiClient';
 import { getStateAsync } from 'app/utils/hiveApi';
 import * as globalActions from './GlobalReducer';
 import * as appActions from './AppReducer';
 import * as transactionActions from './TransactionReducer';
-
-const wait = (ms) =>
-    new Promise((resolve) => {
-        setTimeout(() => resolve(), ms);
-    });
 
 export const sharedWatches = [
     takeEvery(globalActions.GET_STATE, getState),

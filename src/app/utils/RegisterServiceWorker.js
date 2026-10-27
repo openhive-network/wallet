@@ -2,14 +2,12 @@ export default function registerServiceWorker() {
     if (!navigator.serviceWorker) return Promise.resolve(false);
     return navigator.serviceWorker
         .register('/service-worker.js', { scope: '/' })
-        .then((registration) => {
-            navigator.serviceWorker.ready.catch((e) =>
-                console.error('-- registerServiceWorker error -->', e)
-            );
+        .then(() => {
+            navigator.serviceWorker.ready.catch((e) => console.error('-- registerServiceWorker error -->', e));
             return navigator.serviceWorker.ready.then(
                 (serviceWorkerRegistration) => {
-                    const subscription = serviceWorkerRegistration.pushManager.getSubscription();
-                    return subscription.then((subscription) => {
+                    const existingSubscription = serviceWorkerRegistration.pushManager.getSubscription();
+                    return existingSubscription.then((subscription) => {
                         if (subscription) {
                             return subscription;
                         }

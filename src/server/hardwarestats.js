@@ -12,15 +12,18 @@ function handleError(err) {
 }
 
 function startPromise() {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
         resolve();
     });
 }
 
 function getCpuUsage() {
     return new Promise((resolve, reject) => {
-        cpuStat.usagePercent((err, percent, seconds) => {
-            if (err) return err;
+        cpuStat.usagePercent((err, percent) => {
+            if (err) {
+                reject(err);
+                return;
+            }
             stats.cpuPercent = percent;
             resolve();
         });
@@ -28,14 +31,14 @@ function getCpuUsage() {
 }
 
 function getMemoryUsage() {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
         stats.memoryStatsInGiB = memStat.allStats('GiB');
         resolve();
     });
 }
 
 function getDiskUsage() {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
         stats.diskStats = diskStat.raw();
         resolve();
     });

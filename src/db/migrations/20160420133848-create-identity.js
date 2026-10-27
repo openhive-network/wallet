@@ -56,7 +56,7 @@ module.exports = {
                 queryInterface.addIndex('identities', ['confirmation_code']);
             });
     },
-    down(queryInterface, Sequelize) {
+    down(queryInterface) {
         return queryInterface.dropTable('identities');
     },
 };

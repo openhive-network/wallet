@@ -1,7 +1,8 @@
-import { Map, Set, List, fromJS, Iterable } from 'immutable';
-import { emptyContent } from 'app/redux/EmptyState';
+import {
+    Map, Set, List, fromJS, Iterable
+} from 'immutable';
+import emptyContent from 'app/redux/EmptyState';
 import { contentStats } from 'app/utils/StateFunctions';
-import constants from './constants';
 
 export const emptyContentMap = Map(emptyContent);
 
@@ -41,8 +42,7 @@ export const GET_STATE = 'global/GET_STATE';
  * @param {Object} account
  */
 
-const transformAccount = (account) =>
-    fromJS(account, (key, value) => {
+const transformAccount = (account) => fromJS(account, (key, value) => {
         if (key === 'witness_votes') return value.toSet();
         const isIndexed = Iterable.isIndexed(value);
         return isIndexed ? value.toList() : value.toOrderedMap();
@@ -57,9 +57,7 @@ const transformAccount = (account) =>
  */
 
 const mergeAccounts = (state, account) => {
-    return state.updateIn(['accounts', account.get('name')], Map(), (a) =>
-        a.mergeDeep(account)
-    );
+    return state.updateIn(['accounts', account.get('name')], Map(), (a) => a.mergeDeep(account));
 };
 
 export default function reducer(state = defaultState, action = {}) {
@@ -81,10 +79,8 @@ export default function reducer(state = defaultState, action = {}) {
             // let transfer_history from new state override completely, otherwise
             // deep merge may not work as intended.
             const mergedState = state.mergeDeep(new_state);
-            return mergedState.update('accounts', (accountMap) =>
-                accountMap
-                    ? accountMap.map((v, k) =>
-                          new_state.hasIn(['accounts', k, 'transfer_history'])
+            return mergedState.update('accounts', (accountMap) => accountMap
+                    ? accountMap.map((v, k) => new_state.hasIn(['accounts', k, 'transfer_history'])
                               ? v.set(
                                     'transfer_history',
                                     new_state.getIn([
@@ -93,10 +89,8 @@ export default function reducer(state = defaultState, action = {}) {
                                         'transfer_history',
                                     ])
                                 )
-                              : v
-                      )
-                    : accountMap
-            );
+                              : v)
+                    : accountMap);
         }
 
         case RECEIVE_ACCOUNT: {
@@ -116,8 +110,7 @@ export default function reducer(state = defaultState, action = {}) {
             return state.updateIn(
                 ['accounts', account, 'witness_votes'],
                 Set(),
-                (votes) =>
-                    approve
+                (votes) => approve
                         ? Set(votes).add(witness)
                         : Set(votes).remove(witness)
             );
@@ -150,10 +143,10 @@ export default function reducer(state = defaultState, action = {}) {
             } = payload;
             let new_state;
             if (
-                order === 'by_author' ||
-                order === 'by_feed' ||
-                order === 'by_comments' ||
-                order === 'by_replies'
+                order === 'by_author'
+                || order === 'by_feed'
+                || order === 'by_comments'
+                || order === 'by_replies'
             ) {
                 // category is either "blog", "feed", "comments", or "recent_replies" (respectively) -- and all posts are keyed under current profile
                 const key = ['accounts', accountname, category];
@@ -239,9 +232,7 @@ export default function reducer(state = defaultState, action = {}) {
 
         case RECEIVE_META: {
             const { id, meta } = payload;
-            return state.updateIn(['metaLinkData', id], (data) =>
-                data.merge(meta)
-            );
+            return state.updateIn(['metaLinkData', id], (data) => data.merge(meta));
         }
 
         case SET: {
@@ -277,9 +268,7 @@ export default function reducer(state = defaultState, action = {}) {
 
         case CLEAR_META_ELEMENT: {
             const { formId, element } = payload;
-            return state.updateIn(['metaLinkData', formId], (data) =>
-                data.remove(element)
-            );
+            return state.updateIn(['metaLinkData', formId], (data) => data.remove(element));
         }
 
         case FETCH_JSON: {
@@ -293,15 +282,11 @@ export default function reducer(state = defaultState, action = {}) {
 
         case SHOW_DIALOG: {
             const { name, params = {} } = payload;
-            return state.update('active_dialogs', Map(), (d) =>
-                d.set(name, fromJS({ params }))
-            );
+            return state.update('active_dialogs', Map(), (d) => d.set(name, fromJS({ params })));
         }
 
         case HIDE_DIALOG: {
-            return state.update('active_dialogs', (d) =>
-                d.delete(payload.name)
-            );
+            return state.update('active_dialogs', (d) => d.delete(payload.name));
         }
 
         case ADD_ACTIVE_WITNESS_VOTE: {

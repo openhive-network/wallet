@@ -1,12 +1,11 @@
 import GDPRUserList from './utils/GDPRUserList';
 
 export const routeRegex = {
-    UserProfile1: /^\/(@[\w\.\d-]+)\/?$/,
-    UserProfile2: /^\/(@[\w\.\d-]+)\/(transfers|curation-rewards|author-rewards|permissions|communities|password|settings|delegations)\/?$/,
+    UserProfile1: /^\/(@[\w.\d-]+)\/?$/,
+    UserProfile2: /^\/(@[\w.\d-]+)\/(transfers|curation-rewards|author-rewards|permissions|communities|password|settings|delegations)\/?$/,
 };
 
 export default function resolveRoute(path) {
-    let match;
     if (path === '/') {
         return { page: 'WalletIndex' };
     }
@@ -64,9 +63,8 @@ export default function resolveRoute(path) {
     if (path === '/proposals') {
         return { page: 'Proposals' };
     }
-    match =
-        path.match(routeRegex.UserProfile1) ||
-        path.match(routeRegex.UserProfile2);
+    const match = path.match(routeRegex.UserProfile1)
+        || path.match(routeRegex.UserProfile2);
     if (match) {
         if (GDPRUserList.includes(match[1].substring(1))) {
             return { page: 'NotFound' };

@@ -68,8 +68,7 @@ export default function normalizeProfile(account) {
         }
     }
 
-    if (profile_image && !/^https?:\/\//.test(profile_image))
-        profile_image = null;
+    if (profile_image && !/^https?:\/\//.test(profile_image)) profile_image = null;
     if (cover_image && !/^https?:\/\//.test(cover_image)) cover_image = null;
 
     return {

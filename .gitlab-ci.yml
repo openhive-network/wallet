@@ -79,7 +79,6 @@ run-eslint:
         - merge_requests
     script:
         - yarn ci:eslint
-    allow_failure: true # will be changed to false when all linter errors removed
 
 build-review-app:
     <<: *docker-job

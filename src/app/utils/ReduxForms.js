@@ -1,4 +1,4 @@
-export const cleanReduxInput = (i) => {
+const cleanReduxInput = (i) => {
     // Remove all props that don't belong.  Triggers React warnings.
     const {
         name,
@@ -25,3 +25,5 @@ export const cleanReduxInput = (i) => {
     if (ret.type == null) delete ret.type;
     return ret;
 };
+
+export default cleanReduxInput;

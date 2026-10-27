@@ -48,5 +48,5 @@ module.exports = {
             });
     },
 
-    down(queryInterface, Sequelize) {},
+    down() {},
 };

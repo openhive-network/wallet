@@ -67,8 +67,7 @@ async function getGenericState(user) {
         user_to_check = user.split('/')[1];
     }
 
-    if (user_to_check.startsWith('@'))
-        user_to_check = user_to_check.split('@')[1];
+    if (user_to_check.startsWith('@')) user_to_check = user_to_check.split('@')[1];
     const account_details = await api.getAccountsAsync([user_to_check]);
     result.accounts[user_to_check] = account_details[0];
 
@@ -111,9 +110,9 @@ export async function getAllTransferHistory(
         }
 
         if (
-            daysAgo <= fetchDays &&
-            lastTransaction[0] > 0 &&
-            lastTransaction[0] !== start
+            daysAgo <= fetchDays
+            && lastTransaction[0] > 0
+            && lastTransaction[0] !== start
         ) {
             accountHistory = await getAllTransferHistory(
                 account,
@@ -144,8 +143,7 @@ async function getTransferHistory(account) {
         if (error_string.includes('start=')) {
             const index = error_string.indexOf('=');
             start_sequence = error_string.substr(index + 1);
-            if (start_sequence.indexOf('.') > 0)
-                start_sequence = start_sequence.substr(
+            if (start_sequence.indexOf('.') > 0) start_sequence = start_sequence.substr(
                     0,
                     start_sequence.length - 1
                 );
@@ -156,19 +154,18 @@ async function getTransferHistory(account) {
                     500,
                     ...wallet_operations_bitmask
                 );
-            } catch (err) {
+            } catch (retryErr) {
                 console.log(
                     'Unable to fetch account history for account: ',
                     account,
-                    err
+                    retryErr
                 );
                 transfer_history = [];
             }
         }
     }
 
-    if (transfer_history === null || transfer_history === undefined)
-        transfer_history = [];
+    if (transfer_history === null || transfer_history === undefined) transfer_history = [];
     return transfer_history;
 }
 

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import tt from 'counterpart';
 import classnames from 'classnames';
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
-import { looksPhishy } from 'app/utils/Phishing';
+import looksPhishy from 'app/utils/Phishing';
 
 const SAFE_URL_PATTERN = /^https?:\/\//i;
 

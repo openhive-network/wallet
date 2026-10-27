@@ -88,11 +88,12 @@ const domains = [
  * @param {string} questionableUrl
  * @returns {boolean}
  */
-export const looksPhishy = (questionableUrl) => {
+const looksPhishy = (questionableUrl) => {
     for (const domain of domains) {
-        if (questionableUrl.toLocaleLowerCase().indexOf(domain) > -1)
-            return true;
+        if (questionableUrl.toLocaleLowerCase().indexOf(domain) > -1) return true;
     }
 
     return false;
 };
+
+export default looksPhishy;

@@ -2,14 +2,13 @@ import { PARAM_VIEW_MODE, VIEW_MODE_WHISTLE } from '../../shared/constants';
 
 const urlChar = '[^\\s"<>\\]\\[\\(\\)]';
 const urlCharEnd = urlChar.replace(/\]$/, ".,']"); // insert bad chars to end on
-const imagePath =
-    '(?:(?:\\.(?:tiff?|jpe?g|gif|png|svg|ico)|ipfs/[a-z\\d]{40,}))';
+const imagePath = '(?:(?:\\.(?:tiff?|jpe?g|gif|png|svg|ico)|ipfs/[a-z\\d]{40,}))';
 const domainPath = '(?:[-a-zA-Z0-9\\._]*[-a-zA-Z0-9])';
 const urlChars = '(?:' + urlChar + '*' + urlCharEnd + ')?';
 
 const urlSet = ({ domain = domainPath, path } = {}) => {
     // urlChars is everything but html or markdown stop chars
-    return `https?:\/\/${domain}(?::\\d{2,5})?(?:[/\\?#]${urlChars}${
+    return `https?://${domain}(?::\\d{2,5})?(?:[/\\?#]${urlChars}${
         path ? path : ''
     })${path ? '' : '?'}`;
 };
@@ -18,17 +17,13 @@ const urlSet = ({ domain = domainPath, path } = {}) => {
     Unless your using a 'g' (glob) flag you can store and re-use your regular expression.  Use the cache below.  If your using a glob (for example: replace all), the regex object becomes stateful and continues where it left off when called with the same string so naturally the regexp object can't be cached for long.
 */
 export const any = (flags = 'i') => new RegExp(urlSet(), flags);
-export const local = (flags = 'i') =>
-    new RegExp(urlSet({ domain: '(?:localhost|(?:.*\\.)?hive.blog)' }), flags);
-export const remote = (flags = 'i') =>
-    new RegExp(
+export const local = (flags = 'i') => new RegExp(urlSet({ domain: '(?:localhost|(?:.*\\.)?hive.blog)' }), flags);
+export const remote = (flags = 'i') => new RegExp(
         urlSet({ domain: `(?!localhost|(?:.*\\.)?hive.blog)${domainPath}` }),
         flags
     );
-export const youTube = (flags = 'i') =>
-    new RegExp(urlSet({ domain: '(?:(?:.*.)?youtube.com|youtu.be)' }), flags);
-export const image = (flags = 'i') =>
-    new RegExp(urlSet({ path: imagePath }), flags);
+export const youTube = (flags = 'i') => new RegExp(urlSet({ domain: '(?:(?:.*.)?youtube.com|youtu.be)' }), flags);
+export const image = (flags = 'i') => new RegExp(urlSet({ path: imagePath }), flags);
 export const imageFile = (flags = 'i') => new RegExp(imagePath, flags);
 // export const nonImage = (flags = 'i') => new RegExp(urlSet({path: '!' + imageFile}), flags)
 // export const markDownImageRegExp = (flags = 'i') => new RegExp('\!\[[\w\s]*\]\(([^\)]+)\)', flags);
@@ -40,7 +35,7 @@ export default {
     image: image(),
     imageFile: imageFile(),
     youTube: youTube(),
-    youTubeId: /(?:(?:youtube.com\/watch\?v=)|(?:youtu.be\/)|(?:youtube.com\/embed\/))([A-Za-z0-9\_\-]+)/i,
+    youTubeId: /(?:(?:youtube.com\/watch\?v=)|(?:youtu.be\/)|(?:youtube.com\/embed\/))([A-Za-z0-9_-]+)/i,
     vimeo: /https?:\/\/(?:vimeo.com\/|player.vimeo.com\/video\/)([0-9]+)\/*/,
     vimeoId: /(?:vimeo.com\/|player.vimeo.com\/video\/)([0-9]+)/,
     // simpleLink: new RegExp(`<a href="(.*)">(.*)<\/a>`, 'ig'),
@@ -93,11 +88,10 @@ export const makeParams = (params, prefix) => {
  * @returns {string}
  */
 export const determineViewMode = (search) => {
-    const searchList =
-        search.indexOf('?') === 0
+    const searchList = search.indexOf('?') === 0
             ? search.substr(1).split('&')
             : search.split('&');
-    for (let i = 0; i < searchList.length; i++) {
+    for (let i = 0; i < searchList.length; i += 1) {
         if (searchList[i].indexOf(PARAM_VIEW_MODE) === 0) {
             if (searchList[i] == PARAM_VIEW_MODE + '=' + VIEW_MODE_WHISTLE) {
                 //we only want to support known view modes.
