@@ -12,17 +12,15 @@ export default function reactForm({
     initialValues,
     validation = () => {},
 }) {
-    if (typeof instance !== 'object')
-        throw new TypeError('instance is a required object');
-    if (!Array.isArray(fields))
-        throw new TypeError('fields is a required array');
-    if (typeof initialValues !== 'object')
-        throw new TypeError('initialValues is a required object');
+    if (typeof instance !== 'object') throw new TypeError('instance is a required object');
+    if (!Array.isArray(fields)) throw new TypeError('fields is a required array');
+    if (typeof initialValues !== 'object') throw new TypeError('initialValues is a required object');
 
     // Give API users access to this.props, this.state, this.etc..
     validation = validation.bind(instance);
 
-    const formState = (instance.state = instance.state || {});
+    instance.state = instance.state || {};
+    const formState = instance.state;
     formState[name] = {
         // validate: () => setFormState(instance, fields, validation),
         handleSubmit: (submitCallback) => (event) => {
@@ -42,17 +40,17 @@ export default function reactForm({
 
             instance.setState({ [name]: fs }, () => {
                 // TODO, support promise ret
-                const ret =
-                    submitCallback({ data, event, updateInitialValues }) || {};
+                const ret = submitCallback({ data, event, updateInitialValues }) || {};
                 // Look for field level errors
                 for (const fieldName of Object.keys(ret)) {
                     const error = ret[fieldName];
-                    if (!error) continue;
-                    const value = instance.state[fieldName] || {};
-                    value.error = error;
-                    value.touched = true;
-                    if (error) formValid = false;
-                    instance.setState({ [fieldName]: value });
+                    if (error) {
+                        const value = instance.state[fieldName] || {};
+                        value.error = error;
+                        value.touched = true;
+                        formValid = false;
+                        instance.setState({ [fieldName]: value });
+                    }
                 }
                 fs.submitting = false;
                 fs.valid = formValid;
@@ -80,11 +78,12 @@ export default function reactForm({
         const fieldName = n(field);
         const fieldType = t(field);
 
-        const fs = (formState[fieldName] = {
+        const fs = {
             value: null,
             error: null,
             touched: false,
-        });
+        };
+        formState[fieldName] = fs;
 
         // Caution: fs.props is expanded <input {...fieldName.props} />, so only add valid props for the component
         fs.props = { name: fieldName };
@@ -110,14 +109,16 @@ export default function reactForm({
 
             if (fieldType === 'checked') {
                 v.touched = toString(value) !== toString(initialValue);
-                v.value = v.props.checked = toBoolean(value);
+                v.props.checked = toBoolean(value);
                 v.value = value;
             } else if (fieldType === 'selected') {
                 v.touched = toString(value) !== toString(initialValue);
-                v.value = v.props.selected = toString(value);
+                v.props.selected = toString(value);
+                v.value = v.props.selected;
             } else {
                 v.touched = toString(value) !== toString(initialValue);
-                v.value = v.props.value = toString(value);
+                v.props.value = toString(value);
+                v.value = v.props.value;
             }
 
             instance.setState({ [fieldName]: v }, () => {
@@ -194,8 +195,7 @@ function n(field) {
     return name;
 }
 
-const hasValue = (v) =>
-    v == null
+const hasValue = (v) => v == null
         ? false
         : (typeof v === 'string' ? v.trim() : v) === ''
         ? false

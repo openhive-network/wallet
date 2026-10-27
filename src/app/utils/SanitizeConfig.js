@@ -30,10 +30,10 @@ const iframeWhitelist = [
             const m = src.match(/url=(.+?)&/);
             if (!m || m.length !== 2) return null;
             return (
-                'https://w.soundcloud.com/player/?url=' +
-                m[1] +
-                '&auto_play=false&hide_related=false&show_comments=true' +
-                '&show_user=true&show_reposts=false&visual=true'
+                'https://w.soundcloud.com/player/?url='
+                + m[1]
+                + '&auto_play=false&hide_related=false&show_comments=true'
+                + '&show_user=true&show_reposts=false&visual=true'
             );
         },
     },
@@ -93,10 +93,8 @@ export default ({
     transformTags: {
         iframe: (tagName, attribs) => {
             const srcAtty = attribs.src;
-            for (const item of iframeWhitelist)
-                if (item.re.test(srcAtty)) {
-                    const src =
-                        typeof item.fn === 'function'
+            for (const item of iframeWhitelist) if (item.re.test(srcAtty)) {
+                    const src = typeof item.fn === 'function'
                             ? item.fn(srcAtty, item.re)
                             : srcAtty;
                     if (!src) break;
@@ -124,7 +122,8 @@ export default ({
         img: (tagName, attribs) => {
             if (noImage) return { tagName: 'div', text: noImageText };
             //See https://github.com/punkave/sanitize-html/issues/117
-            let { src, alt } = attribs;
+            const { alt } = attribs;
+            let { src } = attribs;
             if (!/^(https?:)?\/\//i.test(src)) {
                 console.log(
                     'Blocked, image tag src does not appear to be a url',
@@ -158,10 +157,9 @@ export default ({
             const validClass = classWhitelist.find((e) => attribs.class == e);
             if (validClass) attys.class = validClass;
             if (
-                validClass === 'phishy' &&
-                attribs.title === getPhishingWarningMessage()
-            )
-                attys.title = attribs.title;
+                validClass === 'phishy'
+                && attribs.title === getPhishingWarningMessage()
+            ) attys.title = attribs.title;
             return {
                 tagName,
                 attribs: attys,
@@ -169,8 +167,7 @@ export default ({
         },
         td: (tagName, attribs) => {
             const attys = {};
-            if (attribs.style === 'text-align:right')
-                attys.style = 'text-align:right';
+            if (attribs.style === 'text-align:right') attys.style = 'text-align:right';
             return {
                 tagName,
                 attribs: attys,

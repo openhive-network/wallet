@@ -56,8 +56,7 @@ module.exports = {
     init: (context) => {
         if (!context) return;
         for (const obj in module.exports) {
-            if (obj === 'init') continue;
-            context[obj] = module.exports[obj];
+            if (obj !== 'init') context[obj] = module.exports[obj];
         }
     },
 

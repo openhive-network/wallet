@@ -8,7 +8,7 @@ const customer_id = config.get('telesign.customer_id');
 let api_key = '';
 
 if (config.get('telesign.rest_api_key')) {
-    api_key = new Buffer(config.get('telesign.rest_api_key'), 'base64');
+    api_key = Buffer.from(config.get('telesign.rest_api_key'), 'base64');
 }
 
 const use_case_code = 'BACS'; // Use Case: avoid bulk attack and spammers
@@ -38,9 +38,9 @@ export default function* verify({
             };
         }
         if (
-            result.numbering &&
-            result.numbering.cleansing &&
-            result.numbering.cleansing.sms
+            result.numbering
+            && result.numbering.cleansing
+            && result.numbering.cleansing.sms
         ) {
             const { sms } = result.numbering.cleansing;
             phone = sms.country_code + sms.phone_number;
@@ -153,8 +153,7 @@ function authHeaders({ resource, fields, method = 'GET' }) {
     ).toString(36);
 
     let content_type = '';
-    if (/POST|PUT/.test(method))
-        content_type = 'application/x-www-form-urlencoded';
+    if (/POST|PUT/.test(method)) content_type = 'application/x-www-form-urlencoded';
 
     let strToSign = `${method}\n${content_type}\n\nx-ts-auth-method:${auth_method}\nx-ts-date:${currDate}\nx-ts-nonce:${nonce}`;
 
@@ -179,7 +178,6 @@ function authHeaders({ resource, fields, method = 'GET' }) {
     return headers;
 }
 
-const urlencode = (json) =>
-    Object.keys(json)
+const urlencode = (json) => Object.keys(json)
         .map((key) => encodeURI(key) + '=' + encodeURI(json[key]))
         .join('&');

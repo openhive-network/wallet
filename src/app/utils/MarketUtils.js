@@ -1,21 +1,21 @@
 function roundUp(num, precision) {
-    let satoshis = parseFloat(num) * Math.pow(10, precision);
+    let satoshis = parseFloat(num) * 10 ** precision;
 
     // Attempt to correct floating point: 1.0001 satoshis should not round up.
     satoshis -= 0.0001;
 
     // Round up, restore precision
-    return Math.ceil(satoshis) / Math.pow(10, precision);
+    return Math.ceil(satoshis) / 10 ** precision;
 }
 
 function roundDown(num, precision) {
-    let satoshis = parseFloat(num) * Math.pow(10, precision);
+    let satoshis = parseFloat(num) * 10 ** precision;
 
     // Attempt to correct floating point: 1.9999 satoshis should not round down.
     satoshis += 0.0001;
 
     // Round down, restore precision
-    return Math.floor(satoshis) / Math.pow(10, precision);
+    return Math.floor(satoshis) / 10 ** precision;
 }
 
 /**

@@ -44,8 +44,7 @@ issues:
 # that slot — never one selection repeated under seven names, which makes
 # seven gates report on the same evidence while claiming to check seven
 # different things. Steps (.aidev/run-checks.sh): test =
-# jest, build = yarn build, lint = eslint src/ (CI allows it to fail, so it is
-# only in static).
+# jest, build = yarn build, lint = eslint src/ (only in static).
 verification:
   quick:
     adapter: command

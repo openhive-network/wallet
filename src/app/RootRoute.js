@@ -1,5 +1,4 @@
 import App from 'app/components/App';
-import Benchmark from 'app/components/pages/Benchmark';
 import WalletIndex from 'app/components/pages/WalletIndex';
 import resolveRoute from './ResolveRoute';
 
@@ -26,8 +25,8 @@ export default {
         } else if (route.page === 'Support') {
             cb(null, [require('app/components/pages/Support')]);
         } else if (
-            route.page === 'XSSTest' &&
-            process.env.NODE_ENV === 'development'
+            route.page === 'XSSTest'
+            && process.env.NODE_ENV === 'development'
         ) {
             cb(null, [require('app/components/pages/XSS')]);
         } else if (route.page === 'Benchmark') {

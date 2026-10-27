@@ -8,8 +8,8 @@ import { Iterable } from 'immutable';
 export default function (instance, name) {
     const mixin = PureRenderMixin.shouldComponentUpdate.bind(instance);
     if (
-        process.env.BROWSER &&
-        window.steemDebug_shouldComponentUpdate === undefined
+        process.env.BROWSER
+        && window.steemDebug_shouldComponentUpdate === undefined
     ) {
         window.steemDebug_shouldComponentUpdate = false; // console command line completion
     }
@@ -18,9 +18,9 @@ export default function (instance, name) {
         // Usage: steemDebug_shouldComponentUpdate = true
         // Or: steemDebug_shouldComponentUpdate = /Comment/
         if (
-            upd &&
-            process.env.BROWSER &&
-            window.steemDebug_shouldComponentUpdate
+            upd
+            && process.env.BROWSER
+            && window.steemDebug_shouldComponentUpdate
         ) {
             const filter = window.steemDebug_shouldComponentUpdate;
             if (filter.test) {

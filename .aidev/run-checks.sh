@@ -10,7 +10,6 @@
 # the installed jest can write one):
 #
 #   test   jest (package.json `ci:test`, CI's run-unit-tests job): src/**/*.test.js
-#          without the files in JEST_ALREADY_FAILING below
 #   lint   eslint src/ (package.json `ci:eslint`, CI's run-eslint job)
 #   build  `yarn build`: webpack production bundle + babel of src/ into lib/
 #          (what the Dockerfile's build stage runs)
@@ -59,16 +58,8 @@ if ! step install install; then
     exit 1
 fi
 
-# Test files left out of every slot (jest --testPathIgnorePatterns), failing on
-# the default branch on any Node; see .aidev/README.md.
-JEST_ALREADY_FAILING=(
-    'src/app/utils/ProxifyUrl\.test\.js$'
-)
-
 unit() {
     local args=(--ci --coverage --coverageDirectory "$out/coverage")
-    local p
-    for p in "${JEST_ALREADY_FAILING[@]}"; do args+=(--testPathIgnorePatterns "$p"); done
     # jest-junit is not a dependency at onboarding; use it when the tree has one.
     if [ -d node_modules/jest-junit ]; then
         args+=(--reporters=default --reporters=jest-junit)

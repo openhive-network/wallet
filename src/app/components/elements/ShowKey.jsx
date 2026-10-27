@@ -3,7 +3,6 @@ import React, { Component } from 'react';
 import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
 import { connect } from 'react-redux';
 import * as userActions from 'app/redux/UserReducer';
-import tt from 'counterpart';
 import * as globalActions from 'app/redux/GlobalReducer';
 import QRCode from 'react-qr';
 import {
@@ -31,7 +30,7 @@ class ShowKey extends Component {
             if (isLoggedInWithHiveSigner()) {
                 openHiveSignerAuths();
             } else {
-                const { showLogin, accountName, authType } = this.props;
+                const { showLogin, accountName } = this.props;
                 showLogin({ username: accountName });
             }
         };
@@ -39,26 +38,27 @@ class ShowKey extends Component {
     }
 
     componentWillMount() {
-        this.setWif(this.props, this.state);
+        const { privateKey, pubkey } = this.props;
+        this.setWif(privateKey, pubkey);
         this.setOnKey(this.props, this.state);
     }
 
     componentWillReceiveProps(nextProps) {
-        this.setWif(nextProps);
+        const { privateKey, pubkey } = nextProps;
+        this.setWif(privateKey, pubkey);
     }
 
     componentWillUpdate(nextProps, nextState) {
         this.setOnKey(nextProps, nextState);
     }
 
-    setWif(props) {
-        const { privateKey, pubkey } = props;
+    setWif(privateKey, pubkey) {
         if (privateKey && pubkey === privateKey.toPublicKey().toString()) {
             const wif = privateKey.toWif();
             this.setState({ wif });
 
-            const { onKey, pubkey } = this.props;
-            if (onKey) onKey(wif, pubkey);
+            const { onKey } = this.props;
+            if (onKey) onKey(wif, this.props.pubkey);
         } else {
             this.setState({ wif: undefined });
         }
@@ -82,7 +82,7 @@ class ShowKey extends Component {
     render() {
         const {
             showLogin,
-            props: { pubkey, authType },
+            props: { pubkey },
         } = this;
         const { wif } = this.state;
 
@@ -93,10 +93,13 @@ class ShowKey extends Component {
                     paddingRight: 10,
                     cursor: 'pointer',
                 }}
+                role="button"
+                tabIndex={0}
                 onClick={this.showQr}
             >
                 <img
                     src={require('app/assets/images/qrcode.png')}
+                    alt=""
                     height="32"
                     width="32"
                 />
@@ -109,8 +112,7 @@ class ShowKey extends Component {
                     <div className="column">
                         <br />
                         <h5>
-                            Public
-                            {this.props.authTypeName} Key
+                            {`Public ${this.props.authTypeName} Key`}
                         </h5>
                         {qrIcon}
                         <span>{pubkey}</span>
@@ -120,8 +122,7 @@ class ShowKey extends Component {
                 <div className="row key__private">
                     <div className="key__private-title">
                         <h5>
-                            Your Private
-                            {this.props.authTypeName} Key
+                            {`Your Private ${this.props.authTypeName} Key`}
                         </h5>
                     </div>
 
@@ -139,6 +140,8 @@ class ShowKey extends Component {
                                 <QRCode text={wif} />
                             ) : (
                                 <a
+                                    role="button"
+                                    tabIndex={0}
                                     onClick={showLogin}
                                     className="hollow button"
                                 >

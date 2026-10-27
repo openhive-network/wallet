@@ -1,5 +1,5 @@
 module.exports = function (sequelize, DataTypes) {
-    var AccountRecoveryRequest = sequelize.define(
+    const AccountRecoveryRequest = sequelize.define(
         'AccountRecoveryRequest',
         {
             UserId: {

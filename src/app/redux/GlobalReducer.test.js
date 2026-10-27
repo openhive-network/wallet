@@ -1,5 +1,6 @@
-import { Map, OrderedMap, getIn, List, fromJS, Set, merge } from 'immutable';
-import { emptyContent } from 'app/redux/EmptyState';
+import {
+    Map, OrderedMap, List, fromJS, Set
+} from 'immutable';
 import * as globalActions from './GlobalReducer';
 import reducer, { defaultState } from './GlobalReducer';
 
@@ -81,17 +82,6 @@ describe('Global reducer', () => {
             },
         };
         const initial = reducer();
-        const expected = Map({
-            status: {},
-            accounts: Map({
-                foo: Map({
-                    name: 'foo',
-                    witness_votes: 99,
-                    be_List: List(['alice', 'bob', 'claire']),
-                    be_orderedMap: OrderedMap({ foo: 'barman' }),
-                }),
-            }),
-        });
         // Act
         const actual = reducer(initial, globalActions.receiveAccount(payload));
         // Assert
@@ -469,7 +459,6 @@ describe('Global reducer', () => {
                 },
             ],
         };
-        const initial = reducer();
         const initWithData = reducer()
             .setIn(['discussion_idx', '', 'created'], List([]))
             .set('content', Map({}));
@@ -521,7 +510,7 @@ describe('Global reducer', () => {
             globalActions.receiveRecentPosts(payload)
         );
         // Assert
-        expect(actual.getIn(['discussion_idx', '', 'created'])).toEqual(
+        expect(actual2.getIn(['discussion_idx', '', 'created'])).toEqual(
             List(['ding/bat', 'pidge/wolf'])
         );
     });

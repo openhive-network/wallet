@@ -1,8 +1,8 @@
 module.exports = {
-    up(queryInterface, Sequelize) {
+    up(queryInterface) {
         queryInterface.removeIndex('accounts', ['name']);
         return queryInterface.addIndex('accounts', ['name']);
     },
 
-    down(queryInterface, Sequelize) {},
+    down() {},
 };

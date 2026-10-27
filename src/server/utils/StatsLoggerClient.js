@@ -17,8 +17,8 @@ export default class StatsLoggerClient {
             );
             // Implement debug loggers here, as any new calls are added in methods below.
             this.SDC = {
-                timing() {
-                    console.log('StatsLoggerClient call: ', arguments);
+                timing(...args) {
+                    console.log('StatsLoggerClient call: ', args);
                 },
             };
         }
@@ -29,8 +29,7 @@ export default class StatsLoggerClient {
      * log them all to statsd.
      */
     logTimers(tuples) {
-        const timestamp = +new Date();
-        tuples.map((tuple) => {
+        tuples.forEach((tuple) => {
             this.SDC.timing(tuple[0], tuple[1]);
         });
     }

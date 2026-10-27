@@ -21,7 +21,6 @@ export function* listVotedOnProposalsCaller(action) {
 
 export function* listProposals({
     voter_id,
-    last_proposal,
     order_by,
     order_direction,
     limit,
@@ -49,7 +48,6 @@ export function* listProposals({
         let proposalVotes = yield proposalIds.map(function* (pId) {
             let votes = [];
             let nextVotes = [];
-            let lastVoter = '';
             let beyondThisProposal = false;
             const maxVotes = 100;
             // ¯\_(ツ)_/¯
@@ -63,12 +61,10 @@ export function* listProposals({
                     'active'
                 );
                 votes = votes.concat(nextVotes);
-                lastVoter = nextVotes[nextVotes.length - 1].voter;
                 if (nextVotes.length < maxVotes) return votes;
                 beyondThisProposal = false;
-                nextVotes.map((d) => {
-                    if (d.proposal.proposal_id != pId)
-                        beyondThisProposal = true;
+                nextVotes.forEach((d) => {
+                    if (d.proposal.proposal_id != pId) beyondThisProposal = true;
                 });
                 if (beyondThisProposal) return votes;
             }
@@ -105,7 +101,6 @@ export function* listProposals({
 export function* listVotedOnProposals({
     voter_id,
     limit,
-    order_by,
     order_direction,
     status,
     resolve,

@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import LoadingIndicator from 'app/components/elements/LoadingIndicator';
 import { reduxForm } from 'redux-form'; // @deprecated, instead use: app/utils/ReactForm.js
-import { cleanReduxInput } from 'app/utils/ReduxForms';
+import cleanReduxInput from 'app/utils/ReduxForms';
 import tt from 'counterpart';
 import { PrivateKey, PublicKey } from '@hiveio/hive-js/lib/auth/ecc';
 
@@ -55,8 +55,7 @@ class KeyEdit extends Component {
         try {
             PrivateKey.fromWif(password.value);
             // A WIF has a checksum, it does not need a confirmation
-            if (confirm.value !== password.value)
-                confirm.onChange(password.value);
+            if (confirm.value !== password.value) confirm.onChange(password.value);
             isWif = true;
         } catch (e) {
             isWif = false;
@@ -83,11 +82,11 @@ class KeyEdit extends Component {
                 <div className="row">
                     <div
                         className={
-                            'column small-12' +
-                            (password.touched && password.error ? ' error' : '')
+                            'column small-12'
+                            + (password.touched && password.error ? ' error' : '')
                         }
                     >
-                        <label>Change “{authType}” Key (Password or WIF)</label>
+                        <label>{`Change “${authType}” Key (Password or WIF)`}</label>
                         <input
                             ref="key"
                             type="password"
@@ -96,16 +95,16 @@ class KeyEdit extends Component {
                             autoComplete="off"
                         />
                         <span className="error">
-                            {password.touched &&
-                                password.error &&
-                                password.error}
+                            {password.touched
+                                && password.error
+                                && password.error}
                             &nbsp;
                         </span>
                     </div>
                     <div
                         className={
-                            'column small-12' +
-                            (confirm.touched && confirm.error ? ' error' : '')
+                            'column small-12'
+                            + (confirm.touched && confirm.error ? ' error' : '')
                         }
                     >
                         <label>{tt('g.confirm_password')}</label>
@@ -186,9 +185,8 @@ export default reduxForm(
     (state, ownProps) => {
         const { oldAuth } = ownProps;
         const private_keys = state.user.getIn(['current', 'private_keys']);
-        const privateKey =
-            private_keys &&
-            private_keys.find((d) => d.toPublicKey().toString() === oldAuth);
+        const privateKey = private_keys
+            && private_keys.find((d) => d.toPublicKey().toString() === oldAuth);
         return { ...ownProps, privateKey, oldAuth };
     }
 )(KeyEdit);

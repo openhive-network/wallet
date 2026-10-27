@@ -1,13 +1,8 @@
-import { call, put, takeLatest, select } from 'redux-saga/effects';
-import { api, broadcast, auth } from '@hiveio/hive-js';
-import { PrivateKey } from '@hiveio/hive-js/lib/auth/ecc';
+import { call, put, takeLatest } from 'redux-saga/effects';
+import { broadcast, auth } from '@hiveio/hive-js';
 import * as communityActions from './CommunityReducer';
 import * as transactionActions from './TransactionReducer';
 import { wait } from './MarketSaga';
-
-const activeKeySelector = (state) => {
-    return state.user.getIn(['pub_keys_used']).active;
-};
 
 const generateAuth = (user, pass, type) => {
     const key = auth.getPrivateKeys(user, pass, [type]);
@@ -51,8 +46,6 @@ export function* customOps(action) {
         communityDescription,
         communityOwnerName,
         communityOwnerWifPassword,
-        createAccountSuccessCB,
-        createAccountErrorCB,
         broadcastOpsErrorCB,
     } = action.payload;
 
@@ -60,12 +53,6 @@ export function* customOps(action) {
     yield call(wait, 3000);
 
     try {
-        const communityOwnerPosting = auth.getPrivateKeys(
-            communityOwnerName,
-            communityOwnerWifPassword,
-            ['posting']
-        );
-
         const setRoleOperation = generateHivemindOperation(
             communityOwnerName,
             'setRole',
@@ -115,7 +102,7 @@ export function* customOps(action) {
             transactionActions.broadcastOperation({
                 type: subscribeToCommunityOperation[0],
                 operation: subscribeToCommunityOperation[1],
-                successCallback: (res) => {
+                successCallback: () => {
                     console.log('subscribed');
                 },
                 errorCallback: (res) => {
@@ -152,14 +139,11 @@ export function* createCommunityAccount(createCommunityAction) {
     });
     const {
         accountName,
-        communityTitle,
-        communityDescription,
         communityOwnerName,
         communityOwnerWifPassword,
         broadcastOpsCb,
         createAccountSuccessCB,
         createAccountErrorCB,
-        broadcastOpsErrorCB,
     } = createCommunityAction.payload;
 
     const communityOwnerPosting = auth.getPrivateKeys(
@@ -201,7 +185,7 @@ export function* createCommunityAccount(createCommunityAction) {
                 confirm:
                     'This operation will cost 3 HIVE. Would you like to proceed?',
                 operation: op,
-                successCallback: (res) => {
+                successCallback: () => {
                     createAccountSuccessCB();
                     broadcastOpsCb();
                 },

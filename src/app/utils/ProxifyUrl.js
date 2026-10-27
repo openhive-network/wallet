@@ -45,8 +45,8 @@ export default (url, dimensions = false) => {
         }
 
         if (
-            (NATURAL_SIZE !== dims && CAPPED_SIZE !== dims) ||
-            !rProxyDomain.test(respUrl)
+            (NATURAL_SIZE !== dims && CAPPED_SIZE !== dims)
+            || !rProxyDomain.test(respUrl)
         ) {
             return $STM_Config.img_proxy_prefix + dims + respUrl;
         }

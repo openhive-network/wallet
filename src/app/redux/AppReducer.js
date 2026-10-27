@@ -50,9 +50,7 @@ export default function reducer(state = defaultState, action = {}) {
             });
         }
         case REMOVE_NOTIFICATION:
-            return state.update('notifications', (s) =>
-                s.delete(action.payload.key)
-            );
+            return state.update('notifications', (s) => s.delete(action.payload.key));
         case SET_USER_PREFERENCES:
             return state.set('user_preferences', Map(action.payload));
         case TOGGLE_NIGHTMODE:
@@ -108,6 +106,5 @@ export const receiveFeatureFlags = (flags) => ({
 });
 
 export const selectors = {
-    getFeatureFlag: (state, flagName) =>
-        state.getIn(['featureFlags', flagName], false),
+    getFeatureFlag: (state, flagName) => state.getIn(['featureFlags', flagName], false),
 };

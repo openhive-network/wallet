@@ -17,7 +17,7 @@ import {
     isTosAccepted,
     acceptTos,
 } from 'app/utils/ServerApiClient';
-import { loadFollows } from 'app/redux/FollowSaga';
+import loadFollows from 'app/redux/FollowSaga';
 import { setHiveSignerAccessToken } from 'app/utils/HiveSigner';
 import HiveAuthUtils from 'app/utils/HiveAuthUtils';
 
