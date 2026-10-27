@@ -1,8 +1,13 @@
-FROM node:12.22.6 as development
+# No default: CI passes --build-arg NODE_VERSION=$NODE_IMAGE_VERSION, the one Node
+# version of hive/common-ci-configuration; a local build passes it the same way.
+ARG NODE_VERSION
+
+FROM node:${NODE_VERSION} as development
 
 WORKDIR /var/app
 
 COPY package.json yarn.lock ./
+COPY patches ./patches
 
 RUN yarn install --non-interactive --frozen-lockfile
 
@@ -18,7 +23,7 @@ FROM development as dependencies
 RUN yarn install --non-interactive --frozen-lockfile --production
 
 ### BUILD MINIFIED PRODUCTION ##
-FROM node:12.22.6-alpine as production
+FROM node:${NODE_VERSION}-alpine as production
 
 WORKDIR /var/app
 

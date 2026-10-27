@@ -161,6 +161,7 @@ Key env vars (prefix `SDC_`):
 
 ## Node Version
 
-- Minimum: Node 8.7.0
-- Recommended: Node 12.22.1
+- Node 24 (`engines.node` `>=24`); CI and the Dockerfile take the exact version from
+  hive/common-ci-configuration (`NODE_TEST_TOOLS_IMAGE`, `--build-arg NODE_VERSION=$NODE_IMAGE_VERSION`)
+- `patches/` holds patch-package fixes to unmaintained dependencies, applied on `postinstall`
 - Yarn preferred over npm

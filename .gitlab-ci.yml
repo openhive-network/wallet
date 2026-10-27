@@ -1,3 +1,8 @@
+include:
+    - project: 'hive/common-ci-configuration'
+      ref: develop
+      file: '/templates/base.gitlab-ci.yml'
+
 stages:
     - test
     - build
@@ -8,7 +13,6 @@ variables:
     APP_REVIEW_SUBDOMAIN: .wallet.engrave.dev
     STAGING_DOMAIN: staging-wallet.hive.io
     PRODUCTION_DOMAIN: wallet.hive.blog
-    BASE_IMAGE: node:12.22.6
     CERTS: ~/.docker
 
 ################################# COMMON TEMPLATES #################################
@@ -48,28 +52,31 @@ variables:
     after_script:
         - rm -fR $CERTS
 
+# Node comes from common-ci-configuration's node-test-tools, which has no yarn.
+.yarn-job: &yarn-job
+    image: ${NODE_TEST_TOOLS_IMAGE}
+    before_script:
+        - npm install -g --no-fund --no-audit yarn@1.22.22
+        - yarn install --frozen-lockfile
+
 ################################# MERGE REQUESTS #################################
 
 run-unit-tests:
+    <<: *yarn-job
     stage: test
-    image: $BASE_IMAGE
     only:
         - branches
         - merge_requests
-    before_script:
-        - yarn install --frozen-lockfile
     script:
         - yarn run ci:test
     coverage: /All files[^|]*\|[^|]*\s+([\d\.]+)/
 
 run-eslint:
+    <<: *yarn-job
     stage: test
-    image: $BASE_IMAGE
     only:
         - branches
         - merge_requests
-    before_script:
-        - yarn install --frozen-lockfile
     script:
         - yarn ci:eslint
     allow_failure: true # will be changed to false when all linter errors removed
@@ -85,7 +92,7 @@ build-review-app:
     before_script:
         - echo $CI_JOB_TOKEN | docker login -u $CI_REGISTRY_USER $CI_REGISTRY --password-stdin
     script:
-        - docker build -t $DOCKER_TAG --build-arg SOURCE_COMMIT --build-arg DOCKER_TAG .
+        - docker build -t $DOCKER_TAG --build-arg SOURCE_COMMIT --build-arg DOCKER_TAG --build-arg NODE_VERSION=$NODE_IMAGE_VERSION .
         - docker push $DOCKER_TAG
 
 deploy-review-app:
@@ -136,7 +143,7 @@ build-development:
     only:
         - develop
     script:
-        - docker build -t $DOCKER_TAG -t $DOCKER_TAG_MAIN --build-arg SOURCE_COMMIT --build-arg DOCKER_TAG .
+        - docker build -t $DOCKER_TAG -t $DOCKER_TAG_MAIN --build-arg SOURCE_COMMIT --build-arg DOCKER_TAG --build-arg NODE_VERSION=$NODE_IMAGE_VERSION .
         - docker push $DOCKER_TAG
         - docker push $DOCKER_TAG_MAIN
 
@@ -150,7 +157,7 @@ build-production:
     only:
         - master
     script:
-        - docker build -t $DOCKER_TAG -t $DOCKER_TAG_MAIN --build-arg SOURCE_COMMIT --build-arg DOCKER_TAG .
+        - docker build -t $DOCKER_TAG -t $DOCKER_TAG_MAIN --build-arg SOURCE_COMMIT --build-arg DOCKER_TAG --build-arg NODE_VERSION=$NODE_IMAGE_VERSION .
         - docker push $DOCKER_TAG
         - docker push $DOCKER_TAG_MAIN
 

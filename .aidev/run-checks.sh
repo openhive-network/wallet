@@ -5,7 +5,7 @@
 #
 # Every run first installs node_modules offline from the image's yarn cache
 # (`yarn install --offline --frozen-lockfile`, lifecycle scripts included, so a
-# native module such as node-sass is built here) as the `install` case. Steps,
+# native module's install script runs here) as the `install` case. Steps,
 # one junit case each (`test` also keeps jest's own junit as jest-junit.xml when
 # the installed jest can write one):
 #

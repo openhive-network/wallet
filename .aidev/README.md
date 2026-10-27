@@ -42,7 +42,7 @@ the slots: `blackboxtest/` needs Selenium and a running site.
 
 Left out of every slot (`JEST_ALREADY_FAILING` in `run-checks.sh`):
 
-- `src/app/utils/ProxifyUrl.test.js` — 6 of its tests fail on `develop` on Node 12.22.6
+- `src/app/utils/ProxifyUrl.test.js` — 6 of its tests fail on `develop` on Node 12
   as well as on Node 24; they appear to predate 7d7d7270, which moved ProxifyUrl's regex
   from steemitimages.com to images.hive.blog. Fixing them would bring the file back.
 
@@ -56,13 +56,13 @@ re-pin it with `.aidev/runtime/build.sh --push` when the Dockerfile, `package.js
 `yarn.lock` changes, or ccc's image moves, and put the printed `repo@sha256:…` into
 `environment.image`.
 
-## Known state at onboarding (2026-10-26)
+## Known state after the Node 24 port (2026-10-27)
 
-The runtime is Node v24.22.1, and the application is still a Node 12 application
-(`.gitlab-ci.yml` and `Dockerfile` pin `node:12.22.6`). Every slot fails at `install`:
-`node-sass` 4.14 builds from source with node-gyp 3.8, which needs Python 2 and does not
-support Node 24. With install scripts skipped, on Node 24: jest passes (123 tests, 1
-skipped, ProxifyUrl excluded); `yarn build` fails in webpack 4 with
-`ERR_OSSL_EVP_UNSUPPORTED` (md4 hashing under OpenSSL 3); `eslint src/` reports 502
-errors and 126 warnings (as on Node 12; CI allows it to fail). Moving the application to
-Node 24 is the open port issue.
+The application runs on the hive-wide Node (ccc's `NODE_VERSION`): CI's test jobs use ccc's
+`${NODE_TEST_TOOLS_IMAGE}` and the `Dockerfile` takes `NODE_VERSION` as a build arg
+(`$NODE_IMAGE_VERSION` from ccc's `templates/base.gitlab-ci.yml`), with no version of
+this repository's own. `install` (with lifecycle scripts), jest (123 tests, 1 skipped,
+ProxifyUrl excluded) and `yarn build` pass; `eslint src/` reports 502 errors and 126
+warnings, as on Node 12 (CI allows it to fail). `patches/` (patch-package, run on
+`postinstall`) fixes unmaintained webpack-isomorphic-tools and require-hacker, which
+call `util.isRegExp`, removed in Node 23.
