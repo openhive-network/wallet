@@ -28,18 +28,18 @@ mkdir tmp
 
 #### Install dependencies
 
-Install at least Node v12.22.1 if you don't already have it. We recommend using
+Install Node 24 if you don't already have it. We recommend using
 `nvm` to do this as it's both the simplest way to install and manage
 installed version(s) of node. If you need `nvm`, you can get it at
 [https://github.com/creationix/nvm](https://github.com/creationix/nvm).
 
-Wallet is known to successfully build using node 12.22.1, npm 7.19.1, and
-yarn 1.22.17 (more recent versions will probably work, but node needs to be at least version 12.22.1).
+Wallet builds and runs on the Node 24 release that CI takes from
+hive/common-ci-configuration, with yarn 1.22 (classic).
 
 Using nvm, you would install like this:
 
 ```bash
-nvm install v12.22.1
+nvm install 24
 ```
 
 We use the yarn package manager instead of the default `npm`. There are
