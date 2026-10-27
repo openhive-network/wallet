@@ -31,6 +31,9 @@ export function serverApiLogout() {
 // Event collection through overseer is disabled until overseer is updated.
 export function serverApiRecordEvent() {}
 
+// Page view recording is disabled.
+export function recordPageView() {}
+
 export function saveCords(x, y) {
     const request = {
         ...request_base,
