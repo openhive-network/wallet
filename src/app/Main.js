@@ -9,6 +9,7 @@ import Iso from 'iso';
 import { clientRender } from 'shared/UniversalRender';
 import { serverApiRecordEvent } from 'app/utils/ServerApiClient';
 import * as hive from '@hiveio/hive-js';
+import applyHiveChainConfig from 'shared/HiveChainConfig';
 import { determineViewMode } from 'app/utils/Links';
 import frontendLogger from 'app/utils/FrontendLogger';
 import Cookies from 'universal-cookie';
@@ -44,7 +45,7 @@ function runApp(initial_state) {
         failover_threshold: config.failover_threshold,
         rebranded_api: true,
     });
-    hive.config.set('address_prefix', config.address_prefix);
+    applyHiveChainConfig(hive.config, config);
     hive.config.set('rebranded_api', true);
     hive.broadcast.updateOperations();
 

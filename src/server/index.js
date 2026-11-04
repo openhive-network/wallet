@@ -1,6 +1,7 @@
 import config from 'config';
 
 import * as hive from '@hiveio/hive-js';
+import applyHiveChainConfig from '../shared/HiveChainConfig';
 
 const path = require('path');
 
@@ -27,6 +28,7 @@ global.$STM_Config = {
     hived_connection_server: config.get('hived_connection_server'),
     hived_use_appbase: config.get('hived_use_appbase'),
     address_prefix: config.get('address_prefix'),
+    chain_id: config.get('chain_id'),
     img_proxy_prefix: config.get('img_proxy_prefix'),
     ipfs_prefix: config.get('ipfs_prefix'),
     disable_signups: config.get('disable_signups'),
@@ -62,7 +64,7 @@ global.webpackIsomorphicTools.server(ROOT, () => {
         alternative_api_endpoints: alternativeApiEndpoints,
         failover_threshold: config.get('failover_threshold'),
     });
-    hive.config.set('address_prefix', config.get('address_prefix'));
+    applyHiveChainConfig(hive.config, global.$STM_Config);
     hive.config.set('rebranded_api', true);
     hive.broadcast.updateOperations();
 
