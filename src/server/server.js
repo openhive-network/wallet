@@ -8,13 +8,13 @@ import os from 'os';
 import favicon from 'koa-favicon';
 import staticCache from 'koa-static-cache';
 import isBot from 'koa-isbot';
-import session from '@steem/crypto-session';
 import csrf from 'koa-csrf';
 import config from 'config';
 import { routeRegex } from 'app/ResolveRoute';
 import secureRandom from 'secure-random';
 import userIllegalContent from 'app/utils/userIllegalContent';
 import koaLocale from 'koa-locale';
+import hiveCryptoSession from './hive-crypto-session';
 import useEnterAndConfirmMobilePages from './sign_up_pages/enter_confirm_mobile';
 import useEnterAndConfirmEmailPages from './sign_up_pages/enter_confirm_email';
 import useAccountRecoveryApi from './api/account_recovery';
@@ -110,7 +110,7 @@ app.use(requestTime(statsLoggerClient));
 app.keys = [config.get('session_key')];
 
 const crypto_key = config.get('server_session_secret');
-session(app, {
+hiveCryptoSession(app, {
     maxAge: 1000 * 3600 * 24 * 60,
     crypto_key,
     key: config.get('session_cookie_key'),
