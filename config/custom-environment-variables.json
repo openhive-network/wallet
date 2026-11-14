@@ -47,6 +47,7 @@
     }
   },
   "server_session_secret": "SDC_SESSION_SECRETKEY",
+  "session_key": "SDC_SESSION_KEY",
   "site_domain": "SDC_SITE_DOMAIN",
   "tarantool": {
     "host": "SDC_TARANTOOL_HOSTNAME",
