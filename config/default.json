@@ -10,7 +10,7 @@
             "defaultSrc": "'self'",
             "fontSrc": "data: fonts.gstatic.com",
             "frameAncestors": "'none'",
-            "imgSrc": "* data:",
+            "imgSrc": "'self' https://images.hive.blog data:",
             "objectSrc": "'none'",
             "pluginTypes": "application/pdf",
             "scriptSrc": "'self' www.google-analytics.com",
